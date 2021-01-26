@@ -1,0 +1,49 @@
+package net.thevpc.tson;
+
+import java.util.List;
+
+public interface TsonAnnotationBuilder {
+    TsonAnnotationBuilder reset();
+
+    TsonAnnotationBuilder merge(TsonElementBase element);
+
+    String getName();
+
+    String name();
+
+    TsonAnnotationBuilder name(String name);
+
+    TsonAnnotationBuilder setName(String name);
+
+    TsonAnnotationBuilder addAll(TsonElement... element);
+
+    TsonAnnotationBuilder addAll(TsonElementBase... element);
+
+    TsonAnnotationBuilder addAll(Iterable<? extends TsonElementBase> element);
+
+    TsonAnnotationBuilder with(TsonElementBase... element);
+
+    TsonAnnotationBuilder add(TsonElementBase element);
+
+    TsonAnnotationBuilder param(TsonElementBase element);
+
+    TsonAnnotationBuilder remove(TsonElementBase element);
+
+    TsonAnnotationBuilder add(TsonElementBase element, int index);
+
+    TsonAnnotationBuilder removeAt(int index);
+
+    List<TsonElement> all();
+
+    List<TsonElement> getAll();
+
+    TsonElement get(int index);
+
+    TsonAnnotation build();
+
+    TsonAnnotationBuilder merge(TsonAnnotation element);
+
+    int size();
+
+    TsonAnnotationBuilder ensureCapacity(int length);
+}

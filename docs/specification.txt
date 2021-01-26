@@ -1,0 +1,155 @@
+
+Big Numbers
+    3.5G : Big Decimal
+    3G : Big Integer
+
+Complex Numbers
+    1.0i+3E-9 : double complex
+    1i+3 : double complex
+    0i+3f : floating real complex
+    0i : double zero complex
+    0.0i : double zero complex
+    1iG : Big complex
+    3.5G : Big Decimal
+    3G : Big Integer
+
+Arrays
+        Examples :
+
+        [1,2,3]
+            array of ints
+
+        ['1','2','3']
+
+        ['1',2,true,"false"]
+            multi-typed array
+
+        [[1,2,3],[4,5,6]]
+            nested arrays
+
+        [1,2,3 ; 4,5,6]
+            nested array as matrix
+
+        [
+          1,2,3 ;
+          4,5,6
+        ]
+            nested array as matrix
+
+NamedArray
+        Examples :
+
+        ints[1,2,3]
+            named array of ints
+
+        chars(howmany:3)['1','2','3']
+            named array of chars with parameters
+
+        matrix(3,2)[1,2,3 ; 4,5,6]
+            named nested arrays (as matrix)
+
+        matrix(3,2)[row1[1,2,3],row2[4,5,6]]
+            nested named arrays
+
+        ()[
+          1,2,3 ;
+          4,5,6
+        ]
+            anonymous named array (as matrix)
+
+Objects
+        Examples :
+
+        {a:1,b:2,c:3}
+            object with name keys
+
+        {"a":1,"b":2,"c":3}
+            object with string keys
+
+        {"a":1,b:'2',3:c}
+            object with heterogeneous types
+
+        {"a":1,b:{r:1,h:3}}
+            object with embedded objects
+
+        {"a":1,{r:1,h:3}:6}
+            object with complex keys
+
+        {"name":1,"name":2}
+            object with repeated keys
+
+        {"name","a":1,2,3}
+            object with non valued keys, equivalent to {"name":null,"a":1,2:null,3:null}
+
+NamedObjects
+        Examples :
+
+        complex{r=0.0,i:1.0}
+            object named complex with two values
+
+        complex(1,2)
+            object named complex with two values
+
+Function
+        Examples :
+
+        complex(1,2)
+            JFunction named complex with two parameters
+
+Uplet
+        Examples :
+
+        (1,2)
+            two parameters Uplet
+
+
+Streams
+        Examples :
+
+        ^{
+        }
+            empty char stream
+
+        ^[]
+            empty binary stream
+
+        ^[ABBBDBBDBB==]
+            base64 binary stream
+
+        ^[
+        ABBBDBBDBB
+        ABBBDBBDBB
+        ABBBDBBDBB==
+        ]
+            multiline base64 binary stream
+
+        ^{
+          /*Hello*/
+          public static class JavaClassExample{
+            private String[] str={"}{"};
+          }
+        }
+            embedded java file charstream. this should be ok for c,c++,java,c#
+
+        ^(java){
+          /*Hello*/
+          public static class JavaClassExample{
+            private String[] str={"}{"};
+          }
+        }
+            embedded java file charstream. this should be ok for c,c++,java,c#
+
+
+        ^STOP{This is a phrase that should stop at the given stop word^STOP}
+
+        ^END{
+            This is a phrase that should stop at the
+            given stop word
+        ^END}
+            embedded phrase with stop word
+
+        ^SOMETHING_12665555{
+            This is a phrase that should stop at the
+            given stop word
+        ^SOMETHING_12665555}
+            embedded phrase with stop word
