@@ -17,13 +17,13 @@ public class TsonSerializerBuilderImpl implements TsonSerializerBuilder {
     }
 
     @Override
-    public <T> TsonSerializerBuilder setToElement(Class<T> type, TsonObjectToElement<T> objToElem) {
+    public <T> TsonSerializerBuilder setSerializer(Class<T> type, TsonObjectToElement<T> objToElem) {
         config.registerObjToElemConverter(type,objToElem);
         return this;
     }
 
     @Override
-    public <T> TsonSerializerBuilder setToObject(TsonElementType type, String name, Class<T> to, TsonElementToObject<T> elemToObj) {
+    public <T> TsonSerializerBuilder setDeserializer(TsonElementType type, String name, Class<T> to, TsonElementToObject<T> elemToObj) {
         config.registerElemToObjConverter(type,name, to, elemToObj);
         return this;
     }

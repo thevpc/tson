@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.marshall;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 
 public class TsonSerializerImpl implements TsonSerializer {
 

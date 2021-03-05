@@ -2,7 +2,6 @@ package net.thevpc.tson.impl.parser;
 
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.parser.javacc.TsonStreamParserImpl;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.StringBuilderReader;
 
 import java.io.*;
