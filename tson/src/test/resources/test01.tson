@@ -1,13 +1,15 @@
 {
-/* Hello*/
-a:test(me),
-[],
-{},
-@NotNull()
-(),
-test(me):test(me){
-   [1,2,3],
-   a:46b,
-   c:'k'
-}
+    /* Hello*/
+    a:test(me),
+    [],
+    {},
+
+    @NotNull()
+    (),
+
+    test(me):test(me){
+       [1,2,3],
+       a:46b,
+       c:'k'
+    }
 }
