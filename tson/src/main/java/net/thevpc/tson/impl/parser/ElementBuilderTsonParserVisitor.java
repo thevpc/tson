@@ -2,11 +2,9 @@ package net.thevpc.tson.impl.parser;
 
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.elements.*;
-import net.thevpc.tson.*;
 
 import java.util.*;
 
-import net.thevpc.tson.impl.elements.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor {
@@ -56,6 +54,19 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
         boolean decorated;
         String comments;
         List<TsonAnnotation> annotations;
+        public boolean paramsEmpty() {
+            return params == null || params.isEmpty();
+        }
+
+        public ArrayList<TsonElement> params() {
+            return params == null ? new ArrayList<>() : params;
+        }
+        public ArrayList<TsonElement> object() {
+            return object == null ? new ArrayList<>() : object;
+        }
+        public ArrayList<TsonElement> array() {
+            return array == null ? new ArrayList<>() : array;
+        }
     }
 
     @Override
@@ -166,35 +177,35 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
     @Override
     public void visitObjectEnd() {
         PartialElemNode a = peek();
-        repushDecorated(new TsonObjectImpl(null, TsonUtils.unmodifiableElements(a.object)), a);
+        repushDecorated(new TsonObjectImpl(null, TsonUtils.unmodifiableElements(a.object())), a);
     }
 
     @Override
     public void visitFunctionEnd() {
         PartialElemNode a = peek();
-        repushDecorated(new TsonFunctionImpl(a.name, TsonUtils.unmodifiableElements(a.params)), a);
+        repushDecorated(new TsonFunctionImpl(a.name, TsonUtils.unmodifiableElements(a.params())), a);
     }
 
     @Override
     public void visitUpletEnd() {
         PartialElemNode a = peek();
-        repushDecorated(new TsonUpletImpl(TsonUtils.unmodifiableElements(a.params)), a);
+        repushDecorated(new TsonUpletImpl(TsonUtils.unmodifiableElements(a.params())), a);
     }
 
     @Override
     public void visitArrayEnd() {
         PartialElemNode a = peek();
-        repushDecorated(TsonUtils.toArray(a.array), a);
+        repushDecorated(TsonUtils.toArray(a.array()), a);
     }
 
     @Override
     public void visitNamedObjectEnd() {
         PartialElemNode a = peek();
         TsonElementHeader h = null;
-        if (a.name != null || !a.params.isEmpty()) {
-            h = new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params));
+        if (a.name != null || !a.paramsEmpty()) {
+            h = new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params()));
         }
-        repushDecorated(new TsonObjectImpl(h, TsonUtils.unmodifiableElements(a.object)), a);
+        repushDecorated(new TsonObjectImpl(h, TsonUtils.unmodifiableElements(a.object())), a);
     }
 
     @Override
@@ -202,9 +213,9 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
         PartialElemNode a = peek();
         TsonElementHeader h = null;
         if (a.name != null || !a.params.isEmpty()) {
-            h = new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params));
+            h = new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params()));
         }
-        repushDecorated(TsonUtils.toArray(h, a.array), a);
+        repushDecorated(TsonUtils.toArray(h, a.array()), a);
     }
 
     @Override

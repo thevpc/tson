@@ -47,7 +47,8 @@ public class TestFormats {
         Assertions.assertEquals("hello{'p'}", e.toString(true));
 
         e = obj(elem('p')).build();
-        Assertions.assertEquals("(){'p'}", e.toString(true));
+        Assertions.assertEquals("{'p'}", e.toString(true));
+//        Assertions.assertEquals("(){'p'}", e.toString(true));
 
         e = elem(1.5f);
         Assertions.assertEquals("1.5f", e.toString());

@@ -4,7 +4,6 @@ import net.thevpc.tson.TsonDocumentVisitor;
 import net.thevpc.tson.TsonElement;
 import net.thevpc.tson.TsonElementHeader;
 import net.thevpc.tson.TsonParserVisitor;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.impl.util.UnmodifiableArrayList;
 

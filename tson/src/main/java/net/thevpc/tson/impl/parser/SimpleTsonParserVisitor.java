@@ -2,8 +2,6 @@ package net.thevpc.tson.impl.parser;
 
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.elements.*;
-import net.thevpc.tson.*;
-import net.thevpc.tson.impl.elements.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.util.*;
@@ -35,7 +33,6 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
         DocumentContext u = peek();
         return u.value;
     }
-
 
     public <T> Set<T> getMergedSetsContextValues(String name, int index) {
         Set<T> s = new HashSet();
@@ -73,7 +70,6 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
 //        }
 //        return a;
 //    }
-
     public <T> List<T> getContextValues(String name, int index) {
         List<T> a = new ArrayList<>();
         for (int i = stackSize - 1 - index; i >= 0; i--) {
@@ -90,6 +86,7 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
     }
 
     protected static class StackContext {
+
         Map<String, Object> map = new HashMap<>();
 
         public void setContextValue(String name, Object o) {
@@ -147,24 +144,34 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
         public ArrayList<TsonElement> object;
         public String comments;
         public List<TsonAnnotation> annotations;
+
+        public boolean paramsEmpty() {
+            return params == null || params.isEmpty();
+        }
+
+        public ArrayList<TsonElement> params() {
+            return params == null ? new ArrayList<>() : params;
+        }
     }
 
     protected static class ElementContext extends StackContext {
+
         public TsonElement value;
 
         public ElementContext(TsonElement value) {
-            this(value,null);
+            this(value, null);
         }
 
         public ElementContext(TsonElement value, Map<String, Object> map) {
             this.value = value;
-            if(map!=null) {
+            if (map != null) {
                 this.map.putAll(map);
             }
         }
     }
 
     protected static class DocumentContext extends StackContext {
+
         TsonDocument value;
 
         public DocumentContext(TsonDocument value) {
@@ -262,9 +269,9 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
     @Override
     public void visitObjectEnd() {
         PartialElementContext a = peek();
-        TsonElementHeader h=null;
-        if(a.name!=null || !a.params.isEmpty()){
-            h=new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params));
+        TsonElementHeader h = null;
+        if (a.name != null || !a.paramsEmpty()) {
+            h = new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params()));
         }
         repush(new ElementContext(
                 TsonElementDecorator.of(
@@ -286,7 +293,7 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
                 TsonElementDecorator.of(
                         new TsonFunctionImpl(
                                 a.name,
-                                TsonUtils.unmodifiableElements(a.params)
+                                TsonUtils.unmodifiableElements(a.params())
                         ),
                         a.comments,
                         a.annotations
@@ -301,7 +308,7 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
         repush(new ElementContext(
                 TsonElementDecorator.of(
                         new TsonUpletImpl(
-                                TsonUtils.unmodifiableElements(a.params)
+                                TsonUtils.unmodifiableElements(a.params())
                         ),
                         a.comments,
                         a.annotations
@@ -313,13 +320,13 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
     @Override
     public void visitArrayEnd() {
         PartialElementContext a = peek();
-        TsonElementHeader h=null;
-        if(a.name!=null || !a.params.isEmpty()){
-            h=new TsonElementHeaderImpl(a.name,TsonUtils.unmodifiableElements(a.params));
+        TsonElementHeader h = null;
+        if (a.name != null || !a.paramsEmpty()) {
+            h = new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params()));
         }
         repush(new ElementContext(
                 TsonElementDecorator.of(
-                        TsonUtils.toArray(h,a.array),
+                        TsonUtils.toArray(h, a.array),
                         a.comments,
                         a.annotations
                 ),
@@ -330,9 +337,9 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
     @Override
     public void visitNamedObjectEnd() {
         PartialElementContext a = peek();
-        TsonElementHeader h=null;
-        if(a.name!=null || !a.params.isEmpty()){
-            h=new TsonElementHeaderImpl(a.name,TsonUtils.unmodifiableElements(a.params));
+        TsonElementHeader h = null;
+        if (a.name != null || !a.paramsEmpty()) {
+            h = new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params()));
         }
         repush(new ElementContext(
                 TsonElementDecorator.of(
@@ -350,13 +357,13 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
     @Override
     public void visitNamedArrayEnd() {
         PartialElementContext a = peek();
-        TsonElementHeader h=null;
-        if(a.name!=null || !a.params.isEmpty()){
-            h=new TsonElementHeaderImpl(a.name,TsonUtils.unmodifiableElements(a.params));
+        TsonElementHeader h = null;
+        if (a.name != null || !a.paramsEmpty()) {
+            h = new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params()));
         }
         repush(new ElementContext(
                 TsonElementDecorator.of(
-                        TsonUtils.toArray(h,a.array),
+                        TsonUtils.toArray(h, a.array),
                         a.comments,
                         a.annotations
                 ),
@@ -406,7 +413,6 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
         AnnotationContext n = peek();
         n.elements.add(e.value);
     }
-
 
     @Override
     public void visitDocumentEnd() {
@@ -459,6 +465,5 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
         }
         stackSize++;
     }
-
 
 }

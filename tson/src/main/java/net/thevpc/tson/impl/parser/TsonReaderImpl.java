@@ -10,8 +10,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class TsonReaderImpl implements TsonReader {
+
     private TsonStreamParserImplConfig config = new TsonStreamParserImplConfig();
     private TsonSerializer marshaller;
+    private String defaultParser = "javacc";
     private String parser = "default";
 
     public TsonReaderImpl(TsonSerializer marshaller) {
@@ -82,7 +84,6 @@ public class TsonReaderImpl implements TsonReader {
     }
 
     /////////////////////////////////
-
     @Override
     public <T> T read(InputStream stream, Class<? extends T> clazz) throws IOException {
         return read(clazz, _fromReader(new InputStreamReader(stream)));
@@ -97,10 +98,9 @@ public class TsonReaderImpl implements TsonReader {
         }
     }
 
-
     @Override
     public <T> T read(InputStream stream, String encoding, Class<? extends T> clazz) throws IOException {
-        return read(clazz, _fromReader(new InputStreamReader(stream, encoding==null? "UTF-8":encoding)));
+        return read(clazz, _fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding)));
     }
 
     @Override
@@ -130,7 +130,6 @@ public class TsonReaderImpl implements TsonReader {
     }
 
     /////////////////////////////////
-
     @Override
     public TsonElement readElement(InputStream stream) {
         return readElement(_fromReader(new InputStreamReader(stream)));
@@ -146,8 +145,8 @@ public class TsonReaderImpl implements TsonReader {
     }
 
     @Override
-    public TsonElement readElement(InputStream stream, String encoding) throws IOException{
-        return readElement(_fromReader(new InputStreamReader(stream, encoding==null? "UTF-8":encoding)));
+    public TsonElement readElement(InputStream stream, String encoding) throws IOException {
+        return readElement(_fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding)));
     }
 
     @Override
@@ -198,8 +197,8 @@ public class TsonReaderImpl implements TsonReader {
     }
 
     @Override
-    public TsonDocument readDocument(InputStream stream, String encoding) throws IOException{
-        return readDocument(_fromReader(new InputStreamReader(stream, encoding==null? "UTF-8":encoding)));
+    public TsonDocument readDocument(InputStream stream, String encoding) throws IOException {
+        return readDocument(_fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding)));
     }
 
     @Override
@@ -229,7 +228,6 @@ public class TsonReaderImpl implements TsonReader {
     }
 
     /////////////////////////////////
-
     @Override
     public void visitElement(InputStream stream, TsonParserVisitor visitor) {
         visitElement(visitor, _fromReader(new InputStreamReader(stream)));
@@ -245,8 +243,8 @@ public class TsonReaderImpl implements TsonReader {
     }
 
     @Override
-    public void visitElement(InputStream stream, String encoding, TsonParserVisitor visitor) throws IOException{
-        visitElement(visitor, _fromReader(new InputStreamReader(stream, encoding==null? "UTF-8":encoding)));
+    public void visitElement(InputStream stream, String encoding, TsonParserVisitor visitor) throws IOException {
+        visitElement(visitor, _fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding)));
     }
 
     @Override
@@ -276,7 +274,6 @@ public class TsonReaderImpl implements TsonReader {
     }
 
     /////////////////////////////////
-
     @Override
     public void visitDocument(InputStream stream, TsonParserVisitor visitor) throws IOException {
         visitDocument(visitor, _fromReader(new InputStreamReader(stream)));
@@ -293,9 +290,8 @@ public class TsonReaderImpl implements TsonReader {
 
     @Override
     public void visitDocument(InputStream stream, String encoding, TsonParserVisitor visitor) throws IOException {
-        visitDocument(visitor, _fromReader(new InputStreamReader(stream, encoding==null? "UTF-8":encoding)));
+        visitDocument(visitor, _fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding)));
     }
-
 
     @Override
     public void visitDocument(Reader reader, TsonParserVisitor visitor) throws IOException {
@@ -418,16 +414,22 @@ public class TsonReaderImpl implements TsonReader {
     }
 
     private ITsonStreamParser _fromReader(Reader reader) {
-        switch (parser){
-            case "default":
-            case "jflex":{
+        return _fromReader(reader, parser);
+    }
+
+    private ITsonStreamParser _fromReader(Reader reader, String parser) {
+        switch (parser) {
+            case "jflex": {
                 return new CustomJFlexTsonStreamParserImpl(reader);
             }
-            case "javacc":{
+            case "javacc": {
                 return new TsonStreamParserImpl(reader);
             }
-            case "custom-javacc":{
+            case "custom-javacc": {
                 return new CustomJavaccTsonStreamParserImpl(reader);
+            }
+            case "default": {
+                return _fromReader(reader, defaultParser);
             }
             default: {
                 throw new IllegalArgumentException("Unsupported parser " + parser);
