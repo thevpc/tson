@@ -295,6 +295,11 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     }
 
     @Override
+    public TsonBinOp toBinOp() {
+        throw new ClassCastException("Cannot cast Null to Bin Op type");
+    }
+
+    @Override
     public BigInteger getBigInteger() {
         return null;
     }

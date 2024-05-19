@@ -172,11 +172,18 @@ public class TsonParserUtils {
     }
 
     public static TsonElement parseCharElem(String s) {
+        if (s.length() != 1) {
+            return new TsonStringImpl(parseString(s), "'");
+        }
         return new TsonCharImpl(parseString(s).charAt(0));
     }
 
     public static TsonElement parseStringElem(String s) {
-        return new TsonStringImpl(parseString(s));
+        return new TsonStringImpl(parseString(s), "\"");
+    }
+
+    public static TsonElement parseMultiLineStringElem(String s) {
+        return new TsonStringImpl(parseMultiLineString(s), "\"\"\"");
     }
 
     public static TsonElement parseAliasElem(String s) {
@@ -209,6 +216,13 @@ public class TsonParserUtils {
 //        System.out.println(c2);
 //        System.out.println(c3);
 //    }
+
+    public static String parseMultiLineString(String s) {
+        char[] chars = s.toCharArray();
+        int len = chars.length;
+        final int beforeLen = len - 3;
+        return new String(chars, 3, beforeLen - 3);
+    }
 
     public static String parseString(String s) {
         char[] chars = s.toCharArray();
@@ -308,7 +322,7 @@ public class TsonParserUtils {
 
     public static TsonDocument elementToDocument(TsonElement root) {
         TsonAnnotation[] annotations = root.getAnnotations();
-        if (annotations.length > 0 && annotations[0].getName().equals("tson")) {
+        if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].getName())) {
             // will remove it
             TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];
             System.arraycopy(annotations, 1, annotations2, 0, annotations.length - 1);

@@ -61,6 +61,8 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     TsonPair toKeyValue();
 
+    TsonBinOp toBinOp();
+
     TsonBigInt toBigInt();
 
     TsonBigDecimal toBigDecimal();

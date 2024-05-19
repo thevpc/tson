@@ -33,6 +33,11 @@ public class TsonRandom {
         return names[randomInt(names.length)];
     }
 
+    public static String randomOp() {
+        String[] names = {"+", "-"};
+        return names[randomInt(names.length)];
+    }
+
     public static String randomId() {
         String[] names = {"hello", "world"};
         return names[randomInt(names.length)];
@@ -99,6 +104,13 @@ public class TsonRandom {
                         randomElement(t -> t != TsonElementType.PAIR)
                 );
             }
+            case BINOP: {
+                return Tson.binOp(
+                        randomOp(),
+                        randomElement(t -> t != TsonElementType.PAIR),
+                        randomElement(t -> t != TsonElementType.PAIR)
+                );
+            }
             case ARRAY: {
                 TsonArrayBuilder f = Tson.array();
                 if (randomBoolean()) {
@@ -148,22 +160,22 @@ public class TsonRandom {
             case BIG_DECIMAL: {
                 return Tson.bigDecimal(randomBigDecimal());
             }
-            case BIG_COMPLEX:{
-                return Tson.bigComplex(randomBigDecimal(),randomBigDecimal());
+            case BIG_COMPLEX: {
+                return Tson.bigComplex(randomBigDecimal(), randomBigDecimal());
             }
-            case FLOAT_COMPLEX:{
-                return Tson.floatComplex(randomFloat(),randomFloat());
+            case FLOAT_COMPLEX: {
+                return Tson.floatComplex(randomFloat(), randomFloat());
             }
-            case DOUBLE_COMPLEX:{
-                return Tson.doubleComplex(randomDouble(),randomDouble());
+            case DOUBLE_COMPLEX: {
+                return Tson.doubleComplex(randomDouble(), randomDouble());
             }
-            case CHAR_STREAM:{
-                return Tson.stopStream(randomString(),"<STOP>");
+            case CHAR_STREAM: {
+                return Tson.stopStream(randomString(), "<STOP>");
             }
-            case BINARY_STREAM:{
+            case BINARY_STREAM: {
                 return Tson.bstream(randomString().getBytes());
             }
-            case ALIAS:{
+            case ALIAS: {
                 return Tson.alias("customAlias");
             }
         }
@@ -179,7 +191,7 @@ public class TsonRandom {
     }
 
     private static BigDecimal randomBigDecimal() {
-        return new BigDecimal(randomBigInteger(),randomInt(10));
+        return new BigDecimal(randomBigInteger(), randomInt(10));
     }
 
     private static BigInteger randomBigInteger() {

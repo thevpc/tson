@@ -48,7 +48,21 @@ public class Tson {
         if (value == null) {
             return nullElem();
         }
-        return new TsonStringImpl(value);
+        return new TsonStringImpl(value, "\"");
+    }
+
+    public static TsonElement multiLineString(String value) {
+        if (value == null) {
+            return nullElem();
+        }
+        return new TsonStringImpl(value, "\"\"\"");
+    }
+
+    public static TsonElement simpleString(String value) {
+        if (value == null) {
+            return nullElem();
+        }
+        return new TsonStringImpl(value, "'");
     }
 
     public static TsonElement datetime(Instant value) {
@@ -185,6 +199,10 @@ public class Tson {
 
     public static TsonPair pair(TsonElementBase key, TsonElementBase value) {
         return new TsonPairImpl(elem(key), elem(value));
+    }
+
+    public static TsonBinOp binOp(String op, TsonElementBase key, TsonElementBase value) {
+        return new TsonBinOpImpl(op, elem(key), elem(value));
     }
 
     public static TsonPair pair(String key, TsonElementBase value) {

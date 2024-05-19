@@ -6,8 +6,6 @@ import net.thevpc.tson.impl.parser.CharStreamCodeSupports;
 import net.thevpc.tson.impl.util.AppendableWriter;
 import net.thevpc.tson.impl.util.KmpAlgo;
 import net.thevpc.tson.impl.util.TsonUtils;
-import net.thevpc.tson.*;
-import net.thevpc.tson.impl.util.*;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -288,7 +286,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
             }
             case STRING: {
                 String s = element.getString();
-                StringBuilder sb=new StringBuilder(s.length()*2);
+                StringBuilder sb = new StringBuilder(s.length() * 2);
                 TsonUtils.toDblStr(s, sb);
                 //TsonUtils.toDblStr(s, writer);
                 writer.append(sb);
@@ -311,6 +309,19 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     writer.append(":\n").append(TsonUtils.indent(vs, config.indent));
                 } else {
                     writer.append(':').append(config.beforeValue).append(vs);
+                }
+                return;
+            }
+            case BINOP: {
+                TsonBinOp t = element.toBinOp();
+                String op = t.op();
+                format(t.getFirst(), writer);
+                String vs = format(t.getSecond());
+                writer.append(config.afterKey);
+                if (config.indent.length() > 0 && vs.indexOf("\n") > 0) {
+                    writer.append(op).append("\n").append(TsonUtils.indent(vs, config.indent));
+                } else {
+                    writer.append(op).append(config.beforeValue).append(vs);
                 }
                 return;
             }
@@ -547,14 +558,14 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 case MATRIX: {
                     for (TsonElement tsonElement : a) {
 //                        if (acceptParamElement(tsonElement)) {
-                            if (i > 0) {
-                                sb2.append(",\n");
-                            }
-                            format(tsonElement, w);
-                            i++;
+                        if (i > 0) {
+                            sb2.append(",\n");
+                        }
+                        format(tsonElement, w);
+                        i++;
 //                        }
                     }
-                    if(i<2){
+                    if (i < 2) {
                         sb2.append(";\n");
                     }
                     break;
@@ -633,7 +644,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     i++;
                     //}
                 }
-                if(i<2){
+                if (i < 2) {
                     out.append(';').append(config.afterComma);
                 }
                 break;

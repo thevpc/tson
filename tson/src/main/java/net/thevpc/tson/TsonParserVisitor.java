@@ -35,6 +35,10 @@ public interface TsonParserVisitor {
 
     }
 
+    default void visitBinOpEnd(String op) {
+
+    }
+
     default void visitKeyValueEnd() {
 
     }
@@ -98,6 +102,10 @@ public interface TsonParserVisitor {
 
     }
     default void visitNamedArrayStart(){
+
+    }
+
+    default void listSeparator(){
 
     }
 }

@@ -10,11 +10,16 @@ import java.util.Objects;
 
 public class TsonStringImpl extends AbstractPrimitiveTsonElement implements TsonString {
 
+    private String stringType;
     private String value;
 
-    public TsonStringImpl(String value) {
+    public TsonStringImpl(String value,String stringType) {
         super(TsonElementType.STRING);
         this.value = value;
+        this.stringType = stringType;
+    }
+    public String stringType(){
+        return stringType;
     }
 
     @Override

@@ -15,7 +15,7 @@ public class TestFormats {
     public void test1() {
         try {
             DecimalFormat f = new DecimalFormat("00");
-            for (int i = 3; i <= 3; i++) {
+            for (int i = 4; i <= 4; i++) {
                 String name = "/test" + f.format(i) + ".tson";
                 System.out.println(name + "  ==============================================================");
                 TsonElement t = Tson.reader().readElement(TestFormats.class.getResource(name));

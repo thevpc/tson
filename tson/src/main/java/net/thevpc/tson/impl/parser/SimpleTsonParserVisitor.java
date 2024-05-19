@@ -56,7 +56,7 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
         return s;
     }
 
-//    public <T> List<T> getContextValues(String name) {
+    //    public <T> List<T> getContextValues(String name) {
 //        List<T> a = new ArrayList<>();
 //        for (int i = stackSize - 1; i >= 0; i--) {
 //            T u = (T) stack[i].map.get(name);
@@ -184,6 +184,16 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
         ElementContext b = pop();
         ElementContext a = peek();
         repush(new ElementContext(Tson.pair(a.value, b.value)));
+    }
+
+    public void visitBinOpEnd(String op) {
+        ElementContext b = pop();
+        ElementContext a = peek();
+        if (":".equals(op)) {
+            repush(new ElementContext(Tson.pair(a.value, b.value)));
+        } else {
+            repush(new ElementContext(Tson.binOp(op, a.value, b.value)));
+        }
     }
 
     @Override

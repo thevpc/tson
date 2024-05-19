@@ -54,6 +54,7 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
         boolean decorated;
         String comments;
         List<TsonAnnotation> annotations;
+
         public boolean paramsEmpty() {
             return params == null || params.isEmpty();
         }
@@ -61,9 +62,11 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
         public ArrayList<TsonElement> params() {
             return params == null ? new ArrayList<>() : params;
         }
+
         public ArrayList<TsonElement> object() {
             return object == null ? new ArrayList<>() : object;
         }
+
         public ArrayList<TsonElement> array() {
             return array == null ? new ArrayList<>() : array;
         }
@@ -74,6 +77,16 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
         TsonElement b = pop();
         TsonElement a = peek();
         repush(Tson.pair(a, b));
+    }
+
+    public void visitBinOpEnd(String op) {
+        TsonElement b = pop();
+        TsonElement a = peek();
+        if (":".equals(op)) {
+            repush(Tson.pair(a, b));
+        } else {
+            repush(Tson.binOp(op, a, b));
+        }
     }
 
     @Override

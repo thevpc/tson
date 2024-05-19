@@ -28,6 +28,7 @@ public enum TsonElementType {
     OBJECT(false,false,false),
     MATRIX(false,false,false),
     PAIR(false,false,false),
+    BINOP(false,false,false),
     FUNCTION(false,false,false),
     UPLET(false,false,false),
     ;

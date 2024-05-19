@@ -258,6 +258,11 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
     }
 
     @Override
+    public TsonBinOp toBinOp() {
+        return throwNonPrimitive(TsonElementType.BINOP);
+    }
+
+    @Override
     public TsonBinaryStream toBinaryStream() {
         return throwPrimitive(TsonElementType.BINARY_STREAM);
     }

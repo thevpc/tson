@@ -231,7 +231,10 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
     public TsonPair toKeyValue() {
         return throwNonPrimitive(TsonElementType.PAIR);
     }
-
+    @Override
+    public TsonBinOp toBinOp() {
+        return throwNonPrimitive(TsonElementType.BINOP);
+    }
     @Override
     public Number getNumber() {
         return throwNonPrimitive(TsonElementType.DOUBLE);

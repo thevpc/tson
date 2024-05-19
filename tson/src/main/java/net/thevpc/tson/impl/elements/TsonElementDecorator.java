@@ -393,6 +393,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
+    public TsonBinOp toBinOp() {
+        return base.toBinOp();
+    }
+
+    @Override
     public float getFloat() {
         return base.getFloat();
     }
@@ -678,6 +683,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsString(TsonString base, String comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public String stringType() {
+            return "\"";
         }
 
         @Override
