@@ -37,6 +37,7 @@ public class TsonParseException extends RuntimeException {
      * The string image of the token.
      */
     public String currentTokenImage;
+    public Object source;
 
     public TsonParseException(ParseException ex) {
         super(ex.getMessage());
@@ -51,7 +52,7 @@ public class TsonParseException extends RuntimeException {
         currentTokenImage = ex.currentToken.image;
     }
 
-    public TsonParseException(Throwable cause) {
-        super(cause);
+    public TsonParseException(Throwable cause, Object source) {
+        super("[" + source + "] " + cause.toString(), cause);
     }
 }

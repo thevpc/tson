@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 
 import java.time.Instant;
@@ -83,19 +82,19 @@ public class TsonTimeImpl extends AbstractTemporalTsonElement implements TsonTim
 
     @Override
     public int compareTo(TsonElement o) {
-        if (o.getType().isTemporal()) {
-            switch (o.getType()) {
+        if (o.type().isTemporal()) {
+            switch (o.type()) {
                 case DATETIME: {
                     int i = getDateTime().compareTo(o.getDateTime());
-                    return i == 0 ? getType().compareTo(o.getType()) : i;
+                    return i == 0 ? type().compareTo(o.type()) : i;
                 }
                 case DATE: {
                     int i = getDate().compareTo(o.getDate());
-                    return i == 0 ? getType().compareTo(o.getType()) : i;
+                    return i == 0 ? type().compareTo(o.type()) : i;
                 }
                 case TIME: {
                     int i = getValue().compareTo(o.getTime());
-                    return i == 0 ? getType().compareTo(o.getType()) : i;
+                    return i == 0 ? type().compareTo(o.type()) : i;
                 }
             }
         }

@@ -27,7 +27,7 @@ public class TsonObjectBuilderSupport {
 
     public void remove(TsonElementBase element) {
         TsonElement e = Tson.elem(element).build();
-        elements.removeIf(elem -> elem.equals(e) || (elem.getType() == TsonElementType.PAIR && elem.toKeyValue().getKey().equals(e)));
+        elements.removeIf(elem -> elem.equals(e) || (elem.type() == TsonElementType.PAIR && elem.toPair().getKey().equals(e)));
     }
 
     public void remove(String name) {
@@ -79,7 +79,7 @@ public class TsonObjectBuilderSupport {
 
     public void set(TsonElementBase element0) {
         TsonElement element = element0.build();
-        switch (element.getType()) {
+        switch (element.type()) {
             case ARRAY: {
                 addAll(element.toArray().getAll());
                 return;
@@ -89,7 +89,7 @@ public class TsonObjectBuilderSupport {
                 return;
             }
         }
-        throw new IllegalArgumentException("Unsupported copy from " + element.getType());
+        throw new IllegalArgumentException("Unsupported copy from " + element.type());
     }
 
     public void ensureCapacity(int length) {

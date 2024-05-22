@@ -11,7 +11,7 @@ public class TsonKeyValueBuilderImpl extends AbstractTsonElementBuilder<TsonKeyV
     private TsonElement value;
 
     @Override
-    public TsonElementType getType() {
+    public TsonElementType type() {
         return TsonElementType.PAIR;
     }
 

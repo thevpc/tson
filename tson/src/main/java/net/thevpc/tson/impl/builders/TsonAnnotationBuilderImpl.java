@@ -2,7 +2,6 @@ package net.thevpc.tson.impl.builders;
 
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.elements.TsonAnnotationImpl;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.util.ArrayList;
@@ -116,7 +115,7 @@ public class TsonAnnotationBuilderImpl implements TsonAnnotationBuilder {
     @Override
     public TsonAnnotationBuilder merge(TsonElementBase element0) {
         TsonElement element = Tson.elem(element0);
-        switch (element.getType()) {
+        switch (element.type()) {
             case ARRAY: {
                 TsonElementHeader h = element.toArray().getHeader();
                 if (h != null) {
@@ -140,7 +139,7 @@ public class TsonAnnotationBuilderImpl implements TsonAnnotationBuilder {
                 return this;
             }
         }
-        throw new IllegalArgumentException("Unsupported copy from " + element.getType());
+        throw new IllegalArgumentException("Unsupported copy from " + element.type());
     }
 
     @Override

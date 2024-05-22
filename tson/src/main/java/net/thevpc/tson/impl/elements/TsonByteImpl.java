@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 
 import java.util.Objects;
@@ -140,31 +139,31 @@ public class TsonByteImpl extends AbstractNumberTsonElement implements TsonByte 
 
     @Override
     public int compareTo(TsonElement o) {
-        if (o.getType().isNumber()) {
-            switch (o.getType()) {
+        if (o.type().isNumber()) {
+            switch (o.type()) {
                 case BYTE: {
                     int i= Byte.compare(getValue(), o.getByte());
-                    return i == 0 ? getType().compareTo(o.getType()):i;
+                    return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case SHORT: {
                     int i= Short.compare(getValue(), o.getShort());
-                    return i == 0 ? getType().compareTo(o.getType()):i;
+                    return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case INT: {
                     int i= Integer.compare(getValue(), o.getInt());
-                    return i == 0 ? getType().compareTo(o.getType()):i;
+                    return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case LONG: {
                     int i= Long.compare(getValue(), o.getLong());
-                    return i == 0 ? getType().compareTo(o.getType()):i;
+                    return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case FLOAT: {
                     int i= Float.compare(getValue(), o.getFloat());
-                    return i == 0 ? getType().compareTo(o.getType()):i;
+                    return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case DOUBLE: {
                     int i= Double.compare(getValue(), o.getDouble());
-                    return i == 0 ? getType().compareTo(o.getType()):i;
+                    return i == 0 ? type().compareTo(o.type()):i;
                 }
             }
         }

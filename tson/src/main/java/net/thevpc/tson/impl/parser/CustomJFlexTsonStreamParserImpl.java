@@ -21,7 +21,14 @@ public class CustomJFlexTsonStreamParserImpl implements ITsonStreamParser {
     private int c_kind;
 
     private boolean pushedBack;
+    private Object source;
 
+    public Object source(){
+        return source;
+    }
+    public void source(Object source){
+        this.source=source;
+    }
     public String getTokenString() {
         switch (c_kind) {
             case TsonStreamParserImplConstants.STRING: {

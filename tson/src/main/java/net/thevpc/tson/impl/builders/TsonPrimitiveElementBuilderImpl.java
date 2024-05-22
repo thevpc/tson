@@ -3,7 +3,6 @@ package net.thevpc.tson.impl.builders;
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.elements.TsonElementDecorator;
 import net.thevpc.tson.impl.elements.TsonNullImpl;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.io.File;
@@ -20,8 +19,8 @@ public class TsonPrimitiveElementBuilderImpl extends AbstractTsonElementBuilder<
     private TsonElement value = TsonNullImpl.INSTANCE;
 
     @Override
-    public TsonElementType getType() {
-        return value.getType();
+    public TsonElementType type() {
+        return value.type();
     }
 
     @Override
@@ -36,13 +35,13 @@ public class TsonPrimitiveElementBuilderImpl extends AbstractTsonElementBuilder<
             setComments(d.getComments());
             setAnnotations(d.getAnnotations());
         } else {
-            switch (element.getType()) {
+            switch (element.type()) {
                 case PAIR:
                 case OBJECT:
                 case UPLET:
                 case ARRAY:
                 case FUNCTION:{
-                    throw new ClassCastException("Not a primitive type " + element.getType());
+                    throw new ClassCastException("Not a primitive type " + element.type());
                 }
             }
             this.value = element;

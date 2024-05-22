@@ -2,7 +2,6 @@ package net.thevpc.tson.impl.builders;
 
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.elements.TsonUpletImpl;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
     private ArrayList<TsonElement> elements = new ArrayList<>();
 
     @Override
-    public TsonElementType getType() {
+    public TsonElementType type() {
         return TsonElementType.UPLET;
     }
 
@@ -98,7 +97,7 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
     @Override
     public TsonUpletBuilder merge(TsonElementBase element0) {
         TsonElement element = element0.build();
-        switch (element.getType()) {
+        switch (element.type()) {
             case ARRAY: {
                 TsonElementHeader h = element.toArray().getHeader();
                 if (h != null) {
@@ -122,7 +121,7 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
                 return this;
             }
         }
-        throw new IllegalArgumentException("Unsupported copy from " + element.getType());
+        throw new IllegalArgumentException("Unsupported copy from " + element.type());
     }
 
     @Override

@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.marshall;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.io.IOException;
@@ -332,8 +331,8 @@ public class TsonSerializerConfig {
             ClassPropertiesRegistry.ClassInfo ci = classPropertiesRegistry.getClassInfo(to);
             Object o = ci.newInstance();
             for (TsonElement a : elements) {
-                if (a.getType() == TsonElementType.PAIR) {
-                    TsonPair kv = a.toKeyValue();
+                if (a.type() == TsonElementType.PAIR) {
+                    TsonPair kv = a.toPair();
                     Object u = context.obj(kv.getKey(), null);
                     if (u instanceof String) {
                         ClassPropertiesRegistry.TypeProperty property = ci.getProperty((String) u, true);
@@ -351,8 +350,8 @@ public class TsonSerializerConfig {
             return o;
         }
         for (TsonElement a : elements) {
-            if (a.getType() == TsonElementType.PAIR) {
-                TsonPair kv = a.toKeyValue();
+            if (a.type() == TsonElementType.PAIR) {
+                TsonPair kv = a.toPair();
                 coll.put(
                         context.obj(kv.getKey(), null),
                         context.obj(kv.getValue(), null)
@@ -371,12 +370,12 @@ public class TsonSerializerConfig {
         return new Map.Entry() {
             @Override
             public Object getKey() {
-                return context.obj(element.toKeyValue().getKey(), null);
+                return context.obj(element.toPair().getKey(), null);
             }
 
             @Override
             public Object getValue() {
-                return context.obj(element.toKeyValue().getValue(), null);
+                return context.obj(element.toPair().getValue(), null);
             }
 
             @Override
@@ -435,7 +434,7 @@ public class TsonSerializerConfig {
 
 
     private TypeElementSignature sig(TsonElement e, Class to) {
-        final TsonElementType etype = e.getType();
+        final TsonElementType etype = e.type();
         switch (etype) {
             case ARRAY: {
                 TsonElementHeader h = e.toArray().getHeader();

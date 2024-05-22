@@ -2,7 +2,6 @@ package net.thevpc.tson.impl.builders;
 
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.elements.TsonDocumentHeaderImpl;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.nio.charset.Charset;
@@ -30,10 +29,10 @@ public class TsonDocumentHeaderBuilderImpl implements TsonDocumentHeaderBuilder 
             List<TsonElement> params = a.getAll();
             boolean acceptStr=true;
             for (TsonElement param : params) {
-                switch (param.getType()) {
+                switch (param.type()) {
                     case PAIR: {
                         acceptStr=false;
-                        TsonPair kv = param.toKeyValue();
+                        TsonPair kv = param.toPair();
                         switch (kv.getKey().getString()) {
                             case "version": {
                                 version = kv.getValue().getString();

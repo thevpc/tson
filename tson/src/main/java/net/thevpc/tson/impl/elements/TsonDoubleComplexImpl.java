@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 
 import java.math.BigDecimal;
@@ -186,8 +185,8 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
 
     @Override
     public int compareTo(TsonElement o) {
-        if (o.getType().isNumber()) {
-            switch (o.getType()) {
+        if (o.type().isNumber()) {
+            switch (o.type()) {
                 case BYTE:
                 case SHORT:
                 case INT:
@@ -196,12 +195,12 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
                 case FLOAT:
                 case DOUBLE:{
                     int i = compare(this, o.toDoubleComplex());
-                    return i == 0 ? getType().compareTo(o.getType()) : i;
+                    return i == 0 ? type().compareTo(o.type()) : i;
                 }
                 case BIG_DECIMAL:
                 case BIG_COMPLEX: {
                     int i = this.toBigComplex().compareTo(o.toBigComplex());
-                    return i == 0 ? getType().compareTo(o.getType()) : i;
+                    return i == 0 ? type().compareTo(o.type()) : i;
                 }
             }
         }

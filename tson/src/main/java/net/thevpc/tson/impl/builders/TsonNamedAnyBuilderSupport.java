@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.builders;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 
 public class TsonNamedAnyBuilderSupport extends TsonParamsBuilderSupport {
     private String name;
@@ -22,7 +21,7 @@ public class TsonNamedAnyBuilderSupport extends TsonParamsBuilderSupport {
 
     public void set(TsonElementBase element0) {
         TsonElement element = Tson.elem(element0);
-        switch (element.getType()) {
+        switch (element.type()) {
             case ARRAY: {
                 TsonElementHeader narr = element.toArray().getHeader();
                 setName(narr.getName());
@@ -46,6 +45,6 @@ public class TsonNamedAnyBuilderSupport extends TsonParamsBuilderSupport {
                 return;
             }
         }
-        throw new IllegalArgumentException("Unsupported copy from " + element.getType());
+        throw new IllegalArgumentException("Unsupported copy from " + element.type());
     }
 }

@@ -86,13 +86,13 @@ public class TsonReaderImpl implements TsonReader {
     /////////////////////////////////
     @Override
     public <T> T read(InputStream stream, Class<? extends T> clazz) throws IOException {
-        return read(clazz, _fromReader(new InputStreamReader(stream)));
+        return read(clazz, _fromReader(new InputStreamReader(stream), "stream"));
     }
 
     @Override
     public <T> T read(CharSequence string, Class<? extends T> clazz) {
         try (Reader r = createStringReader(string)) {
-            return read(clazz, _fromReader(r));
+            return read(clazz, _fromReader(r, "stream"));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -100,45 +100,45 @@ public class TsonReaderImpl implements TsonReader {
 
     @Override
     public <T> T read(InputStream stream, String encoding, Class<? extends T> clazz) throws IOException {
-        return read(clazz, _fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding)));
+        return read(clazz, _fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding), "stream"));
     }
 
     @Override
     public <T> T read(Reader reader, Class<? extends T> clazz) throws IOException {
-        return read(clazz, _fromReader(reader));
+        return read(clazz, _fromReader(reader, String.valueOf(reader)));
     }
 
     @Override
     public <T> T read(File file, Class<? extends T> clazz) throws IOException {
         try (Reader is = new FileReader(file)) {
-            return read(clazz, _fromReader(is));
+            return read(clazz, _fromReader(is, file));
         }
     }
 
     @Override
     public <T> T read(Path file, Class<? extends T> clazz) throws IOException {
         try (Reader is = Files.newBufferedReader(file)) {
-            return read(clazz, _fromReader(is));
+            return read(clazz, _fromReader(is, file));
         }
     }
 
     @Override
     public <T> T read(URL url, Class<? extends T> clazz) throws IOException {
         try (Reader is = new InputStreamReader(url.openStream())) {
-            return read(clazz, _fromReader(is));
+            return read(clazz, _fromReader(is, url));
         }
     }
 
     /////////////////////////////////
     @Override
     public TsonElement readElement(InputStream stream) {
-        return readElement(_fromReader(new InputStreamReader(stream)));
+        return readElement(_fromReader(new InputStreamReader(stream), "stream"));
     }
 
     @Override
     public TsonElement readElement(CharSequence string) {
         try (Reader r = createStringReader(string)) {
-            return readElement(_fromReader(r));
+            return readElement(_fromReader(r, "stream"));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -146,46 +146,46 @@ public class TsonReaderImpl implements TsonReader {
 
     @Override
     public TsonElement readElement(InputStream stream, String encoding) throws IOException {
-        return readElement(_fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding)));
+        return readElement(_fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding), "stream"));
     }
 
     @Override
     public TsonElement readElement(Reader reader) {
-        return readElement(_fromReader(reader));
+        return readElement(_fromReader(reader, "stream"));
     }
 
     @Override
     public TsonElement readElement(File file) throws IOException {
         try (Reader is = new FileReader(file)) {
-            return readElement(_fromReader(is));
+            return readElement(_fromReader(is, file));
         }
     }
 
     @Override
     public TsonElement readElement(Path file) throws IOException {
         try (Reader is = Files.newBufferedReader(file)) {
-            return readElement(_fromReader(is));
+            return readElement(_fromReader(is, file));
         }
     }
 
     @Override
     public TsonElement readElement(URL url) throws IOException {
         try (Reader is = new InputStreamReader(url.openStream())) {
-            return readElement(_fromReader(is));
+            return readElement(_fromReader(is, url));
         }
     }
     /////////////////////////////////
 
     @Override
     public TsonDocument readDocument(InputStream stream) {
-        return readDocument(_fromReader(new InputStreamReader(stream)));
+        return readDocument(_fromReader(new InputStreamReader(stream), "stream"));
     }
 
     @Override
     public TsonDocument readDocument(CharSequence string) {
         try {
             try (Reader r = createStringReader(string)) {
-                return readDocument(_fromReader(r));
+                return readDocument(_fromReader(r, "stream"));
             }
         } catch (IOException e) {
             throw new UncheckedIOException(e);
@@ -198,45 +198,45 @@ public class TsonReaderImpl implements TsonReader {
 
     @Override
     public TsonDocument readDocument(InputStream stream, String encoding) throws IOException {
-        return readDocument(_fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding)));
+        return readDocument(_fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding), "stream"));
     }
 
     @Override
     public TsonDocument readDocument(Reader reader) {
-        return readDocument(_fromReader(reader));
+        return readDocument(_fromReader(reader, "stream"));
     }
 
     @Override
     public TsonDocument readDocument(File file) throws IOException {
         try (Reader is = new FileReader(file)) {
-            return readDocument(_fromReader(is));
+            return readDocument(_fromReader(is, file));
         }
     }
 
     @Override
     public TsonDocument readDocument(Path file) throws IOException {
         try (Reader is = Files.newBufferedReader(file)) {
-            return readDocument(_fromReader(is));
+            return readDocument(_fromReader(is, file));
         }
     }
 
     @Override
     public TsonDocument readDocument(URL url) throws IOException {
         try (Reader is = new InputStreamReader(url.openStream())) {
-            return readDocument(_fromReader(is));
+            return readDocument(_fromReader(is, url));
         }
     }
 
     /////////////////////////////////
     @Override
     public void visitElement(InputStream stream, TsonParserVisitor visitor) {
-        visitElement(visitor, _fromReader(new InputStreamReader(stream)));
+        visitElement(visitor, _fromReader(new InputStreamReader(stream), "stream"));
     }
 
     @Override
     public void visitElement(CharSequence string, TsonParserVisitor visitor) {
         try (Reader r = createStringReader(string)) {
-            visitElement(visitor, _fromReader(r));
+            visitElement(visitor, _fromReader(r, "stream"));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -244,45 +244,45 @@ public class TsonReaderImpl implements TsonReader {
 
     @Override
     public void visitElement(InputStream stream, String encoding, TsonParserVisitor visitor) throws IOException {
-        visitElement(visitor, _fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding)));
+        visitElement(visitor, _fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding), "stream"));
     }
 
     @Override
     public void visitElement(Reader reader, TsonParserVisitor visitor) {
-        visitElement(visitor, _fromReader(reader));
+        visitElement(visitor, _fromReader(reader, "stream"));
     }
 
     @Override
     public void visitElement(File file, TsonParserVisitor visitor) throws IOException {
         try (Reader is = new FileReader(file)) {
-            visitElement(visitor, _fromReader(is));
+            visitElement(visitor, _fromReader(is, file));
         }
     }
 
     @Override
     public void visitElement(Path file, TsonParserVisitor visitor) throws IOException {
         try (Reader is = Files.newBufferedReader(file)) {
-            visitElement(visitor, _fromReader(is));
+            visitElement(visitor, _fromReader(is, file));
         }
     }
 
     @Override
     public void visitElement(URL url, TsonParserVisitor visitor) throws IOException {
         try (Reader is = new InputStreamReader(url.openStream())) {
-            visitElement(visitor, _fromReader(is));
+            visitElement(visitor, _fromReader(is, url));
         }
     }
 
     /////////////////////////////////
     @Override
     public void visitDocument(InputStream stream, TsonParserVisitor visitor) throws IOException {
-        visitDocument(visitor, _fromReader(new InputStreamReader(stream)));
+        visitDocument(visitor, _fromReader(new InputStreamReader(stream), "stream"));
     }
 
     @Override
     public void visitDocument(CharSequence string, TsonParserVisitor visitor) {
         try (Reader r = createStringReader(string)) {
-            visitDocument(visitor, _fromReader(r));
+            visitDocument(visitor, _fromReader(r, "stream"));
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -290,46 +290,46 @@ public class TsonReaderImpl implements TsonReader {
 
     @Override
     public void visitDocument(InputStream stream, String encoding, TsonParserVisitor visitor) throws IOException {
-        visitDocument(visitor, _fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding)));
+        visitDocument(visitor, _fromReader(new InputStreamReader(stream, encoding == null ? "UTF-8" : encoding), "stream"));
     }
 
     @Override
     public void visitDocument(Reader reader, TsonParserVisitor visitor) throws IOException {
-        visitDocument(visitor, _fromReader(reader));
+        visitDocument(visitor, _fromReader(reader, "stream"));
     }
 
     @Override
     public void visitDocument(File file, TsonParserVisitor visitor) throws IOException {
         try (Reader is = new FileReader(file)) {
-            visitDocument(visitor, _fromReader(is));
+            visitDocument(visitor, _fromReader(is, file));
         }
     }
 
     @Override
     public void visitDocument(Path file, TsonParserVisitor visitor) throws IOException {
         try (Reader is = Files.newBufferedReader(file)) {
-            visitDocument(visitor, _fromReader(is));
+            visitDocument(visitor, _fromReader(is, file));
         }
     }
 
     @Override
     public void visitDocument(URL url, TsonParserVisitor visitor) throws IOException {
         try (Reader is = new InputStreamReader(url.openStream())) {
-            visitDocument(visitor, _fromReader(is));
+            visitDocument(visitor, _fromReader(is, url));
         }
     }
 
     @Override
     public void visitElement(String tsonString, TsonParserVisitor visitor) {
         try (StringReader is = new StringReader(tsonString)) {
-            visitElement(visitor, _fromReader(is));
+            visitElement(visitor, _fromReader(is, "string"));
         }
     }
 
     @Override
     public void visitDocument(String tsonString, TsonParserVisitor visitor) {
         try (StringReader is = new StringReader(tsonString)) {
-            visitDocument(visitor, _fromReader(is));
+            visitDocument(visitor, _fromReader(is, "string"));
         }
     }
 
@@ -347,7 +347,7 @@ public class TsonReaderImpl implements TsonReader {
                 try {
                     source.parseElement();
                 } catch (Exception e) {
-                    throw new TsonParseException(e);
+                    throw new TsonParseException(e,source.source());
                 }
                 return (T) r.getElement();
             }
@@ -355,7 +355,7 @@ public class TsonReaderImpl implements TsonReader {
                 try {
                     source.parseDocument();
                 } catch (Exception e) {
-                    throw new TsonParseException(e);
+                    throw new TsonParseException(e,source.source());
                 }
                 return (T) r.getDocument();
             }
@@ -363,7 +363,7 @@ public class TsonReaderImpl implements TsonReader {
         try {
             source.parseElement();
         } catch (Exception e) {
-            throw new TsonParseException(e);
+            throw new TsonParseException(e,source.source());
         }
         TsonElement elem = r.getElement();
         return marshaller.deserialize(elem, clazz);
@@ -376,7 +376,7 @@ public class TsonReaderImpl implements TsonReader {
         try {
             source.parseElement();
         } catch (Exception e) {
-            throw new TsonParseException(e);
+            throw new TsonParseException(e,source.source());
         }
         return r.getElement();
     }
@@ -388,7 +388,7 @@ public class TsonReaderImpl implements TsonReader {
         try {
             source.parseDocument();
         } catch (Exception e) {
-            throw new TsonParseException(e);
+            throw new TsonParseException(e,source.source());
         }
         return r.getDocument();
     }
@@ -399,7 +399,7 @@ public class TsonReaderImpl implements TsonReader {
         try {
             source.parseElement();
         } catch (Exception e) {
-            throw new TsonParseException(e);
+            throw new TsonParseException(e,source.source());
         }
     }
 
@@ -409,27 +409,33 @@ public class TsonReaderImpl implements TsonReader {
         try {
             source.parseDocument();
         } catch (Exception e) {
-            throw new TsonParseException(e);
+            throw new TsonParseException(e,source.source());
         }
     }
 
-    private ITsonStreamParser _fromReader(Reader reader) {
-        return _fromReader(reader, parser);
+    private ITsonStreamParser _fromReader(Reader reader, Object source) {
+        return _fromReader(reader, parser, source);
     }
 
-    private ITsonStreamParser _fromReader(Reader reader, String parser) {
+    private ITsonStreamParser _fromReader(Reader reader, String parser, Object source) {
         switch (parser) {
             case "jflex": {
-                return new CustomJFlexTsonStreamParserImpl(reader);
+                CustomJFlexTsonStreamParserImpl s = new CustomJFlexTsonStreamParserImpl(reader);
+                s.source(source);
+                return s;
             }
             case "javacc": {
-                return new TsonStreamParserImpl(reader);
+                TsonStreamParserImpl s = new TsonStreamParserImpl(reader);
+                s.source(source);
+                return s;
             }
             case "custom-javacc": {
-                return new CustomJavaccTsonStreamParserImpl(reader);
+                CustomJavaccTsonStreamParserImpl s = new CustomJavaccTsonStreamParserImpl(reader);
+                s.source(source);
+                return s;
             }
             case "default": {
-                return _fromReader(reader, defaultParser);
+                return _fromReader(reader, defaultParser, source);
             }
             default: {
                 throw new IllegalArgumentException("Unsupported parser " + parser);

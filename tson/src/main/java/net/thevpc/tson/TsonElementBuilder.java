@@ -36,7 +36,7 @@ public interface TsonElementBuilder extends TsonElementBase{
 
     TsonFunctionBuilder toFunction();
 
-    TsonElementType getType();
+    TsonElementType type();
 
     String getComments();
 

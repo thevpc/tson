@@ -12,7 +12,7 @@ public class TsonBinOpBuilderImpl extends AbstractTsonElementBuilder<TsonBinOpBu
     private TsonElement value;
 
     @Override
-    public TsonElementType getType() {
+    public TsonElementType type() {
         return TsonElementType.BINOP;
     }
 

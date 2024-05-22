@@ -1,7 +1,7 @@
 package net.thevpc.tson;
 
 public interface TsonElementBase {
-    TsonElementType getType();
+    TsonElementType type();
 
     TsonElement build();
 

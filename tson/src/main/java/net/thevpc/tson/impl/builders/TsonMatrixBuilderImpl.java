@@ -2,7 +2,6 @@ package net.thevpc.tson.impl.builders;
 
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.elements.TsonMatrixImpl;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.util.AbstractList;
@@ -56,7 +55,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
     }
 
     @Override
-    public TsonElementType getType() {
+    public TsonElementType type() {
         return TsonElementType.MATRIX;
     }
 
@@ -251,7 +250,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
     @Override
     public TsonMatrixBuilder merge(TsonElementBase element) {
         TsonElement e = Tson.elem(element);
-        switch (e.getType()) {
+        switch (e.type()) {
             case UPLET: {
                 header.addAll(e.toUplet());
                 break;

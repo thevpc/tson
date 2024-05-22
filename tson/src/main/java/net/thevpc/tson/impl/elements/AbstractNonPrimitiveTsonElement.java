@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -14,11 +13,11 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
     }
 
     protected <T> T throwPrimitive(TsonElementType type){
-        throw new ClassCastException(getType()+" is not a primitive. Cannot cast to "+type);
+        throw new ClassCastException(type()+" is not a primitive. Cannot cast to "+type);
     }
 
     protected <T> T throwNonPrimitive(TsonElementType type){
-        throw new ClassCastException(getType()+" cannot be cast to "+type);
+        throw new ClassCastException(type()+" cannot be cast to "+type);
     }
 
     @Override
@@ -228,7 +227,7 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
     }
 
     @Override
-    public TsonPair toKeyValue() {
+    public TsonPair toPair() {
         return throwNonPrimitive(TsonElementType.PAIR);
     }
     @Override

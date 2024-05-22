@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 
 import java.util.Objects;
@@ -144,19 +143,19 @@ public class TsonFloatImpl extends AbstractNumberTsonElement implements TsonFloa
         long lon=Long.MAX_VALUE;
         float t=Float.MAX_VALUE;
         float v = lon + t;
-        if (o.getType().isNumber()) {
-            switch (o.getType()) {
+        if (o.type().isNumber()) {
+            switch (o.type()) {
                 case BYTE:
                 case SHORT:
                 case INT:
                 case LONG:
                 case FLOAT: {
                     int i= Float.compare(getValue(), o.getFloat());
-                    return i == 0 ? getType().compareTo(o.getType()):i;
+                    return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case DOUBLE: {
                     int i= Double.compare(getValue(), o.getDouble());
-                    return i == 0 ? getType().compareTo(o.getType()):i;
+                    return i == 0 ? type().compareTo(o.type()):i;
                 }
             }
         }

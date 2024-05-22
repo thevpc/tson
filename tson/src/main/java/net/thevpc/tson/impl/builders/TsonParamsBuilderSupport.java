@@ -67,7 +67,7 @@ public class TsonParamsBuilderSupport {
 
     public void set(TsonElementBase element0) {
         TsonElement element = Tson.elem(element0);
-        switch (element.getType()) {
+        switch (element.type()) {
             case ARRAY: {
                 TsonElementHeader h = element.toArray().getHeader();
                 if (h != null) {

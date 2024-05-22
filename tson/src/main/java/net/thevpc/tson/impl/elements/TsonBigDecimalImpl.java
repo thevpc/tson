@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 
 import java.math.BigDecimal;
@@ -157,8 +156,8 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
 
     @Override
     public int compareTo(TsonElement o) {
-        if (o.getType().isNumber()) {
-            switch (o.getType()) {
+        if (o.type().isNumber()) {
+            switch (o.type()) {
                 case BYTE:
                 case SHORT:
                 case INT:
@@ -169,7 +168,7 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
                 case BIG_DECIMAL:
                     {
                     int i= getBigDecimal().compareTo(o.getBigDecimal());
-                    return i == 0 ? getType().compareTo(o.getType()):i;
+                    return i == 0 ? type().compareTo(o.type()):i;
                 }
             }
         }

@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 
@@ -24,7 +23,7 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     }
 
     @Override
-    public TsonElementType getType() {
+    public TsonElementType type() {
         return TsonElementType.NULL;
     }
 
@@ -160,7 +159,7 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     //element implementation
 
     @Override
-    public TsonPair toKeyValue() {
+    public TsonPair toPair() {
         throw new ClassCastException("Cannot cast Null to Non Null type");
     }
 
@@ -341,7 +340,7 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
 
     @Override
     public int compareTo(TsonElement o) {
-        if (o.getType() == TsonElementType.NULL) {
+        if (o.type() == TsonElementType.NULL) {
             return 0;
         }
         return -1;

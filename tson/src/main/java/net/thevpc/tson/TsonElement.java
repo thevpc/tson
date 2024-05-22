@@ -59,7 +59,7 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     TsonUplet toUplet();
 
-    TsonPair toKeyValue();
+    TsonPair toPair();
 
     TsonBinOp toBinOp();
 

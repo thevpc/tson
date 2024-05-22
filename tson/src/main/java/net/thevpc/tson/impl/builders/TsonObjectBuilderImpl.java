@@ -2,7 +2,6 @@ package net.thevpc.tson.impl.builders;
 
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.elements.TsonObjectImpl;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.util.Iterator;
@@ -14,7 +13,7 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
     private TsonElementHeaderBuilderImpl<TsonObjectBuilder> header = new TsonElementHeaderBuilderImpl(this);
 
     @Override
-    public TsonElementType getType() {
+    public TsonElementType type() {
         return TsonElementType.OBJECT;
     }
 
@@ -177,7 +176,7 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
     @Override
     public TsonObjectBuilder merge(TsonElementBase element) {
         TsonElement e = Tson.elem(element);
-        switch (e.getType()) {
+        switch (e.type()) {
             case UPLET: {
                 header.addAll(e.toUplet());
                 break;

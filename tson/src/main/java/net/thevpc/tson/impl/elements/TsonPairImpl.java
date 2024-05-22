@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonKeyValueBuilderImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 
@@ -19,10 +18,10 @@ public class TsonPairImpl extends AbstractNonPrimitiveTsonElement implements Tso
         if (value == null) {
             throw new IllegalArgumentException("Value cannot be null. Try to use NULL Tson element");
         }
-        if (key.getType() == TsonElementType.PAIR) {
+        if (key.type() == TsonElementType.PAIR) {
             throw new IllegalArgumentException("Key of Key Value cannot be a key value as well");
         }
-        if (value.getType() == TsonElementType.PAIR) {
+        if (value.type() == TsonElementType.PAIR) {
             throw new IllegalArgumentException("Key of Key Value cannot be a key value as well");
         }
         this.key = key;
@@ -30,7 +29,7 @@ public class TsonPairImpl extends AbstractNonPrimitiveTsonElement implements Tso
     }
 
     @Override
-    public TsonPair toKeyValue() {
+    public TsonPair toPair() {
         return this;
     }
 
@@ -79,7 +78,7 @@ public class TsonPairImpl extends AbstractNonPrimitiveTsonElement implements Tso
 
     @Override
     protected int compareCore(TsonElement o) {
-        TsonPair oo = o.toKeyValue();
+        TsonPair oo = o.toPair();
         return TsonUtils.compareElementsArray(
                 new TsonElement[]{getKey(), getValue()},
                 new TsonElement[]{oo.getKey(), oo.getValue()}

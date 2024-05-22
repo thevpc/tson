@@ -2,7 +2,6 @@ package net.thevpc.tson.impl.builders;
 
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.elements.TsonFunctionImpl;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.util.ArrayList;
@@ -15,7 +14,7 @@ public class TsonFunctionBuilderImpl extends AbstractTsonElementBuilder<TsonFunc
     private ArrayList<TsonElement> params = new ArrayList<>();
 
     @Override
-    public TsonElementType getType() {
+    public TsonElementType type() {
         return TsonElementType.FUNCTION;
     }
 
@@ -121,7 +120,7 @@ public class TsonFunctionBuilderImpl extends AbstractTsonElementBuilder<TsonFunc
     @Override
     public TsonFunctionBuilder merge(TsonElementBase element0) {
         TsonElement element=element0.build();
-        switch (element.getType()) {
+        switch (element.type()) {
             case ARRAY: {
                 TsonArray e = element.toArray();
                 TsonElementHeader h = e.getHeader();
@@ -151,7 +150,7 @@ public class TsonFunctionBuilderImpl extends AbstractTsonElementBuilder<TsonFunc
                 return this;
             }
         }
-        throw new IllegalArgumentException("Unsupported copy from " + element.getType());
+        throw new IllegalArgumentException("Unsupported copy from " + element.type());
     }
 
     @Override

@@ -118,7 +118,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                             List<TsonElement> params = ab.getAll();
                             for (int i = params.size() - 1; i >= 0; i--) {
                                 TsonElement o = params.get(i);
-                                if (o.getType() == TsonElementType.NAME || o.getType() == TsonElementType.STRING && FORMAT_NUMBER_TYPES.contains(o.getString())) {
+                                if (o.type() == TsonElementType.NAME || o.type() == TsonElementType.STRING && FORMAT_NUMBER_TYPES.contains(o.getString())) {
                                     ab.removeAt(i);
                                 }
                             }
@@ -145,7 +145,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
 
     public void formatElementCore(TsonElement element, TsonAnnotation format, Writer writer) throws IOException {
 //        sb.ensureCapacity(sb.length() + 10);
-        switch (element.getType()) {
+        switch (element.type()) {
             case NULL:
                 writer.append("null");
                 return;
@@ -301,7 +301,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 return;
             }
             case PAIR: {
-                TsonPair t = element.toKeyValue();
+                TsonPair t = element.toPair();
                 format(t.getKey(), writer);
                 String vs = format(t.getValue());
                 writer.append(config.afterKey);
@@ -453,7 +453,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 return;
             }
         }
-        throw new IllegalArgumentException("Format Tson : Unexpected type " + element.getType());
+        throw new IllegalArgumentException("Format Tson : Unexpected type " + element.type());
     }
 
     private static class RadixInfo {
@@ -469,7 +469,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
     private RadixInfo decodeRadix(TsonAnnotation format) {
         if (format != null) {
             for (TsonElement param : format.getAll()) {
-                if (param.getType() == TsonElementType.NAME || param.getType() == TsonElementType.STRING) {
+                if (param.type() == TsonElementType.NAME || param.type() == TsonElementType.STRING) {
                     switch (param.getString()) {
                         case "hex": {
                             return R16;
@@ -581,12 +581,12 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
             if (tsonElement.isNull()) {
                 return false;
             }
-            if (tsonElement.getType() == TsonElementType.PAIR && tsonElement.toKeyValue().getValue().isNull()) {
+            if (tsonElement.type() == TsonElementType.PAIR && tsonElement.toPair().getValue().isNull()) {
                 return false;
             }
         }
         if (config.ignoreObjectEmptyArrayFields) {
-            if (tsonElement.getType() == TsonElementType.ARRAY && tsonElement.toArray().isEmpty()) {
+            if (tsonElement.type() == TsonElementType.ARRAY && tsonElement.toArray().isEmpty()) {
                 return false;
             }
         }

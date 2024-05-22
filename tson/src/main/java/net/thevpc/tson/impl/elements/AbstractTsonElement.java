@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.math.BigDecimal;
@@ -19,7 +18,7 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
         this.type = type;
     }
 
-    public TsonElementType getType() {
+    public TsonElementType type() {
         return type;
     }
 
@@ -253,7 +252,7 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
     }
 
     @Override
-    public TsonPair toKeyValue() {
+    public TsonPair toPair() {
         return throwNonPrimitive(TsonElementType.PAIR);
     }
 
@@ -331,8 +330,8 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
         if (o == null) {
             o = TsonNullImpl.INSTANCE;
         }
-        TsonElementType t1 = getType();
-        TsonElementType t2 = o.getType();
+        TsonElementType t1 = type();
+        TsonElementType t2 = o.type();
         int i = t1.compareTo(t2);
         if (i != 0) {
             return i;

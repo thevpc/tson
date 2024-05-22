@@ -2,8 +2,6 @@ package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.*;
-import net.thevpc.tson.*;
-import net.thevpc.tson.impl.builders.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.io.InputStream;
@@ -43,7 +41,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 return base;
             }
         }
-        switch (base.getType()) {
+        switch (base.type()) {
             case NULL:
                 return new AsNull((TsonNull) base, comments, annotations);
             case STRING:
@@ -103,7 +101,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
             case FLOAT_COMPLEX:
                 return new AsFloatComplex((TsonFloatComplex) base, comments, annotations);
         }
-        throw new IllegalArgumentException("Unsupported " + base.getType());
+        throw new IllegalArgumentException("Unsupported " + base.type());
     }
 
     public static TsonElement of(TsonElement base, String comments, Collection<TsonAnnotation> annotationsList) {
@@ -125,7 +123,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 return base;
             }
         }
-        switch (base.getType()) {
+        switch (base.type()) {
             case NULL:
                 return new AsNull((TsonNull) base, comments, annotations);
             case STRING:
@@ -167,7 +165,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
             case PAIR:
                 return new AsPair((TsonPair) base, comments, annotations);
         }
-        throw new IllegalArgumentException("Unsupported " + base.getType());
+        throw new IllegalArgumentException("Unsupported " + base.type());
     }
 
     private TsonElementDecorator(TsonElement base, String comments, TsonAnnotation[] annotations) {
@@ -209,8 +207,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
-    public TsonElementType getType() {
-        return base.getType();
+    public TsonElementType type() {
+        return base.type();
     }
 
     @Override
@@ -388,8 +386,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
-    public TsonPair toKeyValue() {
-        return base.toKeyValue();
+    public TsonPair toPair() {
+        return base.toPair();
     }
 
     @Override

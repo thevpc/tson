@@ -7,6 +7,14 @@ import net.thevpc.tson.*;
 public class TsonStreamParserImpl implements ITsonStreamParser, TsonStreamParserImplConstants {
     private TsonStreamParserImplConfig config;
     private TsonParserVisitor visitor;
+    private Object source;
+
+    public Object source(){
+        return source;
+    }
+    public void source(Object source){
+        this.source=source;
+    }
     public void setConfig(TsonStreamParserImplConfig c){
         this.config=c;
         this.visitor=config.getVisitor();
@@ -585,59 +593,66 @@ Token t ;
       ;
     }
         visitor.visitAnnotationStart(id==null?null:id.image);
-    jj_consume_token(LPAREN);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case RPAREN:
-      jj_consume_token(RPAREN);
-      break;
-    case DATETIME:
-    case DATE:
-    case TIME:
-    case REGEX:
-    case LBRACE:
-    case SHORT:
-    case BYTE:
-    case LONG:
-    case INTEGER:
-    case INTEGER_H:
-    case INTEGER_O:
-    case INTEGER_B:
-    case LONG_H:
-    case LONG_O:
-    case LONG_B:
-    case SHORT_H:
-    case SHORT_O:
-    case SHORT_B:
-    case BYTE_H:
-    case BYTE_O:
-    case BYTE_B:
-    case FLOAT:
-    case DOUBLE:
-    case STRING:
-    case CHARACTER:
-    case TRUE:
-    case FALSE:
-    case NULL:
     case LPAREN:
-    case LBRACK:
-    case COMMA:
-    case AT:
-    case CHARSTREAM_START:
-    case NAN:
-    case POS_INF:
-    case NEG_INF:
-    case POS_BOUND:
-    case NEG_BOUND:
-    case COMMENT:
-    case MULTILINE_STR:
-    case NAME:
-      annotationParamList();
-      jj_consume_token(RPAREN);
+      jj_consume_token(LPAREN);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case RPAREN:
+        jj_consume_token(RPAREN);
+        break;
+      case DATETIME:
+      case DATE:
+      case TIME:
+      case REGEX:
+      case LBRACE:
+      case SHORT:
+      case BYTE:
+      case LONG:
+      case INTEGER:
+      case INTEGER_H:
+      case INTEGER_O:
+      case INTEGER_B:
+      case LONG_H:
+      case LONG_O:
+      case LONG_B:
+      case SHORT_H:
+      case SHORT_O:
+      case SHORT_B:
+      case BYTE_H:
+      case BYTE_O:
+      case BYTE_B:
+      case FLOAT:
+      case DOUBLE:
+      case STRING:
+      case CHARACTER:
+      case TRUE:
+      case FALSE:
+      case NULL:
+      case LPAREN:
+      case LBRACK:
+      case COMMA:
+      case AT:
+      case CHARSTREAM_START:
+      case NAN:
+      case POS_INF:
+      case NEG_INF:
+      case POS_BOUND:
+      case NEG_BOUND:
+      case COMMENT:
+      case MULTILINE_STR:
+      case NAME:
+        annotationParamList();
+        jj_consume_token(RPAREN);
+        break;
+      default:
+        jj_la1[12] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
       break;
     default:
-      jj_la1[12] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
+      jj_la1[13] = jj_gen;
+      ;
     }
          visitor.visitAnnotationEnd();
   }
@@ -663,7 +678,7 @@ Token t ;
                   hasPars=true;
       break;
     default:
-      jj_la1[13] = jj_gen;
+      jj_la1[14] = jj_gen;
       ;
     }
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -679,13 +694,13 @@ Token t ;
                        hasObj=true;
         break;
       default:
-        jj_la1[14] = jj_gen;
+        jj_la1[15] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
     default:
-      jj_la1[15] = jj_gen;
+      jj_la1[16] = jj_gen;
       ;
     }
         if(!hasArr && !hasObj){
@@ -720,13 +735,13 @@ Token t ;
                        hasObj=true;
         break;
       default:
-        jj_la1[16] = jj_gen;
+        jj_la1[17] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
     default:
-      jj_la1[17] = jj_gen;
+      jj_la1[18] = jj_gen;
       ;
     }
     if(!hasArr && !hasObj){
@@ -789,7 +804,7 @@ Token t ;
           ;
           break;
         default:
-          jj_la1[18] = jj_gen;
+          jj_la1[19] = jj_gen;
           break label_2;
         }
         jj_consume_token(COMMA);
@@ -798,7 +813,7 @@ Token t ;
       jj_consume_token(RPAREN);
       break;
     default:
-      jj_la1[19] = jj_gen;
+      jj_la1[20] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -870,7 +885,7 @@ Token t ;
         ;
         break;
       default:
-        jj_la1[20] = jj_gen;
+        jj_la1[21] = jj_gen;
         break label_3;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -920,7 +935,7 @@ Token t ;
         commaSeparator();
         break;
       default:
-        jj_la1[21] = jj_gen;
+        jj_la1[22] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -975,7 +990,7 @@ Token t ;
         ;
         break;
       default:
-        jj_la1[22] = jj_gen;
+        jj_la1[23] = jj_gen;
         break label_4;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1025,7 +1040,7 @@ Token t ;
         commaSeparator();
         break;
       default:
-        jj_la1[23] = jj_gen;
+        jj_la1[24] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1080,7 +1095,7 @@ Token t ;
         ;
         break;
       default:
-        jj_la1[24] = jj_gen;
+        jj_la1[25] = jj_gen;
         break label_5;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1130,7 +1145,7 @@ Token t ;
         commaSeparator();
         break;
       default:
-        jj_la1[25] = jj_gen;
+        jj_la1[26] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1193,7 +1208,7 @@ Token t ;
       jj_consume_token(RBRACE);
       break;
     default:
-      jj_la1[26] = jj_gen;
+      jj_la1[27] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1260,7 +1275,7 @@ Token t ;
       jj_consume_token(RBRACK);
       break;
     default:
-      jj_la1[27] = jj_gen;
+      jj_la1[28] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1286,7 +1301,7 @@ Token t ;
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[28];
+  final private int[] jj_la1 = new int[29];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static private int[] jj_la1_2;
@@ -1298,16 +1313,16 @@ Token t ;
       jj_la1_init_3();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0xfdffffbf,0x0,0x0,0x0,0x0,0x80000000,0x80000000,0x80000000,0x80000000,0x80000000,0xfdffffbe,0x0,0xfdffffbe,0x80000000,0x20,0x20,0x20,0x20,0x0,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdfffffe,0xfdffffbe,};
+      jj_la1_0 = new int[] {0xfdffffbf,0x0,0x0,0x0,0x0,0x80000000,0x80000000,0x80000000,0x80000000,0x80000000,0xfdffffbe,0x0,0xfdffffbe,0x80000000,0x80000000,0x20,0x20,0x20,0x20,0x0,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdfffffe,0xfdffffbe,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x2,0xfffffff8,0xfffffff8,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2,0x0,0x3,0x0,0x2,0x2,0x2,0x2,0x0,0x3,0x2,0x2,0x2,0x2,0x2,0x2,0x2,0x6,};
+      jj_la1_1 = new int[] {0x2,0xfffffff8,0xfffffff8,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2,0x0,0x3,0x0,0x0,0x2,0x2,0x2,0x2,0x0,0x3,0x2,0x2,0x2,0x2,0x2,0x2,0x2,0x6,};
    }
    private static void jj_la1_init_2() {
-      jj_la1_2 = new int[] {0x40000000,0xc7ffffff,0xc7ffffff,0x0,0x40000000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x60000000,0x0,0x0,0x0,0x0,0x0,0x20000000,0x40000000,0x60000000,0x60000000,0x60000000,0x60000000,0x60000000,0x60000000,0x60000000,0x60000000,};
+      jj_la1_2 = new int[] {0x40000000,0xc7ffffff,0xc7ffffff,0x0,0x40000000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x60000000,0x0,0x0,0x0,0x0,0x0,0x0,0x20000000,0x40000000,0x60000000,0x60000000,0x60000000,0x60000000,0x60000000,0x60000000,0x60000000,0x60000000,};
    }
    private static void jj_la1_init_3() {
-      jj_la1_3 = new int[] {0x2ff,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x2bf,0x200,0x2ff,0x0,0x0,0x0,0x0,0x0,0x0,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,};
+      jj_la1_3 = new int[] {0x2ff,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x2bf,0x200,0x2ff,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,};
    }
 
   /** Constructor with InputStream. */
@@ -1321,7 +1336,7 @@ Token t ;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 29; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1335,7 +1350,7 @@ Token t ;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 29; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -1345,7 +1360,7 @@ Token t ;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 29; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1355,7 +1370,7 @@ Token t ;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 29; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -1364,7 +1379,7 @@ Token t ;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 29; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1373,7 +1388,7 @@ Token t ;
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 29; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -1429,7 +1444,7 @@ Token t ;
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 28; i++) {
+    for (int i = 0; i < 29; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

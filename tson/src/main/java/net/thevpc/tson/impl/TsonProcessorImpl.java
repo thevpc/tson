@@ -32,7 +32,7 @@ public class TsonProcessorImpl implements TsonProcessor {
             protected TsonAnnotation onAddAnnotation(TsonAnnotation a) {
                 if (a.getName() == null && a.size() == 1) {
                     TsonElement aliasParam = a.get(0);
-                    if (aliasParam.getType() == TsonElementType.NAME) {
+                    if (aliasParam.type() == TsonElementType.NAME) {
                         //this is an alias definition
                         //mark it
                         String aliasName = aliasParam.getString();
@@ -55,7 +55,7 @@ public class TsonProcessorImpl implements TsonProcessor {
                     for (String s : all) {
                         getRootContext().addToMapContextValue("vars", s, ac.value);
                     }
-                    if (ac.value.getType() == TsonElementType.ALIAS) {
+                    if (ac.value.type() == TsonElementType.ALIAS) {
                         Map<String, TsonElement> vars = getMergedMapsContextValues("vars", 1);
                         TsonElement tt = vars.get(ac.value.getString());
                         if (tt == null) {

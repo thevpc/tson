@@ -16,7 +16,14 @@ public class CustomJavaccTsonStreamParserImpl implements ITsonStreamParser {
     private TsonStreamParserImplConfig config;
     private TsonParserVisitor visitor;
     private Token last;
+    private Object source;
 
+    public Object source(){
+        return source;
+    }
+    public void source(Object source){
+        this.source=source;
+    }
     public CustomJavaccTsonStreamParserImpl(java.io.InputStream stream) {
         this(stream, null);
     }

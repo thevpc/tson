@@ -91,7 +91,7 @@ public class TestFormats {
         try {
             for (int i = 0; i < 20; i++) {
                 TsonElement v1 = TsonRandom.randomElement();
-                System.out.println("============================================================== :: " + v1.getType());
+                System.out.println("============================================================== :: " + v1.type());
                 System.out.println(v1);
                 String s = v1.toString();
                 TsonElement v2 = null;

@@ -22,10 +22,10 @@ public class TsonBinOpImpl extends AbstractNonPrimitiveTsonElement implements Ts
         if (value == null) {
             throw new IllegalArgumentException("Value cannot be null. Try to use NULL Tson element");
         }
-        if (key.getType() == TsonElementType.PAIR) {
+        if (key.type() == TsonElementType.PAIR) {
             throw new IllegalArgumentException("Key of Key Value cannot be a key value as well");
         }
-        if (value.getType() == TsonElementType.PAIR) {
+        if (value.type() == TsonElementType.PAIR) {
             throw new IllegalArgumentException("Key of Key Value cannot be a key value as well");
         }
         this.op=op;
@@ -88,7 +88,7 @@ public class TsonBinOpImpl extends AbstractNonPrimitiveTsonElement implements Ts
 
     @Override
     protected int compareCore(TsonElement o) {
-        TsonPair oo = o.toKeyValue();
+        TsonPair oo = o.toPair();
         return TsonUtils.compareElementsArray(
                 new TsonElement[]{getFirst(), getSecond()},
                 new TsonElement[]{oo.getKey(), oo.getValue()}

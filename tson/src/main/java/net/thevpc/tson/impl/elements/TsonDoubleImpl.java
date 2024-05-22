@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 
 import java.util.Objects;
@@ -141,8 +140,8 @@ public class TsonDoubleImpl extends AbstractNumberTsonElement implements TsonDou
 
     @Override
     public int compareTo(TsonElement o) {
-        if (o.getType().isNumber()) {
-            switch (o.getType()) {
+        if (o.type().isNumber()) {
+            switch (o.type()) {
                 case BYTE:
                 case SHORT:
                 case INT:
@@ -150,7 +149,7 @@ public class TsonDoubleImpl extends AbstractNumberTsonElement implements TsonDou
                 case FLOAT:
                 case DOUBLE: {
                     int i = Double.compare(getValue(), o.getDouble());
-                    return i == 0 ? getType().compareTo(o.getType()) : i;
+                    return i == 0 ? type().compareTo(o.type()) : i;
                 }
             }
         }
