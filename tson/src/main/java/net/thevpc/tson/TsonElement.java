@@ -17,6 +17,8 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     TsonString toStr();
 
+    TsonNumber toNumber();
+
     TsonLong toLong();
 
     TsonInt toInt();

@@ -9,7 +9,7 @@ public class TsonFloatImpl extends AbstractNumberTsonElement implements TsonFloa
     private float value;
 
     public TsonFloatImpl(float value) {
-        super(TsonElementType.FLOAT);
+        super(TsonElementType.FLOAT,TsonNumberLayout.DECIMAL);
         this.value = value;
     }
 

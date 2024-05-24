@@ -11,7 +11,7 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
     private BigDecimal value;
 
     public TsonBigDecimalImpl(BigDecimal value) {
-        super(TsonElementType.BIG_DECIMAL);
+        super(TsonElementType.BIG_DECIMAL,TsonNumberLayout.DECIMAL);
         this.value = value;
     }
 
@@ -106,7 +106,7 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
 
 
     public TsonBigInt toBigInt(){
-        return new TsonBigIntImpl(getBigInteger());
+        return new TsonBigIntImpl(getBigInteger(),layout());
     }
 
     @Override

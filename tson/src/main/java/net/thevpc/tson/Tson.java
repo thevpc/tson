@@ -44,25 +44,18 @@ public class Tson {
         return TsonBooleanImpl.valueOf(val);
     }
 
+    public static TsonElement string(String value, TsonStringLayout layout) {
+        if (value == null) {
+            return nullElem();
+        }
+        return new TsonStringImpl(value, layout == null ? TsonStringLayout.DOUBLE_QUOTE : layout);
+    }
+
     public static TsonElement string(String value) {
         if (value == null) {
             return nullElem();
         }
-        return new TsonStringImpl(value, "\"");
-    }
-
-    public static TsonElement multiLineString(String value) {
-        if (value == null) {
-            return nullElem();
-        }
-        return new TsonStringImpl(value, "\"\"\"");
-    }
-
-    public static TsonElement simpleString(String value) {
-        if (value == null) {
-            return nullElem();
-        }
-        return new TsonStringImpl(value, "'");
+        return new TsonStringImpl(value, TsonStringLayout.DOUBLE_QUOTE);
     }
 
     public static TsonElement datetime(Instant value) {
@@ -126,19 +119,35 @@ public class Tson {
     }
 
     public static TsonElement intElem(int value) {
-        return new TsonIntImpl(value);
+        return intElem(value, TsonNumberLayout.DECIMAL);
+    }
+
+    public static TsonElement intElem(int value, TsonNumberLayout layout) {
+        return new TsonIntImpl(value, layout);
     }
 
     public static TsonElement longElem(long value) {
-        return new TsonLongImpl(value);
+        return longElem(value, TsonNumberLayout.DECIMAL);
+    }
+
+    public static TsonElement longElem(long value, TsonNumberLayout layout) {
+        return new TsonLongImpl(value, layout);
+    }
+
+    public static TsonElement byteElem(byte value, TsonNumberLayout layout) {
+        return new TsonByteImpl(value, layout);
     }
 
     public static TsonElement byteElem(byte value) {
-        return new TsonByteImpl(value);
+        return byteElem(value, TsonNumberLayout.DECIMAL);
+    }
+
+    public static TsonElement shortElem(short value, TsonNumberLayout layout) {
+        return new TsonShortImpl(value, layout);
     }
 
     public static TsonElement shortElem(short value) {
-        return new TsonShortImpl(value);
+        return shortElem(value, TsonNumberLayout.DECIMAL);
     }
 
     public static TsonElement floatElem(float value) {
@@ -146,10 +155,14 @@ public class Tson {
     }
 
     public static TsonElement bigInt(BigInteger value) {
+        return bigInt(value, TsonNumberLayout.DECIMAL);
+    }
+
+    public static TsonElement bigInt(BigInteger value, TsonNumberLayout layout) {
         if (value == null) {
             return nullElem();
         }
-        return new TsonBigIntImpl(value);
+        return new TsonBigIntImpl(value, layout);
     }
 
     public static TsonElement bigDecimal(BigDecimal value) {

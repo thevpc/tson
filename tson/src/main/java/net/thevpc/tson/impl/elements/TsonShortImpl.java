@@ -8,8 +8,8 @@ import java.util.Objects;
 public class TsonShortImpl extends AbstractNumberTsonElement implements TsonShort {
     private short value;
 
-    public TsonShortImpl(short value) {
-        super(TsonElementType.SHORT);
+    public TsonShortImpl(short value,TsonNumberLayout layout) {
+        super(TsonElementType.SHORT,layout);
         this.value = value;
     }
 

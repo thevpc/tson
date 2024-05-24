@@ -8,8 +8,8 @@ import java.util.Objects;
 public class TsonIntImpl extends AbstractNumberTsonElement implements TsonInt {
     private int value;
 
-    public TsonIntImpl(int value) {
-        super(TsonElementType.INT);
+    public TsonIntImpl(int value,TsonNumberLayout layout) {
+        super(TsonElementType.INT,layout);
         this.value = value;
     }
 

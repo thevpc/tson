@@ -232,6 +232,11 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
     }
 
     @Override
+    public TsonNumber toNumber() {
+        throw new ClassCastException(type() + " is not a number");
+    }
+
+    @Override
     public TsonArray toArray() {
         return throwNonPrimitive(TsonElementType.ARRAY);
     }

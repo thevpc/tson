@@ -1,5 +1,6 @@
 package net.thevpc.tson.impl.parser;
 
+import net.thevpc.tson.TsonStringLayout;
 import net.thevpc.tson.impl.elements.TsonBooleanImpl;
 import net.thevpc.tson.impl.elements.TsonNullImpl;
 import net.thevpc.tson.impl.parser.javacc.TsonStreamParserImplConstants;
@@ -31,11 +32,29 @@ public class CustomJFlexTsonStreamParserImpl implements ITsonStreamParser {
     }
     public String getTokenString() {
         switch (c_kind) {
-            case TsonStreamParserImplConstants.STRING: {
-                return TsonStreamParserImplConstants.tokenImage[c_kind] + " " + flex.stringVal;
+            case TsonStreamParserImplConstants.SINGLE_QUOTE_STR:
+            {
+                return "SINGLE_QUOTE_STR " + flex.stringVal;
             }
-            case TsonStreamParserImplConstants.CHARACTER: {
-                return "CHAT " + flex.charVal;
+            case TsonStreamParserImplConstants.ANTI_QUOTE_STR:
+            {
+                return "ANTI_QUOTE_STR " + flex.stringVal;
+            }
+            case TsonStreamParserImplConstants.DOUBLE_QUOTE_STR:
+            {
+                return "DOUBLE_QUOTE_STR " + flex.stringVal;
+            }
+            case TsonStreamParserImplConstants.TRIPLE_SINGLE_QUOTE_STR:
+            {
+                return "TRIPLE_SINGLE_QUOTE_STR " + flex.stringVal;
+            }
+            case TsonStreamParserImplConstants.TRIPLE_ANTI_QUOTE_STR:
+            {
+                return "TRIPLE_ANTI_QUOTE_STR " + flex.stringVal;
+            }
+            case TsonStreamParserImplConstants.TRIPLE_DOUBLE_QUOTE_STR:
+            {
+                return "TRIPLE_DOUBLE_QUOTE_STR " + flex.stringVal;
             }
             default: {
                 return TsonStreamParserImplConstants.tokenImage[c_kind];
@@ -377,12 +396,28 @@ public class CustomJFlexTsonStreamParserImpl implements ITsonStreamParser {
                 visitor.visitPrimitiveEnd(TsonParserUtils.parseDoubleElem(flex.yytext()));
                 break;
             }
-            case TsonStreamParserImplConstants.CHARACTER: {
-                visitor.visitPrimitiveEnd(Tson.elem(flex.charVal));
+            case TsonStreamParserImplConstants.SINGLE_QUOTE_STR: {
+                visitor.visitPrimitiveEnd(Tson.string(flex.stringVal, TsonStringLayout.SINGLE_QUOTE));
                 break;
             }
-            case TsonStreamParserImplConstants.STRING: {
-                visitor.visitPrimitiveEnd(Tson.elem(flex.stringVal));
+            case TsonStreamParserImplConstants.ANTI_QUOTE_STR: {
+                visitor.visitPrimitiveEnd(Tson.string(flex.stringVal, TsonStringLayout.ANTI_QUOTE));
+                break;
+            }
+            case TsonStreamParserImplConstants.DOUBLE_QUOTE_STR: {
+                visitor.visitPrimitiveEnd(Tson.string(flex.stringVal, TsonStringLayout.DOUBLE_QUOTE));
+                break;
+            }
+            case TsonStreamParserImplConstants.TRIPLE_SINGLE_QUOTE_STR: {
+                visitor.visitPrimitiveEnd(Tson.string(flex.stringVal, TsonStringLayout.TRIPLE_SINGLE_QUOTE));
+                break;
+            }
+            case TsonStreamParserImplConstants.TRIPLE_ANTI_QUOTE_STR: {
+                visitor.visitPrimitiveEnd(Tson.string(flex.stringVal, TsonStringLayout.TRIPLE_ANTI_QUOTE));
+                break;
+            }
+            case TsonStreamParserImplConstants.TRIPLE_DOUBLE_QUOTE_STR: {
+                visitor.visitPrimitiveEnd(Tson.string(flex.stringVal, TsonStringLayout.TRIPLE_DOUBLE_QUOTE));
                 break;
             }
             case TsonStreamParserImplConstants.ALIAS: {

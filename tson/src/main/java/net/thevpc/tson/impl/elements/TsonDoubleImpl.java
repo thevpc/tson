@@ -9,7 +9,7 @@ public class TsonDoubleImpl extends AbstractNumberTsonElement implements TsonDou
     private double value;
 
     public TsonDoubleImpl(double value) {
-        super(TsonElementType.DOUBLE);
+        super(TsonElementType.DOUBLE,TsonNumberLayout.DECIMAL);
         this.value = value;
     }
 

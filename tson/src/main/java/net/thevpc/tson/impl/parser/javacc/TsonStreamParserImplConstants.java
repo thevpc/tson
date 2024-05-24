@@ -61,173 +61,179 @@ public interface TsonStreamParserImplConstants {
   /** RegularExpression Id. */
   int EXPONENT = 25;
   /** RegularExpression Id. */
-  int STRING = 26;
+  int DOUBLE_QUOTE_STR = 26;
   /** RegularExpression Id. */
-  int CHARACTER = 27;
+  int SINGLE_QUOTE_STR = 27;
   /** RegularExpression Id. */
-  int TRUE = 28;
+  int ANTI_QUOTE_STR = 28;
   /** RegularExpression Id. */
-  int FALSE = 29;
+  int TRIPLE_DOUBLE_QUOTE_STR = 29;
   /** RegularExpression Id. */
-  int NULL = 30;
+  int TRIPLE_SINGLE_QUOTE_STR = 30;
   /** RegularExpression Id. */
-  int LPAREN = 31;
+  int TRIPLE_ANTI_QUOTE_STR = 31;
   /** RegularExpression Id. */
-  int RPAREN = 32;
+  int TRUE = 32;
   /** RegularExpression Id. */
-  int LBRACK = 33;
+  int FALSE = 33;
   /** RegularExpression Id. */
-  int RBRACK = 34;
+  int NULL = 34;
   /** RegularExpression Id. */
-  int COLON = 35;
+  int LPAREN = 35;
   /** RegularExpression Id. */
-  int OP_PLUS = 36;
+  int RPAREN = 36;
   /** RegularExpression Id. */
-  int OP_PLUS2 = 37;
+  int LBRACK = 37;
   /** RegularExpression Id. */
-  int OP_PLUS3 = 38;
+  int RBRACK = 38;
   /** RegularExpression Id. */
-  int OP_MINUS = 39;
+  int COLON = 39;
   /** RegularExpression Id. */
-  int OP_MINUS2 = 40;
+  int OP_PLUS = 40;
   /** RegularExpression Id. */
-  int OP_MINUS3 = 41;
+  int OP_PLUS2 = 41;
   /** RegularExpression Id. */
-  int OP_MUL = 42;
+  int OP_PLUS3 = 42;
   /** RegularExpression Id. */
-  int OP_MUL2 = 43;
+  int OP_MINUS = 43;
   /** RegularExpression Id. */
-  int OP_MUL3 = 44;
+  int OP_MINUS2 = 44;
   /** RegularExpression Id. */
-  int OP_DIV = 45;
+  int OP_MINUS3 = 45;
   /** RegularExpression Id. */
-  int OP_DIV3 = 46;
+  int OP_MUL = 46;
   /** RegularExpression Id. */
-  int OP_HAT = 47;
+  int OP_MUL2 = 47;
   /** RegularExpression Id. */
-  int OP_HAT2 = 48;
+  int OP_MUL3 = 48;
   /** RegularExpression Id. */
-  int OP_HAT3 = 49;
+  int OP_DIV = 49;
   /** RegularExpression Id. */
-  int OP_REM = 50;
+  int OP_DIV3 = 50;
   /** RegularExpression Id. */
-  int OP_REM2 = 51;
+  int OP_HAT = 51;
   /** RegularExpression Id. */
-  int OP_REM3 = 52;
+  int OP_HAT2 = 52;
   /** RegularExpression Id. */
-  int OP_EQ = 53;
+  int OP_HAT3 = 53;
   /** RegularExpression Id. */
-  int OP_EQ2 = 54;
+  int OP_REM = 54;
   /** RegularExpression Id. */
-  int OP_EQ3 = 55;
+  int OP_REM2 = 55;
   /** RegularExpression Id. */
-  int OP_TILDE = 56;
+  int OP_REM3 = 56;
   /** RegularExpression Id. */
-  int OP_TILDE2 = 57;
+  int OP_EQ = 57;
   /** RegularExpression Id. */
-  int OP_TILDE3 = 58;
+  int OP_EQ2 = 58;
   /** RegularExpression Id. */
-  int OP_LT = 59;
+  int OP_EQ3 = 59;
   /** RegularExpression Id. */
-  int OP_LT2 = 60;
+  int OP_TILDE = 60;
   /** RegularExpression Id. */
-  int OP_LT3 = 61;
+  int OP_TILDE2 = 61;
   /** RegularExpression Id. */
-  int OP_GT = 62;
+  int OP_TILDE3 = 62;
   /** RegularExpression Id. */
-  int OP_GT2 = 63;
+  int OP_LT = 63;
   /** RegularExpression Id. */
-  int OP_GT3 = 64;
+  int OP_LT2 = 64;
   /** RegularExpression Id. */
-  int OP_LTE = 65;
+  int OP_LT3 = 65;
   /** RegularExpression Id. */
-  int OP_GTE = 66;
+  int OP_GT = 66;
   /** RegularExpression Id. */
-  int OP_ASSIGN = 67;
+  int OP_GT2 = 67;
   /** RegularExpression Id. */
-  int OP_ASSIGN_EQ = 68;
+  int OP_GT3 = 68;
   /** RegularExpression Id. */
-  int OP_MINUS_GT = 69;
+  int OP_LTE = 69;
   /** RegularExpression Id. */
-  int OP_MINUS2_GT = 70;
+  int OP_GTE = 70;
   /** RegularExpression Id. */
-  int OP_EQ_GT = 71;
+  int OP_ASSIGN = 71;
   /** RegularExpression Id. */
-  int OP_EQ2_GT = 72;
+  int OP_ASSIGN_EQ = 72;
   /** RegularExpression Id. */
-  int OP_LT_MINUS2 = 73;
+  int OP_MINUS_GT = 73;
   /** RegularExpression Id. */
-  int OP_LT_EQ2 = 74;
+  int OP_MINUS2_GT = 74;
   /** RegularExpression Id. */
-  int OP_PIPE = 75;
+  int OP_EQ_GT = 75;
   /** RegularExpression Id. */
-  int OP_PIPE2 = 76;
+  int OP_EQ2_GT = 76;
   /** RegularExpression Id. */
-  int OP_PIPE3 = 77;
+  int OP_LT_MINUS2 = 77;
   /** RegularExpression Id. */
-  int OP_AND = 78;
+  int OP_LT_EQ2 = 78;
   /** RegularExpression Id. */
-  int OP_AND2 = 79;
+  int OP_PIPE = 79;
   /** RegularExpression Id. */
-  int OP_AND3 = 80;
+  int OP_PIPE2 = 80;
   /** RegularExpression Id. */
-  int OP_HASH = 81;
+  int OP_PIPE3 = 81;
   /** RegularExpression Id. */
-  int OP_HASH2 = 82;
+  int OP_AND = 82;
   /** RegularExpression Id. */
-  int OP_HASH3 = 83;
+  int OP_AND2 = 83;
   /** RegularExpression Id. */
-  int OP_HASH4 = 84;
+  int OP_AND3 = 84;
   /** RegularExpression Id. */
-  int OP_HASH5 = 85;
+  int OP_HASH = 85;
   /** RegularExpression Id. */
-  int OP_HASH6 = 86;
+  int OP_HASH2 = 86;
   /** RegularExpression Id. */
-  int OP_HASH7 = 87;
+  int OP_HASH3 = 87;
   /** RegularExpression Id. */
-  int OP_HASH8 = 88;
+  int OP_HASH4 = 88;
   /** RegularExpression Id. */
-  int OP_HASH9 = 89;
+  int OP_HASH5 = 89;
   /** RegularExpression Id. */
-  int OP_HASH10 = 90;
+  int OP_HASH6 = 90;
   /** RegularExpression Id. */
-  int SEMICOLON = 91;
+  int OP_HASH7 = 91;
   /** RegularExpression Id. */
-  int SEMICOLON2 = 92;
+  int OP_HASH8 = 92;
   /** RegularExpression Id. */
-  int COMMA = 93;
+  int OP_HASH9 = 93;
   /** RegularExpression Id. */
-  int AT = 94;
+  int OP_HASH10 = 94;
   /** RegularExpression Id. */
-  int AT2 = 95;
+  int SEMICOLON = 95;
   /** RegularExpression Id. */
-  int CHARSTREAM_START = 96;
+  int SEMICOLON2 = 96;
   /** RegularExpression Id. */
-  int NAN = 97;
+  int COMMA = 97;
   /** RegularExpression Id. */
-  int POS_INF = 98;
+  int AT = 98;
   /** RegularExpression Id. */
-  int NEG_INF = 99;
+  int AT2 = 99;
   /** RegularExpression Id. */
-  int POS_BOUND = 100;
+  int CHARSTREAM_START = 100;
   /** RegularExpression Id. */
-  int NEG_BOUND = 101;
+  int NAN = 101;
   /** RegularExpression Id. */
-  int COMMENT = 102;
+  int POS_INF = 102;
   /** RegularExpression Id. */
-  int MULTILINE_STR = 103;
+  int NEG_INF = 103;
   /** RegularExpression Id. */
-  int ALIAS = 104;
+  int POS_BOUND = 104;
   /** RegularExpression Id. */
-  int NAME = 105;
+  int NEG_BOUND = 105;
   /** RegularExpression Id. */
-  int LETTER = 106;
+  int COMMENT = 106;
   /** RegularExpression Id. */
-  int DIGIT = 107;
+  int ALIAS = 107;
   /** RegularExpression Id. */
-  int CHARSTREAM_END = 108;
+  int NAME = 108;
   /** RegularExpression Id. */
-  int CHARSTREAM_PART = 109;
+  int LETTER = 109;
+  /** RegularExpression Id. */
+  int DIGIT = 110;
+  /** RegularExpression Id. */
+  int CHARSTREAM_END = 111;
+  /** RegularExpression Id. */
+  int CHARSTREAM_PART = 112;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -262,8 +268,12 @@ public interface TsonStreamParserImplConstants {
     "<FLOAT>",
     "<DOUBLE>",
     "<EXPONENT>",
-    "<STRING>",
-    "<CHARACTER>",
+    "<DOUBLE_QUOTE_STR>",
+    "<SINGLE_QUOTE_STR>",
+    "<ANTI_QUOTE_STR>",
+    "<TRIPLE_DOUBLE_QUOTE_STR>",
+    "<TRIPLE_SINGLE_QUOTE_STR>",
+    "<TRIPLE_ANTI_QUOTE_STR>",
     "\"true\"",
     "\"false\"",
     "\"null\"",
@@ -339,7 +349,6 @@ public interface TsonStreamParserImplConstants {
     "\"+Bound\"",
     "\"-Bound\"",
     "<COMMENT>",
-    "<MULTILINE_STR>",
     "<ALIAS>",
     "<NAME>",
     "<LETTER>",

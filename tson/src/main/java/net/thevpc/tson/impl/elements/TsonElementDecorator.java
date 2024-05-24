@@ -236,6 +236,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
+    public TsonNumber toNumber() {
+        return base.toNumber();
+    }
+
+    @Override
     public TsonBinaryStream toBinaryStream() {
         return base.toBinaryStream();
     }
@@ -570,6 +575,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonNumberLayout layout() {
+            return getBase().layout();
+        }
+
+        @Override
         public BigInteger getValue() {
             return getBase().getValue();
         }
@@ -579,6 +589,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsBigDecimal(TsonBigDecimal base, String comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+        @Override
+        public TsonNumberLayout layout() {
+            return getBase().layout();
         }
 
         @Override
@@ -591,6 +605,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsBigComplex(TsonBigComplex base, String comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+        @Override
+        public TsonNumberLayout layout() {
+            return getBase().layout();
         }
 
         @Override
@@ -648,6 +666,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public AsDoubleComplex(TsonDoubleComplex base, String comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
+        @Override
+        public TsonNumberLayout layout() {
+            return getBase().layout();
+        }
 
         @Override
         public double getReal() {
@@ -664,6 +686,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsFloatComplex(TsonFloatComplex base, String comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+        @Override
+        public TsonNumberLayout layout() {
+            return getBase().layout();
         }
 
         @Override
@@ -684,8 +710,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public String stringType() {
-            return "\"";
+        public TsonStringLayout layout() {
+            return getBase().layout();
         }
 
         @Override
@@ -802,6 +828,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public AsByte(TsonByte base, String comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
+        @Override
+        public TsonNumberLayout layout() {
+            return getBase().layout();
+        }
 
         @Override
         public byte getValue() {
@@ -813,6 +843,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsShort(TsonShort base, String comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+        @Override
+        public TsonNumberLayout layout() {
+            return getBase().layout();
         }
 
         @Override
@@ -826,6 +860,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public AsInt(TsonInt base, String comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
+        @Override
+        public TsonNumberLayout layout() {
+            return getBase().layout();
+        }
 
         @Override
         public int getValue() {
@@ -837,6 +875,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsLong(TsonLong base, String comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+        @Override
+        public TsonNumberLayout layout() {
+            return getBase().layout();
         }
 
         @Override
@@ -850,6 +892,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public AsFloat(TsonFloat base, String comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
+        @Override
+        public TsonNumberLayout layout() {
+            return getBase().layout();
+        }
 
         @Override
         public float getValue() {
@@ -861,6 +907,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsDouble(TsonDouble base, String comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+        @Override
+        public TsonNumberLayout layout() {
+            return getBase().layout();
         }
 
         @Override
@@ -953,6 +1003,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsUplet(TsonUplet base, String comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonUplet toUplet() {
+            return this;
         }
 
         @Override

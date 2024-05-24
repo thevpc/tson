@@ -57,8 +57,12 @@ public class TsonStreamParserImpl implements ITsonStreamParser, TsonStreamParser
     case BYTE_B:
     case FLOAT:
     case DOUBLE:
-    case STRING:
-    case CHARACTER:
+    case DOUBLE_QUOTE_STR:
+    case SINGLE_QUOTE_STR:
+    case ANTI_QUOTE_STR:
+    case TRIPLE_DOUBLE_QUOTE_STR:
+    case TRIPLE_SINGLE_QUOTE_STR:
+    case TRIPLE_ANTI_QUOTE_STR:
     case TRUE:
     case FALSE:
     case NULL:
@@ -72,7 +76,6 @@ public class TsonStreamParserImpl implements ITsonStreamParser, TsonStreamParser
     case POS_BOUND:
     case NEG_BOUND:
     case COMMENT:
-    case MULTILINE_STR:
     case NAME:
       elementLevel2();
       break;
@@ -353,18 +356,22 @@ Token t ;
     net.thevpc.tson.impl.parser.javacc.Token comments=null;
     visitor.visitElementStart();
     Token typeName=null;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case COMMENT:
+    label_1:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case COMMENT:
+        ;
+        break;
+      default:
+        jj_la1[3] = jj_gen;
+        break label_1;
+      }
       comments = jj_consume_token(COMMENT);
             if(!config.isSkipComments()) {
             visitor.visitComments(prepareComments(comments.image));
             }
-      break;
-    default:
-      jj_la1[3] = jj_gen;
-      ;
     }
-    label_1:
+    label_2:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case AT:
@@ -372,7 +379,7 @@ Token t ;
         break;
       default:
         jj_la1[4] = jj_gen;
-        break label_1;
+        break label_2;
       }
       annotation();
     }
@@ -477,17 +484,29 @@ Token t ;
       jj_consume_token(DOUBLE);
                visitor.visitPrimitiveEnd(TsonParserUtils.parseDoubleElem(token.image));
       break;
-    case CHARACTER:
-      jj_consume_token(CHARACTER);
-                   visitor.visitPrimitiveEnd(TsonParserUtils.parseCharElem(token.image));
+    case SINGLE_QUOTE_STR:
+      jj_consume_token(SINGLE_QUOTE_STR);
+                           visitor.visitPrimitiveEnd(TsonParserUtils.parseCharElem(token.image));
       break;
-    case STRING:
-      jj_consume_token(STRING);
-                 visitor.visitPrimitiveEnd(TsonParserUtils.parseStringElem(token.image));
+    case DOUBLE_QUOTE_STR:
+      jj_consume_token(DOUBLE_QUOTE_STR);
+                           visitor.visitPrimitiveEnd(TsonParserUtils.parseStringElem(token.image));
       break;
-    case MULTILINE_STR:
-      jj_consume_token(MULTILINE_STR);
-                        visitor.visitPrimitiveEnd(TsonParserUtils.parseMultiLineStringElem(token.image));
+    case ANTI_QUOTE_STR:
+      jj_consume_token(ANTI_QUOTE_STR);
+                         visitor.visitPrimitiveEnd(TsonParserUtils.parseStringElem(token.image,TsonStringLayout.ANTI_QUOTE));
+      break;
+    case TRIPLE_DOUBLE_QUOTE_STR:
+      jj_consume_token(TRIPLE_DOUBLE_QUOTE_STR);
+                                  visitor.visitPrimitiveEnd(TsonParserUtils.parseStringElem(token.image,TsonStringLayout.TRIPLE_DOUBLE_QUOTE));
+      break;
+    case TRIPLE_SINGLE_QUOTE_STR:
+      jj_consume_token(TRIPLE_SINGLE_QUOTE_STR);
+                                  visitor.visitPrimitiveEnd(TsonParserUtils.parseStringElem(token.image,TsonStringLayout.TRIPLE_SINGLE_QUOTE));
+      break;
+    case TRIPLE_ANTI_QUOTE_STR:
+      jj_consume_token(TRIPLE_ANTI_QUOTE_STR);
+                                visitor.visitPrimitiveEnd(TsonParserUtils.parseStringElem(token.image,TsonStringLayout.TRIPLE_ANTI_QUOTE));
       break;
     case NAN:
       jj_consume_token(NAN);
@@ -623,8 +642,12 @@ Token t ;
       case BYTE_B:
       case FLOAT:
       case DOUBLE:
-      case STRING:
-      case CHARACTER:
+      case DOUBLE_QUOTE_STR:
+      case SINGLE_QUOTE_STR:
+      case ANTI_QUOTE_STR:
+      case TRIPLE_DOUBLE_QUOTE_STR:
+      case TRIPLE_SINGLE_QUOTE_STR:
+      case TRIPLE_ANTI_QUOTE_STR:
       case TRUE:
       case FALSE:
       case NULL:
@@ -639,7 +662,6 @@ Token t ;
       case POS_BOUND:
       case NEG_BOUND:
       case COMMENT:
-      case MULTILINE_STR:
       case NAME:
         annotationParamList();
         jj_consume_token(RPAREN);
@@ -779,8 +801,12 @@ Token t ;
     case BYTE_B:
     case FLOAT:
     case DOUBLE:
-    case STRING:
-    case CHARACTER:
+    case DOUBLE_QUOTE_STR:
+    case SINGLE_QUOTE_STR:
+    case ANTI_QUOTE_STR:
+    case TRIPLE_DOUBLE_QUOTE_STR:
+    case TRIPLE_SINGLE_QUOTE_STR:
+    case TRIPLE_ANTI_QUOTE_STR:
     case TRUE:
     case FALSE:
     case NULL:
@@ -794,10 +820,9 @@ Token t ;
     case POS_BOUND:
     case NEG_BOUND:
     case COMMENT:
-    case MULTILINE_STR:
     case NAME:
       param();
-      label_2:
+      label_3:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case COMMA:
@@ -805,7 +830,7 @@ Token t ;
           break;
         default:
           jj_la1[19] = jj_gen;
-          break label_2;
+          break label_3;
         }
         jj_consume_token(COMMA);
         param();
@@ -838,111 +863,6 @@ Token t ;
   }
 
   final public void objectElementList() throws ParseException {
-    label_3:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case DATETIME:
-      case DATE:
-      case TIME:
-      case REGEX:
-      case LBRACE:
-      case SHORT:
-      case BYTE:
-      case LONG:
-      case INTEGER:
-      case INTEGER_H:
-      case INTEGER_O:
-      case INTEGER_B:
-      case LONG_H:
-      case LONG_O:
-      case LONG_B:
-      case SHORT_H:
-      case SHORT_O:
-      case SHORT_B:
-      case BYTE_H:
-      case BYTE_O:
-      case BYTE_B:
-      case FLOAT:
-      case DOUBLE:
-      case STRING:
-      case CHARACTER:
-      case TRUE:
-      case FALSE:
-      case NULL:
-      case LPAREN:
-      case LBRACK:
-      case COMMA:
-      case AT:
-      case CHARSTREAM_START:
-      case NAN:
-      case POS_INF:
-      case NEG_INF:
-      case POS_BOUND:
-      case NEG_BOUND:
-      case COMMENT:
-      case MULTILINE_STR:
-      case NAME:
-        ;
-        break;
-      default:
-        jj_la1[21] = jj_gen;
-        break label_3;
-      }
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case DATETIME:
-      case DATE:
-      case TIME:
-      case REGEX:
-      case LBRACE:
-      case SHORT:
-      case BYTE:
-      case LONG:
-      case INTEGER:
-      case INTEGER_H:
-      case INTEGER_O:
-      case INTEGER_B:
-      case LONG_H:
-      case LONG_O:
-      case LONG_B:
-      case SHORT_H:
-      case SHORT_O:
-      case SHORT_B:
-      case BYTE_H:
-      case BYTE_O:
-      case BYTE_B:
-      case FLOAT:
-      case DOUBLE:
-      case STRING:
-      case CHARACTER:
-      case TRUE:
-      case FALSE:
-      case NULL:
-      case LPAREN:
-      case LBRACK:
-      case AT:
-      case CHARSTREAM_START:
-      case NAN:
-      case POS_INF:
-      case NEG_INF:
-      case POS_BOUND:
-      case NEG_BOUND:
-      case COMMENT:
-      case MULTILINE_STR:
-      case NAME:
-        objectElement();
-        break;
-      case COMMA:
-        commaSeparator();
-        break;
-      default:
-        jj_la1[22] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-    }
-  }
-
-  final public void arrayElementList() throws ParseException {
     label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -969,8 +889,12 @@ Token t ;
       case BYTE_B:
       case FLOAT:
       case DOUBLE:
-      case STRING:
-      case CHARACTER:
+      case DOUBLE_QUOTE_STR:
+      case SINGLE_QUOTE_STR:
+      case ANTI_QUOTE_STR:
+      case TRIPLE_DOUBLE_QUOTE_STR:
+      case TRIPLE_SINGLE_QUOTE_STR:
+      case TRIPLE_ANTI_QUOTE_STR:
       case TRUE:
       case FALSE:
       case NULL:
@@ -985,12 +909,11 @@ Token t ;
       case POS_BOUND:
       case NEG_BOUND:
       case COMMENT:
-      case MULTILINE_STR:
       case NAME:
         ;
         break;
       default:
-        jj_la1[23] = jj_gen;
+        jj_la1[21] = jj_gen;
         break label_4;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1017,8 +940,12 @@ Token t ;
       case BYTE_B:
       case FLOAT:
       case DOUBLE:
-      case STRING:
-      case CHARACTER:
+      case DOUBLE_QUOTE_STR:
+      case SINGLE_QUOTE_STR:
+      case ANTI_QUOTE_STR:
+      case TRIPLE_DOUBLE_QUOTE_STR:
+      case TRIPLE_SINGLE_QUOTE_STR:
+      case TRIPLE_ANTI_QUOTE_STR:
       case TRUE:
       case FALSE:
       case NULL:
@@ -1032,22 +959,21 @@ Token t ;
       case POS_BOUND:
       case NEG_BOUND:
       case COMMENT:
-      case MULTILINE_STR:
       case NAME:
-        arrayElement();
+        objectElement();
         break;
       case COMMA:
         commaSeparator();
         break;
       default:
-        jj_la1[24] = jj_gen;
+        jj_la1[22] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
     }
   }
 
-  final public void annotationParamList() throws ParseException {
+  final public void arrayElementList() throws ParseException {
     label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1074,8 +1000,12 @@ Token t ;
       case BYTE_B:
       case FLOAT:
       case DOUBLE:
-      case STRING:
-      case CHARACTER:
+      case DOUBLE_QUOTE_STR:
+      case SINGLE_QUOTE_STR:
+      case ANTI_QUOTE_STR:
+      case TRIPLE_DOUBLE_QUOTE_STR:
+      case TRIPLE_SINGLE_QUOTE_STR:
+      case TRIPLE_ANTI_QUOTE_STR:
       case TRUE:
       case FALSE:
       case NULL:
@@ -1090,12 +1020,11 @@ Token t ;
       case POS_BOUND:
       case NEG_BOUND:
       case COMMENT:
-      case MULTILINE_STR:
       case NAME:
         ;
         break;
       default:
-        jj_la1[25] = jj_gen;
+        jj_la1[23] = jj_gen;
         break label_5;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -1122,8 +1051,12 @@ Token t ;
       case BYTE_B:
       case FLOAT:
       case DOUBLE:
-      case STRING:
-      case CHARACTER:
+      case DOUBLE_QUOTE_STR:
+      case SINGLE_QUOTE_STR:
+      case ANTI_QUOTE_STR:
+      case TRIPLE_DOUBLE_QUOTE_STR:
+      case TRIPLE_SINGLE_QUOTE_STR:
+      case TRIPLE_ANTI_QUOTE_STR:
       case TRUE:
       case FALSE:
       case NULL:
@@ -1137,7 +1070,117 @@ Token t ;
       case POS_BOUND:
       case NEG_BOUND:
       case COMMENT:
-      case MULTILINE_STR:
+      case NAME:
+        arrayElement();
+        break;
+      case COMMA:
+        commaSeparator();
+        break;
+      default:
+        jj_la1[24] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+    }
+  }
+
+  final public void annotationParamList() throws ParseException {
+    label_6:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case DATETIME:
+      case DATE:
+      case TIME:
+      case REGEX:
+      case LBRACE:
+      case SHORT:
+      case BYTE:
+      case LONG:
+      case INTEGER:
+      case INTEGER_H:
+      case INTEGER_O:
+      case INTEGER_B:
+      case LONG_H:
+      case LONG_O:
+      case LONG_B:
+      case SHORT_H:
+      case SHORT_O:
+      case SHORT_B:
+      case BYTE_H:
+      case BYTE_O:
+      case BYTE_B:
+      case FLOAT:
+      case DOUBLE:
+      case DOUBLE_QUOTE_STR:
+      case SINGLE_QUOTE_STR:
+      case ANTI_QUOTE_STR:
+      case TRIPLE_DOUBLE_QUOTE_STR:
+      case TRIPLE_SINGLE_QUOTE_STR:
+      case TRIPLE_ANTI_QUOTE_STR:
+      case TRUE:
+      case FALSE:
+      case NULL:
+      case LPAREN:
+      case LBRACK:
+      case COMMA:
+      case AT:
+      case CHARSTREAM_START:
+      case NAN:
+      case POS_INF:
+      case NEG_INF:
+      case POS_BOUND:
+      case NEG_BOUND:
+      case COMMENT:
+      case NAME:
+        ;
+        break;
+      default:
+        jj_la1[25] = jj_gen;
+        break label_6;
+      }
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case DATETIME:
+      case DATE:
+      case TIME:
+      case REGEX:
+      case LBRACE:
+      case SHORT:
+      case BYTE:
+      case LONG:
+      case INTEGER:
+      case INTEGER_H:
+      case INTEGER_O:
+      case INTEGER_B:
+      case LONG_H:
+      case LONG_O:
+      case LONG_B:
+      case SHORT_H:
+      case SHORT_O:
+      case SHORT_B:
+      case BYTE_H:
+      case BYTE_O:
+      case BYTE_B:
+      case FLOAT:
+      case DOUBLE:
+      case DOUBLE_QUOTE_STR:
+      case SINGLE_QUOTE_STR:
+      case ANTI_QUOTE_STR:
+      case TRIPLE_DOUBLE_QUOTE_STR:
+      case TRIPLE_SINGLE_QUOTE_STR:
+      case TRIPLE_ANTI_QUOTE_STR:
+      case TRUE:
+      case FALSE:
+      case NULL:
+      case LPAREN:
+      case LBRACK:
+      case AT:
+      case CHARSTREAM_START:
+      case NAN:
+      case POS_INF:
+      case NEG_INF:
+      case POS_BOUND:
+      case NEG_BOUND:
+      case COMMENT:
       case NAME:
         annotationParam();
         break;
@@ -1186,8 +1229,12 @@ Token t ;
     case BYTE_B:
     case FLOAT:
     case DOUBLE:
-    case STRING:
-    case CHARACTER:
+    case DOUBLE_QUOTE_STR:
+    case SINGLE_QUOTE_STR:
+    case ANTI_QUOTE_STR:
+    case TRIPLE_DOUBLE_QUOTE_STR:
+    case TRIPLE_SINGLE_QUOTE_STR:
+    case TRIPLE_ANTI_QUOTE_STR:
     case TRUE:
     case FALSE:
     case NULL:
@@ -1202,7 +1249,6 @@ Token t ;
     case POS_BOUND:
     case NEG_BOUND:
     case COMMENT:
-    case MULTILINE_STR:
     case NAME:
       objectElementList();
       jj_consume_token(RBRACE);
@@ -1253,8 +1299,12 @@ Token t ;
     case BYTE_B:
     case FLOAT:
     case DOUBLE:
-    case STRING:
-    case CHARACTER:
+    case DOUBLE_QUOTE_STR:
+    case SINGLE_QUOTE_STR:
+    case ANTI_QUOTE_STR:
+    case TRIPLE_DOUBLE_QUOTE_STR:
+    case TRIPLE_SINGLE_QUOTE_STR:
+    case TRIPLE_ANTI_QUOTE_STR:
     case TRUE:
     case FALSE:
     case NULL:
@@ -1269,7 +1319,6 @@ Token t ;
     case POS_BOUND:
     case NEG_BOUND:
     case COMMENT:
-    case MULTILINE_STR:
     case NAME:
       arrayElementList();
       jj_consume_token(RBRACK);
@@ -1313,16 +1362,16 @@ Token t ;
       jj_la1_init_3();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0xfdffffbf,0x0,0x0,0x0,0x0,0x80000000,0x80000000,0x80000000,0x80000000,0x80000000,0xfdffffbe,0x0,0xfdffffbe,0x80000000,0x80000000,0x20,0x20,0x20,0x20,0x0,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdfffffe,0xfdffffbe,};
+      jj_la1_0 = new int[] {0xfdffffbf,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xfdffffbe,0x0,0xfdffffbe,0x0,0x0,0x20,0x20,0x20,0x20,0x0,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdfffffe,0xfdffffbe,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x2,0xfffffff8,0xfffffff8,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2,0x0,0x3,0x0,0x0,0x2,0x2,0x2,0x2,0x0,0x3,0x2,0x2,0x2,0x2,0x2,0x2,0x2,0x6,};
+      jj_la1_1 = new int[] {0x2f,0xffffff80,0xffffff80,0x0,0x0,0x8,0x8,0x8,0x8,0x8,0x2f,0x0,0x3f,0x8,0x8,0x20,0x20,0x20,0x20,0x0,0x3f,0x2f,0x2f,0x2f,0x2f,0x2f,0x2f,0x2f,0x6f,};
    }
    private static void jj_la1_init_2() {
-      jj_la1_2 = new int[] {0x40000000,0xc7ffffff,0xc7ffffff,0x0,0x40000000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x60000000,0x0,0x0,0x0,0x0,0x0,0x0,0x20000000,0x40000000,0x60000000,0x60000000,0x60000000,0x60000000,0x60000000,0x60000000,0x60000000,0x60000000,};
+      jj_la1_2 = new int[] {0x0,0x7fffffff,0x7fffffff,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
    }
    private static void jj_la1_init_3() {
-      jj_la1_3 = new int[] {0x2ff,0x0,0x0,0x40,0x0,0x0,0x0,0x0,0x0,0x0,0x2bf,0x200,0x2ff,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,0x2ff,};
+      jj_la1_3 = new int[] {0x17f4,0xc,0xc,0x400,0x4,0x0,0x0,0x0,0x0,0x0,0x13f0,0x1000,0x17f6,0x0,0x0,0x0,0x0,0x0,0x0,0x2,0x17f4,0x17f6,0x17f6,0x17f6,0x17f6,0x17f6,0x17f6,0x17f6,0x17f6,};
    }
 
   /** Constructor with InputStream. */
@@ -1439,7 +1488,7 @@ Token t ;
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[114];
+    boolean[] la1tokens = new boolean[117];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -1462,7 +1511,7 @@ Token t ;
         }
       }
     }
-    for (int i = 0; i < 114; i++) {
+    for (int i = 0; i < 117; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

@@ -1,5 +1,6 @@
 package net.thevpc.tson.impl.parser;
 
+import net.thevpc.tson.TsonStringLayout;
 import net.thevpc.tson.impl.elements.TsonBooleanImpl;
 import net.thevpc.tson.impl.elements.TsonNullImpl;
 import net.thevpc.tson.impl.parser.javacc.SimpleCharStream;
@@ -343,12 +344,28 @@ public class CustomJavaccTsonStreamParserImpl implements ITsonStreamParser {
                 visitor.visitPrimitiveEnd(TsonParserUtils.parseDoubleElem(token.image));
                 break;
             }
-            case TsonStreamParserImplConstants.CHARACTER: {
+            case TsonStreamParserImplConstants.SINGLE_QUOTE_STR: {
                 visitor.visitPrimitiveEnd(TsonParserUtils.parseCharElem(token.image));
                 break;
             }
-            case TsonStreamParserImplConstants.STRING: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseStringElem(token.image));
+            case TsonStreamParserImplConstants.ANTI_QUOTE_STR: {
+                visitor.visitPrimitiveEnd(TsonParserUtils.parseStringElem(token.image, TsonStringLayout.ANTI_QUOTE));
+                break;
+            }
+            case TsonStreamParserImplConstants.DOUBLE_QUOTE_STR: {
+                visitor.visitPrimitiveEnd(TsonParserUtils.parseStringElem(token.image, TsonStringLayout.DOUBLE_QUOTE));
+                break;
+            }
+            case TsonStreamParserImplConstants.TRIPLE_SINGLE_QUOTE_STR: {
+                visitor.visitPrimitiveEnd(TsonParserUtils.parseStringElem(token.image, TsonStringLayout.TRIPLE_SINGLE_QUOTE));
+                break;
+            }
+            case TsonStreamParserImplConstants.TRIPLE_DOUBLE_QUOTE_STR: {
+                visitor.visitPrimitiveEnd(TsonParserUtils.parseStringElem(token.image, TsonStringLayout.TRIPLE_DOUBLE_QUOTE));
+                break;
+            }
+            case TsonStreamParserImplConstants.TRIPLE_ANTI_QUOTE_STR: {
+                visitor.visitPrimitiveEnd(TsonParserUtils.parseStringElem(token.image, TsonStringLayout.TRIPLE_ANTI_QUOTE));
                 break;
             }
             case TsonStreamParserImplConstants.ALIAS: {

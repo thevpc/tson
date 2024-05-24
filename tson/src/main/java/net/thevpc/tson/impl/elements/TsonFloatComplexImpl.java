@@ -12,7 +12,7 @@ public class TsonFloatComplexImpl extends AbstractNumberTsonElement implements T
     private float imag;
 
     public TsonFloatComplexImpl(float real, float imag) {
-        super(TsonElementType.FLOAT_COMPLEX);
+        super(TsonElementType.FLOAT_COMPLEX,TsonNumberLayout.DECIMAL);
         this.real = real;
         this.imag = imag;
     }
@@ -123,7 +123,7 @@ public class TsonFloatComplexImpl extends AbstractNumberTsonElement implements T
 
 
     public TsonBigInt toBigInt() {
-        return new TsonBigIntImpl(getBigInteger());
+        return new TsonBigIntImpl(getBigInteger(),layout());
     }
 
     @Override

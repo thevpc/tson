@@ -20,10 +20,6 @@ import java.util.List;
 
 public class TsonFormatImpl implements TsonFormat, Cloneable {
     public static final HashSet<String> FORMAT_NUMBER_TYPES = new HashSet<>(Arrays.asList("hex", "dec", "bin", "oct"));
-    private static final RadixInfo R2 = new RadixInfo(2, "0b");
-    private static final RadixInfo R8 = new RadixInfo(8, "0");
-    private static final RadixInfo R10 = new RadixInfo(10, "");
-    private static final RadixInfo R16 = new RadixInfo(16, "0x");
 
     private DefaultTsonFormatConfig config;
 
@@ -156,8 +152,11 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 } else if (i == Integer.MIN_VALUE) {
                     writer.append("-Bound(int)");
                 } else {
-                    RadixInfo radix = decodeRadix(format);
-                    writer.append(radix.prefix).append(Integer.toString(i, radix.radix));
+                    TsonNumber nbr = element.toNumber();
+                    writer.append(decodeRadixPrefix(nbr.layout()))
+                            .append(Integer.toString(i,
+                                    nbr.layout().radix()
+                            ));
                 }
                 return;
             }
@@ -165,7 +164,9 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 BigInteger i = element.getBigInteger();
 //                RadixInfo radix = decodeRadix(format);
 //                writer.append(radix.prefix).append(i.toString(radix.radix));
-                writer.append(i.toString());
+                TsonNumber nbr = element.toNumber();
+                writer.append(decodeRadixPrefix(nbr.layout()));
+                writer.append(i.toString(nbr.layout().radix()));
                 writer.append("g");
                 return;
             }
@@ -184,14 +185,20 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 } else if (i == Long.MIN_VALUE) {
                     writer.append("-Bound(long)");
                 } else {
-                    RadixInfo radix = decodeRadix(format);
-                    writer.append(radix.prefix).append(Long.toString(i, radix.radix)).append('L');
+                    TsonNumber nbr = element.toNumber();
+                    writer.append(decodeRadixPrefix(nbr.layout()))
+                            .append(Long.toString(i,
+                                    nbr.layout().radix()
+                            )).append('L');
                 }
                 return;
             }
             case BYTE: {
-                RadixInfo radix = decodeRadix(format);
-                writer.append(radix.prefix).append(Integer.toString(element.getByte(), radix.radix)).append('o');
+                TsonNumber nbr = element.toNumber();
+                writer.append(decodeRadixPrefix(nbr.layout()))
+                        .append(Integer.toString(element.getByte(),
+                                nbr.layout().radix()
+                        )).append('o');
                 return;
             }
             case SHORT: {
@@ -201,8 +208,11 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 } else if (i == Short.MIN_VALUE) {
                     writer.append("-Bound(short)");
                 } else {
-                    RadixInfo radix = decodeRadix(format);
-                    writer.append(radix.prefix).append(Integer.toString(i, radix.radix)).append('s');
+                    TsonNumber nbr = element.toNumber();
+                    writer.append(decodeRadixPrefix(nbr.layout()))
+                            .append(Integer.toString(i,
+                                    nbr.layout().radix()
+                            )).append('s');
                 }
                 return;
             }
@@ -287,7 +297,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
             case STRING: {
                 String s = element.getString();
                 StringBuilder sb = new StringBuilder(s.length() * 2);
-                TsonUtils.toDblStr(s, sb);
+                TsonUtils.toQuotedStr(s, element.toStr().layout(), sb);
                 //TsonUtils.toDblStr(s, writer);
                 writer.append(sb);
                 return;
@@ -457,37 +467,26 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
     }
 
     private static class RadixInfo {
-        int radix;
         String prefix;
 
-        public RadixInfo(int radix, String prefix) {
-            this.radix = radix;
+        public RadixInfo(String prefix) {
             this.prefix = prefix;
         }
     }
 
-    private RadixInfo decodeRadix(TsonAnnotation format) {
-        if (format != null) {
-            for (TsonElement param : format.getAll()) {
-                if (param.type() == TsonElementType.NAME || param.type() == TsonElementType.STRING) {
-                    switch (param.getString()) {
-                        case "hex": {
-                            return R16;
-                        }
-                        case "dec": {
-                            return R10;
-                        }
-                        case "oct": {
-                            return R8;
-                        }
-                        case "bin": {
-                            return R2;
-                        }
-                    }
-                }
-            }
+    private String decodeRadixPrefix(TsonNumberLayout l) {
+        switch (l) {
+            case BINARY:
+                return "0b";
+            case OCTAL:
+                return "0";
+            case HEXADECIMAL:
+                return "0x";
+            case DECIMAL:
+                return "";
+            default:
+                return "";
         }
-        return R10;
     }
 
     private void listToString(boolean indent, Iterable<TsonElement> it, char start, char end, Writer out, ListType applyIgnore) throws

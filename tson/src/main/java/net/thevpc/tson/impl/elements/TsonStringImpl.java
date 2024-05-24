@@ -1,25 +1,22 @@
 package net.thevpc.tson.impl.elements;
 
-import net.thevpc.tson.TsonElement;
-import net.thevpc.tson.TsonPrimitiveBuilder;
-import net.thevpc.tson.TsonString;
-import net.thevpc.tson.TsonElementType;
+import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 
 import java.util.Objects;
 
 public class TsonStringImpl extends AbstractPrimitiveTsonElement implements TsonString {
 
-    private String stringType;
+    private TsonStringLayout layout;
     private String value;
 
-    public TsonStringImpl(String value,String stringType) {
+    public TsonStringImpl(String value,TsonStringLayout layout) {
         super(TsonElementType.STRING);
         this.value = value;
-        this.stringType = stringType;
+        this.layout = layout;
     }
-    public String stringType(){
-        return stringType;
+    public TsonStringLayout layout(){
+        return layout;
     }
 
     @Override

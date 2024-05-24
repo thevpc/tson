@@ -12,8 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.regex.Pattern;
 
-import net.thevpc.tson.impl.elements.*;
-
 public class TsonParserUtils {
 
     public static TsonElement parseDateTimeElem(String s) {
@@ -35,70 +33,70 @@ public class TsonParserUtils {
     }
 
     public static TsonElement parseByteElem(String s) {
-        return new TsonByteImpl(Byte.parseByte(s.substring(0, s.length() - 1)));
+        return new TsonByteImpl(Byte.parseByte(s.substring(0, s.length() - 1)), TsonNumberLayout.DECIMAL);
     }
 
     public static TsonElement parseByteElemBin(String s) {
-        return new TsonByteImpl((byte) fastDecodeShortBin(s));
+        return new TsonByteImpl((byte) fastDecodeShortBin(s), TsonNumberLayout.BINARY);
     }
 
     public static TsonElement parseByteElemOctal(String s) {
-        return new TsonByteImpl((byte) fastDecodeShortOctal(s));
+        return new TsonByteImpl((byte) fastDecodeShortOctal(s), TsonNumberLayout.OCTAL);
     }
 
     public static TsonElement parseByteElemHex(String s) {
-        return new TsonByteImpl((byte) fastDecodeShortHex(s));
+        return new TsonByteImpl((byte) fastDecodeShortHex(s), TsonNumberLayout.HEXADECIMAL);
     }
 
 
     public static TsonElement parseIntElemOctal(String s) {
-        return new TsonIntImpl(fastDecodeIntOctal(s));
+        return new TsonIntImpl(fastDecodeIntOctal(s), TsonNumberLayout.OCTAL);
     }
 
     public static TsonElement parseLongElemOctal(String s) {
-        return new TsonLongImpl(fastDecodeLongOctal(s));
+        return new TsonLongImpl(fastDecodeLongOctal(s), TsonNumberLayout.OCTAL);
     }
 
     public static TsonElement parseIntElemBin(String s) {
-        return new TsonIntImpl(fastDecodeIntBin(s));
+        return new TsonIntImpl(fastDecodeIntBin(s), TsonNumberLayout.BINARY);
     }
 
 
     public static TsonElement parseLongElemBin(String s) {
-        return new TsonLongImpl(fastDecodeLongBin(s));
+        return new TsonLongImpl(fastDecodeLongBin(s), TsonNumberLayout.BINARY);
     }
 
     public static TsonElement parseIntElemHex(String s) {
-        return new TsonIntImpl(fastDecodeIntHex(s));
+        return new TsonIntImpl(fastDecodeIntHex(s), TsonNumberLayout.HEXADECIMAL);
     }
 
 
     public static TsonElement parseShortElem(String s) {
-        return new TsonShortImpl(Short.parseShort(s.substring(0, s.length() - 1)));
+        return new TsonShortImpl(Short.parseShort(s.substring(0, s.length() - 1)), TsonNumberLayout.DECIMAL);
     }
 
     public static TsonElement parseShortElemBin(String s) {
-        return new TsonShortImpl(fastDecodeShortBin(s));
+        return new TsonShortImpl(fastDecodeShortBin(s), TsonNumberLayout.BINARY);
     }
 
     public static TsonElement parseShortElemOctal(String s) {
-        return new TsonShortImpl(fastDecodeShortOctal(s));
+        return new TsonShortImpl(fastDecodeShortOctal(s), TsonNumberLayout.OCTAL);
     }
 
     public static TsonElement parseShortElemHex(String s) {
-        return new TsonShortImpl(fastDecodeShortHex(s));
+        return new TsonShortImpl(fastDecodeShortHex(s), TsonNumberLayout.HEXADECIMAL);
     }
 
     public static TsonElement parseLongElemHex(String s) {
-        return new TsonLongImpl(fastDecodeLongHex(s));
+        return new TsonLongImpl(fastDecodeLongHex(s), TsonNumberLayout.HEXADECIMAL);
     }
 
     public static TsonElement parseIntElem(String s) {
-        return new TsonIntImpl(Integer.parseInt(s));
+        return new TsonIntImpl(Integer.parseInt(s), TsonNumberLayout.DECIMAL);
     }
 
     public static TsonElement parseLongElem(String s) {
-        return new TsonLongImpl(Long.parseLong(s));
+        return new TsonLongImpl(Long.parseLong(s), TsonNumberLayout.DECIMAL);
     }
 
     public static TsonElement parseFloatElem(String s) {
@@ -168,22 +166,23 @@ public class TsonParserUtils {
     }
 
     public static char parseChar(String s) {
-        return parseString(s).charAt(0);
+        return parseString(s, TsonStringLayout.SINGLE_QUOTE).charAt(0);
     }
 
     public static TsonElement parseCharElem(String s) {
         if (s.length() != 1) {
-            return new TsonStringImpl(parseString(s), "'");
+            return parseStringElem(s, TsonStringLayout.SINGLE_QUOTE);
         }
-        return new TsonCharImpl(parseString(s).charAt(0));
+        return new TsonCharImpl(parseString(s, TsonStringLayout.SINGLE_QUOTE).charAt(0));
     }
 
     public static TsonElement parseStringElem(String s) {
-        return new TsonStringImpl(parseString(s), "\"");
+        return parseStringElem(s, TsonStringLayout.DOUBLE_QUOTE);
     }
 
-    public static TsonElement parseMultiLineStringElem(String s) {
-        return new TsonStringImpl(parseMultiLineString(s), "\"\"\"");
+    public static TsonElement parseStringElem(String s, TsonStringLayout layout) {
+        layout = layout == null ? TsonStringLayout.DOUBLE_QUOTE : layout;
+        return new TsonStringImpl(parseString(s, layout), layout);
     }
 
     public static TsonElement parseAliasElem(String s) {
@@ -224,56 +223,139 @@ public class TsonParserUtils {
         return new String(chars, 3, beforeLen - 3);
     }
 
-    public static String parseString(String s) {
+    public static String parseString(String s, TsonStringLayout layout) {
         char[] chars = s.toCharArray();
         int len = chars.length;
-        final int beforeLen = len - 1;
-        int lastPut = 1;
-        StringBuilder sb = null;
-        for (int i = 1; i < beforeLen; i++) {
-            switch (s.charAt(i)) {
-                case '\\': {
-                    if (sb == null) {
-                        sb = new StringBuilder(len - 2);
-                    }
-                    sb.append(chars, lastPut, i - lastPut);
-                    i++;
-                    switch (s.charAt(i)) {
-                        case 'n': {
-                            sb.append('\n');
-                            break;
-                        }
-                        case 't': {
-                            sb.append('\t');
-                            break;
-                        }
-                        case 'f': {
-                            sb.append('\f');
-                            break;
-                        }
-                        case 'b': {
-                            sb.append('\b');
-                            break;
-                        }
-                        case '\\': {
-                            sb.append('\\');
-                            break;
-                        }
-                        default: {
-                            sb.append(chars[i]);
-                        }
-                    }
-                    lastPut = i + 1;
-                    break;
-                }
+        int prefixLen = 1;
+        int suffixLen = 1;
+        String border = "\"";
+        switch (layout) {
+            case DOUBLE_QUOTE: {
+                border = "\"";
+                break;
+            }
+            case SINGLE_QUOTE: {
+                border = "'";
+                break;
+            }
+            case ANTI_QUOTE: {
+                border = "`";
+                break;
+            }
+            case TRIPLE_ANTI_QUOTE: {
+                border = "```";
+                break;
+            }
+            case TRIPLE_DOUBLE_QUOTE: {
+                border = "\"\"\"";
+                break;
+            }
+            case TRIPLE_SINGLE_QUOTE: {
+                border = "'''";
+                break;
             }
         }
-        if (sb == null) {
-//            return s.substring(1, beforeLen-1);
-            return new String(chars, 1, beforeLen - 1);
+        prefixLen = border.length();
+        suffixLen = prefixLen;
+        if (s.length() < prefixLen + suffixLen) {
+            throw new IllegalArgumentException("unsupported: " + s);
         }
-        sb.append(chars, lastPut, beforeLen - lastPut);
-        return sb.toString();
+        if (
+                !s.startsWith(border)
+                        || !s.endsWith(border)
+        ) {
+            throw new IllegalArgumentException("unsupported: " + s);
+        }
+        switch (layout) {
+            case DOUBLE_QUOTE:
+            case SINGLE_QUOTE:
+            case ANTI_QUOTE: {
+                final int beforeLen = len - suffixLen;
+                StringBuilder sb = new StringBuilder();
+                for (int i = suffixLen; i < beforeLen; i++) {
+                    char c = s.charAt(i);
+                    switch (c) {
+                        case '\\': {
+                            int ip = i + 1;
+                            boolean processed=false;
+                            if(ip < beforeLen) {
+                                switch (s.charAt(ip)) {
+                                    case 'n': {
+                                        sb.append('\n');
+                                        i++;
+                                        processed=true;
+                                        break;
+                                    }
+                                    case 't': {
+                                        sb.append('\t');
+                                        i++;
+                                        processed=true;
+                                        break;
+                                    }
+                                    case 'f': {
+                                        sb.append('\f');
+                                        i++;
+                                        processed=true;
+                                        break;
+                                    }
+                                    case 'b': {
+                                        sb.append('\b');
+                                        i++;
+                                        processed=true;
+                                        break;
+                                    }
+                                    case '\\': {
+                                        sb.append('\\');
+                                        i++;
+                                        processed=true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!processed) {
+                                sb.append(c);
+                            }
+                            break;
+                        }
+                        default:{
+                            sb.append(c);
+                        }
+                    }
+                }
+                return sb.toString();
+            }
+            case TRIPLE_ANTI_QUOTE:
+            case TRIPLE_DOUBLE_QUOTE:
+            case TRIPLE_SINGLE_QUOTE: {
+                final int beforeLen = len - prefixLen;
+                StringBuilder sb = new StringBuilder(s.length());
+                for (int i = prefixLen; i < beforeLen; i++) {
+                    char c = s.charAt(i);
+                    switch (c) {
+                        case '\\': {
+                            boolean processed=false;
+                            if (i + 3 < len) {
+                                String substring = s.substring(i + 1, i + 1 + suffixLen);
+                                if(substring.equals(border)) {
+                                    sb.append(substring);
+                                    i+=suffixLen;
+                                    processed=true;
+                                }
+                            }
+                            if(!processed) {
+                                sb.append(c);
+                            }
+                            break;
+                        }
+                        default:{
+                            sb.append(c);
+                        }
+                    }
+                }
+                return sb.toString();
+            }
+        }
+        throw new IllegalArgumentException("unsupported: " + s);
     }
 
     public static String parseStringOld(String s) {

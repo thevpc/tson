@@ -8,8 +8,8 @@ import java.util.Objects;
 public class TsonByteImpl extends AbstractNumberTsonElement implements TsonByte {
     private byte value;
 
-    public TsonByteImpl(byte value) {
-        super(TsonElementType.BYTE);
+    public TsonByteImpl(byte value,TsonNumberLayout layout) {
+        super(TsonElementType.BYTE,layout);
         this.value = value;
     }
 
