@@ -715,6 +715,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public String raw() {
+            return getBase().raw();
+        }
+
+        @Override
         public String getValue() {
             return getBase().getValue();
         }

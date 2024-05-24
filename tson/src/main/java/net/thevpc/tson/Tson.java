@@ -6,6 +6,7 @@ import net.thevpc.tson.impl.elements.*;
 import net.thevpc.tson.impl.format.TsonFormatImplBuilder;
 import net.thevpc.tson.impl.format.TsonWriterImpl;
 import net.thevpc.tson.impl.marshall.TsonSerializerImpl;
+import net.thevpc.tson.impl.parser.TsonParserUtils;
 import net.thevpc.tson.impl.parser.TsonReaderImpl;
 
 import java.io.File;
@@ -44,18 +45,30 @@ public class Tson {
         return TsonBooleanImpl.valueOf(val);
     }
 
+    public static TsonElement rawString(String value, TsonStringLayout layout) {
+        if (value == null) {
+            return nullElem();
+        }
+        TsonStringLayout ll = layout == null ? TsonStringLayout.DOUBLE_QUOTE : layout;
+        return new TsonStringImpl(
+                TsonParserUtils.parseRawString(value, ll),
+                TsonParserUtils.extractRawString(value, ll),
+                ll
+        );
+    }
+
     public static TsonElement string(String value, TsonStringLayout layout) {
         if (value == null) {
             return nullElem();
         }
-        return new TsonStringImpl(value, layout == null ? TsonStringLayout.DOUBLE_QUOTE : layout);
+        return new TsonStringImpl(value, value, layout == null ? TsonStringLayout.DOUBLE_QUOTE : layout);
     }
 
     public static TsonElement string(String value) {
         if (value == null) {
             return nullElem();
         }
-        return new TsonStringImpl(value, TsonStringLayout.DOUBLE_QUOTE);
+        return string(value, TsonStringLayout.DOUBLE_QUOTE);
     }
 
     public static TsonElement datetime(Instant value) {

@@ -8,13 +8,16 @@ import java.util.Objects;
 public class TsonStringImpl extends AbstractPrimitiveTsonElement implements TsonString {
 
     private TsonStringLayout layout;
+    private String rawValue;
     private String value;
 
-    public TsonStringImpl(String value,TsonStringLayout layout) {
+    public TsonStringImpl(String value,String rawValue,TsonStringLayout layout) {
         super(TsonElementType.STRING);
         this.value = value;
+        this.rawValue = rawValue;
         this.layout = layout;
     }
+
     public TsonStringLayout layout(){
         return layout;
     }
@@ -27,6 +30,11 @@ public class TsonStringImpl extends AbstractPrimitiveTsonElement implements Tson
     @Override
     public String getValue() {
         return value;
+    }
+
+    @Override
+    public String raw() {
+        return rawValue;
     }
 
     @Override

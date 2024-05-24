@@ -166,14 +166,14 @@ public class TsonParserUtils {
     }
 
     public static char parseChar(String s) {
-        return parseString(s, TsonStringLayout.SINGLE_QUOTE).charAt(0);
+        return parseRawString(s, TsonStringLayout.SINGLE_QUOTE).charAt(0);
     }
 
     public static TsonElement parseCharElem(String s) {
         if (s.length() != 1) {
             return parseStringElem(s, TsonStringLayout.SINGLE_QUOTE);
         }
-        return new TsonCharImpl(parseString(s, TsonStringLayout.SINGLE_QUOTE).charAt(0));
+        return new TsonCharImpl(parseRawString(s, TsonStringLayout.SINGLE_QUOTE).charAt(0));
     }
 
     public static TsonElement parseStringElem(String s) {
@@ -182,7 +182,7 @@ public class TsonParserUtils {
 
     public static TsonElement parseStringElem(String s, TsonStringLayout layout) {
         layout = layout == null ? TsonStringLayout.DOUBLE_QUOTE : layout;
-        return new TsonStringImpl(parseString(s, layout), layout);
+        return Tson.rawString(s, layout);
     }
 
     public static TsonElement parseAliasElem(String s) {
@@ -216,14 +216,33 @@ public class TsonParserUtils {
 //        System.out.println(c3);
 //    }
 
-    public static String parseMultiLineString(String s) {
+
+    public static String extractRawString(String s, TsonStringLayout layout) {
         char[] chars = s.toCharArray();
         int len = chars.length;
-        final int beforeLen = len - 3;
-        return new String(chars, 3, beforeLen - 3);
+        int borderLen;
+        switch (layout) {
+            case DOUBLE_QUOTE:
+            case SINGLE_QUOTE:
+            case ANTI_QUOTE: {
+                borderLen = 1;
+                break;
+            }
+            case TRIPLE_ANTI_QUOTE:
+            case TRIPLE_DOUBLE_QUOTE:
+            case TRIPLE_SINGLE_QUOTE: {
+                borderLen = 3;
+                break;
+            }
+            default: {
+                throw new IllegalArgumentException("unsupported");
+            }
+        }
+        return s.substring(borderLen,len - borderLen);
     }
 
-    public static String parseString(String s, TsonStringLayout layout) {
+
+    public static String parseRawString(String s, TsonStringLayout layout) {
         char[] chars = s.toCharArray();
         int len = chars.length;
         int prefixLen = 1;
@@ -277,47 +296,47 @@ public class TsonParserUtils {
                     switch (c) {
                         case '\\': {
                             int ip = i + 1;
-                            boolean processed=false;
-                            if(ip < beforeLen) {
+                            boolean processed = false;
+                            if (ip < beforeLen) {
                                 switch (s.charAt(ip)) {
                                     case 'n': {
                                         sb.append('\n');
                                         i++;
-                                        processed=true;
+                                        processed = true;
                                         break;
                                     }
                                     case 't': {
                                         sb.append('\t');
                                         i++;
-                                        processed=true;
+                                        processed = true;
                                         break;
                                     }
                                     case 'f': {
                                         sb.append('\f');
                                         i++;
-                                        processed=true;
+                                        processed = true;
                                         break;
                                     }
                                     case 'b': {
                                         sb.append('\b');
                                         i++;
-                                        processed=true;
+                                        processed = true;
                                         break;
                                     }
                                     case '\\': {
                                         sb.append('\\');
                                         i++;
-                                        processed=true;
+                                        processed = true;
                                         break;
                                     }
                                 }
                             }
-                            if(!processed) {
+                            if (!processed) {
                                 sb.append(c);
                             }
                             break;
                         }
-                        default:{
+                        default: {
                             sb.append(c);
                         }
                     }
@@ -333,21 +352,21 @@ public class TsonParserUtils {
                     char c = s.charAt(i);
                     switch (c) {
                         case '\\': {
-                            boolean processed=false;
+                            boolean processed = false;
                             if (i + 3 < len) {
                                 String substring = s.substring(i + 1, i + 1 + suffixLen);
-                                if(substring.equals(border)) {
+                                if (substring.equals(border)) {
                                     sb.append(substring);
-                                    i+=suffixLen;
-                                    processed=true;
+                                    i += suffixLen;
+                                    processed = true;
                                 }
                             }
-                            if(!processed) {
+                            if (!processed) {
                                 sb.append(c);
                             }
                             break;
                         }
-                        default:{
+                        default: {
                             sb.append(c);
                         }
                     }
