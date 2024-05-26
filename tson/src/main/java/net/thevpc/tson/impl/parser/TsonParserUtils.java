@@ -10,6 +10,9 @@ import net.thevpc.tson.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class TsonParserUtils {
@@ -238,7 +241,7 @@ public class TsonParserUtils {
                 throw new IllegalArgumentException("unsupported");
             }
         }
-        return s.substring(borderLen,len - borderLen);
+        return s.substring(borderLen, len - borderLen);
     }
 
 
@@ -421,6 +424,27 @@ public class TsonParserUtils {
         return sb.toString();
     }
 
+    public static TsonDocument elementsToDocument(TsonElement[] roots) {
+        TsonElement c=null;
+        if(roots.length==0){
+            return Tson.document().header(null).content(Tson.obj().build()).build();
+        }else if(roots.length==1){
+            return elementToDocument(roots[0]);
+        }else{
+            TsonAnnotation[] annotations = roots[0].getAnnotations();
+            if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].getName())) {
+                // will remove it
+                TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];
+                System.arraycopy(annotations, 1, annotations2, 0, annotations.length - 1);
+                List<TsonElement> newList=new ArrayList<>(Arrays.asList(roots));
+                TsonElement c0 = roots[0].builder().setAnnotations(annotations2).build();
+                newList.set(0,c0);
+                roots=newList.toArray(new TsonElement[0]);
+            }
+            return Tson.document().content(Tson.obj(roots).build()).build();
+        }
+    }
+
     public static TsonDocument elementToDocument(TsonElement root) {
         TsonAnnotation[] annotations = root.getAnnotations();
         if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].getName())) {
@@ -448,9 +472,18 @@ public class TsonParserUtils {
                 }
             }
             if (line == lines.length - 1) {
-                if (s.startsWith("*/")) {
+                if (s.endsWith("*/")) {
                     s = s.substring(0, s.length() - 2);
                 }
+            }
+            if (s.equals("*")) {
+                s = s.substring(1);
+            } else if (s.equals("**")) {
+                s = s.substring(1);
+            } else if (s.startsWith("*") && s.length() > 1 && Character.isWhitespace(s.charAt(1))) {
+                s = s.substring(2).trim();
+            } else if (s.startsWith("**") && s.length() > 2 && Character.isWhitespace(s.charAt(1))) {
+                s = s.substring(2).trim();
             }
             if (s.length() > 1 && s.charAt(0) == '*' && s.charAt(1) == ' ') {
                 s = s.substring(2);

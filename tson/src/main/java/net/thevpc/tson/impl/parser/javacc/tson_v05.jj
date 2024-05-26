@@ -39,7 +39,11 @@ public void parseDocument():
 {
 }
 {
-    parseElement() {
+    (
+    (parseElement())*
+    (<COMMENT>)*
+    )
+    {
         visitor.visitDocumentEnd();
     }
 }
@@ -48,9 +52,6 @@ public void parseElement():
 }
 {
   elementLevel2()
-  |
-  <EOF>
-
 }
 
 void elementLevel2() :

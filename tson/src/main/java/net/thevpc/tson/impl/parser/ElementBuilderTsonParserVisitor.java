@@ -275,8 +275,11 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
 
     @Override
     public void visitDocumentEnd() {
-        TsonElement e = peek();
-        repush(TsonParserUtils.elementToDocument(e));
+        List<TsonElement> allChildren = new ArrayList<>();
+        while (stackSize > 0) {
+            allChildren.add(0, pop());
+        }
+        push(TsonParserUtils.elementsToDocument(allChildren.toArray(new TsonElement[0])));
     }
 
     //---------------------------------------------------------------------
