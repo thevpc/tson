@@ -48,7 +48,7 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
 
     @Override
     public TsonUpletBuilder add(TsonElementBase element) {
-        elements.add(Tson.elem(element).build());
+        elements.add(Tson.of(element).build());
         return this;
     }
 
@@ -59,7 +59,7 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
 
     @Override
     public TsonUpletBuilder remove(TsonElementBase element) {
-        elements.remove(Tson.elem(element));
+        elements.remove(Tson.of(element));
         return this;
     }
 
@@ -76,7 +76,7 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
 
     @Override
     public TsonUpletBuilder add(TsonElementBase element, int index) {
-        elements.add(index, Tson.elem(element).build());
+        elements.add(index, Tson.of(element).build());
         return this;
     }
 

@@ -58,19 +58,19 @@ public class TsonFunctionBuilderImpl extends AbstractTsonElementBuilder<TsonFunc
 
     @Override
     public TsonFunctionBuilder add(TsonElementBase element) {
-        params.add(Tson.elem(element).build());
+        params.add(Tson.of(element).build());
         return this;
     }
 
     @Override
     public TsonFunctionBuilder remove(TsonElementBase element) {
-        params.remove(Tson.elem(element).build());
+        params.remove(Tson.of(element).build());
         return this;
     }
 
     @Override
     public TsonFunctionBuilder add(TsonElementBase element, int index) {
-        params.add(index, Tson.elem(element).build());
+        params.add(index, Tson.of(element).build());
         return this;
     }
 

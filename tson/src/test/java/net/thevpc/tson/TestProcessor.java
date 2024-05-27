@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 public class TestProcessor {
     @Test
     public void testRemoveComments(){
-        TsonElement a = Tson.obj().comments("Hello")
-                .add("name", Tson.elem().set("Really me").anchor("ref"))
+        TsonElement a = Tson.ofObj().comments("Hello")
+                .add("name", Tson.of().set("Really me").anchor("ref"))
                 .add("otherName", Tson.alias("ref"))
                 .build();
         System.out.println(a);

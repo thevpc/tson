@@ -3,7 +3,6 @@ package net.thevpc.tson.impl.builders;
 import net.thevpc.tson.Tson;
 import net.thevpc.tson.TsonElement;
 import net.thevpc.tson.TsonElementBase;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.util.ArrayList;
@@ -26,19 +25,19 @@ public class TsonArrayBuilderSupport {
     }
 
     public void add(TsonElementBase element) {
-        TsonElement e = Tson.elem(element).build();
+        TsonElement e = Tson.of(element).build();
         current.add(e);
     }
 
     public void remove(TsonElementBase element) {
-        TsonElement e = Tson.elem(element).build();
+        TsonElement e = Tson.of(element).build();
         if (!current.remove(e)) {
 
         }
     }
 
     public void add(TsonElementBase element, int index) {
-        current.add(index, Tson.elem(element).build());
+        current.add(index, Tson.of(element).build());
     }
 
     public void removeAt(int index) {

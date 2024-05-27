@@ -68,7 +68,7 @@ public abstract class AbstractTsonElementBuilder<T extends TsonElementBuilder> i
 
     @Override
     public T addAnnotation(String name, TsonElementBase... elements) {
-        return addAnnotation(Tson.annotation(name, elements));
+        return addAnnotation(Tson.ofAnnotation(name, elements));
     }
 
     @Override

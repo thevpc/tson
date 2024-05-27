@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 
 import java.util.Objects;
@@ -24,7 +23,7 @@ public class TsonAliasImpl extends AbstractPrimitiveTsonElement implements TsonA
 
     @Override
     public TsonString toStr() {
-        return (TsonString) Tson.elem(value);
+        return (TsonString) Tson.of(value);
     }
 
     @Override

@@ -113,7 +113,7 @@ public class TsonArrayBuilderImpl extends AbstractTsonElementBuilder<TsonArrayBu
 
     @Override
     public TsonArrayBuilder merge(TsonElementBase element) {
-        TsonElement e = Tson.elem(element);
+        TsonElement e = Tson.of(element);
         switch (e.type()) {
             case UPLET: {
                 header.addAll(e.toUplet());

@@ -22,7 +22,7 @@ public class TsonSerializerConfig {
     private final TsonObjectToElement objToElem_arr = new TsonObjectToElement() {
         @Override
         public TsonElement toElement(Object object, TsonObjectContext context) {
-            TsonArrayBuilder a = Tson.array();
+            TsonArrayBuilder a = Tson.ofArray();
             int len = Array.getLength(object);
             for (int i = 0; i < len; i++) {
                 a.add(context.elem(Array.get(object, i)));
@@ -72,38 +72,38 @@ public class TsonSerializerConfig {
         registerObjToElemConverter(TsonSerializable.class, TsonSerializable::toTsonElement);
         registerObjToElemConverter(TsonElementBase.class, (object, context) -> object.build());
         registerObjToElemConverter(Enum.class, (object, context) -> Tson.name(object.name()));
-        registerObjToElemConverter(String.class, (object, context) -> Tson.elem((String) object));
-        registerObjToElemConverter(Double.class, (object, context) -> Tson.elem((Double) object));
-        registerObjToElemConverter(Double.TYPE, (object, context) -> Tson.elem((Double) object));
-        registerObjToElemConverter(Float.class, (object, context) -> Tson.elem((Float) object));
-        registerObjToElemConverter(Float.TYPE, (object, context) -> Tson.elem((Float) object));
-        registerObjToElemConverter(Long.class, (object, context) -> Tson.elem((Long) object));
-        registerObjToElemConverter(Long.TYPE, (object, context) -> Tson.elem((Long) object));
-        registerObjToElemConverter(Integer.class, (object, context) -> Tson.elem((Integer) object));
-        registerObjToElemConverter(Integer.TYPE, (object, context) -> Tson.elem((Integer) object));
-        registerObjToElemConverter(Short.class, (object, context) -> Tson.elem((Short) object));
-        registerObjToElemConverter(Short.TYPE, (object, context) -> Tson.elem((Short) object));
-        registerObjToElemConverter(Byte.class, (object, context) -> Tson.elem((Byte) object));
-        registerObjToElemConverter(Byte.TYPE, (object, context) -> Tson.elem((Byte) object));
-        registerObjToElemConverter(Character.class, (object, context) -> Tson.elem((Character) object));
-        registerObjToElemConverter(Character.TYPE, (object, context) -> Tson.elem((Character) object));
-        registerObjToElemConverter(Date.class, (object, context) -> Tson.elem((Date) object));
-        registerObjToElemConverter(Instant.class, (object, context) -> Tson.elem((Instant) object));
-        registerObjToElemConverter(Time.class, (object, context) -> Tson.elem((Time) object));
-        registerObjToElemConverter(LocalTime.class, (object, context) -> Tson.elem((LocalTime) object));
-        registerObjToElemConverter(LocalDate.class, (object, context) -> Tson.elem((LocalDate) object));
-        registerObjToElemConverter(Pattern.class, (object, context) -> Tson.elem((Pattern) object));
-        registerObjToElemConverter(Boolean.class, (object, context) -> Tson.elem((Boolean) object));
-        registerObjToElemConverter(Boolean.TYPE, (object, context) -> Tson.elem((Boolean) object));
+        registerObjToElemConverter(String.class, (object, context) -> Tson.of((String) object));
+        registerObjToElemConverter(Double.class, (object, context) -> Tson.of((Double) object));
+        registerObjToElemConverter(Double.TYPE, (object, context) -> Tson.of((Double) object));
+        registerObjToElemConverter(Float.class, (object, context) -> Tson.of((Float) object));
+        registerObjToElemConverter(Float.TYPE, (object, context) -> Tson.of((Float) object));
+        registerObjToElemConverter(Long.class, (object, context) -> Tson.of((Long) object));
+        registerObjToElemConverter(Long.TYPE, (object, context) -> Tson.of((Long) object));
+        registerObjToElemConverter(Integer.class, (object, context) -> Tson.of((Integer) object));
+        registerObjToElemConverter(Integer.TYPE, (object, context) -> Tson.of((Integer) object));
+        registerObjToElemConverter(Short.class, (object, context) -> Tson.of((Short) object));
+        registerObjToElemConverter(Short.TYPE, (object, context) -> Tson.of((Short) object));
+        registerObjToElemConverter(Byte.class, (object, context) -> Tson.of((Byte) object));
+        registerObjToElemConverter(Byte.TYPE, (object, context) -> Tson.of((Byte) object));
+        registerObjToElemConverter(Character.class, (object, context) -> Tson.of((Character) object));
+        registerObjToElemConverter(Character.TYPE, (object, context) -> Tson.of((Character) object));
+        registerObjToElemConverter(Date.class, (object, context) -> Tson.of((Date) object));
+        registerObjToElemConverter(Instant.class, (object, context) -> Tson.of((Instant) object));
+        registerObjToElemConverter(Time.class, (object, context) -> Tson.of((Time) object));
+        registerObjToElemConverter(LocalTime.class, (object, context) -> Tson.of((LocalTime) object));
+        registerObjToElemConverter(LocalDate.class, (object, context) -> Tson.of((LocalDate) object));
+        registerObjToElemConverter(Pattern.class, (object, context) -> Tson.of((Pattern) object));
+        registerObjToElemConverter(Boolean.class, (object, context) -> Tson.of((Boolean) object));
+        registerObjToElemConverter(Boolean.TYPE, (object, context) -> Tson.of((Boolean) object));
         registerObjToElemConverter(Collection.class, (object, context) -> {
-            TsonArrayBuilder a = Tson.array();
+            TsonArrayBuilder a = Tson.ofArray();
             for (Object o : object) {
                 a.add(context.elem(o));
             }
             return a.build();
         });
         registerObjToElemConverter(Map.class, (object, context) -> {
-            TsonObjectBuilder a = Tson.obj();
+            TsonObjectBuilder a = Tson.ofObj();
             for (Map.Entry<?, ?> o : ((Map<?, ?>) object).entrySet()) {
                 a.add(
                         context.elem(o.getKey()),
@@ -115,14 +115,14 @@ public class TsonSerializerConfig {
 
         registerObjToElemConverter(Map.Entry.class, (object, context) -> {
             Map.Entry me = (Map.Entry) object;
-            return Tson.pair(
+            return Tson.ofPair(
                     context.elem(me.getKey()),
                     context.elem(me.getValue())
             );
         });
 
         registerObjToElemConverter(Object.class, (object, context) -> {
-            TsonObjectBuilder a = Tson.obj();
+            TsonObjectBuilder a = Tson.ofObj();
             ClassPropertiesRegistry.ClassInfo ci = classPropertiesRegistry.getClassInfo(object.getClass());
             for (ClassPropertiesRegistry.TypeProperty o : ci.getProperties(true)) {
                 a.add(
@@ -359,7 +359,7 @@ public class TsonSerializerConfig {
             } else {
                 coll.put(
                         context.obj(a, null),
-                        context.obj(Tson.nullElem(), null)
+                        context.obj(Tson.ofNull(), null)
                 );
             }
         }

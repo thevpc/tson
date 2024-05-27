@@ -3,7 +3,6 @@ package net.thevpc.tson.impl.builders;
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.elements.TsonDocumentHeaderImpl;
 import net.thevpc.tson.impl.elements.TsonDocumentImpl;
-import net.thevpc.tson.*;
 
 public class TsonDocumentBuilderImpl implements TsonDocumentBuilder {
     private TsonDocumentHeader header;
@@ -27,7 +26,7 @@ public class TsonDocumentBuilderImpl implements TsonDocumentBuilder {
 
     @Override
     public TsonDocumentBuilderImpl setValue(TsonElementBase value) {
-        this.value = Tson.elem(value);
+        this.value = Tson.of(value);
         return this;
     }
 
@@ -53,7 +52,7 @@ public class TsonDocumentBuilderImpl implements TsonDocumentBuilder {
 
     @Override
     public TsonDocument build() {
-        return new TsonDocumentImpl(header == null ? new TsonDocumentHeaderImpl() : header, value == null ? Tson.nullElem() : value);
+        return new TsonDocumentImpl(header == null ? new TsonDocumentHeaderImpl() : header, value == null ? Tson.ofNull() : value);
     }
 
     @Override

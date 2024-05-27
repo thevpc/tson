@@ -62,7 +62,7 @@ public class TsonRandom {
             case LONG:
                 return Tson.longElem(Double.doubleToLongBits(Math.random()));
             case INT:
-                return Tson.intElem((int) Double.doubleToLongBits(Math.random()));
+                return Tson.ofInt((int) Double.doubleToLongBits(Math.random()));
             case SHORT:
                 return Tson.shortElem((short) Double.doubleToLongBits(Math.random()));
             case BYTE:
@@ -70,7 +70,7 @@ public class TsonRandom {
             case FLOAT:
                 return Tson.floatElem((float) Math.random());
             case DOUBLE:
-                return Tson.doubleElem(Math.random());
+                return Tson.ofDouble(Math.random());
             case DATETIME:
                 return Tson.datetime(Instant.now());
             case DATE:
@@ -82,15 +82,15 @@ public class TsonRandom {
             case NAME:
                 return Tson.name(randomId());
             case STRING:
-                return Tson.string(randomString());
+                return Tson.ofString(randomString());
             case CHAR:
                 return Tson.charElem(randomString().charAt(0));
             case BOOLEAN:
-                return Tson.booleanElem(randomBoolean());
+                return Tson.ofBoolean(randomBoolean());
             case NULL:
-                return Tson.nullElem();
+                return Tson.ofNull();
             case FUNCTION: {
-                TsonFunctionBuilder f = Tson.function();
+                TsonFunctionBuilder f = Tson.ofFunction();
                 f.setName(randomId());
                 int max = randomInt(3);
                 for (int i = 0; i < max; i++) {
@@ -99,7 +99,7 @@ public class TsonRandom {
                 return f.build();
             }
             case PAIR: {
-                return Tson.pair(
+                return Tson.ofPair(
                         randomElement(t -> t != TsonElementType.PAIR),
                         randomElement(t -> t != TsonElementType.PAIR)
                 );
@@ -112,7 +112,7 @@ public class TsonRandom {
                 );
             }
             case ARRAY: {
-                TsonArrayBuilder f = Tson.array();
+                TsonArrayBuilder f = Tson.ofArray();
                 if (randomBoolean()) {
                     f.getHeader().setName(randomId());
                 }
@@ -129,7 +129,7 @@ public class TsonRandom {
                 return f.build();
             }
             case OBJECT: {
-                TsonObjectBuilder f = Tson.obj();
+                TsonObjectBuilder f = Tson.ofObj();
                 if (randomBoolean()) {
                     f.getHeader().setName(randomId());
                 }
@@ -146,7 +146,7 @@ public class TsonRandom {
                 return f.build();
             }
             case UPLET: {
-                TsonUpletBuilder f = Tson.uplet();
+                TsonUpletBuilder f = Tson.ofUplet();
                 int max = randomInt(3);
                 max = randomInt(3);
                 for (int i = 0; i < max; i++) {
@@ -170,10 +170,10 @@ public class TsonRandom {
                 return Tson.doubleComplex(randomDouble(), randomDouble());
             }
             case CHAR_STREAM: {
-                return Tson.stopStream(randomString(), "<STOP>");
+                return Tson.ofStopStream(randomString(), "<STOP>");
             }
             case BINARY_STREAM: {
-                return Tson.bstream(randomString().getBytes());
+                return Tson.ofBinStream(randomString().getBytes());
             }
             case ALIAS: {
                 return Tson.alias("customAlias");

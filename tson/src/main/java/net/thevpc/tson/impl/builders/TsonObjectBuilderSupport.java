@@ -22,11 +22,11 @@ public class TsonObjectBuilderSupport {
     }
 
     public void add(TsonElementBase element) {
-        elements.add(Tson.elem(element).build());
+        elements.add(Tson.of(element).build());
     }
 
     public void remove(TsonElementBase element) {
-        TsonElement e = Tson.elem(element).build();
+        TsonElement e = Tson.of(element).build();
         elements.removeIf(elem -> elem.equals(e) || (elem.type() == TsonElementType.PAIR && elem.toPair().getKey().equals(e)));
     }
 
@@ -35,15 +35,15 @@ public class TsonObjectBuilderSupport {
     }
 
     public void add(TsonElementBase key, TsonElementBase value) {
-        add(Tson.pair(key, value));
+        add(Tson.ofPair(key, value));
     }
 
     public void add(String key, TsonElementBase value) {
-        add(Tson.pair(key, value));
+        add(Tson.ofPair(key, value));
     }
 
     public void add(TsonElementBase element, int index) {
-        elements.add(index, Tson.elem(element).build());
+        elements.add(index, Tson.of(element).build());
     }
 
     public void removeAt(int index) {

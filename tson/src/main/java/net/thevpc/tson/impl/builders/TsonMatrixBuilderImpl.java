@@ -22,7 +22,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
         columnsCount = columns0 = Math.max(columns0, columnsCount);
         rowsCount = rows0 = Math.max(rows0, rowsCount);
 
-        TsonElement nullElem = Tson.nullElem();
+        TsonElement nullElem = Tson.ofNull();
 
         if (columnsCount != oldColumnsCount) {
             for (int i = 0; i < rowsCount; i++) {
@@ -109,7 +109,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
     public TsonMatrixBuilder addColumn(TsonArray element) {
         ensureCapacity(columnsCount(), element.size());
         int i = 0;
-        TsonElement nullElem = Tson.nullElem();
+        TsonElement nullElem = Tson.ofNull();
         for (ArrayList<TsonElement> row : rows) {
             if (i < element.size()) {
                 row.add(element.get(i));
@@ -201,7 +201,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
     @Override
     public TsonMatrixBuilder set(TsonElementBase element, int column, int row) {
         ensureCapacity(column, row);
-        rows.get(row).set(column, Tson.elem(element));
+        rows.get(row).set(column, Tson.of(element));
         return this;
     }
 
@@ -249,7 +249,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
 
     @Override
     public TsonMatrixBuilder merge(TsonElementBase element) {
-        TsonElement e = Tson.elem(element);
+        TsonElement e = Tson.of(element);
         switch (e.type()) {
             case UPLET: {
                 header.addAll(e.toUplet());

@@ -3,7 +3,6 @@ package net.thevpc.tson.impl.builders;
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.elements.TsonNullImpl;
 import net.thevpc.tson.impl.elements.TsonPairImpl;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 public class TsonKeyValueBuilderImpl extends AbstractTsonElementBuilder<TsonKeyValueBuilder> implements TsonKeyValueBuilder {
@@ -36,7 +35,7 @@ public class TsonKeyValueBuilderImpl extends AbstractTsonElementBuilder<TsonKeyV
 
     @Override
     public TsonKeyValueBuilder setKey(TsonElementBase key) {
-        this.key = Tson.elem(key);
+        this.key = Tson.of(key);
         return this;
     }
 
@@ -48,7 +47,7 @@ public class TsonKeyValueBuilderImpl extends AbstractTsonElementBuilder<TsonKeyV
 
     @Override
     public TsonKeyValueBuilder setValue(TsonElementBase value) {
-        this.value = Tson.elem(value);
+        this.value = Tson.of(value);
         return this;
     }
 

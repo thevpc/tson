@@ -32,43 +32,43 @@ public class TestFormats {
     public void test5() {
         TsonElement e;
 
-        e = array(name("a")).build();
+        e = ofArray(name("a")).build();
         Assertions.assertEquals("[\n a\n]", e.toString(false));
         Assertions.assertEquals("[a]", e.toString(true));
 
-        e = obj(pair(name("a"), elem(16))).build();
+        e = ofObj(ofPair(name("a"), of(16))).build();
         Assertions.assertEquals("{\n a : 16\n}", e.toString(false));
         Assertions.assertEquals("{a:16}", e.toString(true));
 
-        e = obj("hello", new TsonElementBase[]{pair(name("a"), elem(16))}, elem('p')).build();
+        e = ofObj("hello", new TsonElementBase[]{ofPair(name("a"), of(16))}, of('p')).build();
         Assertions.assertEquals("hello(a:16){'p'}", e.toString(true));
 
-        e = obj("hello", null, elem('p')).build();
+        e = ofObj("hello", null, of('p')).build();
         Assertions.assertEquals("hello{'p'}", e.toString(true));
 
-        e = obj(elem('p')).build();
+        e = ofObj(of('p')).build();
         Assertions.assertEquals("{'p'}", e.toString(true));
 //        Assertions.assertEquals("(){'p'}", e.toString(true));
 
-        e = elem(1.5f);
+        e = of(1.5f);
         Assertions.assertEquals("1.5f", e.toString());
 
-        e = elem((byte) 12);
+        e = of((byte) 12);
         Assertions.assertEquals("12o", e.toString());
 
-        e = elem(1.5);
+        e = of(1.5);
         Assertions.assertEquals("1.5", e.toString());
 
-        e = elem(15L);
+        e = of(15L);
         Assertions.assertEquals("15L", e.toString());
 
-        e = elem(15);
+        e = of(15);
         Assertions.assertEquals("15", e.toString());
 
-        e = elem(new BigInteger("15"));
+        e = of(new BigInteger("15"));
         Assertions.assertEquals("15g", e.toString());
 
-        e = elem(new BigDecimal("15.5"));
+        e = of(new BigDecimal("15.5"));
         Assertions.assertEquals("15.5g", e.toString());
 
     }
@@ -114,13 +114,13 @@ public class TestFormats {
 
     @Test
     public void test3() {
-        TsonElement h = obj()
-                .add("lastName", elem(8).builder()
+        TsonElement h = ofObj()
+                .add("lastName", of(8).builder()
                         .comments("Hello\nworld")
-                        .annotation("an1", elem(15.0)))
+                        .annotation("an1", of(15.0)))
                 .add("firstName", charElem('a').builder()
                         .comments("By")
-                        .annotation("an2", elem(20.0))
+                        .annotation("an2", of(20.0))
                 )
                 .build();
 
@@ -128,7 +128,7 @@ public class TestFormats {
         System.out.println(h.toString(true));
         System.out.println(h.toString(false));
         try {
-            TsonElement u = reader().readElement(Tson.document().content(h).toString(true));
+            TsonElement u = reader().readElement(Tson.ofDocument().content(h).toString(true));
             System.out.println(u);
         } catch (Exception e) {
             e.printStackTrace();

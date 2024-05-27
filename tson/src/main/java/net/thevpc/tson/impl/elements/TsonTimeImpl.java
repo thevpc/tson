@@ -52,7 +52,7 @@ public class TsonTimeImpl extends AbstractTemporalTsonElement implements TsonTim
 
     @Override
     public TsonDateTime toDateTime() {
-        return (TsonDateTime) Tson.elem(getDateTime());
+        return (TsonDateTime) Tson.of(getDateTime());
     }
 
 

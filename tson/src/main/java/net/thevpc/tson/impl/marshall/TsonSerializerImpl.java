@@ -18,7 +18,7 @@ public class TsonSerializerImpl implements TsonSerializer {
 
     protected <T> TsonElement defaultObjectToElement(T any, TsonObjectContext context) {
         if (any == null) {
-            return Tson.nullElem();
+            return Tson.ofNull();
         }
         Class<T> cls = (Class<T>) any.getClass();
         TsonObjectToElement<T> c = config.getObjToElemConverter(cls);

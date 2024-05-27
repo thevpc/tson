@@ -76,14 +76,14 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
     public void visitKeyValueEnd() {
         TsonElement b = pop();
         TsonElement a = peek();
-        repush(Tson.pair(a, b));
+        repush(Tson.ofPair(a, b));
     }
 
     public void visitBinOpEnd(String op) {
         TsonElement b = pop();
         TsonElement a = peek();
         if (":".equals(op)) {
-            repush(Tson.pair(a, b));
+            repush(Tson.ofPair(a, b));
         } else {
             repush(Tson.binOp(op, a, b));
         }

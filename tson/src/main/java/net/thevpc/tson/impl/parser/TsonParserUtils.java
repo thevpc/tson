@@ -427,7 +427,7 @@ public class TsonParserUtils {
     public static TsonDocument elementsToDocument(TsonElement[] roots) {
         TsonElement c=null;
         if(roots.length==0){
-            return Tson.document().header(null).content(Tson.obj().build()).build();
+            return Tson.ofDocument().header(null).content(Tson.ofObj().build()).build();
         }else if(roots.length==1){
             return elementToDocument(roots[0]);
         }else{
@@ -441,7 +441,7 @@ public class TsonParserUtils {
                 newList.set(0,c0);
                 roots=newList.toArray(new TsonElement[0]);
             }
-            return Tson.document().content(Tson.obj(roots).build()).build();
+            return Tson.ofDocument().content(Tson.ofObj(roots).build()).build();
         }
     }
 
@@ -451,10 +451,10 @@ public class TsonParserUtils {
             // will remove it
             TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];
             System.arraycopy(annotations, 1, annotations2, 0, annotations.length - 1);
-            return Tson.document().header(Tson.documentHeader().addParams(annotations[0].getAll()).build())
+            return Tson.ofDocument().header(Tson.ofDocumentHeader().addParams(annotations[0].getAll()).build())
                     .content(root.builder().setAnnotations(annotations2).build()).build();
         }
-        return Tson.document().header(null).content(root).build();
+        return Tson.ofDocument().header(null).content(root).build();
     }
 
     public static String escapeComments(String c) {
@@ -775,81 +775,81 @@ public class TsonParserUtils {
 
     public static TsonElement parseNaNElem(String s) {
         if (s == null) {
-            return Tson.elem(Double.NaN);
+            return Tson.of(Double.NaN);
         }
         switch (s) {
             case "double":
-                return Tson.elem(Double.NaN);
+                return Tson.of(Double.NaN);
             case "float":
-                return Tson.elem(Float.NaN);
+                return Tson.of(Float.NaN);
         }
         throw new IllegalArgumentException("Unsupported NaN(" + s + ")");
     }
 
     public static TsonElement parsePosInfElem(String s) {
         if (s == null) {
-            return Tson.elem(Double.POSITIVE_INFINITY);
+            return Tson.of(Double.POSITIVE_INFINITY);
         }
         switch (s) {
             case "double":
-                return Tson.elem(Double.POSITIVE_INFINITY);
+                return Tson.of(Double.POSITIVE_INFINITY);
             case "float":
-                return Tson.elem(Float.POSITIVE_INFINITY);
+                return Tson.of(Float.POSITIVE_INFINITY);
         }
         throw new IllegalArgumentException("Unsupported +Bound(" + s + ")");
     }
 
     public static TsonElement parseNegInfElem(String s) {
         if (s == null) {
-            return Tson.elem(Double.NEGATIVE_INFINITY);
+            return Tson.of(Double.NEGATIVE_INFINITY);
         }
         switch (s) {
             case "double":
-                return Tson.elem(Double.NEGATIVE_INFINITY);
+                return Tson.of(Double.NEGATIVE_INFINITY);
             case "float":
-                return Tson.elem(Float.NEGATIVE_INFINITY);
+                return Tson.of(Float.NEGATIVE_INFINITY);
         }
         throw new IllegalArgumentException("Unsupported -Bound(" + s + ")");
     }
 
     public static TsonElement parsePosBoundElem(String s) {
         if (s == null) {
-            return Tson.elem(Double.MAX_VALUE);
+            return Tson.of(Double.MAX_VALUE);
         }
         switch (s) {
             case "double":
-                return Tson.elem(Double.MAX_VALUE);
+                return Tson.of(Double.MAX_VALUE);
             case "float":
-                return Tson.elem(Float.MAX_VALUE);
+                return Tson.of(Float.MAX_VALUE);
             case "byte":
-                return Tson.elem(Byte.MAX_VALUE);
+                return Tson.of(Byte.MAX_VALUE);
             case "short":
-                return Tson.elem(Short.MAX_VALUE);
+                return Tson.of(Short.MAX_VALUE);
             case "int":
-                return Tson.elem(Integer.MAX_VALUE);
+                return Tson.of(Integer.MAX_VALUE);
             case "long":
-                return Tson.elem(Long.MAX_VALUE);
+                return Tson.of(Long.MAX_VALUE);
         }
         throw new IllegalArgumentException("Unsupported +Inf(" + s + ")");
     }
 
     public static TsonElement parseNegBoundElem(String s) {
         if (s == null) {
-            return Tson.elem(Double.MIN_VALUE);
+            return Tson.of(Double.MIN_VALUE);
         }
         switch (s) {
             case "double":
-                return Tson.elem(Double.MIN_VALUE);
+                return Tson.of(Double.MIN_VALUE);
             case "float":
-                return Tson.elem(Float.MIN_VALUE);
+                return Tson.of(Float.MIN_VALUE);
             case "byte":
-                return Tson.elem(Byte.MIN_VALUE);
+                return Tson.of(Byte.MIN_VALUE);
             case "short":
-                return Tson.elem(Short.MIN_VALUE);
+                return Tson.of(Short.MIN_VALUE);
             case "int":
-                return Tson.elem(Integer.MIN_VALUE);
+                return Tson.of(Integer.MIN_VALUE);
             case "long":
-                return Tson.elem(Long.MIN_VALUE);
+                return Tson.of(Long.MIN_VALUE);
         }
         throw new IllegalArgumentException("Unsupported +Inf(" + s + ")");
     }

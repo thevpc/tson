@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.format;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.AppendableWriter;
 
 import java.io.*;
@@ -116,7 +115,7 @@ public class TsonWriterImpl implements TsonWriter {
             writer.write(getFormat().format((TsonDocument) any));
         } else {
             TsonElement e = marshaller.serialize(any);
-            writer.write(getFormat().format(Tson.document().content(e).build()));
+            writer.write(getFormat().format(Tson.ofDocument().content(e).build()));
         }
     }
 

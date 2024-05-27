@@ -39,27 +39,27 @@ public class TsonIntImpl extends AbstractNumberTsonElement implements TsonInt {
 
     @Override
     public TsonByte toByte() {
-        return Tson.elem((byte) getValue()).toByte();
+        return Tson.of((byte) getValue()).toByte();
     }
 
     @Override
     public TsonShort toShort() {
-        return Tson.elem((short) getValue()).toShort();
+        return Tson.of((short) getValue()).toShort();
     }
 
     @Override
     public TsonLong toLong() {
-        return Tson.elem((long) getValue()).toLong();
+        return Tson.of((long) getValue()).toLong();
     }
 
     @Override
     public TsonFloat toFloat() {
-        return Tson.elem((float) getValue()).toFloat();
+        return Tson.of((float) getValue()).toFloat();
     }
 
     @Override
     public TsonDouble toDouble() {
-        return Tson.elem((double) getValue()).toDouble();
+        return Tson.of((double) getValue()).toDouble();
     }
 
     @Override

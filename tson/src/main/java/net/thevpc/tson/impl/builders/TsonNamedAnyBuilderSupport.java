@@ -20,7 +20,7 @@ public class TsonNamedAnyBuilderSupport extends TsonParamsBuilderSupport {
     }
 
     public void set(TsonElementBase element0) {
-        TsonElement element = Tson.elem(element0);
+        TsonElement element = Tson.of(element0);
         switch (element.type()) {
             case ARRAY: {
                 TsonElementHeader narr = element.toArray().getHeader();

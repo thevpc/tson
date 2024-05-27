@@ -37,17 +37,17 @@ public class Tson {
         return new TsonReaderImpl(serializer);
     }
 
-    public static TsonElement nullElem() {
+    public static TsonElement ofNull() {
         return TsonNullImpl.INSTANCE;
     }
 
-    public static TsonElement booleanElem(boolean val) {
+    public static TsonElement ofBoolean(boolean val) {
         return TsonBooleanImpl.valueOf(val);
     }
 
     public static TsonElement rawString(String value, TsonStringLayout layout) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         TsonStringLayout ll = layout == null ? TsonStringLayout.DOUBLE_QUOTE : layout;
         return new TsonStringImpl(
@@ -57,72 +57,72 @@ public class Tson {
         );
     }
 
-    public static TsonElement string(String value, TsonStringLayout layout) {
+    public static TsonElement ofString(String value, TsonStringLayout layout) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonStringImpl(value, value, layout == null ? TsonStringLayout.DOUBLE_QUOTE : layout);
     }
 
-    public static TsonElement string(String value) {
+    public static TsonElement ofString(String value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
-        return string(value, TsonStringLayout.DOUBLE_QUOTE);
+        return ofString(value, TsonStringLayout.DOUBLE_QUOTE);
     }
 
     public static TsonElement datetime(Instant value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonDateTimeImpl(value);
     }
 
     public static TsonElement datetime(Date value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return datetime(Instant.ofEpochMilli(value.getTime()));
     }
 
     public static TsonElement date(LocalDate value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonDateImpl(value);
     }
 
     public static TsonElement time(LocalTime value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonTimeImpl(value);
     }
 
     public static TsonElement time(java.sql.Time value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonTimeImpl(value.toLocalTime());
     }
 
     public static TsonElement date(java.sql.Date value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonDateImpl(value.toLocalDate());
     }
 
     public static TsonElement regex(Pattern value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonRegexImpl(value);
     }
 
     public static TsonElement regex(String value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonRegexImpl(Pattern.compile(value));
     }
@@ -131,11 +131,11 @@ public class Tson {
         return new TsonCharImpl(value);
     }
 
-    public static TsonElement intElem(int value) {
-        return intElem(value, TsonNumberLayout.DECIMAL);
+    public static TsonElement ofInt(int value) {
+        return ofInt(value, TsonNumberLayout.DECIMAL);
     }
 
-    public static TsonElement intElem(int value, TsonNumberLayout layout) {
+    public static TsonElement ofInt(int value, TsonNumberLayout layout) {
         return new TsonIntImpl(value, layout);
     }
 
@@ -173,21 +173,21 @@ public class Tson {
 
     public static TsonElement bigInt(BigInteger value, TsonNumberLayout layout) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonBigIntImpl(value, layout);
     }
 
     public static TsonElement bigDecimal(BigDecimal value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonBigDecimalImpl(value);
     }
 
     public static TsonElement bigComplex(BigDecimal real, BigDecimal imag) {
         if (real == null && imag == null) {
-            return nullElem();
+            return ofNull();
         }
         if (real == null || imag == null) {
             throw new IllegalArgumentException("Null real or imag");
@@ -205,282 +205,282 @@ public class Tson {
     }
 
 
-    public static TsonElement doubleElem(double value) {
+    public static TsonElement ofDouble(double value) {
         return new TsonDoubleImpl(value);
     }
 
     public static TsonElement name(String value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonNameImpl(value);
     }
 
     public static TsonElement alias(String value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonAliasImpl(value);
     }
 
-    public static TsonPair pair(TsonElementBase key, TsonElementBase value) {
-        return new TsonPairImpl(elem(key), elem(value));
+    public static TsonPair ofPair(TsonElementBase key, TsonElementBase value) {
+        return new TsonPairImpl(of(key), of(value));
     }
 
     public static TsonBinOp binOp(String op, TsonElementBase key, TsonElementBase value) {
-        return new TsonBinOpImpl(op, elem(key), elem(value));
+        return new TsonBinOpImpl(op, of(key), of(value));
     }
 
-    public static TsonPair pair(String key, TsonElementBase value) {
-        return new TsonPairImpl(name(key), elem(value));
+    public static TsonPair ofPair(String key, TsonElementBase value) {
+        return new TsonPairImpl(name(key), of(value));
     }
 
-    public static TsonElement elem(boolean value) {
-        return booleanElem(value);
+    public static TsonElement of(boolean value) {
+        return ofBoolean(value);
     }
 
-    public static TsonElement elem(char value) {
+    public static TsonElement of(char value) {
         return charElem(value);
     }
 
-    public static TsonElement elem(byte value) {
+    public static TsonElement of(byte value) {
         return byteElem(value);
     }
 
-    public static TsonElement elem(short value) {
+    public static TsonElement of(short value) {
         return shortElem(value);
     }
 
-    public static TsonElement elem(int value) {
-        return intElem(value);
+    public static TsonElement of(int value) {
+        return ofInt(value);
     }
 
-    public static TsonElement elem(long value) {
+    public static TsonElement of(long value) {
         return longElem(value);
     }
 
-    public static TsonElement elem(float value) {
+    public static TsonElement of(float value) {
         return floatElem(value);
     }
 
-    public static TsonElement elem(double value) {
-        return doubleElem(value);
+    public static TsonElement of(double value) {
+        return ofDouble(value);
     }
 
-    public static TsonElement elem(BigInteger value) {
+    public static TsonElement of(BigInteger value) {
         return bigInt(value);
     }
 
-    public static TsonElement elem(BigDecimal value) {
+    public static TsonElement of(BigDecimal value) {
         return bigDecimal(value);
     }
 
-    public static TsonElement elem(byte[] value) {
+    public static TsonElement of(byte[] value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
-        return bstream(value);
+        return ofBinStream(value);
     }
 
-    public static TsonElement elem(InputStream value) {
+    public static TsonElement of(InputStream value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
-        return bstream(value);
+        return ofBinStream(value);
     }
 
-    public static TsonElement bstream(byte[] value) {
+    public static TsonElement ofBinStream(byte[] value) {
         if (value == null) {
-            return nullElem();
-        }
-        return new TsonBinaryStreamImpl(TsonBinaryStreamSource.of(value));
-    }
-
-    public static TsonElement bstream(InputStream value) {
-        if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonBinaryStreamImpl(TsonBinaryStreamSource.of(value));
     }
 
-    public static TsonElement bstream(File value) {
+    public static TsonElement ofBinStream(InputStream value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonBinaryStreamImpl(TsonBinaryStreamSource.of(value));
     }
 
-    public static TsonElement bstream(Path value) {
+    public static TsonElement ofBinStream(File value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonBinaryStreamImpl(TsonBinaryStreamSource.of(value));
     }
 
-    private static TsonElement cstream(char[] value, String type) {
+    public static TsonElement ofBinStream(Path value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
+        }
+        return new TsonBinaryStreamImpl(TsonBinaryStreamSource.of(value));
+    }
+
+    private static TsonElement ofCharStream(char[] value, String type) {
+        if (value == null) {
+            return ofNull();
         }
         return new TsonCharStreamImpl(TsonCharStreamSource.of(value), type);
     }
 
-    private static TsonElement cstream(Reader value, String type) {
+    private static TsonElement ofCharStream(Reader value, String type) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonCharStreamImpl(TsonCharStreamSource.of(value), type);
     }
 
-    private static TsonElement cstream(File value, String type) {
+    private static TsonElement ofCharStream(File value, String type) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonCharStreamImpl(TsonCharStreamSource.of(value), type);
     }
 
-    public static TsonElement cstream(String value) {
+    public static TsonElement ofCharStream(String value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonCharStreamImpl(TsonCharStreamSource.of(value), "");
     }
 
-    public static TsonElement cstream(char[] value) {
+    public static TsonElement ofCharStream(char[] value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonCharStreamImpl(TsonCharStreamSource.of(value), "");
     }
 
-    public static TsonElement cstream(Reader value) {
+    public static TsonElement ofCharStream(Reader value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonCharStreamImpl(TsonCharStreamSource.of(value), "");
     }
 
-    public static TsonElement cstream(File value) {
+    public static TsonElement ofCharStream(File value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonCharStreamImpl(TsonCharStreamSource.of(value), "");
     }
 
-    public static TsonElement cstream(Path value) {
+    public static TsonElement ofCharStream(Path value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonCharStreamImpl(TsonCharStreamSource.of(value), "");
     }
 
-    public static TsonElement cstream(String value, String language) {
+    public static TsonElement ofCharStream(String value, String language) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonCharStreamImpl(TsonCharStreamSource.of(value), language);
     }
 
-    public static TsonElement cstream(Path value, String language) {
+    public static TsonElement ofCharStream(Path value, String language) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonCharStreamImpl(TsonCharStreamSource.of(value), language);
     }
 
-    public static TsonElement stopStream(String value, String stopWord) {
+    public static TsonElement ofStopStream(String value, String stopWord) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonStopWordCharStreamImpl(TsonCharStreamSource.of(value), stopWord);
     }
 
-    public static TsonElement stopStream(char[] value, String stopWord) {
+    public static TsonElement ofStopStream(char[] value, String stopWord) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonStopWordCharStreamImpl(TsonCharStreamSource.of(value), stopWord);
     }
 
-    public static TsonElement stopStream(Reader value, String stopWord) {
+    public static TsonElement ofStopStream(Reader value, String stopWord) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonStopWordCharStreamImpl(TsonCharStreamSource.of(value), stopWord);
     }
 
-    public static TsonElement stopStream(File value, String stopWord) {
+    public static TsonElement ofStopStream(File value, String stopWord) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonStopWordCharStreamImpl(TsonCharStreamSource.of(value), stopWord);
     }
 
-    public static TsonElement stopStream(Path value, String stopWord) {
+    public static TsonElement ofStopStream(Path value, String stopWord) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return new TsonStopWordCharStreamImpl(TsonCharStreamSource.of(value), stopWord);
     }
 
-    public static TsonElement elem(Boolean value) {
+    public static TsonElement of(Boolean value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
-        return booleanElem(value);
+        return ofBoolean(value);
     }
 
-    public static TsonElement elem(Character value) {
+    public static TsonElement of(Character value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return charElem(value);
     }
 
-    public static TsonElement elem(Byte value) {
+    public static TsonElement of(Byte value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return byteElem(value);
     }
 
-    public static TsonElement elem(Short value) {
+    public static TsonElement of(Short value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return shortElem(value);
     }
 
-    public static TsonElement elem(Integer value) {
+    public static TsonElement of(Integer value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
-        return intElem(value);
+        return ofInt(value);
     }
 
-    public static TsonElement elem(Long value) {
+    public static TsonElement of(Long value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return longElem(value);
     }
 
-    public static TsonElement elem(Float value) {
+    public static TsonElement of(Float value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         return floatElem(value);
     }
 
-    public static TsonElement elem(Double value) {
+    public static TsonElement of(Double value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
-        return doubleElem(value);
+        return ofDouble(value);
     }
 
-    public static TsonElement elem(Date value) {
+    public static TsonElement of(Date value) {
         if (value == null) {
-            return nullElem();
+            return ofNull();
         }
         if (value instanceof java.sql.Time) {
             return time((Time) value);
@@ -491,113 +491,113 @@ public class Tson {
         return datetime(Instant.ofEpochMilli(value.getTime()));
     }
 
-    public static TsonElement elem(Instant value) {
+    public static TsonElement of(Instant value) {
         return datetime(value);
     }
 
-    public static TsonElement elem(LocalDate value) {
+    public static TsonElement of(LocalDate value) {
         return date(value);
     }
 
-    public static TsonElement elem(java.sql.Date value) {
+    public static TsonElement of(java.sql.Date value) {
         return date(value);
     }
 
-    public static TsonElement elem(java.sql.Time value) {
+    public static TsonElement of(java.sql.Time value) {
         return time(value);
     }
 
-    public static TsonElement elem(LocalTime value) {
+    public static TsonElement of(LocalTime value) {
         return time(value);
     }
 
-    public static TsonElement elem(Pattern value) {
+    public static TsonElement of(Pattern value) {
         return regex(value);
     }
 
-    public static TsonElement elem(String value) {
-        return string(value);
+    public static TsonElement of(String value) {
+        return ofString(value);
     }
 
-    public static TsonPrimitiveBuilder elem() {
+    public static TsonPrimitiveBuilder of() {
         return new TsonPrimitiveElementBuilderImpl();
     }
 
-    public static TsonArrayBuilder array(TsonElementBase... elements) {
-        return array().addAll(elements);
+    public static TsonArrayBuilder ofArray(TsonElementBase... elements) {
+        return ofArray().addAll(elements);
     }
 
-    public static TsonArrayBuilder array() {
+    public static TsonArrayBuilder ofArray() {
         return new TsonArrayBuilderImpl();
     }
 
-    public static TsonArrayBuilder array(String name) {
-        return array().getHeader().setName(name).then();
+    public static TsonArrayBuilder ofArray(String name) {
+        return ofArray().getHeader().setName(name).then();
     }
 
-    public static TsonArrayBuilder array(String name, TsonElementBase[] params, TsonElementBase... elems) {
-        return array().getHeader().setName(name).addAll(params).then().addAll(elems);
+    public static TsonArrayBuilder ofArray(String name, TsonElementBase[] params, TsonElementBase... elems) {
+        return ofArray().getHeader().setName(name).addAll(params).then().addAll(elems);
     }
 
-    public static TsonMatrixBuilder matrix() {
+    public static TsonMatrixBuilder ofMatrix() {
         return new TsonMatrixBuilderImpl();
     }
 
-    public static TsonMatrixBuilder matrix(String name) {
-        return matrix().getHeader().setName(name).then();
+    public static TsonMatrixBuilder ofMatrix(String name) {
+        return ofMatrix().getHeader().setName(name).then();
     }
 
 
-    public static TsonMatrixBuilder matrix(String name, TsonElementBase[] params) {
-        return matrix().getHeader().setName(name).addAll(params).then();
+    public static TsonMatrixBuilder ofMatrix(String name, TsonElementBase[] params) {
+        return ofMatrix().getHeader().setName(name).addAll(params).then();
     }
 
-    public static TsonFunctionBuilder function(String name, TsonElementBase... elems) {
+    public static TsonFunctionBuilder ofFunction(String name, TsonElementBase... elems) {
         return new TsonFunctionBuilderImpl().name(name).addAll(elems);
     }
 
-    public static TsonFunctionBuilder function() {
+    public static TsonFunctionBuilder ofFunction() {
         return new TsonFunctionBuilderImpl();
     }
 
-    public static TsonElementBuilder pair() {
+    public static TsonElementBuilder ofPair() {
         return new TsonPrimitiveElementBuilderImpl();
     }
 
-    public static TsonObjectBuilder obj() {
+    public static TsonObjectBuilder ofObj() {
         return new TsonObjectBuilderImpl();
     }
 
-    public static TsonObjectBuilder obj(TsonElementBase... elems) {
-        return obj().addAll(elems);
+    public static TsonObjectBuilder ofObj(TsonElementBase... elems) {
+        return ofObj().addAll(elems);
     }
 
-    public static TsonObjectBuilder obj(String name) {
-        TsonObjectBuilder e = obj();
+    public static TsonObjectBuilder ofObj(String name) {
+        TsonObjectBuilder e = ofObj();
         e.getHeader().name(name);
         return e;
     }
 
-    public static TsonObjectBuilder obj(String name, TsonElementBase[] params, TsonElementBase... elems) {
-        TsonObjectBuilder o = obj();
+    public static TsonObjectBuilder ofObj(String name, TsonElementBase[] params, TsonElementBase... elems) {
+        TsonObjectBuilder o = ofObj();
         o.getHeader().name(name).addAll(params);
         return o.addAll(elems);
     }
 
-    public static TsonUpletBuilder uplet() {
+    public static TsonUpletBuilder ofUplet() {
         return new TsonUpletBuilderImpl();
     }
 
-    public static TsonUpletBuilder uplet(TsonElementBase... elements) {
+    public static TsonUpletBuilder ofUplet(TsonElementBase... elements) {
         return new TsonUpletBuilderImpl().addAll(elements);
     }
 
-    public static TsonAnnotationBuilder annotation() {
+    public static TsonAnnotationBuilder ofAnnotation() {
         return new TsonAnnotationBuilderImpl();
     }
 
-    public static TsonAnnotation annotation(String name, TsonElementBase... elements) {
-        return annotation().name(name).addAll(elements).build();
+    public static TsonAnnotation ofAnnotation(String name, TsonElementBase... elements) {
+        return ofAnnotation().name(name).addAll(elements).build();
     }
 
     public static TsonFormatBuilder format() {
@@ -608,11 +608,11 @@ public class Tson {
         return new TsonWriterImpl(serializer);
     }
 
-    public static TsonDocumentBuilder document() {
+    public static TsonDocumentBuilder ofDocument() {
         return new TsonDocumentBuilderImpl();
     }
 
-    public static TsonDocumentHeaderBuilder documentHeader() {
+    public static TsonDocumentHeaderBuilder ofDocumentHeader() {
         return new TsonDocumentHeaderBuilderImpl();
     }
 
@@ -631,11 +631,11 @@ public class Tson {
         return new TsonProcessorImpl();
     }
 
-    public static TsonElement elem(Enum b) {
-        return b == null ? nullElem() : name(b.name());
+    public static TsonElement of(Enum b) {
+        return b == null ? ofNull() : name(b.name());
     }
 
-    public static TsonElement elem(TsonElementBase b) {
-        return b == null ? nullElem() : b.build();
+    public static TsonElement of(TsonElementBase b) {
+        return b == null ? ofNull() : b.build();
     }
 }

@@ -9,7 +9,6 @@ import net.thevpc.tson.impl.parser.javacc.TsonStreamParserImplConstants;
 import net.thevpc.tson.impl.parser.javacc.TsonStreamParserImplTokenManager;
 import net.thevpc.tson.Tson;
 import net.thevpc.tson.TsonParserVisitor;
-import net.thevpc.tson.impl.parser.javacc.*;
 
 public class CustomJavaccTsonStreamParserImpl implements ITsonStreamParser {
     private SimpleCharStream jj_input_stream;
@@ -204,7 +203,7 @@ public class CustomJavaccTsonStreamParserImpl implements ITsonStreamParser {
                     }
                     throw new IllegalArgumentException("Expected NaN(type)");
                 } else {
-                    visitor.visitPrimitiveEnd(Tson.elem(Double.NaN));
+                    visitor.visitPrimitiveEnd(Tson.of(Double.NaN));
                     pushBackToken(t);
                 }
                 break;
@@ -220,7 +219,7 @@ public class CustomJavaccTsonStreamParserImpl implements ITsonStreamParser {
                     }
                     throw new IllegalArgumentException("Expected +Inf(type)");
                 } else {
-                    visitor.visitPrimitiveEnd(Tson.elem(Double.NaN));
+                    visitor.visitPrimitiveEnd(Tson.of(Double.NaN));
                     pushBackToken(t);
                 }
                 break;
@@ -236,7 +235,7 @@ public class CustomJavaccTsonStreamParserImpl implements ITsonStreamParser {
                     }
                     throw new IllegalArgumentException("Expected -Inf(type)");
                 } else {
-                    visitor.visitPrimitiveEnd(Tson.elem(Double.NaN));
+                    visitor.visitPrimitiveEnd(Tson.of(Double.NaN));
                     pushBackToken(t);
                 }
                 break;
@@ -253,7 +252,7 @@ public class CustomJavaccTsonStreamParserImpl implements ITsonStreamParser {
                     }
                     throw new IllegalArgumentException("Expected +Bound(type)");
                 } else {
-                    visitor.visitPrimitiveEnd(Tson.elem(Double.NaN));
+                    visitor.visitPrimitiveEnd(Tson.of(Double.NaN));
                     pushBackToken(t);
                 }
                 break;
@@ -269,7 +268,7 @@ public class CustomJavaccTsonStreamParserImpl implements ITsonStreamParser {
                     }
                     throw new IllegalArgumentException("Expected +Bound(type)");
                 } else {
-                    visitor.visitPrimitiveEnd(Tson.elem(Double.NaN));
+                    visitor.visitPrimitiveEnd(Tson.of(Double.NaN));
                     pushBackToken(t);
                 }
                 break;

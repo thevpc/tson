@@ -113,19 +113,19 @@ public class TsonDocumentHeaderBuilderImpl implements TsonDocumentHeaderBuilder 
 
     @Override
     public TsonDocumentHeaderBuilder addParam(TsonElementBase element) {
-        params.add(Tson.elem(element));
+        params.add(Tson.of(element));
         return this;
     }
 
     @Override
     public TsonDocumentHeaderBuilder removeParam(TsonElementBase element) {
-        params.remove(Tson.elem(element));
+        params.remove(Tson.of(element));
         return this;
     }
 
     @Override
     public TsonDocumentHeaderBuilder addParam(TsonElementBase element, int index) {
-        params.add(index, Tson.elem(element));
+        params.add(index, Tson.of(element));
         return this;
     }
 
@@ -153,13 +153,13 @@ public class TsonDocumentHeaderBuilderImpl implements TsonDocumentHeaderBuilder 
 
     @Override
     public TsonAnnotation toAnnotation() {
-        TsonAnnotationBuilder b = Tson.annotation().setName("tson");
+        TsonAnnotationBuilder b = Tson.ofAnnotation().setName("tson");
         if (version == null && encoding == null && params.isEmpty()) {
-            b.add(Tson.string("v"+Tson.getVersion()));
+            b.add(Tson.ofString("v"+Tson.getVersion()));
         } else {
-            b.add(Tson.pair("version", Tson.string(TsonUtils.isBlank(version) ? Tson.getVersion() : version.trim())));
+            b.add(Tson.ofPair("version", Tson.ofString(TsonUtils.isBlank(version) ? Tson.getVersion() : version.trim())));
             if(encoding!=null){
-                b.add(Tson.pair("encoding", Tson.string(TsonUtils.isBlank(version) ? Tson.getVersion() : version.trim())));
+                b.add(Tson.ofPair("encoding", Tson.ofString(TsonUtils.isBlank(version) ? Tson.getVersion() : version.trim())));
             }
             for (TsonElement e : params) {
                 b.add(e);

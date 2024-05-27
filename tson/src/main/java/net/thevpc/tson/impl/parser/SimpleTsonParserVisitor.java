@@ -183,14 +183,14 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
     public void visitKeyValueEnd() {
         ElementContext b = pop();
         ElementContext a = peek();
-        repush(new ElementContext(Tson.pair(a.value, b.value)));
+        repush(new ElementContext(Tson.ofPair(a.value, b.value)));
     }
 
     public void visitBinOpEnd(String op) {
         ElementContext b = pop();
         ElementContext a = peek();
         if (":".equals(op)) {
-            repush(new ElementContext(Tson.pair(a.value, b.value)));
+            repush(new ElementContext(Tson.ofPair(a.value, b.value)));
         } else {
             repush(new ElementContext(Tson.binOp(op, a.value, b.value)));
         }

@@ -51,19 +51,19 @@ public class TsonAnnotationBuilderImpl implements TsonAnnotationBuilder {
 
     @Override
     public TsonAnnotationBuilder add(TsonElementBase element) {
-        elements.add(Tson.elem(element));
+        elements.add(Tson.of(element));
         return this;
     }
 
     @Override
     public TsonAnnotationBuilder remove(TsonElementBase element) {
-        elements.remove(Tson.elem(element));
+        elements.remove(Tson.of(element));
         return this;
     }
 
     @Override
     public TsonAnnotationBuilder add(TsonElementBase element, int index) {
-        elements.add(index, Tson.elem(element));
+        elements.add(index, Tson.of(element));
         return this;
     }
 
@@ -114,7 +114,7 @@ public class TsonAnnotationBuilderImpl implements TsonAnnotationBuilder {
 
     @Override
     public TsonAnnotationBuilder merge(TsonElementBase element0) {
-        TsonElement element = Tson.elem(element0);
+        TsonElement element = Tson.of(element0);
         switch (element.type()) {
             case ARRAY: {
                 TsonElementHeader h = element.toArray().getHeader();

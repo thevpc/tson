@@ -2,7 +2,6 @@ package net.thevpc.tson.impl.builders;
 
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.elements.TsonElementHeaderImpl;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.util.ArrayList;
@@ -64,19 +63,19 @@ public class TsonElementHeaderBuilderImpl<T extends TsonElementBuilder> implemen
 
     @Override
     public TsonElementHeaderBuilder add(TsonElementBase element) {
-        elements.add(Tson.elem(element).build());
+        elements.add(Tson.of(element).build());
         return this;
     }
 
     @Override
     public TsonElementHeaderBuilder remove(TsonElementBase element) {
-        elements.remove(Tson.elem(element).build());
+        elements.remove(Tson.of(element).build());
         return this;
     }
 
     @Override
     public TsonElementHeaderBuilder add(TsonElementBase element, int index) {
-        elements.add(index, Tson.elem(element).build());
+        elements.add(index, Tson.of(element).build());
         return this;
     }
 

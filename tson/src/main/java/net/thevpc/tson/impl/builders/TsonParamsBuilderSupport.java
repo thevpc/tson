@@ -26,15 +26,15 @@ public class TsonParamsBuilderSupport {
     }
 
     public void addParam(TsonElementBase element) {
-        params.add(Tson.elem(element));
+        params.add(Tson.of(element));
     }
 
     public void removeParam(TsonElementBase element) {
-        params.remove(Tson.elem(element));
+        params.remove(Tson.of(element));
     }
 
     public void addParam(TsonElementBase element, int index) {
-        params.add(index, Tson.elem(element));
+        params.add(index, Tson.of(element));
     }
 
     public void removeParamAt(int index) {
@@ -66,7 +66,7 @@ public class TsonParamsBuilderSupport {
     }
 
     public void set(TsonElementBase element0) {
-        TsonElement element = Tson.elem(element0);
+        TsonElement element = Tson.of(element0);
         switch (element.type()) {
             case ARRAY: {
                 TsonElementHeader h = element.toArray().getHeader();

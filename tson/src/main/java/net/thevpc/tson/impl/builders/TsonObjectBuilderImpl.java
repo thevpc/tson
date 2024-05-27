@@ -37,52 +37,52 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
 
     @Override
     public TsonObjectBuilder add(String key, String value) {
-        return add(key,Tson.elem(value));
+        return add(key,Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, int value) {
-        return add(key,Tson.elem(value));
+        return add(key,Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, long value) {
-        return add(key,Tson.elem(value));
+        return add(key,Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, float value) {
-        return add(key,Tson.elem(value));
+        return add(key,Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, double value) {
-        return add(key,Tson.elem(value));
+        return add(key,Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, byte value) {
-        return add(key,Tson.elem(value));
+        return add(key,Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, short value) {
-        return add(key,Tson.elem(value));
+        return add(key,Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, char value) {
-        return add(key,Tson.elem(value));
+        return add(key,Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, Enum value) {
-        return add(key,Tson.elem(value));
+        return add(key,Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, boolean value) {
-        return add(key,Tson.elem(value));
+        return add(key,Tson.of(value));
     }
 
     @Override
@@ -175,7 +175,7 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
 
     @Override
     public TsonObjectBuilder merge(TsonElementBase element) {
-        TsonElement e = Tson.elem(element);
+        TsonElement e = Tson.of(element);
         switch (e.type()) {
             case UPLET: {
                 header.addAll(e.toUplet());

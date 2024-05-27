@@ -258,7 +258,7 @@ public class CustomJFlexTsonStreamParserImpl implements ITsonStreamParser {
                     }
                     throw new IllegalArgumentException("Expected NaN(type)");
                 } else {
-                    visitor.visitPrimitiveEnd(Tson.elem(Double.NaN));
+                    visitor.visitPrimitiveEnd(Tson.of(Double.NaN));
                     pushBackToken();
                 }
                 break;
@@ -274,7 +274,7 @@ public class CustomJFlexTsonStreamParserImpl implements ITsonStreamParser {
                     }
                     throw new IllegalArgumentException("Expected +Inf(type)");
                 } else {
-                    visitor.visitPrimitiveEnd(Tson.elem(Double.POSITIVE_INFINITY));
+                    visitor.visitPrimitiveEnd(Tson.of(Double.POSITIVE_INFINITY));
                     pushBackToken();
                 }
                 break;
@@ -290,7 +290,7 @@ public class CustomJFlexTsonStreamParserImpl implements ITsonStreamParser {
                     }
                     throw new IllegalArgumentException("Expected -Inf(type)");
                 } else {
-                    visitor.visitPrimitiveEnd(Tson.elem(Double.NEGATIVE_INFINITY));
+                    visitor.visitPrimitiveEnd(Tson.of(Double.NEGATIVE_INFINITY));
                     pushBackToken();
                 }
                 break;
@@ -306,7 +306,7 @@ public class CustomJFlexTsonStreamParserImpl implements ITsonStreamParser {
                     }
                     throw new IllegalArgumentException("Expected +Bound(type)");
                 } else {
-                    visitor.visitPrimitiveEnd(Tson.elem(Double.MAX_VALUE));
+                    visitor.visitPrimitiveEnd(Tson.of(Double.MAX_VALUE));
                     pushBackToken();
                 }
                 break;
@@ -322,7 +322,7 @@ public class CustomJFlexTsonStreamParserImpl implements ITsonStreamParser {
                     }
                     throw new IllegalArgumentException("Expected +Bound(type)");
                 } else {
-                    visitor.visitPrimitiveEnd(Tson.elem(Double.MIN_VALUE));
+                    visitor.visitPrimitiveEnd(Tson.of(Double.MIN_VALUE));
                     pushBackToken();
                 }
                 break;
@@ -397,27 +397,27 @@ public class CustomJFlexTsonStreamParserImpl implements ITsonStreamParser {
                 break;
             }
             case TsonStreamParserImplConstants.SINGLE_QUOTE_STR: {
-                visitor.visitPrimitiveEnd(Tson.string(flex.stringVal, TsonStringLayout.SINGLE_QUOTE));
+                visitor.visitPrimitiveEnd(Tson.ofString(flex.stringVal, TsonStringLayout.SINGLE_QUOTE));
                 break;
             }
             case TsonStreamParserImplConstants.ANTI_QUOTE_STR: {
-                visitor.visitPrimitiveEnd(Tson.string(flex.stringVal, TsonStringLayout.ANTI_QUOTE));
+                visitor.visitPrimitiveEnd(Tson.ofString(flex.stringVal, TsonStringLayout.ANTI_QUOTE));
                 break;
             }
             case TsonStreamParserImplConstants.DOUBLE_QUOTE_STR: {
-                visitor.visitPrimitiveEnd(Tson.string(flex.stringVal, TsonStringLayout.DOUBLE_QUOTE));
+                visitor.visitPrimitiveEnd(Tson.ofString(flex.stringVal, TsonStringLayout.DOUBLE_QUOTE));
                 break;
             }
             case TsonStreamParserImplConstants.TRIPLE_SINGLE_QUOTE_STR: {
-                visitor.visitPrimitiveEnd(Tson.string(flex.stringVal, TsonStringLayout.TRIPLE_SINGLE_QUOTE));
+                visitor.visitPrimitiveEnd(Tson.ofString(flex.stringVal, TsonStringLayout.TRIPLE_SINGLE_QUOTE));
                 break;
             }
             case TsonStreamParserImplConstants.TRIPLE_ANTI_QUOTE_STR: {
-                visitor.visitPrimitiveEnd(Tson.string(flex.stringVal, TsonStringLayout.TRIPLE_ANTI_QUOTE));
+                visitor.visitPrimitiveEnd(Tson.ofString(flex.stringVal, TsonStringLayout.TRIPLE_ANTI_QUOTE));
                 break;
             }
             case TsonStreamParserImplConstants.TRIPLE_DOUBLE_QUOTE_STR: {
-                visitor.visitPrimitiveEnd(Tson.string(flex.stringVal, TsonStringLayout.TRIPLE_DOUBLE_QUOTE));
+                visitor.visitPrimitiveEnd(Tson.ofString(flex.stringVal, TsonStringLayout.TRIPLE_DOUBLE_QUOTE));
                 break;
             }
             case TsonStreamParserImplConstants.ALIAS: {

@@ -58,27 +58,27 @@ public class TsonFloatComplexImpl extends AbstractNumberTsonElement implements T
 
     @Override
     public TsonByte toByte() {
-        return Tson.elem(getNumber().byteValue()).toByte();
+        return Tson.of(getNumber().byteValue()).toByte();
     }
 
     @Override
     public TsonShort toShort() {
-        return Tson.elem(getNumber().shortValue()).toShort();
+        return Tson.of(getNumber().shortValue()).toShort();
     }
 
     @Override
     public TsonLong toLong() {
-        return Tson.elem(getNumber().longValue()).toLong();
+        return Tson.of(getNumber().longValue()).toLong();
     }
 
     @Override
     public TsonFloat toFloat() {
-        return Tson.elem(getNumber().floatValue()).toFloat();
+        return Tson.of(getNumber().floatValue()).toFloat();
     }
 
     @Override
     public TsonDouble toDouble() {
-        return Tson.elem(getNumber().doubleValue()).toDouble();
+        return Tson.of(getNumber().doubleValue()).toDouble();
     }
 
     @Override

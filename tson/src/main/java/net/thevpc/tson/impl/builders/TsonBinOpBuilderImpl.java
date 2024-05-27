@@ -3,7 +3,6 @@ package net.thevpc.tson.impl.builders;
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.elements.TsonBinOpImpl;
 import net.thevpc.tson.impl.elements.TsonNullImpl;
-import net.thevpc.tson.impl.elements.TsonPairImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 public class TsonBinOpBuilderImpl extends AbstractTsonElementBuilder<TsonBinOpBuilder> implements TsonBinOpBuilder {
@@ -37,7 +36,7 @@ public class TsonBinOpBuilderImpl extends AbstractTsonElementBuilder<TsonBinOpBu
 
     @Override
     public TsonBinOpBuilder setFirst(TsonElementBase key) {
-        this.key = Tson.elem(key);
+        this.key = Tson.of(key);
         return this;
     }
 
@@ -49,7 +48,7 @@ public class TsonBinOpBuilderImpl extends AbstractTsonElementBuilder<TsonBinOpBu
 
     @Override
     public TsonBinOpBuilder setSecond(TsonElementBase value) {
-        this.value = Tson.elem(value);
+        this.value = Tson.of(value);
         return this;
     }
 
