@@ -1,22 +1,25 @@
 package net.thevpc.tson.impl.elements;
 
-import net.thevpc.tson.TsonDocumentVisitor;
-import net.thevpc.tson.TsonElement;
-import net.thevpc.tson.TsonElementHeader;
-import net.thevpc.tson.TsonParserVisitor;
+import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.impl.util.UnmodifiableArrayList;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class TsonElementHeaderImpl implements TsonElementHeader {
     private String name;
-    private List<TsonElement> params;
+    private TsonElementList params;
 
     public TsonElementHeaderImpl(String name, UnmodifiableArrayList<TsonElement> params) {
         this.name = name;
-        this.params = params;
+        this.params = new TsonElementListImpl(params.stream().map(x->x).collect(Collectors.toList()));
+    }
+
+    @Override
+    public TsonElementList toElementList() {
+        return params;
     }
 
     @Override
@@ -24,24 +27,15 @@ public class TsonElementHeaderImpl implements TsonElementHeader {
         return params.size();
     }
 
-    @Override
-    public String name() {
-        return getName();
-    }
 
     @Override
-    public String getName() {
+    public String name() {
         return name;
     }
 
     @Override
     public List<TsonElement> all() {
-        return getAll();
-    }
-
-    @Override
-    public List<TsonElement> getAll() {
-        return params;
+        return params.toList();
     }
 
     @Override
@@ -72,21 +66,21 @@ public class TsonElementHeaderImpl implements TsonElementHeader {
     }
 
     public int compareTo(TsonElementHeader o) {
-        int i = getName().compareTo(o.getName());
+        int i = this.name().compareTo(o.name());
         if (i != 0) {
             return i;
         }
-        return TsonUtils.compareElementsArray(getAll(), o.getAll());
+        return TsonUtils.compareElementsArray(this.all(), o.all());
     }
 
     @Override
     public void visit(TsonParserVisitor visitor) {
         if (name != null && !name.isEmpty()) {
-            visitor.visitNamedStart(getName());
+            visitor.visitNamedStart(this.name());
         }
         if (!params.isEmpty()) {
             visitor.visitParamsStart();
-            for (TsonElement param : getAll()) {
+            for (TsonElement param : this.all()) {
                 visitor.visitParamElementStart();
                 param.visit(visitor);
                 visitor.visitParamElementEnd();

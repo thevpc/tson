@@ -64,6 +64,20 @@ public class Tson {
         return new TsonStringImpl(value, value, layout == null ? TsonStringLayout.DOUBLE_QUOTE : layout);
     }
 
+    public static TsonElement ofElement(TsonElementBase value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return value.build();
+    }
+
+    public static TsonElementBase ofElementBase(TsonElementBase value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return value;
+    }
+
     public static TsonElement ofString(String value) {
         if (value == null) {
             return ofNull();

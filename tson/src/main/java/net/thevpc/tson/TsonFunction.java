@@ -2,14 +2,8 @@ package net.thevpc.tson;
 
 import java.util.List;
 
-public interface TsonFunction extends TsonElement {
-    String name();
-
-    String getName();
-
+public interface TsonFunction extends TsonContainer {
     List<TsonElement> all();
-
-    List<TsonElement> getAll();
 
     int size();
 

@@ -40,7 +40,7 @@ public class TsonElementHeaderBuilderImpl<T extends TsonElementBuilder> implemen
     }
 
     @Override
-    public TsonElementHeaderBuilder reset() {
+    public TsonElementHeaderBuilder clear() {
         name = null;
         elements.clear();
         return this;
@@ -131,8 +131,8 @@ public class TsonElementHeaderBuilderImpl<T extends TsonElementBuilder> implemen
     @Override
     public TsonElementHeaderBuilder set(TsonElementHeader header) {
         if(header!=null) {
-            addAll(header.getAll());
-            setName(header.getName());
+            addAll(header.all());
+            setName(header.name());
         }
         return this;
     }

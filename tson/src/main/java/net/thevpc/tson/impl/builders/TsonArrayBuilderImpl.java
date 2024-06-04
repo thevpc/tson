@@ -50,7 +50,7 @@ public class TsonArrayBuilderImpl extends AbstractTsonElementBuilder<TsonArrayBu
     @Override
     public TsonArrayBuilder reset() {
         elementsSupport.reset();
-        header.reset();
+        header.clear();
         return this;
     }
 
@@ -120,7 +120,7 @@ public class TsonArrayBuilderImpl extends AbstractTsonElementBuilder<TsonArrayBu
                 break;
             }
             case FUNCTION: {
-                header.setName(e.toFunction().getName());
+                header.setName(e.toFunction().name());
                 header.addAll(e.toUplet());
                 break;
             }
@@ -131,13 +131,13 @@ public class TsonArrayBuilderImpl extends AbstractTsonElementBuilder<TsonArrayBu
             case OBJECT: {
                 TsonElementHeader h = e.toObject().getHeader();
                 this.header.set(h);
-                addAll(e.toObject().getAll());
+                addAll(e.toObject().all());
                 break;
             }
             case ARRAY: {
-                TsonElementHeader h = e.toArray().getHeader();
+                TsonElementHeader h = e.toArray().header();
                 this.header.set(h);
-                addAll(e.toArray().getAll());
+                addAll(e.toArray().all());
                 break;
             }
         }

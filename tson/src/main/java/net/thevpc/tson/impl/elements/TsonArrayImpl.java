@@ -1,35 +1,55 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonArrayBuilderImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.impl.util.UnmodifiableArrayList;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements TsonArray {
-    private final UnmodifiableArrayList<TsonElement> elements;
+    private TsonElementList elements;
     private final TsonElementHeader header;
 
     public TsonArrayImpl(TsonElementHeader header, UnmodifiableArrayList<TsonElement> elements) {
         super(TsonElementType.ARRAY);
         this.header = header;
-        this.elements = elements;
+        this.elements = new TsonElementListImpl(elements.stream().map(x->x).collect(Collectors.toList()));
+    }
+
+    @Override
+    public TsonElementList body() {
+        return elements;
+    }
+
+    @Override
+    public TsonElementList args() {
+        return header==null?null:header.toElementList();
+    }
+
+    @Override
+    public String name() {
+        return header==null?null:header.name();
     }
 
     @Override
     public TsonElement get(int index) {
-        return elements.get(index);
+        return elements.getValueAt(index);
     }
 
     @Override
-    public TsonElementHeader getHeader() {
+    public TsonElementHeader header() {
         return header;
     }
 
     @Override
     public TsonArray toArray() {
+        return this;
+    }
+
+    @Override
+    public TsonContainer toContainer() {
         return this;
     }
 
@@ -45,17 +65,12 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
 
     @Override
     public List<TsonElement> all() {
-        return getAll();
-    }
-
-    @Override
-    public List<TsonElement> getAll() {
-        return elements;
+        return elements.toList();
     }
 
     @Override
     public Iterator<TsonElement> iterator() {
-        return getAll().iterator();
+        return this.all().iterator();
     }
 
     @Override
@@ -98,11 +113,11 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
     @Override
     protected int compareCore(TsonElement o) {
         TsonArray na = o.toArray();
-        int i = TsonUtils.compareHeaders(header, na.getHeader());
+        int i = TsonUtils.compareHeaders(header, na.header());
         if (i != 0) {
             return i;
         }
-        return TsonUtils.compareElementsArray(getAll(), na.getAll());
+        return TsonUtils.compareElementsArray(this.all(), na.all());
     }
 
     @Override
@@ -112,7 +127,7 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
             header.visit(visitor);
         }
         visitor.visitNamedArrayStart();
-        for (TsonElement element : getAll()) {
+        for (TsonElement element : this.all()) {
             visitor.visitArrayElementStart();
             element.visit(visitor);
             visitor.visitArrayElementEnd();

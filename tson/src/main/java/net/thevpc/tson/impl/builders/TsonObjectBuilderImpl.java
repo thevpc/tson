@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObjectBuilder> implements TsonObjectBuilder {
 
-    private TsonObjectBuilderSupport elementsSupport = new TsonObjectBuilderSupport();
+    private TsonElementBaseListBuilder elementsSupport = new TsonElementBaseListBuilderImpl();
     private TsonElementHeaderBuilderImpl<TsonObjectBuilder> header = new TsonElementHeaderBuilderImpl(this);
 
     @Override
@@ -18,15 +18,20 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
     }
 
     @Override
-    public TsonObjectBuilder reset() {
-        header.reset();
-        elementsSupport.reset();
+    public TsonObjectBuilder clear() {
+        header.clear();
+        elementsSupport.clear();
         return this;
     }
 
     @Override
     public Iterator<TsonElement> iterator() {
-        return elementsSupport.iterator();
+        return elementsSupport.toIterator();
+    }
+
+    @Override
+    public TsonElementBaseListBuilder content() {
+        return elementsSupport;
     }
 
     @Override
@@ -37,52 +42,52 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
 
     @Override
     public TsonObjectBuilder add(String key, String value) {
-        return add(key,Tson.of(value));
+        return add(key, Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, int value) {
-        return add(key,Tson.of(value));
+        return add(key, Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, long value) {
-        return add(key,Tson.of(value));
+        return add(key, Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, float value) {
-        return add(key,Tson.of(value));
+        return add(key, Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, double value) {
-        return add(key,Tson.of(value));
+        return add(key, Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, byte value) {
-        return add(key,Tson.of(value));
+        return add(key, Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, short value) {
-        return add(key,Tson.of(value));
+        return add(key, Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, char value) {
-        return add(key,Tson.of(value));
+        return add(key, Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, Enum value) {
-        return add(key,Tson.of(value));
+        return add(key, Tson.of(value));
     }
 
     @Override
     public TsonObjectBuilder add(String key, boolean value) {
-        return add(key,Tson.of(value));
+        return add(key, Tson.of(value));
     }
 
     @Override
@@ -91,6 +96,70 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
         return this;
     }
 
+    //////////////
+    @Override
+    public TsonObjectBuilder set(TsonElementBase key, TsonElementBase value) {
+        elementsSupport.set(key, value);
+        return this;
+    }
+
+    @Override
+    public TsonObjectBuilder set(String key, String value) {
+        return set(key, Tson.of(value));
+    }
+
+    @Override
+    public TsonObjectBuilder set(String key, int value) {
+        return set(key, Tson.of(value));
+    }
+
+    @Override
+    public TsonObjectBuilder set(String key, long value) {
+        return set(key, Tson.of(value));
+    }
+
+    @Override
+    public TsonObjectBuilder set(String key, float value) {
+        return set(key, Tson.of(value));
+    }
+
+    @Override
+    public TsonObjectBuilder set(String key, double value) {
+        return set(key, Tson.of(value));
+    }
+
+    @Override
+    public TsonObjectBuilder set(String key, byte value) {
+        return set(key, Tson.of(value));
+    }
+
+    @Override
+    public TsonObjectBuilder set(String key, short value) {
+        return set(key, Tson.of(value));
+    }
+
+    @Override
+    public TsonObjectBuilder set(String key, char value) {
+        return set(key, Tson.of(value));
+    }
+
+    @Override
+    public TsonObjectBuilder set(String key, Enum value) {
+        return set(key, Tson.of(value));
+    }
+
+    @Override
+    public TsonObjectBuilder set(String key, boolean value) {
+        return set(key, Tson.of(value));
+    }
+
+    @Override
+    public TsonObjectBuilder set(String key, TsonElementBase value) {
+        elementsSupport.set(key, value);
+        return this;
+    }
+
+    //////////////
     @Override
     public TsonObjectBuilder add(TsonElementBase element) {
         elementsSupport.add(element);
@@ -110,14 +179,20 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
     }
 
     @Override
-    public TsonObjectBuilder add(TsonElementBase element, int index) {
-        elementsSupport.add(element, index);
+    public TsonObjectBuilder addAt(int index, TsonElementBase element) {
+        elementsSupport.addAt(index, element);
         return this;
     }
 
     @Override
     public TsonObjectBuilder removeAt(int index) {
         elementsSupport.removeAt(index);
+        return this;
+    }
+
+    @Override
+    public TsonObjectBuilder setAt(int index, TsonElementBase element) {
+        elementsSupport.setAt(index, element);
         return this;
     }
 
@@ -133,23 +208,12 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
 
     @Override
     public List<TsonElement> all() {
-        return getAll();
-    }
-
-    @Override
-    public List<TsonElement> getAll() {
-        return elementsSupport.getAll();
-    }
-
-    @Override
-    public TsonObjectBuilder removeAll() {
-        elementsSupport.removeAll();
-        return this;
+        return elementsSupport.toList();
     }
 
     @Override
     public TsonElement build() {
-        TsonObjectImpl built = new TsonObjectImpl(header.build(), TsonUtils.unmodifiableElements(elementsSupport.getAll()));
+        TsonObjectImpl built = new TsonObjectImpl(header.build(), TsonUtils.unmodifiableElements(elementsSupport.toList()));
         return TsonUtils.decorate(
                 built,
                 getComments(), getAnnotations());
@@ -182,7 +246,7 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
                 break;
             }
             case FUNCTION: {
-                header.setName(e.toFunction().getName());
+                header.setName(e.toFunction().name());
                 header.addAll(e.toUplet());
                 break;
             }
@@ -193,13 +257,13 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
             case OBJECT: {
                 TsonElementHeader h = e.toObject().getHeader();
                 this.header.set(h);
-                addAll(e.toObject().getAll());
+                addAll(e.toObject().all());
                 break;
             }
             case ARRAY: {
-                TsonElementHeader h = e.toArray().getHeader();
+                TsonElementHeader h = e.toArray().header();
                 this.header.set(h);
-                addAll(e.toArray().getAll());
+                addAll(e.toArray().all());
                 break;
             }
         }

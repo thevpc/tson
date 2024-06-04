@@ -3,7 +3,7 @@ package net.thevpc.tson;
 import java.util.List;
 
 public interface TsonElementHeaderBuilder<T extends TsonElementBuilder> {
-    TsonElementHeaderBuilder<T> reset();
+    TsonElementHeaderBuilder<T> clear();
 
     TsonElementHeaderBuilder<T> set(TsonElementHeader header);
 

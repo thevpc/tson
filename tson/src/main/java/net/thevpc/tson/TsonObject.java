@@ -2,12 +2,12 @@ package net.thevpc.tson;
 
 import java.util.List;
 
-public interface TsonObject extends TsonElement, Iterable<TsonElement> {
+public interface TsonObject extends TsonContainer, Iterable<TsonElement> {
     TsonElementHeader getHeader();
 
     List<TsonElement> all();
 
-    List<TsonElement> getAll();
+    TsonElementList body();
 
     TsonElement get(String name);
 

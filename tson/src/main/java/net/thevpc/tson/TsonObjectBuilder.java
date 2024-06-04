@@ -4,7 +4,9 @@ import java.util.Collection;
 import java.util.List;
 
 public interface TsonObjectBuilder extends Iterable<TsonElement>, TsonElementBuilder {
-    TsonObjectBuilder reset();
+    TsonObjectBuilder clear();
+
+    TsonElementBaseListBuilder content();
 
     TsonElementHeaderBuilder<TsonObjectBuilder> header();
 
@@ -45,17 +47,40 @@ public interface TsonObjectBuilder extends Iterable<TsonElement>, TsonElementBui
 
     TsonObjectBuilder add(TsonElementBase element);
 
-    TsonObjectBuilder remove(TsonElementBase element);
 
-    TsonObjectBuilder add(TsonElementBase element, int index);
+    TsonObjectBuilder addAt(int index, TsonElementBase element);
+
+    TsonObjectBuilder set(TsonElementBase key, TsonElementBase value);
+
+    TsonObjectBuilder set(String key, TsonElementBase value);
+
+    TsonObjectBuilder set(String key, String value);
+
+    TsonObjectBuilder set(String key, int value);
+
+    TsonObjectBuilder set(String key, long value);
+
+    TsonObjectBuilder set(String key, float value);
+
+    TsonObjectBuilder set(String key, double value);
+
+    TsonObjectBuilder set(String key, byte value);
+
+    TsonObjectBuilder set(String key, short value);
+
+    TsonObjectBuilder set(String key, char value);
+
+    TsonObjectBuilder set(String key, boolean value);
+
+    TsonObjectBuilder set(String key, Enum value);
+
+    TsonObjectBuilder setAt(int index, TsonElementBase element);
+
+    TsonObjectBuilder remove(TsonElementBase element);
 
     TsonObjectBuilder removeAt(int index);
 
     List<TsonElement> all();
-
-    List<TsonElement> getAll();
-
-    TsonObjectBuilder removeAll();
 
 
     ////////////////////////////////////////////////

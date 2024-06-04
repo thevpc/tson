@@ -20,4 +20,24 @@ public abstract class AbstractTsonElementBase implements TsonElement {
     public String toString(TsonFormat format) {
         return format == null ? Tson.DEFAULT_FORMAT.format(this) : format.format(this);
     }
+
+    @Override
+    public boolean isContainer() {
+        return type().isContainer();
+    }
+
+    @Override
+    public boolean isNumber() {
+        return type().isNumber();
+    }
+
+    @Override
+    public boolean isPrimitive() {
+        return type().isPrimitive();
+    }
+
+    @Override
+    public boolean isTemporal() {
+        return type().isTemporal();
+    }
 }

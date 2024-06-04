@@ -3,13 +3,13 @@ package net.thevpc.tson;
 import java.util.List;
 
 public interface TsonElementHeader extends Comparable<TsonElementHeader> {
+
     String name();
 
-    String getName();
+    TsonElementList toElementList();
 
     List<TsonElement> all();
 
-    List<TsonElement> getAll();
 
     int size();
 

@@ -22,7 +22,7 @@ public class TsonPairImpl extends AbstractNonPrimitiveTsonElement implements Tso
             throw new IllegalArgumentException("Key of Key Value cannot be a key value as well");
         }
         if (value.type() == TsonElementType.PAIR) {
-            throw new IllegalArgumentException("Key of Key Value cannot be a key value as well");
+            throw new IllegalArgumentException("value of Key Value cannot be a key value as well");
         }
         this.key = key;
         this.value = value;

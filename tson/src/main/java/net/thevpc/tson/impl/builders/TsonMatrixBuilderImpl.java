@@ -80,7 +80,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
 
     @Override
     public TsonMatrixBuilder addRow(TsonArray element) {
-        rows.add(new ArrayList<>(element.getAll()));
+        rows.add(new ArrayList<>(element.all()));
         ensureCapacity(columnsCount, rowsCount + 1);
         return this;
     }
@@ -88,7 +88,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
     @Override
     public TsonMatrixBuilder addRows(TsonArray... elements) {
         for (TsonArray element : elements) {
-            rows.add(new ArrayList<>(element.getAll()));
+            rows.add(new ArrayList<>(element.all()));
         }
         ensureCapacity(columnsCount, rowsCount + elements.length);
         return this;
@@ -98,7 +98,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
     public TsonMatrixBuilder addRows(Iterable<? extends TsonArray> elements) {
         int count = 0;
         for (TsonArray element : elements) {
-            rows.add(new ArrayList<>(element.getAll()));
+            rows.add(new ArrayList<>(element.all()));
             count++;
         }
         ensureCapacity(columnsCount, rowsCount + count);
@@ -224,7 +224,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
     @Override
     public TsonMatrixBuilder reset() {
         rows.clear();
-        header.reset();
+        header.clear();
         rowsCount = 0;
         columnsCount = 0;
         return this;
@@ -256,7 +256,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
                 break;
             }
             case FUNCTION: {
-                header.setName(e.toFunction().getName());
+                header.setName(e.toFunction().name());
                 header.addAll(e.toUplet());
                 break;
             }
@@ -267,17 +267,17 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
             case OBJECT: {
                 TsonElementHeader h = e.toObject().getHeader();
                 this.header.set(h);
-                addRow(TsonUtils.toArray(e.toObject().getAll()));
+                addRow(TsonUtils.toArray(e.toObject().all()));
                 break;
             }
             case ARRAY: {
-                TsonElementHeader h = e.toArray().getHeader();
+                TsonElementHeader h = e.toArray().header();
                 this.header.set(h);
-                addRow(TsonUtils.toArray(e.toObject().getAll()));
+                addRow(TsonUtils.toArray(e.toObject().all()));
                 break;
             }
             case MATRIX: {
-                TsonElementHeader h = e.toArray().getHeader();
+                TsonElementHeader h = e.toArray().header();
                 this.header.set(h);
                 for (TsonArray m : e.toMatrix()) {
                     addRow(m);

@@ -1,45 +1,51 @@
 package net.thevpc.tson;
 
 public enum TsonElementType {
-    NULL(true,false,false),
-    BINARY_STREAM(true,false,false),
-    CHAR_STREAM(true,false,false),
-    STRING(true,false,false),
-    CHAR(true,false,false),
-    BYTE(true,true,false),
-    SHORT(true,true,false),
-    INT(true,true,false),
-    LONG(true,true,false),
-    FLOAT(true,true,false),
-    DOUBLE(true,true,false),
-    DOUBLE_COMPLEX(true,true,false),
-    FLOAT_COMPLEX(true,true,false),
-    BIG_INT(true,true,false),
-    BIG_COMPLEX(true,true,false),
-    BIG_DECIMAL(true,true,false),
-    BOOLEAN(true,false,false),
-    NAME(true,false,false),
-    ALIAS(true,false,false),
-    DATETIME(true,false,true),
-    DATE(true,false,true),
-    TIME(true,false,true),
-    REGEX(true,false,false),
-    ARRAY(false,false,false),
-    OBJECT(false,false,false),
-    MATRIX(false,false,false),
-    PAIR(false,false,false),
-    BINOP(false,false,false),
-    FUNCTION(false,false,false),
-    UPLET(false,false,false),
+    NULL(true,false,false,false),
+    BINARY_STREAM(true,false,false,false),
+    CHAR_STREAM(true,false,false,false),
+    STRING(true,false,false,false),
+    CHAR(true,false,false,false),
+    BYTE(true,true,false,false),
+    SHORT(true,true,false,false),
+    INT(true,true,false,false),
+    LONG(true,true,false,false),
+    FLOAT(true,true,false,false),
+    DOUBLE(true,true,false,false),
+    DOUBLE_COMPLEX(true,true,false,false),
+    FLOAT_COMPLEX(true,true,false,false),
+    BIG_INT(true,true,false,false),
+    BIG_COMPLEX(true,true,false,false),
+    BIG_DECIMAL(true,true,false,false),
+    BOOLEAN(true,false,false,false),
+    NAME(true,false,false,false),
+    ALIAS(true,false,false,false),
+    DATETIME(true,false,true,false),
+    DATE(true,false,true,false),
+    TIME(true,false,true,false),
+    REGEX(true,false,false,false),
+    MATRIX(false,false,false,false),
+    PAIR(false,false,false,false),
+    BINOP(false,false,false,false),
+    ARRAY(false,false,false,true),
+    OBJECT(false,false,false,true),
+    FUNCTION(false,false,false,true),
+    UPLET(false,false,false,true),
     ;
 
     private boolean primitiveType;
     private boolean number;
     private boolean temporal;
-    TsonElementType(boolean primitiveType,boolean number,boolean temporal) {
+    private boolean container;
+    TsonElementType(boolean primitiveType,boolean number,boolean temporal,boolean container) {
         this.primitiveType = primitiveType;
         this.number = number;
         this.temporal = temporal;
+        this.container = container;
+    }
+
+    public boolean isContainer() {
+        return container;
     }
 
     public boolean isTemporal() {

@@ -1,19 +1,34 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonUpletBuilderImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.impl.util.UnmodifiableArrayList;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements TsonUplet {
-    private UnmodifiableArrayList<TsonElement> elements;
+    private TsonElementList elements;
 
     public TsonUpletImpl(UnmodifiableArrayList<TsonElement> elements) {
         super(TsonElementType.UPLET);
-        this.elements = elements;
+        this.elements = new TsonElementListImpl(elements.stream().map(x -> x).collect(Collectors.toList()));
+    }
+
+    @Override
+    public TsonElementList body() {
+        return null;
+    }
+
+    @Override
+    public TsonElementList args() {
+        return elements;
+    }
+
+    @Override
+    public String name() {
+        return null;
     }
 
     @Override
@@ -33,17 +48,12 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
 
     @Override
     public List<TsonElement> all() {
-        return getAll();
-    }
-
-    @Override
-    public List<TsonElement> getAll() {
-        return elements;
+        return elements.toList();
     }
 
     @Override
     public Iterator<TsonElement> iterator() {
-        return getAll().iterator();
+        return this.all().iterator();
     }
 
     @Override
@@ -60,6 +70,11 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
         int result = super.hashCode();
         result = 31 * result + Objects.hashCode(elements);
         return result;
+    }
+
+    @Override
+    public TsonContainer toContainer() {
+        return this;
     }
 
     @Override
@@ -82,14 +97,14 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
 
     @Override
     protected int compareCore(TsonElement o) {
-        return TsonUtils.compareElementsArray(getAll(), o.toUplet().getAll());
+        return TsonUtils.compareElementsArray(this.all(), o.toUplet().all());
     }
 
     @Override
     public void visit(TsonParserVisitor visitor) {
         visitor.visitElementStart();
         visitor.visitParamsStart();
-        for (TsonElement param : getAll()) {
+        for (TsonElement param : this.all()) {
             visitor.visitParamElementStart();
             param.visit(visitor);
             visitor.visitParamElementEnd();

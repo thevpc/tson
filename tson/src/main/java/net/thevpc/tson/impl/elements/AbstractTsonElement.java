@@ -370,4 +370,11 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
     public boolean isNull() {
         return false;
     }
+
+
+    @Override
+    public TsonContainer toContainer() {
+        throw new ClassCastException(type()+" cannot be cast to Container");
+    }
+
 }

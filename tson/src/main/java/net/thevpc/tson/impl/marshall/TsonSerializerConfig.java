@@ -167,14 +167,14 @@ public class TsonSerializerConfig {
             if (to == null || to.equals(Map.class)) {
                 TsonArray ee = element.toArray();
                 Map<String, Object> namedArray = new LinkedHashMap<>();
-                TsonElementHeader h = ee.getHeader();
+                TsonElementHeader h = ee.header();
                 if(h!=null){
                     Map<String, Object> mheader = new LinkedHashMap<>();
                     mheader.put("name", h.name());
-                    mheader.put("values", arrayElementToObject(h.getAll(), null, context));
+                    mheader.put("values", arrayElementToObject(h.all(), null, context));
                     namedArray.put("header",mheader);
                 }
-                namedArray.put("values", arrayElementToObject(ee.getAll(), null, context));
+                namedArray.put("values", arrayElementToObject(ee.all(), null, context));
                 return namedArray;
             }
             throw new UnsupportedOperationException("Unsupported Named Array to " + to);
@@ -187,10 +187,10 @@ public class TsonSerializerConfig {
                 if(h!=null){
                     Map<String, Object> mheader = new LinkedHashMap<>();
                     mheader.put("name", h.name());
-                    mheader.put("values", arrayElementToObject(h.getAll(), null, context));
+                    mheader.put("values", arrayElementToObject(h.all(), null, context));
                     namedArray.put("header",mheader);
                 }
-                namedArray.put("values", arrayElementToObject(ee.getAll(), null, context));
+                namedArray.put("values", arrayElementToObject(ee.all(), null, context));
                 return namedArray;
             }
             throw new UnsupportedOperationException("Unsupported Named Array to " + to);
@@ -200,7 +200,7 @@ public class TsonSerializerConfig {
                 TsonFunction ee = element.toFunction();
                 Map<String, Object> namedArray = new LinkedHashMap<>();
                 namedArray.put("function", ee.name());
-                namedArray.put("params", arrayElementToObject(ee.getAll(), null, context));
+                namedArray.put("params", arrayElementToObject(ee.all(), null, context));
                 return namedArray;
             }
             throw new UnsupportedOperationException("Unsupported Named Array to " + to);
@@ -213,19 +213,19 @@ public class TsonSerializerConfig {
             TsonUplet ee = element.toUplet();
             Map<String, Object> namedArray = new LinkedHashMap<>();
             namedArray.put("uplet", true);
-            namedArray.put("params", arrayElementToObject(ee.getAll(), null, context));
+            namedArray.put("params", arrayElementToObject(ee.all(), null, context));
             return namedArray;
         } else {
-            return arrayElementToObject(element.toUplet().getAll(), to, context);
+            return arrayElementToObject(element.toUplet().all(), to, context);
         }
     }
 
     private Object arrayElementToObject(TsonElement element, Class to, TsonObjectContext context) {
-        return arrayElementToObject(element.toArray().getAll(), to, context);
+        return arrayElementToObject(element.toArray().all(), to, context);
     }
 
     private Object objectElementToObject(TsonElement element, Class to, TsonObjectContext context) {
-        return objectElementToObject(element.toObject().getAll(), to, context);
+        return objectElementToObject(element.toObject().all(), to, context);
     }
 
     private Object arrayElementToObject(List<TsonElement> elements, Class to, TsonObjectContext context) {
@@ -437,7 +437,7 @@ public class TsonSerializerConfig {
         final TsonElementType etype = e.type();
         switch (etype) {
             case ARRAY: {
-                TsonElementHeader h = e.toArray().getHeader();
+                TsonElementHeader h = e.toArray().header();
                 return new TypeElementSignature(etype, h==null?null:h.name(), to);
             }
             case OBJECT: {

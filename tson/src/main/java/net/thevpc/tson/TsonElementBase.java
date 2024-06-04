@@ -1,6 +1,10 @@
 package net.thevpc.tson;
 
 public interface TsonElementBase {
+    static TsonElementBase of(TsonElementBase any){
+        return any==null?Tson.ofNull():any;
+    }
+
     TsonElementType type();
 
     TsonElement build();

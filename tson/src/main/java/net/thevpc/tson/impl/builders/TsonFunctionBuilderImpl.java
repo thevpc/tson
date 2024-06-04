@@ -123,10 +123,10 @@ public class TsonFunctionBuilderImpl extends AbstractTsonElementBuilder<TsonFunc
         switch (element.type()) {
             case ARRAY: {
                 TsonArray e = element.toArray();
-                TsonElementHeader h = e.getHeader();
+                TsonElementHeader h = e.header();
                 if(h!=null) {
-                    addAll(h.getAll());
-                    setName(h.getName());
+                    addAll(h.all());
+                    setName(h.name());
                 }
                 return this;
             }
@@ -134,19 +134,19 @@ public class TsonFunctionBuilderImpl extends AbstractTsonElementBuilder<TsonFunc
                 TsonObject e = element.toObject();
                 TsonElementHeader h = e.getHeader();
                 if(h!=null) {
-                    addAll(h.getAll());
-                    setName(h.getName());
+                    addAll(h.all());
+                    setName(h.name());
                 }
                 return this;
             }
             case FUNCTION: {
                 TsonFunction o = element.toFunction();
-                addAll(o.getAll());
-                setName(o.getName());
+                addAll(o.all());
+                setName(o.name());
                 return this;
             }
             case UPLET: {
-                addAll(element.toUplet().getAll());
+                addAll(element.toUplet().all());
                 return this;
             }
         }

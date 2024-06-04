@@ -1,22 +1,36 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonFunctionBuilderImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.impl.util.UnmodifiableArrayList;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class TsonFunctionImpl extends AbstractNonPrimitiveTsonElement implements TsonFunction {
     private String name;
-    private UnmodifiableArrayList<TsonElement> params;
+    private TsonElementList params;
 
     public TsonFunctionImpl(String name, UnmodifiableArrayList<TsonElement> params) {
         super(TsonElementType.FUNCTION);
         this.name = name;
-        this.params = params;
+        this.params = new TsonElementListImpl(params.stream().map(x->x).collect(Collectors.toList()));
+    }
+
+    @Override
+    public TsonElementList body() {
+        return null;
+    }
+
+    @Override
+    public TsonElementList args() {
+        return params;
+    }
+    @Override
+    public TsonContainer toContainer() {
+        return this;
     }
 
     @Override
@@ -25,28 +39,18 @@ public class TsonFunctionImpl extends AbstractNonPrimitiveTsonElement implements
     }
 
     @Override
-    public String name() {
-        return getName();
-    }
-
-    @Override
     public TsonFunction toFunction() {
         return this;
     }
 
     @Override
-    public String getName() {
+    public String name() {
         return name;
     }
 
     @Override
     public List<TsonElement> all() {
-        return getAll();
-    }
-
-    @Override
-    public List<TsonElement> getAll() {
-        return params;
+        return params.toList();
     }
 
     @Override
@@ -86,19 +90,19 @@ public class TsonFunctionImpl extends AbstractNonPrimitiveTsonElement implements
 
     @Override
     protected int compareCore(TsonElement o) {
-        int i = getName().compareTo(o.toFunction().getName());
+        int i = this.name().compareTo(o.toFunction().name());
         if (i != 0) {
             return i;
         }
-        return TsonUtils.compareElementsArray(getAll(), o.toFunction().getAll());
+        return TsonUtils.compareElementsArray(this.all(), o.toFunction().all());
     }
 
     @Override
     public void visit(TsonParserVisitor visitor) {
         visitor.visitElementStart();
-        visitor.visitNamedStart(getName());
+        visitor.visitNamedStart(this.name());
         visitor.visitParamsStart();
-        for (TsonElement param : getAll()) {
+        for (TsonElement param : this.all()) {
             visitor.visitParamElementStart();
             param.visit(visitor);
             visitor.visitParamElementEnd();

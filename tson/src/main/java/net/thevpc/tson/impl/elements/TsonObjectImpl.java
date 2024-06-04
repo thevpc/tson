@@ -7,21 +7,37 @@ import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.impl.util.UnmodifiableArrayList;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements TsonObject {
-    private UnmodifiableArrayList<TsonElement> elements;
+    private TsonElementList elements;
     private Map<TsonElement, TsonElement> cachedMap = new LinkedHashMap<>();
     private TsonElementHeader header;
 
     public TsonObjectImpl(TsonElementHeader header, UnmodifiableArrayList<TsonElement> elements) {
         super(TsonElementType.OBJECT);
-        this.elements = elements;
+        this.elements = new TsonElementListImpl(elements.stream().map(x->x).collect(Collectors.toList()));
         this.header = header;
     }
 
     @Override
     public TsonElementHeader getHeader() {
         return header;
+    }
+
+
+    @Override
+    public TsonElementList args() {
+        return header==null ? null:header.toElementList();
+    }
+    @Override
+    public TsonContainer toContainer() {
+        return this;
+    }
+
+    @Override
+    public String name() {
+        return header==null?null:header.name();
     }
 
     @Override
@@ -31,12 +47,7 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
 
     @Override
     public List<TsonElement> all() {
-        return getAll();
-    }
-
-    @Override
-    public List<TsonElement> getAll() {
-        return elements;
+        return elements.toList();
     }
 
     @Override
@@ -46,17 +57,14 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
 
     private Map<TsonElement, TsonElement> asMap() {
         if (cachedMap == null) {
-            cachedMap = new LinkedHashMap<>();
-            for (TsonElement element : elements) {
-                if (element instanceof TsonPairImpl) {
-                    TsonPair element1 = (TsonPair) element;
-                    this.cachedMap.put(element1.getKey(), element1.getValue());
-                } else {
-                    this.cachedMap.put(element, element);
-                }
-            }
+            cachedMap = elements.toMap();
         }
         return cachedMap;
+    }
+
+    @Override
+    public TsonElementList body() {
+        return elements;
     }
 
     @Override
@@ -116,7 +124,7 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
         if (i != 0) {
             return i;
         }
-        return TsonUtils.compareElementsArray(getAll(), no.getAll());
+        return TsonUtils.compareElementsArray(all(), no.all());
     }
 
     @Override
@@ -126,7 +134,7 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
             header.visit(visitor);
         }
         visitor.visitNamedObjectStart();
-        for (TsonElement element : getAll()) {
+        for (TsonElement element : all()) {
             visitor.visitObjectElementStart();
             element.visit(visitor);
             visitor.visitObjectElementEnd();

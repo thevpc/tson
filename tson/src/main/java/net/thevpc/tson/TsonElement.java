@@ -8,6 +8,9 @@ import java.time.LocalTime;
 import java.util.regex.Pattern;
 
 public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
+    static TsonElement of(TsonElementBase any) {
+        return any == null ? Tson.ofNull() : any.build();
+    }
 
     int getAnnotationsCount();
 
@@ -52,6 +55,8 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
     TsonMatrix toMatrix();
 
     TsonArray toArray();
+
+    TsonContainer toContainer();
 
     TsonBinaryStream toBinaryStream();
 
@@ -135,4 +140,8 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
     }
 
     boolean isNull();
+    boolean isContainer();
+    boolean isNumber() ;
+    boolean isPrimitive();
+    boolean isTemporal();
 }
