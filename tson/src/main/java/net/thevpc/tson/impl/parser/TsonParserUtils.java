@@ -425,21 +425,21 @@ public class TsonParserUtils {
     }
 
     public static TsonDocument elementsToDocument(TsonElement[] roots) {
-        TsonElement c=null;
-        if(roots.length==0){
+        TsonElement c = null;
+        if (roots.length == 0) {
             return Tson.ofDocument().header(null).content(Tson.ofObj().build()).build();
-        }else if(roots.length==1){
+        } else if (roots.length == 1) {
             return elementToDocument(roots[0]);
-        }else{
+        } else {
             TsonAnnotation[] annotations = roots[0].getAnnotations();
             if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].getName())) {
                 // will remove it
                 TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];
                 System.arraycopy(annotations, 1, annotations2, 0, annotations.length - 1);
-                List<TsonElement> newList=new ArrayList<>(Arrays.asList(roots));
+                List<TsonElement> newList = new ArrayList<>(Arrays.asList(roots));
                 TsonElement c0 = roots[0].builder().setAnnotations(annotations2).build();
-                newList.set(0,c0);
-                roots=newList.toArray(new TsonElement[0]);
+                newList.set(0, c0);
+                roots = newList.toArray(new TsonElement[0]);
             }
             return Tson.ofDocument().content(Tson.ofObj(roots).build()).build();
         }
@@ -457,7 +457,30 @@ public class TsonParserUtils {
         return Tson.ofDocument().header(null).content(root).build();
     }
 
-    public static String escapeComments(String c) {
+    public static TsonComment parseComments(String c) {
+        if (c == null) {
+            return null;
+        }
+        if (c.startsWith("/*")) {
+            return TsonComment.ofMultiLine(escapeMultiLineComments(c));
+        }
+        if (c.startsWith("//")) {
+            return TsonComment.ofSingleLine(escapeSingleLineComments(c));
+        }
+        throw new IllegalArgumentException("unsupported comments " + c);
+    }
+
+    public static String escapeSingleLineComments(String c) {
+        if (c == null) {
+            return null;
+        }
+        if (c.startsWith("//")) {
+            return c.substring(2);
+        }
+        throw new IllegalArgumentException("unsupported comments " + c);
+    }
+
+    public static String escapeMultiLineComments(String c) {
         if (c == null) {
             return null;
         }

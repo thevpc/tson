@@ -24,36 +24,32 @@ public class CustomJFlexTsonStreamParserImpl implements ITsonStreamParser {
     private boolean pushedBack;
     private Object source;
 
-    public Object source(){
+    public Object source() {
         return source;
     }
-    public void source(Object source){
-        this.source=source;
+
+    public void source(Object source) {
+        this.source = source;
     }
+
     public String getTokenString() {
         switch (c_kind) {
-            case TsonStreamParserImplConstants.SINGLE_QUOTE_STR:
-            {
+            case TsonStreamParserImplConstants.SINGLE_QUOTE_STR: {
                 return "SINGLE_QUOTE_STR " + flex.stringVal;
             }
-            case TsonStreamParserImplConstants.ANTI_QUOTE_STR:
-            {
+            case TsonStreamParserImplConstants.ANTI_QUOTE_STR: {
                 return "ANTI_QUOTE_STR " + flex.stringVal;
             }
-            case TsonStreamParserImplConstants.DOUBLE_QUOTE_STR:
-            {
+            case TsonStreamParserImplConstants.DOUBLE_QUOTE_STR: {
                 return "DOUBLE_QUOTE_STR " + flex.stringVal;
             }
-            case TsonStreamParserImplConstants.TRIPLE_SINGLE_QUOTE_STR:
-            {
+            case TsonStreamParserImplConstants.TRIPLE_SINGLE_QUOTE_STR: {
                 return "TRIPLE_SINGLE_QUOTE_STR " + flex.stringVal;
             }
-            case TsonStreamParserImplConstants.TRIPLE_ANTI_QUOTE_STR:
-            {
+            case TsonStreamParserImplConstants.TRIPLE_ANTI_QUOTE_STR: {
                 return "TRIPLE_ANTI_QUOTE_STR " + flex.stringVal;
             }
-            case TsonStreamParserImplConstants.TRIPLE_DOUBLE_QUOTE_STR:
-            {
+            case TsonStreamParserImplConstants.TRIPLE_DOUBLE_QUOTE_STR: {
                 return "TRIPLE_DOUBLE_QUOTE_STR " + flex.stringVal;
             }
             default: {
@@ -193,12 +189,15 @@ public class CustomJFlexTsonStreamParserImpl implements ITsonStreamParser {
 
     void elementLevel1() {
         visitor.visitElementStart();
-        nextToken();
-        if (c_kind == TsonStreamParserImplConstants.COMMENT) {
-            visitor.visitComments(TsonParserUtils.escapeComments(flex.yytext()));
-        } else {
-            pushBackToken();
-        }
+//        nextToken();
+//        if (
+//                c_kind == TsonStreamParserImplConstants.ML_COMMENT
+//                        || c_kind == TsonStreamParserImplConstants.SL_COMMENT
+//        ) {
+//            visitor.visitComments(TsonParserUtils.escapeComments(flex.yytext()));
+//        } else {
+//            pushBackToken();
+//        }
 
         annotations();
         nextToken();

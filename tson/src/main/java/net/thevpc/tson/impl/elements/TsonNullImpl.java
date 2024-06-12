@@ -143,7 +143,7 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     }
 
     @Override
-    public String getComments() {
+    public TsonComments getComments() {
         return null;
     }
 

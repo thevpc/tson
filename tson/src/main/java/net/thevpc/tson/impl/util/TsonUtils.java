@@ -27,11 +27,27 @@ public class TsonUtils {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
     };
 
-    public static TsonElement decorate(TsonElement element, String comments, TsonAnnotation[] annotations) {
-        String c2 = comments;
+    public static <T extends Comparable<T>> int compareArrays(T[] a1,T[] a2) {
+        for (int j = 0; j < Math.max(a1.length, a2.length); j++) {
+            if (j >= a1.length) {
+                return -1;
+            }
+            if (j >= a2.length) {
+                return 1;
+            }
+            int i = a1[j].compareTo(a2[j]);
+            if (i != 0) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public static TsonElement decorate(TsonElement element, TsonComments comments, TsonAnnotation[] annotations) {
+        TsonComments c2 = comments;
         TsonAnnotation[] a2 = annotations == null ? new TsonAnnotation[0] : annotations;
 
-        String c = element.getComments();
+        TsonComments c = element.getComments();
         TsonAnnotation[] a = element.getAnnotations();
 
         if (!Objects.equals(c, c2) || !Arrays.equals(a, a2)) {
@@ -40,8 +56,8 @@ public class TsonUtils {
         return element;
     }
 
-    public static TsonElement setComments(TsonElement e, String comments) {
-        String c = e.getComments();
+    public static TsonElement setComments(TsonElement e, TsonComments comments) {
+        TsonComments c = e.getComments();
         if (Objects.equals(c, comments)) {
             return e;
         }

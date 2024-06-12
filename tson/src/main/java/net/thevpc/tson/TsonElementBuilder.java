@@ -4,9 +4,9 @@ import java.util.Collection;
 
 public interface TsonElementBuilder extends TsonElementBase{
 
-    TsonElementBuilder comments(String comments);
+    TsonElementBuilder comments(TsonComments comments);
 
-    TsonElementBuilder setComments(String comments);
+    TsonElementBuilder setComments(TsonComments comments);
 
     TsonElementBuilder setAnnotations(TsonAnnotation... annotations);
 
@@ -38,7 +38,7 @@ public interface TsonElementBuilder extends TsonElementBase{
 
     TsonElementType type();
 
-    String getComments();
+    TsonComments getComments();
 
     TsonAnnotation[] getAnnotations();
 

@@ -1,9 +1,6 @@
 package net.thevpc.tson.impl;
 
-import net.thevpc.tson.TsonAnnotation;
-import net.thevpc.tson.TsonElement;
-import net.thevpc.tson.TsonElementType;
-import net.thevpc.tson.TsonProcessor;
+import net.thevpc.tson.*;
 import net.thevpc.tson.impl.parser.SimpleTsonParserVisitor;
 
 import java.util.Map;
@@ -16,7 +13,7 @@ public class TsonProcessorImpl implements TsonProcessor {
     public TsonElement removeComments(TsonElement element) {
         SimpleTsonParserVisitor v = new SimpleTsonParserVisitor() {
             @Override
-            public void visitComments(String comments) {
+            public void visitComments(TsonComment comments) {
                 super.visitComments(null);
             }
         };

@@ -116,10 +116,10 @@ public class TestFormats {
     public void test3() {
         TsonElement h = ofObj()
                 .add("lastName", of(8).builder()
-                        .comments("Hello\nworld")
+                        .comments(TsonComments.ofMultiLine("Hello\nworld"))
                         .annotation("an1", of(15.0)))
                 .add("firstName", charElem('a').builder()
-                        .comments("By")
+                        .comments(TsonComments.ofSingleLine("By"))
                         .annotation("an2", of(20.0))
                 )
                 .build();

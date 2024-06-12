@@ -28,9 +28,9 @@ public interface TsonUpletBuilder extends Iterable<TsonElement>, TsonElementBuil
 
     ////////////////////////////////////////////////
 
-    TsonUpletBuilder comments(String comments);
+    TsonUpletBuilder comments(TsonComments comments);
 
-    TsonUpletBuilder setComments(String comments);
+    TsonUpletBuilder setComments(TsonComments comments);
 
     TsonUpletBuilder setAnnotations(TsonAnnotation[] annotations);
 

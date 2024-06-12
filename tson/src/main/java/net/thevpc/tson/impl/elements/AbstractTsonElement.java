@@ -23,9 +23,10 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
     }
 
     @Override
-    public String getComments() {
+    public TsonComments getComments() {
         return null;
     }
+
 
     @Override
     public TsonAnnotation[] getAnnotations() {
@@ -345,22 +346,18 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
         if (i != 0) {
             return i;
         }
-        TsonAnnotation[] a1 = getAnnotations();
-        TsonAnnotation[] a2 = o.getAnnotations();
-        for (int j = 0; j < Math.max(a1.length, a2.length); j++) {
-            if (j >= a1.length) {
-                return -1;
-            }
-            if (j >= a2.length) {
-                return 1;
-            }
-            i = a1[j].compareTo(a2[j]);
-            if (i != 0) {
-                return i;
-            }
+        i = TsonUtils.compareArrays(getAnnotations(), o.getAnnotations());
+        if (i != 0) {
+            return i;
         }
-        String c1 = TsonUtils.trim(getComments());
-        String c2 = TsonUtils.trim(o.getComments());
+        TsonComments c1 = getComments();
+        TsonComments c2 = o.getComments();
+        if (c1 == null) {
+            c1 = TsonComments.BLANK;
+        }
+        if (c2 == null) {
+            c2 = TsonComments.BLANK;
+        }
         return c1.compareTo(c2);
     }
 
@@ -374,7 +371,7 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
 
     @Override
     public TsonContainer toContainer() {
-        throw new ClassCastException(type()+" cannot be cast to Container");
+        throw new ClassCastException(type() + " cannot be cast to Container");
     }
 
 }

@@ -48,9 +48,9 @@ public interface TsonMatrixBuilder extends Iterable<TsonArray>, TsonElementBuild
 
     ////////////////////////////////////////////////
 
-    TsonMatrixBuilder comments(String comments);
+    TsonMatrixBuilder comments(TsonComments comments);
 
-    TsonMatrixBuilder setComments(String comments);
+    TsonMatrixBuilder setComments(TsonComments comments);
 
     TsonMatrixBuilder setAnnotations(TsonAnnotation... annotations);
 

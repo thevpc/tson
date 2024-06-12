@@ -142,7 +142,7 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
         public ArrayList<TsonElement> params;
         public ArrayList<TsonElement> array;
         public ArrayList<TsonElement> object;
-        public String comments;
+        public TsonComments comments;
         public List<TsonAnnotation> annotations;
 
         public boolean paramsEmpty() {
@@ -271,9 +271,9 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
     }
 
     @Override
-    public void visitComments(String comments) {
+    public void visitComments(TsonComment comments) {
         PartialElementContext a = peek();
-        a.comments = comments;
+        a.comments = TsonComments.concat(a.comments,new TsonComments(new TsonComment[]{comments},null));
     }
 
     @Override

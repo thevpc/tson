@@ -6,7 +6,6 @@ PARSER_BEGIN(TsonStreamParserImpl)
 package net.thevpc.tson.impl.parser.javacc;
 import net.thevpc.tson.impl.parser.*;
 import net.thevpc.tson.*;
-import net.thevpc.tson.impl.*;
 
 public class TsonStreamParserImpl implements ITsonStreamParser{
     private TsonStreamParserImplConfig config;
@@ -18,10 +17,12 @@ public class TsonStreamParserImpl implements ITsonStreamParser{
 
     private String prepareComments(String comments){
         if(!config.isRawComments()){
-            return TsonParserUtils.escapeComments(comments);
+            return TsonParserUtils.parseComments(comments);
         }
         return comments;
     }
+}}
+}}
 }
 
 PARSER_END(TsonStreamParserImpl)

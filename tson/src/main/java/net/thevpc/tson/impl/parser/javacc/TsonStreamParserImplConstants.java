@@ -221,19 +221,17 @@ public interface TsonStreamParserImplConstants {
   /** RegularExpression Id. */
   int NEG_BOUND = 105;
   /** RegularExpression Id. */
-  int COMMENT = 106;
+  int ALIAS = 106;
   /** RegularExpression Id. */
-  int ALIAS = 107;
+  int NAME = 107;
   /** RegularExpression Id. */
-  int NAME = 108;
+  int LETTER = 108;
   /** RegularExpression Id. */
-  int LETTER = 109;
+  int DIGIT = 109;
   /** RegularExpression Id. */
-  int DIGIT = 110;
+  int CHARSTREAM_END = 110;
   /** RegularExpression Id. */
-  int CHARSTREAM_END = 111;
-  /** RegularExpression Id. */
-  int CHARSTREAM_PART = 112;
+  int CHARSTREAM_PART = 111;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -348,17 +346,15 @@ public interface TsonStreamParserImplConstants {
     "\"-Inf\"",
     "\"+Bound\"",
     "\"-Bound\"",
-    "<COMMENT>",
     "<ALIAS>",
     "<NAME>",
     "<LETTER>",
     "<DIGIT>",
     "\"]\"",
     "<CHARSTREAM_PART>",
-    "\" \"",
-    "\"\\t\"",
-    "\"\\n\"",
-    "\"\\r\"",
+    "<token of kind 112>",
+    "<token of kind 113>",
+    "<token of kind 114>",
   };
 
 }

@@ -17,9 +17,9 @@ public interface TsonKeyValueBuilder extends TsonElementBuilder{
 
     ////////////////////////////////////////////////
 
-    TsonKeyValueBuilder comments(String comments);
+    TsonKeyValueBuilder comments(TsonComments comments);
 
-    TsonKeyValueBuilder setComments(String comments);
+    TsonKeyValueBuilder setComments(TsonComments comments);
 
     TsonKeyValueBuilder setAnnotations(TsonAnnotation... annotations);
 

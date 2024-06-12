@@ -10,6 +10,7 @@ import net.thevpc.tson.impl.util.TsonUtils;
 public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor {
 
     private Object[] stack = new Object[10];
+    private List<TsonComment> comments = new ArrayList<>();
     private int stackSize = 0;
 
     public TsonElement getElement() {
@@ -52,7 +53,7 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
         public ArrayList<TsonElement> array;
         public ArrayList<TsonElement> object;
         boolean decorated;
-        String comments;
+        TsonComments comments;
         List<TsonAnnotation> annotations;
 
         public boolean paramsEmpty() {
@@ -91,7 +92,12 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
 
     @Override
     public void visitElementStart() {
-        push(new PartialElemNode());
+        PartialElemNode n = new PartialElemNode();
+        n.comments = popAllComments(true);
+        if (n.comments != null) {
+            n.decorated = true;
+        }
+        push(n);
     }
 
     @Override
@@ -164,16 +170,22 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
     }
 
     @Override
-    public void visitComments(String comments) {
-        PartialElemNode a = peek();
-        a.comments = comments;
-        if (comments != null) {
-            a.decorated = true;
-        }
+    public void visitComments(TsonComment comments) {
+        this.comments.add(comments);
+//        PartialElemNode a = peek();
+//        a.comments = comments;
+//        if (comments != null) {
+//            a.decorated = true;
+//        }
     }
 
     private void repushDecorated(TsonElement base, PartialElemNode a) {
-        if (a.decorated) {
+        //
+        a.comments = TsonComments.concat(a.comments, popAllComments(false));
+        if (a.comments != null) {
+            a.decorated = true;
+        }
+        if (a.decorated || a.comments != null) {
             repush(
                     TsonElementDecorator.of(
                             base,
@@ -279,6 +291,13 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
         while (stackSize > 0) {
             allChildren.add(0, pop());
         }
+        TsonComments remainingComments = popAllComments(false);
+        if (remainingComments != null
+                && !remainingComments.isBlank()
+                && !allChildren.isEmpty()) {
+            TsonElement s = allChildren.get(allChildren.size() - 1);
+            allChildren.set(allChildren.size() - 1, s.builder().setComments(TsonComments.concat(s.getComments(), remainingComments)).build());
+        }
         push(TsonParserUtils.elementsToDocument(allChildren.toArray(new TsonElement[0])));
     }
 
@@ -307,4 +326,13 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
         }
         stackSize++;
     }
+
+    private TsonComments popAllComments(boolean leading) {
+        TsonComments s = leading ? new TsonComments(comments.toArray(new TsonComment[0]), null) :
+                new TsonComments(null, comments.toArray(new TsonComment[0]));
+        comments.clear();
+        return s;
+    }
+
+
 }

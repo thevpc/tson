@@ -19,18 +19,14 @@ public class TsonStreamParserImpl implements ITsonStreamParser{
     }
     public void source(Object source){
         this.source=source;
+        CommentsHelper.init(config, visitor, source);
     }
     public void setConfig(TsonStreamParserImplConfig c){
         this.config=c;
         this.visitor=config.getVisitor();
+        CommentsHelper.init(config, visitor, source);
     }
 
-    private String prepareComments(String comments){
-        if(!config.isRawComments()){
-            return TsonParserUtils.escapeComments(comments);
-        }
-        return comments;
-    }
 }
 
 PARSER_END(TsonStreamParserImpl)
@@ -41,7 +37,6 @@ public void parseDocument():
 {
     (
     (parseElement())*
-    (<COMMENT>)*
     )
     {
         visitor.visitDocumentEnd();
@@ -133,7 +128,6 @@ Token op() :
 |    t=< OP_HASH8  >
 |    t=< OP_HASH9  >
 |    t=< OP_HASH10 >
-|    t=< AT >
 |    t=< AT2 >))
  {
     return t;
@@ -145,16 +139,10 @@ Token op() :
 
 void elementLevel1() :
 {
-    net.thevpc.tson.impl.parser.javacc.Token comments=null;
     visitor.visitElementStart();
     Token typeName=null;
 }
 {
-    (comments=<COMMENT> {
-            if(!config.isSkipComments()) {
-            visitor.visitComments(prepareComments(comments.image));
-            }
-})*
     (annotation())*
     (
     <NULL> { visitor.visitPrimitiveEnd(TsonNullImpl.INSTANCE);}
@@ -207,28 +195,6 @@ void elementLevel1() :
    )
 }
 
-void annotation() :
-{
-  Token id=null;
-}
-{
-    <AT> [id=<NAME>]
-    {
-        visitor.visitAnnotationStart(id==null?null:id.image);
-    }
-    (
-    <LPAREN>
-    (<RPAREN>
-         |
-         (annotationParamList()
-         <RPAREN>)
-    )
-    )?
-    {
-         visitor.visitAnnotationEnd();
-    }
-}
-
 void bin() :
 {
     InputStreamTsonBinaryStreamSource bin=new InputStreamTsonBinaryStreamSource();
@@ -245,36 +211,6 @@ void bin() :
 }
 
 
-void named() :
-{
-  Token id;
-    boolean hasPars=false;
-    boolean hasArr=false;
-    boolean hasObj=false;
-}
-{
-    (id=<NAME>
-    {
-        visitor.visitNamedStart(id.image);
-    })
-    (
-      (unnamed0(){hasPars=true;}) ?
-    )
-    (
-        (array( true){hasArr=true;})
-        |(object(true){hasObj=true;})
-    )?
-    {
-        if(!hasArr && !hasObj){
-            if(!hasPars){
-                visitor.visitPrimitiveEnd(Tson.name(id.image));
-            }else {
-                visitor.visitFunctionEnd();
-            }
-        }
-    }
-}
-
 void param() :
 {
     visitor.visitParamElementStart();
@@ -284,43 +220,6 @@ void param() :
     {
         visitor.visitParamElementEnd();
     }
-}
-
-void unnamed() :
-{
-    boolean hasArr=false;
-    boolean hasObj=false;
-}
-{
-    unnamed0()
-    (
-         (array(true){hasArr=true;})
-       | (object(true){hasObj=true;})
-    )?
-    {
-    if(!hasArr && !hasObj){
-            visitor.visitUpletEnd();
-    }
-}
-}
-
-void unnamed0() :
-{
-}
-{
-    (<LPAREN>
-    {
-    visitor.visitParamsStart(); }
-    (
-            <RPAREN>
-            |
-            (
-            paramList()
-            <RPAREN>
-            )
-            )
-    {visitor.visitParamsEnd(); }
-    )
 }
 
 void objectElement() :
@@ -355,35 +254,128 @@ void commaSeparator() :
 
 }
 
-
-
 void paramList() :
 {
 }
 {
-    (param()|commaSeparator())* ((<COMMENT>)*)
+    (param()|commaSeparator())*
 }
 
 void objectElementList() :
 {
 }
 {
-    (objectElement()|commaSeparator())* ((<COMMENT>)*)
+    (objectElement()|commaSeparator())*
 }
 
 void arrayElementList() :
 {
 }
 {
-    (arrayElement() | commaSeparator())* ((<COMMENT>)*)
+    (arrayElement() | commaSeparator())*
 }
 
 void annotationParamList() :
 {
 }
 {
-    (annotationParam() | commaSeparator())* ((<COMMENT>)*)
+    (annotationParam() | commaSeparator())*
 }
+
+
+void annotation() :
+{
+  Token id=null;
+}
+{
+    <AT> [id=<NAME>]
+    {
+        visitor.visitAnnotationStart(id==null?null:id.image);
+    }
+    (
+    <LPAREN>
+    (
+        (<RPAREN>)
+         |
+         ( (annotationParamList() )
+
+         <RPAREN>)
+    )
+    )?
+    {
+         visitor.visitAnnotationEnd();
+    }
+}
+
+
+void unnamed() :
+{
+    boolean hasArr=false;
+    boolean hasObj=false;
+}
+{
+    unnamed0()
+    (
+         (array(true){hasArr=true;})
+       | (object(true){hasObj=true;})
+    )?
+    {
+    if(!hasArr && !hasObj){
+            visitor.visitUpletEnd();
+    }
+}
+}
+
+
+void named() :
+{
+  Token id;
+    boolean hasPars=false;
+    boolean hasArr=false;
+    boolean hasObj=false;
+}
+{
+    (id=<NAME>
+    {
+        visitor.visitNamedStart(id.image);
+    })
+    (
+      (unnamed0(){hasPars=true;}) ?
+    )
+    (
+        (array( true){hasArr=true;})
+        |(object(true){hasObj=true;})
+    )?
+    {
+        if(!hasArr && !hasObj){
+            if(!hasPars){
+                visitor.visitPrimitiveEnd(Tson.name(id.image));
+            }else {
+                visitor.visitFunctionEnd();
+            }
+        }
+    }
+}
+
+void unnamed0() :
+{
+}
+{
+    (<LPAREN>
+    {
+    visitor.visitParamsStart(); }
+    (
+            ( <RPAREN>)
+            |
+            (
+            paramList()
+            <RPAREN>
+            )
+            )
+    {visitor.visitParamsEnd(); }
+    )
+}
+
 
 void object(boolean named) :
 {
@@ -396,11 +388,10 @@ void object(boolean named) :
             visitor.visitObjectStart();
         }
     }
-
     (
-        <RBRACE>
+        ( <RBRACE>)
         |
-        (  objectElementList()
+        (  ( objectElementList() )
         <RBRACE>
         )
         )
@@ -426,7 +417,7 @@ void array(boolean named) :
         }
     }
     (
-    <RBRACK>
+    (<RBRACK>)
     |
     ( arrayElementList()
     <RBRACK>
@@ -468,7 +459,7 @@ void annotationParam() :
                 ((<DIGIT>)){2} ":" ((<DIGIT>)){2} ":" ((<DIGIT>)){2} ("." ((<DIGIT>)){1,9})?
                )
                >
-|    < REGEX : "/" ((["\\"] ~["\n"])| (~["*" , "/", "\\"]))*  "/" >
+|    < REGEX : "/" ((["\\"] ~["\n"])| (~["*" , "/", "\\"]))+  "/" >
 |     < LBRACE : "{" >
 |    < RBRACE: "}" >
 |    < SHORT: ("-")?<DIGIT> (<DIGIT>)* ("s"|"S") >
@@ -583,7 +574,6 @@ void annotationParam() :
 |    < NEG_INF   : "-Inf">
 |    < POS_BOUND   : "+Bound">
 |    < NEG_BOUND   : "-Bound">
-|    < COMMENT : "/*"  (~["*"] | ("*" ~["/"]))*  "*/" >
 |    < ALIAS : "&" <NAME> >
 |    < NAME : (("."|"_")?(<LETTER>) (<LETTER>| <DIGIT>) *) (("."|"-"|"_") ((<LETTER>) (<LETTER>| <DIGIT>) *))* >
 |    < #LETTER:
@@ -600,8 +590,14 @@ void annotationParam() :
 }
 
 SKIP : {
- " "
+ <" "
 |  "\t"
 |  "\n"
-|  "\r"
+|  "\r">
+| <"/*"  (~["*"] | ("*" ~["/"]))*  "*/"> {
+    CommentsHelper.onComments(image.toString());
+}
+| <"//"  (~["\n" , "\r"])*> {
+    CommentsHelper.onComments(image.toString());
+}
 }

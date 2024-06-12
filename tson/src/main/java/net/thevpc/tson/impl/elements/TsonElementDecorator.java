@@ -17,13 +17,31 @@ import java.util.regex.Pattern;
 public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     private TsonElement base;
-    private String comments;
+    private TsonComments comments;
+    private TsonComment[] trailingComments;
     private TsonAnnotation[] annotations;
 
-    public static TsonElement of(TsonElement base, String comments, TsonAnnotation[] annotations) {
+    private static TsonComment[] trimToNull(TsonComment[] comments) {
+        if(comments==null) {
+            return null;
+        }
+        List<TsonComment> ok=new ArrayList<>();
+        for (TsonComment c : comments) {
+            if(c!=null){
+                ok.add(c);
+            }
+        }
+        if(ok.isEmpty()){
+            return null;
+        }
+        return ok.toArray(new TsonComment[0]);
+    }
+    public static TsonElement of(TsonElement base, TsonComments comments, TsonAnnotation[] annotations) {
         boolean decorated = base instanceof TsonElementDecorator;
-        comments = TsonUtils.trimToNull(comments);
-        if (comments == null && (annotations == null || annotations.length == 0)) {
+        if (
+                comments == null 
+                && (annotations == null || annotations.length == 0)
+        ) {
             if (!decorated) {
                 return base;
             } else {
@@ -34,9 +52,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
             annotations = TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY;
         }
         if (decorated) {
-            String oldComments = TsonUtils.trimToNull(base.getComments());
+            TsonComments oldComments = base.getComments();
             TsonAnnotation[] oldAnnotations = base.getAnnotations();
-            if (Objects.equals(comments, oldComments)
+            if (
+                    Objects.equals(comments, oldComments)
                     && Arrays.equals(annotations, oldAnnotations)) {
                 return base;
             }
@@ -104,9 +123,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         throw new IllegalArgumentException("Unsupported " + base.type());
     }
 
-    public static TsonElement of(TsonElement base, String comments, Collection<TsonAnnotation> annotationsList) {
+    public static TsonElement of(TsonElement base, TsonComments comments, Collection<TsonAnnotation> annotationsList) {
         boolean decorated = base instanceof TsonElementDecorator;
-        comments = TsonUtils.trimToNull(comments);
         if (comments == null && (annotationsList == null || annotationsList.isEmpty())) {
             if (!decorated) {
                 return base;
@@ -116,7 +134,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
         TsonAnnotation[] annotations = annotationsList == null ? TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY : annotationsList.toArray(TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY);
         if (decorated) {
-            String oldComments = TsonUtils.trimToNull(base.getComments());
+            TsonComments oldComments = base.getComments();
             TsonAnnotation[] oldAnnotations = base.getAnnotations();
             if (Objects.equals(comments, oldComments)
                     && Arrays.equals(annotations, oldAnnotations)) {
@@ -168,7 +186,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         throw new IllegalArgumentException("Unsupported " + base.type());
     }
 
-    private TsonElementDecorator(TsonElement base, String comments, TsonAnnotation[] annotations) {
+    private TsonElementDecorator(TsonElement base, TsonComments comments, TsonAnnotation[] annotations) {
         if (base instanceof TsonElementDecorator) {
             base = ((TsonElementDecorator) base).base;
         }
@@ -178,7 +196,9 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     protected void processCommentsAndAnnotations(TsonParserVisitor visitor) {
-        visitor.visitComments(getComments());
+        for (TsonComment c : getComments().getLeadingComments()) {
+            visitor.visitComments(c);
+        }
         for (TsonAnnotation annotation : getAnnotations()) {
             visitor.visitAnnotationStart(annotation.getName());
             for (TsonElement param : annotation.getAll()) {
@@ -212,7 +232,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
-    public String getComments() {
+    public TsonComments getComments() {
         return comments;
     }
 
@@ -551,7 +571,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static abstract class AsPrimitive<T extends TsonElement> extends TsonElementDecorator {
 
-        public AsPrimitive(T base, String comments, TsonAnnotation[] annotations) {
+        public AsPrimitive(T base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -575,7 +595,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsBigInt extends AsPrimitive<TsonBigInt> implements TsonBigInt {
 
-        public AsBigInt(TsonBigInt base, String comments, TsonAnnotation[] annotations) {
+        public AsBigInt(TsonBigInt base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -592,7 +612,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsBigDecimal extends AsPrimitive<TsonBigDecimal> implements TsonBigDecimal {
 
-        public AsBigDecimal(TsonBigDecimal base, String comments, TsonAnnotation[] annotations) {
+        public AsBigDecimal(TsonBigDecimal base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -609,7 +629,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsBigComplex extends AsPrimitive<TsonBigComplex> implements TsonBigComplex {
 
-        public AsBigComplex(TsonBigComplex base, String comments, TsonAnnotation[] annotations) {
+        public AsBigComplex(TsonBigComplex base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -631,7 +651,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsBinaryStream extends AsPrimitive<TsonBinaryStream> implements TsonBinaryStream {
 
-        public AsBinaryStream(TsonBinaryStream base, String comments, TsonAnnotation[] annotations) {
+        public AsBinaryStream(TsonBinaryStream base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -653,7 +673,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsCharStream extends AsPrimitive<TsonCharStream> implements TsonCharStream {
 
-        public AsCharStream(TsonCharStream base, String comments, TsonAnnotation[] annotations) {
+        public AsCharStream(TsonCharStream base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -670,7 +690,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsDoubleComplex extends AsPrimitive<TsonDoubleComplex> implements TsonDoubleComplex {
 
-        public AsDoubleComplex(TsonDoubleComplex base, String comments, TsonAnnotation[] annotations) {
+        public AsDoubleComplex(TsonDoubleComplex base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -692,7 +712,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsFloatComplex extends AsPrimitive<TsonFloatComplex> implements TsonFloatComplex {
 
-        public AsFloatComplex(TsonFloatComplex base, String comments, TsonAnnotation[] annotations) {
+        public AsFloatComplex(TsonFloatComplex base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -714,7 +734,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsString extends AsPrimitive<TsonString> implements TsonString {
 
-        public AsString(TsonString base, String comments, TsonAnnotation[] annotations) {
+        public AsString(TsonString base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -736,7 +756,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsName extends AsPrimitive<TsonName> implements TsonName {
 
-        public AsName(TsonName base, String comments, TsonAnnotation[] annotations) {
+        public AsName(TsonName base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -748,7 +768,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class Asalias extends AsPrimitive<TsonAlias> implements TsonAlias {
 
-        public Asalias(TsonAlias base, String comments, TsonAnnotation[] annotations) {
+        public Asalias(TsonAlias base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -760,7 +780,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsRegex extends AsPrimitive<TsonRegex> implements TsonRegex {
 
-        public AsRegex(TsonRegex base, String comments, TsonAnnotation[] annotations) {
+        public AsRegex(TsonRegex base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -772,7 +792,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsDate extends AsPrimitive<TsonDate> implements TsonDate {
 
-        public AsDate(TsonDate base, String comments, TsonAnnotation[] annotations) {
+        public AsDate(TsonDate base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -784,7 +804,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsDateTime extends AsPrimitive<TsonDateTime> implements TsonDateTime {
 
-        public AsDateTime(TsonDateTime base, String comments, TsonAnnotation[] annotations) {
+        public AsDateTime(TsonDateTime base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -796,7 +816,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsTime extends AsPrimitive<TsonTime> implements TsonTime {
 
-        public AsTime(TsonTime base, String comments, TsonAnnotation[] annotations) {
+        public AsTime(TsonTime base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -808,14 +828,14 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsNull extends AsPrimitive<TsonNull> implements TsonNull {
 
-        public AsNull(TsonNull base, String comments, TsonAnnotation[] annotations) {
+        public AsNull(TsonNull base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
     }
 
     public static class AsBoolean extends AsPrimitive<TsonBoolean> implements TsonBoolean {
 
-        public AsBoolean(TsonBoolean base, String comments, TsonAnnotation[] annotations) {
+        public AsBoolean(TsonBoolean base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -827,7 +847,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsChar extends AsPrimitive<TsonChar> implements TsonChar {
 
-        public AsChar(TsonChar base, String comments, TsonAnnotation[] annotations) {
+        public AsChar(TsonChar base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -839,7 +859,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsByte extends AsPrimitive<TsonByte> implements TsonByte {
 
-        public AsByte(TsonByte base, String comments, TsonAnnotation[] annotations) {
+        public AsByte(TsonByte base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -856,7 +876,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsShort extends AsPrimitive<TsonShort> implements TsonShort {
 
-        public AsShort(TsonShort base, String comments, TsonAnnotation[] annotations) {
+        public AsShort(TsonShort base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -873,7 +893,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsInt extends AsPrimitive<TsonInt> implements TsonInt {
 
-        public AsInt(TsonInt base, String comments, TsonAnnotation[] annotations) {
+        public AsInt(TsonInt base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -890,7 +910,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsLong extends AsPrimitive<TsonLong> implements TsonLong {
 
-        public AsLong(TsonLong base, String comments, TsonAnnotation[] annotations) {
+        public AsLong(TsonLong base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -907,7 +927,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsFloat extends AsPrimitive<TsonFloat> implements TsonFloat {
 
-        public AsFloat(TsonFloat base, String comments, TsonAnnotation[] annotations) {
+        public AsFloat(TsonFloat base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -924,7 +944,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsDouble extends AsPrimitive<TsonDouble> implements TsonDouble {
 
-        public AsDouble(TsonDouble base, String comments, TsonAnnotation[] annotations) {
+        public AsDouble(TsonDouble base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -941,7 +961,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsObject extends TsonElementDecorator implements TsonObject {
 
-        public AsObject(TsonObject base, String comments, TsonAnnotation[] annotations) {
+        public AsObject(TsonObject base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -949,6 +969,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public TsonElementList args() {
             return getBase().args();
         }
+
         @Override
         public TsonContainer toContainer() {
             return this;
@@ -1035,7 +1056,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsUplet extends TsonElementDecorator implements TsonUplet {
 
-        public AsUplet(TsonUplet base, String comments, TsonAnnotation[] annotations) {
+        public AsUplet(TsonUplet base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -1043,6 +1064,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public TsonUplet toUplet() {
             return this;
         }
+
         @Override
         public TsonContainer toContainer() {
             return this;
@@ -1110,7 +1132,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsFunction extends TsonElementDecorator implements TsonFunction {
 
-        public AsFunction(TsonFunction base, String comments, TsonAnnotation[] annotations) {
+        public AsFunction(TsonFunction base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -1118,6 +1140,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public TsonElementList body() {
             return null;
         }
+
         @Override
         public TsonContainer toContainer() {
             return this;
@@ -1171,7 +1194,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsPair extends TsonElementDecorator implements TsonPair {
 
-        public AsPair(TsonPair base, String comments, TsonAnnotation[] annotations) {
+        public AsPair(TsonPair base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -1207,7 +1230,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsArray extends TsonElementDecorator implements TsonArray {
 
-        public AsArray(TsonArray base, String comments, TsonAnnotation[] annotations) {
+        public AsArray(TsonArray base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -1302,7 +1325,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     public static class AsMatrix extends TsonElementDecorator implements TsonMatrix {
 
-        public AsMatrix(TsonMatrix base, String comments, TsonAnnotation[] annotations) {
+        public AsMatrix(TsonMatrix base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 

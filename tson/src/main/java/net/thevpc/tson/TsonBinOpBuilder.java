@@ -17,9 +17,9 @@ public interface TsonBinOpBuilder extends TsonElementBuilder{
 
     ////////////////////////////////////////////////
 
-    TsonBinOpBuilder comments(String comments);
+    TsonBinOpBuilder comments(TsonComments comments);
 
-    TsonBinOpBuilder setComments(String comments);
+    TsonBinOpBuilder setComments(TsonComments comments);
 
     TsonBinOpBuilder setAnnotations(TsonAnnotation... annotations);
 

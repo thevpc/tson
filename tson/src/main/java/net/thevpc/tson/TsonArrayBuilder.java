@@ -36,9 +36,9 @@ public interface TsonArrayBuilder extends Iterable<TsonElement>, TsonElementBuil
 
     ////////////////////////////////////////////////
 
-    TsonArrayBuilder comments(String comments);
+    TsonArrayBuilder comments(TsonComments comments);
 
-    TsonArrayBuilder setComments(String comments);
+    TsonArrayBuilder setComments(TsonComments comments);
 
     TsonArrayBuilder setAnnotations(TsonAnnotation... annotations);
 

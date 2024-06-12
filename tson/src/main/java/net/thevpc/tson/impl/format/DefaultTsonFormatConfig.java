@@ -4,7 +4,7 @@ class DefaultTsonFormatConfig implements Cloneable {
     boolean ignoreObjectEmptyArrayFields;
     boolean ignoreObjectNullFields;
     String indent0 = " ";
-    String afterComments = " ";
+    String afterMultiLineComments = " ";
     String afterAnnotation = " ";
     String afterAnnotations = " ";
     String afterComma = " ";
@@ -131,11 +131,11 @@ class DefaultTsonFormatConfig implements Cloneable {
 
 
     public String getAfterComments() {
-        return afterComments;
+        return afterMultiLineComments;
     }
 
     public DefaultTsonFormatConfig setAfterComments(String afterComments) {
-        this.afterComments = afterComments;
+        this.afterMultiLineComments = afterComments;
         return this;
     }
 

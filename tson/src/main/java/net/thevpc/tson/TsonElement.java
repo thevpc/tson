@@ -16,7 +16,7 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     TsonAnnotation[] getAnnotations();
 
-    String getComments();
+    TsonComments getComments();
 
     TsonString toStr();
 
@@ -140,8 +140,12 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
     }
 
     boolean isNull();
+
     boolean isContainer();
-    boolean isNumber() ;
+
+    boolean isNumber();
+
     boolean isPrimitive();
+
     boolean isTemporal();
 }

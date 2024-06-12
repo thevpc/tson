@@ -8,11 +8,11 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class AbstractTsonElementBuilder<T extends TsonElementBuilder> implements TsonElementBuilder {
-    private String comments;
+    private TsonComments comments;
     private final List<TsonAnnotation> annotations = new ArrayList<>();
 
     @Override
-    public String getComments() {
+    public TsonComments getComments() {
         return comments;
     }
 
@@ -22,22 +22,19 @@ public abstract class AbstractTsonElementBuilder<T extends TsonElementBuilder> i
     }
 
     @Override
-    public T setComments(String comments) {
-        if (comments != null) {
-            comments = comments.trim();
-            if (comments.isEmpty()) {
-                comments = null;
-            }
+    public T setComments(TsonComments comments) {
+        if (comments != null && comments.isBlank()) {
+            comments = null;
         }
         this.comments = comments;
-        return (T)this;
+        return (T) this;
     }
 
     @Override
     public T setAnnotations(TsonAnnotation[] annotations) {
         this.annotations.clear();
         addAnnotations(annotations);
-        return (T)this;
+        return (T) this;
     }
 
     @Override
@@ -45,25 +42,24 @@ public abstract class AbstractTsonElementBuilder<T extends TsonElementBuilder> i
         for (TsonAnnotation annotation : annotations) {
             addAnnotation(annotation);
         }
-        return (T)this;
+        return (T) this;
     }
 
     @Override
     public T addAnnotations(Collection<TsonAnnotation> annotations) {
-        if(annotations!=null){
+        if (annotations != null) {
             this.annotations.addAll(annotations);
         }
-        return (T)this;
+        return (T) this;
     }
-    
-    
+
 
     @Override
     public T addAnnotation(TsonAnnotation annotation) {
         if (annotation != null) {
             this.annotations.add(annotation);
         }
-        return (T)this;
+        return (T) this;
     }
 
     @Override
@@ -74,7 +70,7 @@ public abstract class AbstractTsonElementBuilder<T extends TsonElementBuilder> i
     @Override
     public T removeAnnotationAt(int index) {
         this.annotations.remove(index);
-        return (T)this;
+        return (T) this;
     }
 
     @Override
@@ -83,7 +79,7 @@ public abstract class AbstractTsonElementBuilder<T extends TsonElementBuilder> i
     }
 
     @Override
-    public T comments(String comments) {
+    public T comments(TsonComments comments) {
         return setComments(comments);
     }
 
@@ -105,7 +101,7 @@ public abstract class AbstractTsonElementBuilder<T extends TsonElementBuilder> i
     @Override
     public T removeAllAnnotations() {
         annotations.clear();
-        return (T)this;
+        return (T) this;
     }
 
     @Override
@@ -130,7 +126,7 @@ public abstract class AbstractTsonElementBuilder<T extends TsonElementBuilder> i
 
     @Override
     public TsonElementBuilder anchor(String name) {
-        return addAnnotation(null,Tson.name(name));
+        return addAnnotation(null, Tson.name(name));
     }
 
 }

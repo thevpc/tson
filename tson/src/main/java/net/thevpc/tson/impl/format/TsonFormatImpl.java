@@ -91,14 +91,34 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
 
     public void formatElement(TsonElement element, boolean showComments, boolean showAnnotations, Writer sb) throws IOException {
         if (showComments) {
-            String c = element.getComments();
-            if (c != null) {
-                if (config.isIndentBraces()) {
-                    sb.append(TsonUtils.formatComments(c));
-                } else {
-                    sb.append("/*").append(c).append("*/");
+            TsonComments c = element.getComments();
+            if (c != null && !c.isBlank()) {
+                TsonComment[] leadingComments = c.getLeadingComments();
+                if (leadingComments.length > 0) {
+                    boolean wasSLC = false;
+                    for (TsonComment lc : leadingComments) {
+                        switch (lc.type()) {
+                            case MULTI_LINE: {
+                                if (config.isIndentBraces()) {
+                                    sb.append(TsonUtils.formatComments(lc.text()));
+                                } else {
+                                    sb.append("/*").append(lc.text()).append("*/");
+                                }
+                                sb.append(config.afterMultiLineComments);
+                                wasSLC = false;
+                                break;
+                            }
+                            case SINGLE_LINE: {
+                                if (!wasSLC) {
+                                    sb.append("\n");
+                                }
+                                sb.append("//").append(lc.text()).append("\n");
+                                wasSLC = true;
+                                break;
+                            }
+                        }
+                    }
                 }
-                sb.append(config.afterComments);
             }
         }
         TsonAnnotation[] ann = element.getAnnotations();
@@ -137,6 +157,37 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
             sb.append(config.afterAnnotations);
         }
         formatElementCore(element, formatAnnotation, sb);
+        if (showComments) {
+            TsonComments c = element.getComments();
+            if (c != null && !c.isBlank()) {
+                TsonComment[] trailingComments = c.getTrailingComments();
+                if (trailingComments.length > 0) {
+                    boolean wasSLC = false;
+                    for (TsonComment lc : trailingComments) {
+                        switch (lc.type()) {
+                            case MULTI_LINE: {
+                                if (config.isIndentBraces()) {
+                                    sb.append(TsonUtils.formatComments(lc.text()));
+                                } else {
+                                    sb.append("/*").append(lc.text()).append("*/");
+                                }
+                                sb.append(config.afterMultiLineComments);
+                                wasSLC = false;
+                                break;
+                            }
+                            case SINGLE_LINE: {
+                                if (!wasSLC) {
+                                    sb.append("\n");
+                                }
+                                sb.append("//").append(lc.text()).append("\n");
+                                wasSLC = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void formatElementCore(TsonElement element, TsonAnnotation format, Writer writer) throws IOException {

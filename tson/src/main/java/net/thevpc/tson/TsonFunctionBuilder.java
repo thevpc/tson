@@ -34,9 +34,9 @@ public interface TsonFunctionBuilder extends TsonElementBuilder {
 
     ////////////////////////////////////////////////
 
-    TsonFunctionBuilder comments(String comments);
+    TsonFunctionBuilder comments(TsonComments comments);
 
-    TsonFunctionBuilder setComments(String comments);
+    TsonFunctionBuilder setComments(TsonComments comments);
 
     TsonFunctionBuilder setAnnotations(TsonAnnotation... annotations);
 

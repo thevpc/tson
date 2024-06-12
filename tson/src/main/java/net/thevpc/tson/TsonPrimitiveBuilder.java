@@ -136,9 +136,9 @@ public interface TsonPrimitiveBuilder extends TsonElementBuilder {
 
     ////////////////////////////////////////////////
 
-    TsonPrimitiveBuilder comments(String comments);
+    TsonPrimitiveBuilder comments(TsonComments comments);
 
-    TsonPrimitiveBuilder setComments(String comments);
+    TsonPrimitiveBuilder setComments(TsonComments comments);
 
     TsonPrimitiveBuilder setAnnotations(TsonAnnotation... annotations);
 

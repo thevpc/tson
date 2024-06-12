@@ -17,10 +17,11 @@ public class TsonStreamParserImpl implements ITsonStreamParser{
 
     private String prepareComments(String comments){
         if(!config.isRawComments()){
-            return TsonParserUtils.escapeComments(comments);
+            return TsonParserUtils.parseComments(comments);
         }
         return comments;
     }
+}}
 }
 
 PARSER_END(TsonStreamParserImpl)

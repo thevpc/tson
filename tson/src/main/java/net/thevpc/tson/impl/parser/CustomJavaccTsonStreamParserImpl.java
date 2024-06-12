@@ -138,12 +138,16 @@ public class CustomJavaccTsonStreamParserImpl implements ITsonStreamParser {
 
     void elementLevel1() {
         visitor.visitElementStart();
-        Token token = nextToken();
-        if (token.kind == TsonStreamParserImplConstants.COMMENT) {
-            visitor.visitComments(TsonParserUtils.escapeComments(token.image));
-        } else {
-            pushBackToken(token);
-        }
+        Token token;
+//        Token token = nextToken();
+//        if (
+//                token.kind == TsonStreamParserImplConstants.ML_COMMENT
+//                || token.kind == TsonStreamParserImplConstants.SL_COMMENT
+//        ) {
+//            visitor.visitComments(TsonParserUtils.escapeComments(token.image));
+//        } else {
+//            pushBackToken(token);
+//        }
 
         annotations();
         token = nextToken();

@@ -1,7 +1,7 @@
 package net.thevpc.tson;
 
 public interface TsonParserVisitor {
-    default void visitComments(String comments) {
+    default void visitComments(TsonComment comments) {
     }
 
     default void visitAnnotationStart(String annotationName) {

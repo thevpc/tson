@@ -85,9 +85,9 @@ public interface TsonObjectBuilder extends Iterable<TsonElement>, TsonElementBui
 
     ////////////////////////////////////////////////
 
-    TsonObjectBuilder comments(String comments);
+    TsonObjectBuilder comments(TsonComments comments);
 
-    TsonObjectBuilder setComments(String comments);
+    TsonObjectBuilder setComments(TsonComments comments);
 
     TsonObjectBuilder setAnnotations(TsonAnnotation... annotations);
 
