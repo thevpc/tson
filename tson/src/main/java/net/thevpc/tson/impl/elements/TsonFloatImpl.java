@@ -8,8 +8,8 @@ import java.util.Objects;
 public class TsonFloatImpl extends AbstractNumberTsonElement implements TsonFloat {
     private float value;
 
-    public TsonFloatImpl(float value) {
-        super(TsonElementType.FLOAT,TsonNumberLayout.DECIMAL);
+    public TsonFloatImpl(float value,String unit) {
+        super(TsonElementType.FLOAT,TsonNumberLayout.DECIMAL,unit);
         this.value = value;
     }
 

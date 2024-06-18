@@ -208,6 +208,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                             .append(Integer.toString(i,
                                     nbr.layout().radix()
                             ));
+                    formatAppendUnit("L4", (TsonNumber) element, writer);
                 }
                 return;
             }
@@ -218,7 +219,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 TsonNumber nbr = element.toNumber();
                 writer.append(decodeRadixPrefix(nbr.layout()));
                 writer.append(i.toString(nbr.layout().radix()));
-                writer.append("g");
+                formatAppendUnit("LL", (TsonNumber) element, writer);
                 return;
             }
             case BIG_DECIMAL: {
@@ -226,7 +227,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
 //                RadixInfo radix = decodeRadix(format);
 //                writer.append(radix.prefix).append(i.toString(radix.radix));
                 writer.append(i.toString());
-                writer.append("g");
+                formatAppendUnit("LL", (TsonNumber) element, writer);
                 return;
             }
             case LONG: {
@@ -240,7 +241,8 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     writer.append(decodeRadixPrefix(nbr.layout()))
                             .append(Long.toString(i,
                                     nbr.layout().radix()
-                            )).append('L');
+                            ));
+                    formatAppendUnit("L", (TsonNumber) element, writer);
                 }
                 return;
             }
@@ -249,7 +251,8 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 writer.append(decodeRadixPrefix(nbr.layout()))
                         .append(Integer.toString(element.getByte(),
                                 nbr.layout().radix()
-                        )).append('o');
+                        ));
+                formatAppendUnit("L1", (TsonNumber) element, writer);
                 return;
             }
             case SHORT: {
@@ -264,6 +267,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                             .append(Integer.toString(i,
                                     nbr.layout().radix()
                             )).append('s');
+                    formatAppendUnit("L2", (TsonNumber) element, writer);
                 }
                 return;
             }
@@ -277,6 +281,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     writer.append("-Bound(float)");
                 } else {
                     writer.append(String.valueOf(i)).append('f');
+                    formatAppendUnit("L4", (TsonNumber) element, writer);
                 }
                 return;
             }
@@ -290,6 +295,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     writer.append("-Bound(double)");
                 } else {
                     writer.append(String.valueOf(i));
+                    formatAppendUnit("L", (TsonNumber) element, writer);
                 }
                 return;
             }
@@ -301,7 +307,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     writer.append("+");
                 }
                 writer.append(ii);
-                writer.append("f");
+                formatAppendUnit("L4", (TsonNumber) element, writer);
                 return;
             }
             case DOUBLE_COMPLEX: {
@@ -312,6 +318,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     writer.append("+");
                 }
                 writer.append(ii);
+                formatAppendUnit("L8", (TsonNumber) element, writer);
                 return;
             }
             case BIG_COMPLEX: {
@@ -322,7 +329,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     writer.append("+");
                 }
                 writer.append(ii);
-                writer.append("g");
+                formatAppendUnit("LL", (TsonNumber) element, writer);
                 return;
             }
             case BOOLEAN:
@@ -515,6 +522,17 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
             }
         }
         throw new IllegalArgumentException("Format Tson : Unexpected type " + element.type());
+    }
+
+    private void formatAppendUnit(String ll, TsonNumber element, Writer writer) throws IOException {
+        writer.append(ll);
+        String unit = TsonUtils.trimToNull(element.unit());
+        if (unit != null) {
+            if (unit.charAt(0) != '%' && unit.charAt(0) != '_') {
+                writer.append('_');
+            }
+            writer.append(unit);
+        }
     }
 
     private static class RadixInfo {

@@ -7,6 +7,8 @@ import net.thevpc.tson.TsonElement;
 import net.thevpc.tson.impl.elements.*;
 import net.thevpc.tson.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class TsonParserUtils {
+
 
     public static TsonElement parseDateTimeElem(String s) {
         return new TsonDateTimeImpl(Instant.parse(s));
@@ -35,79 +38,9 @@ public class TsonParserUtils {
         return new TsonRegexImpl(Pattern.compile(p));
     }
 
-    public static TsonElement parseByteElem(String s) {
-        return new TsonByteImpl(Byte.parseByte(s.substring(0, s.length() - 1)), TsonNumberLayout.DECIMAL);
-    }
 
-    public static TsonElement parseByteElemBin(String s) {
-        return new TsonByteImpl((byte) fastDecodeShortBin(s), TsonNumberLayout.BINARY);
-    }
-
-    public static TsonElement parseByteElemOctal(String s) {
-        return new TsonByteImpl((byte) fastDecodeShortOctal(s), TsonNumberLayout.OCTAL);
-    }
-
-    public static TsonElement parseByteElemHex(String s) {
-        return new TsonByteImpl((byte) fastDecodeShortHex(s), TsonNumberLayout.HEXADECIMAL);
-    }
-
-
-    public static TsonElement parseIntElemOctal(String s) {
-        return new TsonIntImpl(fastDecodeIntOctal(s), TsonNumberLayout.OCTAL);
-    }
-
-    public static TsonElement parseLongElemOctal(String s) {
-        return new TsonLongImpl(fastDecodeLongOctal(s), TsonNumberLayout.OCTAL);
-    }
-
-    public static TsonElement parseIntElemBin(String s) {
-        return new TsonIntImpl(fastDecodeIntBin(s), TsonNumberLayout.BINARY);
-    }
-
-
-    public static TsonElement parseLongElemBin(String s) {
-        return new TsonLongImpl(fastDecodeLongBin(s), TsonNumberLayout.BINARY);
-    }
-
-    public static TsonElement parseIntElemHex(String s) {
-        return new TsonIntImpl(fastDecodeIntHex(s), TsonNumberLayout.HEXADECIMAL);
-    }
-
-
-    public static TsonElement parseShortElem(String s) {
-        return new TsonShortImpl(Short.parseShort(s.substring(0, s.length() - 1)), TsonNumberLayout.DECIMAL);
-    }
-
-    public static TsonElement parseShortElemBin(String s) {
-        return new TsonShortImpl(fastDecodeShortBin(s), TsonNumberLayout.BINARY);
-    }
-
-    public static TsonElement parseShortElemOctal(String s) {
-        return new TsonShortImpl(fastDecodeShortOctal(s), TsonNumberLayout.OCTAL);
-    }
-
-    public static TsonElement parseShortElemHex(String s) {
-        return new TsonShortImpl(fastDecodeShortHex(s), TsonNumberLayout.HEXADECIMAL);
-    }
-
-    public static TsonElement parseLongElemHex(String s) {
-        return new TsonLongImpl(fastDecodeLongHex(s), TsonNumberLayout.HEXADECIMAL);
-    }
-
-    public static TsonElement parseIntElem(String s) {
-        return new TsonIntImpl(Integer.parseInt(s), TsonNumberLayout.DECIMAL);
-    }
-
-    public static TsonElement parseLongElem(String s) {
-        return new TsonLongImpl(Long.parseLong(s), TsonNumberLayout.DECIMAL);
-    }
-
-    public static TsonElement parseFloatElem(String s) {
-        return new TsonFloatImpl(Float.parseFloat(s));
-    }
-
-    public static TsonElement parseDoubleElem(String s) {
-        return new TsonDoubleImpl(Double.parseDouble(s));
+    public static TsonElement parseNumber(String s) {
+        return NumberHelper.parse(s).toTson();
     }
 
     public static Instant parseDateTime(String s) {
@@ -609,6 +542,32 @@ public class TsonParserUtils {
         }
     }
 
+    private static BigInteger fastDecodeBigIntOctal(String nm) throws NumberFormatException {
+        int index = 0;
+        boolean negative = false;
+        BigInteger result;
+        char firstChar = nm.charAt(0);
+        if (firstChar == '-') {
+            negative = true;
+            index++;
+        } else if (firstChar == '+') {
+            index++;
+        }
+        //(nm.startsWith("0", index) && nm.length() > 1 + index)
+        index++;
+        try {
+            result = new BigInteger(nm.substring(index, nm.length() - 1), 8);
+            if (negative) {
+                return result.negate();
+            }
+            return result;
+        } catch (NumberFormatException e) {
+            String constant = negative ? ("-" + nm.substring(index, nm.length() - 1))
+                    : nm.substring(index, nm.length() - 1);
+            return new BigInteger(constant, 8);
+        }
+    }
+
 
     private static int fastDecodeIntHex(String nm) throws NumberFormatException {
         int index = 0;
@@ -765,6 +724,37 @@ public class TsonParserUtils {
         return result;
     }
 
+    private static BigInteger fastDecodeBigIntHex(String nm) throws NumberFormatException {
+        int index = 0;
+        boolean negative = false;
+        BigInteger result;
+
+        char firstChar = nm.charAt(0);
+        // Handle sign, if present
+        if (firstChar == '-') {
+            negative = true;
+            index++;
+        } else if (firstChar == '+') {
+            index++;
+        }
+
+        //(nm.startsWith("0x", index) || nm.startsWith("0X", index)) {
+        index += 2;
+
+        try {
+            result = new BigInteger(nm.substring(index), 16);
+            if (negative) {
+                return result.negate();
+            }
+            return result;
+        } catch (NumberFormatException e) {
+            String constant = negative ? ("-" + nm.substring(index))
+                    : nm.substring(index);
+            result = new BigInteger(constant, 16);
+        }
+        return result;
+    }
+
     private static long fastDecodeLongBin(String nm) throws NumberFormatException {
         int index = 0;
         boolean negative = false;
@@ -792,6 +782,37 @@ public class TsonParserUtils {
             String constant = negative ? ("-" + nm.substring(index))
                     : nm.substring(index);
             result = Long.parseLong(constant, 2);
+        }
+        return result;
+    }
+
+    private static BigInteger fastDecodeBigIntBin(String nm) throws NumberFormatException {
+        int index = 0;
+        boolean negative = false;
+        BigInteger result;
+
+        char firstChar = nm.charAt(0);
+        // Handle sign, if present
+        if (firstChar == '-') {
+            negative = true;
+            index++;
+        } else if (firstChar == '+') {
+            index++;
+        }
+
+        //(nm.startsWith("0x", index) || nm.startsWith("0X", index)) {
+        index += 2;
+
+        try {
+            result = new BigInteger(nm.substring(index), 2);
+            if (negative) {
+                return result.negate();
+            }
+            return result;
+        } catch (NumberFormatException e) {
+            String constant = negative ? ("-" + nm.substring(index))
+                    : nm.substring(index);
+            result = new BigInteger(constant, 2);
         }
         return result;
     }

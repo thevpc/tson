@@ -180,20 +180,11 @@ public class CustomJavaccTsonStreamParserImpl implements ITsonStreamParser {
                 visitor.visitPrimitiveEnd(TsonParserUtils.parseRegexElem(token.image));
                 break;
             }
-            case TsonStreamParserImplConstants.BYTE: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseByteElem(token.image));
-                break;
-            }
-            case TsonStreamParserImplConstants.SHORT: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseShortElem(token.image));
-                break;
-            }
-            case TsonStreamParserImplConstants.INTEGER: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseIntElem(token.image));
-                break;
-            }
-            case TsonStreamParserImplConstants.LONG: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseLongElem(token.image));
+            case TsonStreamParserImplConstants.INTEGER:
+            case TsonStreamParserImplConstants.REAL:
+            case TsonStreamParserImplConstants.COMPLEX:
+            {
+                visitor.visitPrimitiveEnd(TsonParserUtils.parseNumber(token.image));
                 break;
             }
 
@@ -278,75 +269,6 @@ public class CustomJavaccTsonStreamParserImpl implements ITsonStreamParser {
                 break;
             }
 
-            case TsonStreamParserImplConstants.INTEGER_B: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseIntElemBin(token.image));
-                break;
-            }
-
-            case TsonStreamParserImplConstants.INTEGER_O: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseIntElemOctal(token.image));
-                break;
-            }
-
-            case TsonStreamParserImplConstants.INTEGER_H: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseIntElemHex(token.image));
-                break;
-            }
-
-            case TsonStreamParserImplConstants.SHORT_B: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseShortElemBin(token.image));
-                break;
-            }
-
-            case TsonStreamParserImplConstants.SHORT_O: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseShortElemOctal(token.image));
-                break;
-            }
-
-            case TsonStreamParserImplConstants.SHORT_H: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseShortElemHex(token.image));
-                break;
-            }
-
-            case TsonStreamParserImplConstants.LONG_B: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseLongElemBin(token.image));
-                break;
-            }
-
-            case TsonStreamParserImplConstants.LONG_O: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseLongElemOctal(token.image));
-                break;
-            }
-
-            case TsonStreamParserImplConstants.LONG_H: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseLongElemHex(token.image));
-                break;
-            }
-
-
-            case TsonStreamParserImplConstants.BYTE_B: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseByteElemBin(token.image));
-                break;
-            }
-
-            case TsonStreamParserImplConstants.BYTE_O: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseByteElemOctal(token.image));
-                break;
-            }
-
-            case TsonStreamParserImplConstants.BYTE_H: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseByteElemHex(token.image));
-                break;
-            }
-
-            case TsonStreamParserImplConstants.FLOAT: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseFloatElem(token.image));
-                break;
-            }
-            case TsonStreamParserImplConstants.DOUBLE: {
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseDoubleElem(token.image));
-                break;
-            }
             case TsonStreamParserImplConstants.SINGLE_QUOTE_STR: {
                 visitor.visitPrimitiveEnd(TsonParserUtils.parseCharElem(token.image));
                 break;

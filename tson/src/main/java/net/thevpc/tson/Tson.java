@@ -150,35 +150,55 @@ public class Tson {
     }
 
     public static TsonElement ofInt(int value, TsonNumberLayout layout) {
-        return new TsonIntImpl(value, layout);
+        return new TsonIntImpl(value, layout,null);
     }
 
-    public static TsonElement longElem(long value) {
-        return longElem(value, TsonNumberLayout.DECIMAL);
+    public static TsonElement ofInt(int value, TsonNumberLayout layout, String unit) {
+        return new TsonIntImpl(value, layout, unit);
     }
 
-    public static TsonElement longElem(long value, TsonNumberLayout layout) {
-        return new TsonLongImpl(value, layout);
+    public static TsonElement ofLong(long value) {
+        return ofLong(value, TsonNumberLayout.DECIMAL);
     }
 
-    public static TsonElement byteElem(byte value, TsonNumberLayout layout) {
-        return new TsonByteImpl(value, layout);
+    public static TsonElement ofLong(long value, TsonNumberLayout layout) {
+        return new TsonLongImpl(value, layout, null);
     }
 
-    public static TsonElement byteElem(byte value) {
-        return byteElem(value, TsonNumberLayout.DECIMAL);
+    public static TsonElement ofLong(long value, TsonNumberLayout layout, String unit) {
+        return new TsonLongImpl(value, layout, unit);
     }
 
-    public static TsonElement shortElem(short value, TsonNumberLayout layout) {
-        return new TsonShortImpl(value, layout);
+    public static TsonElement ofByte(byte value, TsonNumberLayout layout) {
+        return new TsonByteImpl(value, layout, null);
     }
 
-    public static TsonElement shortElem(short value) {
-        return shortElem(value, TsonNumberLayout.DECIMAL);
+    public static TsonElement ofByte(byte value, TsonNumberLayout layout, String unit) {
+        return new TsonByteImpl(value, layout, unit);
     }
 
-    public static TsonElement floatElem(float value) {
-        return new TsonFloatImpl(value);
+    public static TsonElement ofByte(byte value) {
+        return ofByte(value, TsonNumberLayout.DECIMAL);
+    }
+
+    public static TsonElement ofShort(short value, TsonNumberLayout layout) {
+        return new TsonShortImpl(value, layout, null);
+    }
+
+    public static TsonElement ofShort(short value, TsonNumberLayout layout, String unit) {
+        return new TsonShortImpl(value, layout, unit);
+    }
+
+    public static TsonElement ofShort(short value) {
+        return ofShort(value, TsonNumberLayout.DECIMAL);
+    }
+
+    public static TsonElement ofFloat(float value) {
+        return new TsonFloatImpl(value, null);
+    }
+
+    public static TsonElement ofFloat(float value, String unit) {
+        return new TsonFloatImpl(value, unit);
     }
 
     public static TsonElement bigInt(BigInteger value) {
@@ -189,14 +209,28 @@ public class Tson {
         if (value == null) {
             return ofNull();
         }
-        return new TsonBigIntImpl(value, layout);
+        return new TsonBigIntImpl(value, layout, null);
+    }
+
+    public static TsonElement bigInt(BigInteger value, TsonNumberLayout layout, String unit) {
+        if (value == null) {
+            return ofNull();
+        }
+        return new TsonBigIntImpl(value, layout, unit);
     }
 
     public static TsonElement bigDecimal(BigDecimal value) {
         if (value == null) {
             return ofNull();
         }
-        return new TsonBigDecimalImpl(value);
+        return new TsonBigDecimalImpl(value, null);
+    }
+
+    public static TsonElement bigDecimal(BigDecimal value, String unit) {
+        if (value == null) {
+            return ofNull();
+        }
+        return new TsonBigDecimalImpl(value, unit);
     }
 
     public static TsonElement bigComplex(BigDecimal real, BigDecimal imag) {
@@ -206,21 +240,43 @@ public class Tson {
         if (real == null || imag == null) {
             throw new IllegalArgumentException("Null real or imag");
         }
-        return new TsonBigComplexImpl(real, imag);
+        return new TsonBigComplexImpl(real, imag, null);
     }
 
-    public static TsonElement floatComplex(float real, float imag) {
-        return new TsonFloatComplexImpl(real, imag);
+    public static TsonElement bigComplex(BigDecimal real, BigDecimal imag,String unit) {
+        if (real == null && imag == null) {
+            return ofNull();
+        }
+        if (real == null || imag == null) {
+            throw new IllegalArgumentException("Null real or imag");
+        }
+        return new TsonBigComplexImpl(real, imag, unit);
+    }
+
+    public static TsonElement ofFloatComplex(float real, float imag) {
+        return new TsonFloatComplexImpl(real, imag, null);
+    }
+
+    public static TsonElement ofFloatComplex(float real, float imag,String unit) {
+        return new TsonFloatComplexImpl(real, imag, unit);
     }
 
 
-    public static TsonElement doubleComplex(double real, double imag) {
-        return new TsonDoubleComplexImpl(real, imag);
+    public static TsonElement ofDoubleComplex(double real, double imag) {
+        return new TsonDoubleComplexImpl(real, imag, null);
+    }
+
+    public static TsonElement ofDoubleComplex(double real, double imag,String unit) {
+        return new TsonDoubleComplexImpl(real, imag, unit);
     }
 
 
     public static TsonElement ofDouble(double value) {
-        return new TsonDoubleImpl(value);
+        return new TsonDoubleImpl(value, null);
+    }
+
+    public static TsonElement ofDouble(double value, String unit) {
+        return new TsonDoubleImpl(value, unit);
     }
 
     public static TsonElement name(String value) {
@@ -258,11 +314,11 @@ public class Tson {
     }
 
     public static TsonElement of(byte value) {
-        return byteElem(value);
+        return ofByte(value);
     }
 
     public static TsonElement of(short value) {
-        return shortElem(value);
+        return ofShort(value);
     }
 
     public static TsonElement of(int value) {
@@ -270,11 +326,11 @@ public class Tson {
     }
 
     public static TsonElement of(long value) {
-        return longElem(value);
+        return ofLong(value);
     }
 
     public static TsonElement of(float value) {
-        return floatElem(value);
+        return ofFloat(value);
     }
 
     public static TsonElement of(double value) {
@@ -454,14 +510,14 @@ public class Tson {
         if (value == null) {
             return ofNull();
         }
-        return byteElem(value);
+        return ofByte(value);
     }
 
     public static TsonElement of(Short value) {
         if (value == null) {
             return ofNull();
         }
-        return shortElem(value);
+        return ofShort(value);
     }
 
     public static TsonElement of(Integer value) {
@@ -475,14 +531,14 @@ public class Tson {
         if (value == null) {
             return ofNull();
         }
-        return longElem(value);
+        return ofLong(value);
     }
 
     public static TsonElement of(Float value) {
         if (value == null) {
             return ofNull();
         }
-        return floatElem(value);
+        return ofFloat(value);
     }
 
     public static TsonElement of(Double value) {

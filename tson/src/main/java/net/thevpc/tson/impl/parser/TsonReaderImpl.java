@@ -28,7 +28,7 @@ public class TsonReaderImpl implements TsonReader {
                     switch (String.valueOf(value)) {
                         case "custom-javacc":
                         case "javacc":
-                        case "jflex":
+//                        case "jflex":
                         case "default": {
                             parser = String.valueOf(value);
                             break;
@@ -419,11 +419,11 @@ public class TsonReaderImpl implements TsonReader {
 
     private ITsonStreamParser _fromReader(Reader reader, String parser, Object source) {
         switch (parser) {
-            case "jflex": {
-                CustomJFlexTsonStreamParserImpl s = new CustomJFlexTsonStreamParserImpl(reader);
-                s.source(source);
-                return s;
-            }
+//            case "jflex": {
+//                CustomJFlexTsonStreamParserImpl s = new CustomJFlexTsonStreamParserImpl(reader);
+//                s.source(source);
+//                return s;
+//            }
             case "javacc": {
                 TsonStreamParserImpl s = new TsonStreamParserImpl(reader);
                 s.source(source);

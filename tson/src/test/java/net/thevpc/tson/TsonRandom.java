@@ -60,15 +60,15 @@ public class TsonRandom {
     public static TsonElement randomElement(TsonElementType type) {
         switch (type) {
             case LONG:
-                return Tson.longElem(Double.doubleToLongBits(Math.random()));
+                return Tson.ofLong(Double.doubleToLongBits(Math.random()));
             case INT:
                 return Tson.ofInt((int) Double.doubleToLongBits(Math.random()));
             case SHORT:
-                return Tson.shortElem((short) Double.doubleToLongBits(Math.random()));
+                return Tson.ofShort((short) Double.doubleToLongBits(Math.random()));
             case BYTE:
-                return Tson.byteElem((byte) Double.doubleToLongBits(Math.random()));
+                return Tson.ofByte((byte) Double.doubleToLongBits(Math.random()));
             case FLOAT:
-                return Tson.floatElem((float) Math.random());
+                return Tson.ofFloat((float) Math.random());
             case DOUBLE:
                 return Tson.ofDouble(Math.random());
             case DATETIME:
@@ -164,10 +164,10 @@ public class TsonRandom {
                 return Tson.bigComplex(randomBigDecimal(), randomBigDecimal());
             }
             case FLOAT_COMPLEX: {
-                return Tson.floatComplex(randomFloat(), randomFloat());
+                return Tson.ofFloatComplex(randomFloat(), randomFloat());
             }
             case DOUBLE_COMPLEX: {
-                return Tson.doubleComplex(randomDouble(), randomDouble());
+                return Tson.ofDoubleComplex(randomDouble(), randomDouble());
             }
             case CHAR_STREAM: {
                 return Tson.ofStopStream(randomString(), "<STOP>");

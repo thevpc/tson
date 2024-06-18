@@ -108,4 +108,8 @@ public interface TsonParserVisitor {
     default void listSeparator(){
 
     }
+
+    default void matrixRowSeparator(){
+
+    }
 }

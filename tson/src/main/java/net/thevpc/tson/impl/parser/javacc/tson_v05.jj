@@ -152,30 +152,12 @@ void elementLevel1() :
     |<DATE> {  visitor.visitPrimitiveEnd(TsonParserUtils.parseDateElem(token.image));}
     |<TIME> {  visitor.visitPrimitiveEnd(TsonParserUtils.parseTimeElem(token.image));}
     |<REGEX> {  visitor.visitPrimitiveEnd(TsonParserUtils.parseRegexElem(token.image));}
-    |<BYTE>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseByteElem(token.image));}
-    |<SHORT>{  visitor.visitPrimitiveEnd(TsonParserUtils.parseShortElem(token.image));}
-    |<LONG>{  visitor.visitPrimitiveEnd(TsonParserUtils.parseLongElem(token.image));}
-    |<INTEGER>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseIntElem(token.image));}
-
-    |<BYTE_B>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseByteElemBin(token.image));}
-    |<BYTE_O>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseByteElemOctal(token.image));}
-    |<BYTE_H>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseByteElemHex(token.image));}
-
-    |<SHORT_B>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseShortElemBin(token.image));}
-    |<SHORT_O>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseShortElemOctal(token.image));}
-    |<SHORT_H>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseShortElemHex(token.image));}
-
-    |<INTEGER_B>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseIntElemBin(token.image));}
-    |<INTEGER_O>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseIntElemOctal(token.image));}
-    |<INTEGER_H>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseIntElemHex(token.image));}
 
 
-    |<LONG_B>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseLongElemBin(token.image));}
-    |<LONG_O>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseLongElemOctal(token.image));}
-    |<LONG_H>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseLongElemHex(token.image));}
+    |<INTEGER>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseNumber(token.image));}
+    |<REAL>   { visitor.visitPrimitiveEnd(TsonParserUtils.parseNumber(token.image));}
+    |<COMPLEX>   { visitor.visitPrimitiveEnd(TsonParserUtils.parseNumber(token.image));}
 
-    |<FLOAT>{  visitor.visitPrimitiveEnd(TsonParserUtils.parseFloatElem(token.image));}
-    |<DOUBLE>{ visitor.visitPrimitiveEnd(TsonParserUtils.parseDoubleElem(token.image));}
     |<SINGLE_QUOTE_STR> {  visitor.visitPrimitiveEnd(TsonParserUtils.parseCharElem(token.image));}
     |<DOUBLE_QUOTE_STR> {  visitor.visitPrimitiveEnd(TsonParserUtils.parseStringElem(token.image));}
     |<ANTI_QUOTE_STR> {  visitor.visitPrimitiveEnd(TsonParserUtils.parseStringElem(token.image,TsonStringLayout.ANTI_QUOTE));}
@@ -254,6 +236,16 @@ void commaSeparator() :
 
 }
 
+void semiColonSeparator() :
+{
+}
+{
+        <SEMICOLON> {
+            visitor.matrixRowSeparator();
+        }
+
+}
+
 void paramList() :
 {
 }
@@ -272,7 +264,7 @@ void arrayElementList() :
 {
 }
 {
-    (arrayElement() | commaSeparator())*
+    (arrayElement() | commaSeparator() | semiColonSeparator())*
 }
 
 void annotationParamList() :
@@ -462,35 +454,41 @@ void annotationParam() :
 |    < REGEX : "/" ((["\\"] ~["\n"])| (~["*" , "/", "\\"]))+  "/" >
 |     < LBRACE : "{" >
 |    < RBRACE: "}" >
-|    < SHORT: ("-")?<DIGIT> (<DIGIT>)* ("s"|"S") >
-|    < BYTE: ("-")?<DIGIT> (<DIGIT>)* ("b"|"B") >
-|    < LONG: ("-")?<DIGIT> (<DIGIT>)* ("L") >
-|    < INTEGER: ("-")?<DIGIT> (<DIGIT>)*>
-|    < INTEGER_H: ("-")?"0x" (["0"-"9","A","F","a","f"])+>
-|    < INTEGER_O: ("-")?"0" (["0"-"7"])+>
-|    < INTEGER_B: ("-")?"0b" (["0"-"1"])+>
 
-|    < LONG_H: ("-")?"0x" (["0"-"9","A","F","a","f"])+ "L">
-|    < LONG_O: ("-")?"0" (["0"-"7"])+  "L">
-|    < LONG_B: ("-")?"0b" (["0"-"1"])+  "L">
-
-|    < SHORT_H: ("-")?"0x" (["0"-"9","A","F","a","f"])+ ["s","S"]>
-|    < SHORT_O: ("-")?"0" (["0"-"7"])+  ["s","S"]>
-|    < SHORT_B: ("-")?"0b" (["0"-"1"])+  ["s","S"]>
-
-|    < BYTE_H: ("-")?"0x" (["0"-"9","A","F","a","f"])+ ["b","B"]>
-|    < BYTE_O: ("-")?"0" (["0"-"7"])+  ["b","B"]>
-|    < BYTE_B: ("-")?"0b" (["0"-"1"])+  ["b","B"]>
-
-|    < FLOAT: ("-")?(<DIGIT>)+ "." (<DIGIT>)*
-        (  (<EXPONENT>)?
-        | "." (<DIGIT>)+ (<EXPONENT>)?
-        | (<DIGIT>)+ <EXPONENT>) ("f"|"F")
+|    < INTEGER: ("-")?
+        (
+            <DIGIT> (<DIGIT>)*
+            | "0x" (["0"-"9","A","F","a","f"])+
+            | "0" (["0"-"7"])+
+            | "0b" (["0"-"1"])+
+        )
+        ("L" (["1","2","4","8","L"])?)?
+        (["%","_"](["a"-"z","A"-"Z"])*)?
      >
-|    < DOUBLE: ("-")?(<DIGIT>)+ "." (<DIGIT>)* (<EXPONENT>)?
-        | "." (<DIGIT>)+ (<EXPONENT>)?
-        | (<DIGIT>)+ <EXPONENT>
+
+|    < REAL: ("-")?(<DIGIT>)+
+        (
+            (<EXPONENT>)?
+            | ("." (<DIGIT>)* (<EXPONENT>)?)
+        )
+        ("L" (["1","2","4","8","L"])?)?
+        (["%","_"](["a"-"z","A"-"Z"])*)?
      >
+
+|    < COMPLEX: ("-")?(<DIGIT>)+
+        (
+            (<EXPONENT>)?
+            | ("." (<DIGIT>)* (<EXPONENT>)?)
+        )
+        (["+","-"])["i","î"](<DIGIT>)+
+                (
+                    (<EXPONENT>)?
+                    | ("." (<DIGIT>)* (<EXPONENT>)?)
+                )
+        ("L" (["1","2","4","8","L"])?)?
+        (["%","_"](["a"-"z","A"-"Z"])*)?
+     >
+
 |    < #EXPONENT: ["e","E"] (["+","-"])? (<DIGIT>)+ >
 |    < DOUBLE_QUOTE_STR: "\""  (~["\""] | "\\\"")*  "\"">
 |    < SINGLE_QUOTE_STR: "'"  (~["'"] | "\\'")*  "'">

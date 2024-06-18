@@ -10,8 +10,8 @@ import java.util.Objects;
 public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements TsonBigDecimal {
     private BigDecimal value;
 
-    public TsonBigDecimalImpl(BigDecimal value) {
-        super(TsonElementType.BIG_DECIMAL,TsonNumberLayout.DECIMAL);
+    public TsonBigDecimalImpl(BigDecimal value,String unit) {
+        super(TsonElementType.BIG_DECIMAL,TsonNumberLayout.DECIMAL,unit);
         this.value = value;
     }
 
@@ -106,7 +106,7 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
 
 
     public TsonBigInt toBigInt(){
-        return new TsonBigIntImpl(getBigInteger(),layout());
+        return new TsonBigIntImpl(getBigInteger(),layout(),unit());
     }
 
     @Override

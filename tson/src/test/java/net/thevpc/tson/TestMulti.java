@@ -51,4 +51,20 @@ public class TestMulti {
         TsonDocument s = Tson.reader().readDocument(str);
         System.out.println(s);
     }
+
+    @Test
+    public void testNum() {
+        System.out.println(Tson.reader().readDocument("12"));
+        System.out.println(Tson.reader().readDocument("12%"));
+        System.out.println(Tson.reader().readDocument("12_ab"));
+        System.out.println(Tson.reader().readDocument("12%rem,a"));
+    }
+
+    @Test
+    public void test2() {
+        TsonDocument x = Tson.reader().readDocument(
+                "30"
+                );
+        System.out.println(x.toString());
+    }
 }

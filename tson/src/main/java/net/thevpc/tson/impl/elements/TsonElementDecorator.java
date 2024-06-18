@@ -608,6 +608,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public BigInteger getValue() {
             return getBase().getValue();
         }
+
+        @Override
+        public String unit() {
+            return getBase().unit();
+        }
     }
 
     public static class AsBigDecimal extends AsPrimitive<TsonBigDecimal> implements TsonBigDecimal {
@@ -624,6 +629,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         @Override
         public BigDecimal getValue() {
             return getBase().getValue();
+        }
+
+        @Override
+        public String unit() {
+            return getBase().unit();
         }
     }
 
@@ -646,6 +656,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         @Override
         public BigDecimal getImag() {
             return getBase().getImag();
+        }
+
+        @Override
+        public String unit() {
+            return getBase().unit();
         }
     }
 
@@ -708,6 +723,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public double getImag() {
             return getBase().getImag();
         }
+
+        @Override
+        public String unit() {
+            return getBase().unit();
+        }
     }
 
     public static class AsFloatComplex extends AsPrimitive<TsonFloatComplex> implements TsonFloatComplex {
@@ -729,6 +749,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         @Override
         public float getImag() {
             return getBase().getImag();
+        }
+
+        @Override
+        public String unit() {
+            return getBase().unit();
         }
     }
 
@@ -872,6 +897,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public byte getValue() {
             return getBase().getValue();
         }
+
+        @Override
+        public String unit() {
+            return getBase().unit();
+        }
     }
 
     public static class AsShort extends AsPrimitive<TsonShort> implements TsonShort {
@@ -888,6 +918,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         @Override
         public short getValue() {
             return getBase().getValue();
+        }
+
+        @Override
+        public String unit() {
+            return getBase().unit();
         }
     }
 
@@ -906,6 +941,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public int getValue() {
             return getBase().getValue();
         }
+
+        @Override
+        public String unit() {
+            return getBase().unit();
+        }
     }
 
     public static class AsLong extends AsPrimitive<TsonLong> implements TsonLong {
@@ -922,6 +962,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         @Override
         public long getValue() {
             return getBase().getValue();
+        }
+
+        @Override
+        public String unit() {
+            return getBase().unit();
         }
     }
 
@@ -940,6 +985,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public float getValue() {
             return getBase().getValue();
         }
+
+        @Override
+        public String unit() {
+            return getBase().unit();
+        }
     }
 
     public static class AsDouble extends AsPrimitive<TsonDouble> implements TsonDouble {
@@ -956,6 +1006,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         @Override
         public double getValue() {
             return getBase().getValue();
+        }
+
+        @Override
+        public String unit() {
+            return getBase().unit();
         }
     }
 

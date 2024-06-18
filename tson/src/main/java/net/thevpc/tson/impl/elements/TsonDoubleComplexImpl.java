@@ -11,8 +11,8 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
     private double real;
     private double imag;
 
-    public TsonDoubleComplexImpl(double real, double imag) {
-        super(TsonElementType.DOUBLE_COMPLEX,TsonNumberLayout.DECIMAL);
+    public TsonDoubleComplexImpl(double real, double imag,String unit) {
+        super(TsonElementType.DOUBLE_COMPLEX,TsonNumberLayout.DECIMAL,unit);
         this.real = real;
         this.imag = imag;
     }
@@ -24,12 +24,12 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
 
     @Override
     public TsonBigDecimal toBigDecimal() {
-        return new TsonBigDecimalImpl(BigDecimal.valueOf(getReal()));
+        return new TsonBigDecimalImpl(BigDecimal.valueOf(getReal()),unit());
     }
 
     @Override
     public TsonFloatComplex toFloatComplex() {
-        return new TsonFloatComplexImpl((float) getReal(),0);
+        return new TsonFloatComplexImpl((float) getReal(),0,unit());
     }
 
     @Override
@@ -123,7 +123,7 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
 
 
     public TsonBigInt toBigInt() {
-        return new TsonBigIntImpl(getBigInteger(),layout());
+        return new TsonBigIntImpl(getBigInteger(),layout(),unit());
     }
 
     @Override

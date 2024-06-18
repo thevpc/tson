@@ -8,8 +8,8 @@ import java.util.Objects;
 public class TsonDoubleImpl extends AbstractNumberTsonElement implements TsonDouble {
     private double value;
 
-    public TsonDoubleImpl(double value) {
-        super(TsonElementType.DOUBLE,TsonNumberLayout.DECIMAL);
+    public TsonDoubleImpl(double value, String unit) {
+        super(TsonElementType.DOUBLE, TsonNumberLayout.DECIMAL, unit);
         this.value = value;
     }
 

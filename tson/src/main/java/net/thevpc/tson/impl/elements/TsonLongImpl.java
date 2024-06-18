@@ -8,8 +8,8 @@ import java.util.Objects;
 public class TsonLongImpl extends AbstractNumberTsonElement implements TsonLong {
     private long value;
 
-    public TsonLongImpl(long value,TsonNumberLayout layout) {
-        super(TsonElementType.LONG,layout);
+    public TsonLongImpl(long value,TsonNumberLayout layout,String unit) {
+        super(TsonElementType.LONG,layout,unit);
         this.value = value;
     }
 

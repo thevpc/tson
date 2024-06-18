@@ -31,24 +31,9 @@ public class TsonStreamParserImpl implements ITsonStreamParser, TsonStreamParser
       case TIME:
       case REGEX:
       case LBRACE:
-      case SHORT:
-      case BYTE:
-      case LONG:
       case INTEGER:
-      case INTEGER_H:
-      case INTEGER_O:
-      case INTEGER_B:
-      case LONG_H:
-      case LONG_O:
-      case LONG_B:
-      case SHORT_H:
-      case SHORT_O:
-      case SHORT_B:
-      case BYTE_H:
-      case BYTE_O:
-      case BYTE_B:
-      case FLOAT:
-      case DOUBLE:
+      case REAL:
+      case COMPLEX:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
       case ANTI_QUOTE_STR:
@@ -386,77 +371,17 @@ Token t ;
       jj_consume_token(REGEX);
                 visitor.visitPrimitiveEnd(TsonParserUtils.parseRegexElem(token.image));
       break;
-    case BYTE:
-      jj_consume_token(BYTE);
-             visitor.visitPrimitiveEnd(TsonParserUtils.parseByteElem(token.image));
-      break;
-    case SHORT:
-      jj_consume_token(SHORT);
-               visitor.visitPrimitiveEnd(TsonParserUtils.parseShortElem(token.image));
-      break;
-    case LONG:
-      jj_consume_token(LONG);
-              visitor.visitPrimitiveEnd(TsonParserUtils.parseLongElem(token.image));
-      break;
     case INTEGER:
       jj_consume_token(INTEGER);
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseIntElem(token.image));
+                visitor.visitPrimitiveEnd(TsonParserUtils.parseNumber(token.image));
       break;
-    case BYTE_B:
-      jj_consume_token(BYTE_B);
-               visitor.visitPrimitiveEnd(TsonParserUtils.parseByteElemBin(token.image));
+    case REAL:
+      jj_consume_token(REAL);
+                visitor.visitPrimitiveEnd(TsonParserUtils.parseNumber(token.image));
       break;
-    case BYTE_O:
-      jj_consume_token(BYTE_O);
-               visitor.visitPrimitiveEnd(TsonParserUtils.parseByteElemOctal(token.image));
-      break;
-    case BYTE_H:
-      jj_consume_token(BYTE_H);
-               visitor.visitPrimitiveEnd(TsonParserUtils.parseByteElemHex(token.image));
-      break;
-    case SHORT_B:
-      jj_consume_token(SHORT_B);
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseShortElemBin(token.image));
-      break;
-    case SHORT_O:
-      jj_consume_token(SHORT_O);
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseShortElemOctal(token.image));
-      break;
-    case SHORT_H:
-      jj_consume_token(SHORT_H);
-                visitor.visitPrimitiveEnd(TsonParserUtils.parseShortElemHex(token.image));
-      break;
-    case INTEGER_B:
-      jj_consume_token(INTEGER_B);
-                  visitor.visitPrimitiveEnd(TsonParserUtils.parseIntElemBin(token.image));
-      break;
-    case INTEGER_O:
-      jj_consume_token(INTEGER_O);
-                  visitor.visitPrimitiveEnd(TsonParserUtils.parseIntElemOctal(token.image));
-      break;
-    case INTEGER_H:
-      jj_consume_token(INTEGER_H);
-                  visitor.visitPrimitiveEnd(TsonParserUtils.parseIntElemHex(token.image));
-      break;
-    case LONG_B:
-      jj_consume_token(LONG_B);
-               visitor.visitPrimitiveEnd(TsonParserUtils.parseLongElemBin(token.image));
-      break;
-    case LONG_O:
-      jj_consume_token(LONG_O);
-               visitor.visitPrimitiveEnd(TsonParserUtils.parseLongElemOctal(token.image));
-      break;
-    case LONG_H:
-      jj_consume_token(LONG_H);
-               visitor.visitPrimitiveEnd(TsonParserUtils.parseLongElemHex(token.image));
-      break;
-    case FLOAT:
-      jj_consume_token(FLOAT);
-               visitor.visitPrimitiveEnd(TsonParserUtils.parseFloatElem(token.image));
-      break;
-    case DOUBLE:
-      jj_consume_token(DOUBLE);
-               visitor.visitPrimitiveEnd(TsonParserUtils.parseDoubleElem(token.image));
+    case COMPLEX:
+      jj_consume_token(COMPLEX);
+                   visitor.visitPrimitiveEnd(TsonParserUtils.parseNumber(token.image));
       break;
     case SINGLE_QUOTE_STR:
       jj_consume_token(SINGLE_QUOTE_STR);
@@ -605,6 +530,11 @@ Token t ;
             visitor.listSeparator();
   }
 
+  final public void semiColonSeparator() throws ParseException {
+    jj_consume_token(SEMICOLON);
+            visitor.matrixRowSeparator();
+  }
+
   final public void paramList() throws ParseException {
     label_3:
     while (true) {
@@ -614,24 +544,9 @@ Token t ;
       case TIME:
       case REGEX:
       case LBRACE:
-      case SHORT:
-      case BYTE:
-      case LONG:
       case INTEGER:
-      case INTEGER_H:
-      case INTEGER_O:
-      case INTEGER_B:
-      case LONG_H:
-      case LONG_O:
-      case LONG_B:
-      case SHORT_H:
-      case SHORT_O:
-      case SHORT_B:
-      case BYTE_H:
-      case BYTE_O:
-      case BYTE_B:
-      case FLOAT:
-      case DOUBLE:
+      case REAL:
+      case COMPLEX:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
       case ANTI_QUOTE_STR:
@@ -664,24 +579,9 @@ Token t ;
       case TIME:
       case REGEX:
       case LBRACE:
-      case SHORT:
-      case BYTE:
-      case LONG:
       case INTEGER:
-      case INTEGER_H:
-      case INTEGER_O:
-      case INTEGER_B:
-      case LONG_H:
-      case LONG_O:
-      case LONG_B:
-      case SHORT_H:
-      case SHORT_O:
-      case SHORT_B:
-      case BYTE_H:
-      case BYTE_O:
-      case BYTE_B:
-      case FLOAT:
-      case DOUBLE:
+      case REAL:
+      case COMPLEX:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
       case ANTI_QUOTE_STR:
@@ -723,24 +623,9 @@ Token t ;
       case TIME:
       case REGEX:
       case LBRACE:
-      case SHORT:
-      case BYTE:
-      case LONG:
       case INTEGER:
-      case INTEGER_H:
-      case INTEGER_O:
-      case INTEGER_B:
-      case LONG_H:
-      case LONG_O:
-      case LONG_B:
-      case SHORT_H:
-      case SHORT_O:
-      case SHORT_B:
-      case BYTE_H:
-      case BYTE_O:
-      case BYTE_B:
-      case FLOAT:
-      case DOUBLE:
+      case REAL:
+      case COMPLEX:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
       case ANTI_QUOTE_STR:
@@ -773,24 +658,9 @@ Token t ;
       case TIME:
       case REGEX:
       case LBRACE:
-      case SHORT:
-      case BYTE:
-      case LONG:
       case INTEGER:
-      case INTEGER_H:
-      case INTEGER_O:
-      case INTEGER_B:
-      case LONG_H:
-      case LONG_O:
-      case LONG_B:
-      case SHORT_H:
-      case SHORT_O:
-      case SHORT_B:
-      case BYTE_H:
-      case BYTE_O:
-      case BYTE_B:
-      case FLOAT:
-      case DOUBLE:
+      case REAL:
+      case COMPLEX:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
       case ANTI_QUOTE_STR:
@@ -832,24 +702,9 @@ Token t ;
       case TIME:
       case REGEX:
       case LBRACE:
-      case SHORT:
-      case BYTE:
-      case LONG:
       case INTEGER:
-      case INTEGER_H:
-      case INTEGER_O:
-      case INTEGER_B:
-      case LONG_H:
-      case LONG_O:
-      case LONG_B:
-      case SHORT_H:
-      case SHORT_O:
-      case SHORT_B:
-      case BYTE_H:
-      case BYTE_O:
-      case BYTE_B:
-      case FLOAT:
-      case DOUBLE:
+      case REAL:
+      case COMPLEX:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
       case ANTI_QUOTE_STR:
@@ -861,6 +716,7 @@ Token t ;
       case NULL:
       case LPAREN:
       case LBRACK:
+      case SEMICOLON:
       case COMMA:
       case AT:
       case CHARSTREAM_START:
@@ -882,24 +738,9 @@ Token t ;
       case TIME:
       case REGEX:
       case LBRACE:
-      case SHORT:
-      case BYTE:
-      case LONG:
       case INTEGER:
-      case INTEGER_H:
-      case INTEGER_O:
-      case INTEGER_B:
-      case LONG_H:
-      case LONG_O:
-      case LONG_B:
-      case SHORT_H:
-      case SHORT_O:
-      case SHORT_B:
-      case BYTE_H:
-      case BYTE_O:
-      case BYTE_B:
-      case FLOAT:
-      case DOUBLE:
+      case REAL:
+      case COMPLEX:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
       case ANTI_QUOTE_STR:
@@ -924,6 +765,9 @@ Token t ;
       case COMMA:
         commaSeparator();
         break;
+      case SEMICOLON:
+        semiColonSeparator();
+        break;
       default:
         jj_la1[15] = jj_gen;
         jj_consume_token(-1);
@@ -941,24 +785,9 @@ Token t ;
       case TIME:
       case REGEX:
       case LBRACE:
-      case SHORT:
-      case BYTE:
-      case LONG:
       case INTEGER:
-      case INTEGER_H:
-      case INTEGER_O:
-      case INTEGER_B:
-      case LONG_H:
-      case LONG_O:
-      case LONG_B:
-      case SHORT_H:
-      case SHORT_O:
-      case SHORT_B:
-      case BYTE_H:
-      case BYTE_O:
-      case BYTE_B:
-      case FLOAT:
-      case DOUBLE:
+      case REAL:
+      case COMPLEX:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
       case ANTI_QUOTE_STR:
@@ -991,24 +820,9 @@ Token t ;
       case TIME:
       case REGEX:
       case LBRACE:
-      case SHORT:
-      case BYTE:
-      case LONG:
       case INTEGER:
-      case INTEGER_H:
-      case INTEGER_O:
-      case INTEGER_B:
-      case LONG_H:
-      case LONG_O:
-      case LONG_B:
-      case SHORT_H:
-      case SHORT_O:
-      case SHORT_B:
-      case BYTE_H:
-      case BYTE_O:
-      case BYTE_B:
-      case FLOAT:
-      case DOUBLE:
+      case REAL:
+      case COMPLEX:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
       case ANTI_QUOTE_STR:
@@ -1065,24 +879,9 @@ Token t ;
       case TIME:
       case REGEX:
       case LBRACE:
-      case SHORT:
-      case BYTE:
-      case LONG:
       case INTEGER:
-      case INTEGER_H:
-      case INTEGER_O:
-      case INTEGER_B:
-      case LONG_H:
-      case LONG_O:
-      case LONG_B:
-      case SHORT_H:
-      case SHORT_O:
-      case SHORT_B:
-      case BYTE_H:
-      case BYTE_O:
-      case BYTE_B:
-      case FLOAT:
-      case DOUBLE:
+      case REAL:
+      case COMPLEX:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
       case ANTI_QUOTE_STR:
@@ -1209,24 +1008,9 @@ Token t ;
     case TIME:
     case REGEX:
     case LBRACE:
-    case SHORT:
-    case BYTE:
-    case LONG:
     case INTEGER:
-    case INTEGER_H:
-    case INTEGER_O:
-    case INTEGER_B:
-    case LONG_H:
-    case LONG_O:
-    case LONG_B:
-    case SHORT_H:
-    case SHORT_O:
-    case SHORT_B:
-    case BYTE_H:
-    case BYTE_O:
-    case BYTE_B:
-    case FLOAT:
-    case DOUBLE:
+    case REAL:
+    case COMPLEX:
     case DOUBLE_QUOTE_STR:
     case SINGLE_QUOTE_STR:
     case ANTI_QUOTE_STR:
@@ -1274,24 +1058,9 @@ Token t ;
     case TIME:
     case REGEX:
     case LBRACE:
-    case SHORT:
-    case BYTE:
-    case LONG:
     case INTEGER:
-    case INTEGER_H:
-    case INTEGER_O:
-    case INTEGER_B:
-    case LONG_H:
-    case LONG_O:
-    case LONG_B:
-    case SHORT_H:
-    case SHORT_O:
-    case SHORT_B:
-    case BYTE_H:
-    case BYTE_O:
-    case BYTE_B:
-    case FLOAT:
-    case DOUBLE:
+    case REAL:
+    case COMPLEX:
     case DOUBLE_QUOTE_STR:
     case SINGLE_QUOTE_STR:
     case ANTI_QUOTE_STR:
@@ -1343,24 +1112,9 @@ Token t ;
     case TIME:
     case REGEX:
     case LBRACE:
-    case SHORT:
-    case BYTE:
-    case LONG:
     case INTEGER:
-    case INTEGER_H:
-    case INTEGER_O:
-    case INTEGER_B:
-    case LONG_H:
-    case LONG_O:
-    case LONG_B:
-    case SHORT_H:
-    case SHORT_O:
-    case SHORT_B:
-    case BYTE_H:
-    case BYTE_O:
-    case BYTE_B:
-    case FLOAT:
-    case DOUBLE:
+    case REAL:
+    case COMPLEX:
     case DOUBLE_QUOTE_STR:
     case SINGLE_QUOTE_STR:
     case ANTI_QUOTE_STR:
@@ -1372,6 +1126,7 @@ Token t ;
     case NULL:
     case LPAREN:
     case LBRACK:
+    case SEMICOLON:
     case COMMA:
     case AT:
     case CHARSTREAM_START:
@@ -1423,16 +1178,16 @@ Token t ;
       jj_la1_init_3();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0xfdffffbe,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0xfdffffbe,0x0,0xfdffffbe,0x0,0x20,0x20,0x0,0x20,0x20,0xfdffffbe,0xfdfffffe,0xfdffffbe,};
+      jj_la1_0 = new int[] {0x5ffbbe,0xff000000,0xff000000,0x0,0x100000,0x100000,0x100000,0x100000,0x100000,0x5ffbbe,0x5ffbbe,0x5ffbbe,0x5ffbbe,0x5ffbbe,0x5ffbbe,0x5ffbbe,0x5ffbbe,0x5ffbbe,0x0,0x7ffbbe,0x100000,0x400020,0x400020,0x100000,0x400020,0x400020,0x7ffbbe,0x5ffbfe,0xdffbbe,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x2f,0xffffff80,0xffffff80,0x0,0x8,0x8,0x8,0x8,0x8,0x2f,0x2f,0x2f,0x2f,0x2f,0x2f,0x2f,0x2f,0x2f,0x0,0x3f,0x8,0x20,0x20,0x8,0x20,0x20,0x3f,0x2f,0x6f,};
+      jj_la1_1 = new int[] {0x0,0xffffffff,0xffffffff,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
    }
    private static void jj_la1_init_2() {
-      jj_la1_2 = new int[] {0x0,0x7fffffff,0x7fffffff,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
+      jj_la1_2 = new int[] {0x17e80000,0x10ffff,0x10ffff,0x80000,0x0,0x0,0x0,0x0,0x0,0x17e00000,0x17ec0000,0x17ec0000,0x17ec0000,0x17ec0000,0x17ed0000,0x17ed0000,0x17ec0000,0x17ec0000,0x10000000,0x17ec0000,0x0,0x0,0x0,0x0,0x0,0x0,0x17ec0000,0x17ec0000,0x17ed0000,};
    }
    private static void jj_la1_init_3() {
-      jj_la1_3 = new int[] {0xbf4,0x8,0x8,0x4,0x0,0x0,0x0,0x0,0x0,0xbf0,0xbf6,0xbf6,0xbf6,0xbf6,0xbf6,0xbf6,0xbf6,0xbf6,0x800,0xbf6,0x0,0x0,0x0,0x0,0x0,0x0,0xbf6,0xbf6,0xbf6,};
+      jj_la1_3 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
    }
 
   /** Constructor with InputStream. */
@@ -1549,7 +1304,7 @@ Token t ;
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[115];
+    boolean[] la1tokens = new boolean[100];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -1572,7 +1327,7 @@ Token t ;
         }
       }
     }
-    for (int i = 0; i < 115; i++) {
+    for (int i = 0; i < 100; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
