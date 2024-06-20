@@ -1,0 +1,36 @@
+@(halfa,"1.0")
+{
+    styles:{
+        import("*.tcss"),
+        "" :{
+            color:blue,
+            font-size:40,
+        }
+        (title>""):{
+            font-size:50,
+            bold:true
+        },
+    },
+    template('course'):{
+        "" :{
+            color:blue,
+            font-size:40,
+        }
+        (title>""):{
+            font-size:50,
+            bold:true,
+            at:(50,50),
+            anchor:'north-center'
+        },
+    },
+    page(extends:'course'){
+        text("My Title"),
+        equation("""
+            x=\frac{-b \pm \sqrt {b^2-4ac}}{2a}
+            """){
+            at:(50,50),
+            anchor:'center'
+        },
+    },
+    import("*.tson"),
+}

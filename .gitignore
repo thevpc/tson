@@ -1,2 +1,8 @@
 /tson/target/
 /.idea
+test/tson-test/target
+core/tson/target
+core/tson-api/target
+core/tson-impl/target
+modules/tson-parser-javacc/target
+modules/tson-parser-jflex/target

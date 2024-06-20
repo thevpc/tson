@@ -4,12 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>tson</groupId>
-    <artifactId>tson-builder</artifactId>
     <name>net.thevpc.tson</name>
+    <artifactId>tson-builder</artifactId>
     <version>1.0.0.0</version>
     <packaging>pom</packaging>
     <modules>
-        <module>tson</module>
+        <module>core/tson-api</module>
+        <module>core/tson-impl</module>
+        <module>modules/tson-parser-javacc</module>
+        <module>modules/tson-parser-jflex</module>
+        <module>core/tson</module>
+        <module>test/tson-test</module>
     </modules>
     <properties>
     </properties>

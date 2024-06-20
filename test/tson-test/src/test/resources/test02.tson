@@ -1,0 +1,25 @@
+(0S : 1969088128, (0.23469492100701927)[
+  world(((/[0-9]/)[
+    hello,
+    'h'
+  ], 36S), (false, -100S){} : world("world", 2020-01-08T21:55:12.017098Z)[]){
+    ()
+  }
+]){
+  world()[]
+}
+
+
+(0S : 1969088128)
+
+val : NaN
+val : NaN(float)
+val : +Inf /* double */
+val : -Inf
+val : +Inf(float)
+val : -Inf(float)
+val : -Inf(L)
+val : -Inf(d)
+val : +Inf(s)
+val : +Inf(s)
+val : UpperBound(int)
