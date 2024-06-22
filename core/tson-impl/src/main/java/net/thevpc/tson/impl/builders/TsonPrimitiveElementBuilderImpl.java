@@ -32,8 +32,8 @@ public class TsonPrimitiveElementBuilderImpl extends AbstractTsonElementBuilder<
         if (element instanceof TsonElementDecorator) {
             TsonElementDecorator d = (TsonElementDecorator) element;
             this.value = d.getBase();
-            setComments(d.getComments());
-            setAnnotations(d.getAnnotations());
+            setComments(d.comments());
+            setAnnotations(d.annotations());
         } else {
             switch (element.type()) {
                 case PAIR:
@@ -255,107 +255,107 @@ public class TsonPrimitiveElementBuilderImpl extends AbstractTsonElementBuilder<
 
     @Override
     public Boolean getBooleanObject() {
-        return getValue().getBooleanObject();
+        return getValue().booleanObject();
     }
 
     @Override
     public Character getCharObject() {
-        return getValue().getCharObject();
+        return getValue().charObject();
     }
 
     @Override
     public Byte getByteObject() {
-        return getValue().getByteObject();
+        return getValue().byteObject();
     }
 
     @Override
     public Short getShortObject() {
-        return getValue().getShortObject();
+        return getValue().shortObject();
     }
 
     @Override
     public Integer getIntObject() {
-        return getValue().getIntObject();
+        return getValue().intObject();
     }
 
     @Override
     public Long getLongObject() {
-        return getValue().getLongObject();
+        return getValue().longObject();
     }
 
     @Override
     public Float getFloatObject() {
-        return getValue().getFloatObject();
+        return getValue().floatObject();
     }
 
     @Override
     public Double getDoubleObject() {
-        return getValue().getDoubleObject();
+        return getValue().doubleObject();
     }
 
     @Override
     public float getFloat() {
-        return getValue().getFloat();
+        return getValue().floatValue();
     }
 
     @Override
     public double getDouble() {
-        return getValue().getDouble();
+        return getValue().doubleValue();
     }
 
     @Override
     public byte getByte() {
-        return getValue().getByte();
+        return getValue().byteValue();
     }
 
     @Override
     public char getChar() {
-        return getValue().getChar();
+        return getValue().charValue();
     }
 
     @Override
     public boolean getBoolean() {
-        return getValue().getBoolean();
+        return getValue().booleanValue();
     }
 
     @Override
     public String getString() {
-        return getValue().getString();
+        return getValue().stringValue();
     }
 
     @Override
     public int getInt() {
-        return getValue().getInt();
+        return getValue().intValue();
     }
 
     @Override
     public long getLong() {
-        return getValue().getLong();
+        return getValue().longValue();
     }
 
     @Override
     public short getShort() {
-        return getValue().getShort();
+        return getValue().shortValue();
     }
 
     @Override
     public LocalDate getDate() {
-        return getValue().getDate();
+        return getValue().dateValue();
     }
 
     @Override
     public Instant getDateTime() {
-        return getValue().getDateTime();
+        return getValue().dateTimeValue();
     }
 
     @Override
     public LocalTime getTime() {
-        return getValue().getTime();
+        return getValue().time();
     }
 
     @Override
     public Pattern getRegex() {
-        return getValue().getRegex();
+        return getValue().regexValue();
     }
 
     @Override

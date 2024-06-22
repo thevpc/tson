@@ -125,11 +125,11 @@ public class TsonArrayBuilderImpl extends AbstractTsonElementBuilder<TsonArrayBu
                 break;
             }
             case NAME: {
-                header.setName(e.toName().getName());
+                header.setName(e.toName().value());
                 break;
             }
             case OBJECT: {
-                TsonElementHeader h = e.toObject().getHeader();
+                TsonElementHeader h = e.toObject().header();
                 this.header.set(h);
                 addAll(e.toObject().all());
                 break;

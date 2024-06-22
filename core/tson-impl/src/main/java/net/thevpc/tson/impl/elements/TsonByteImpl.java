@@ -14,7 +14,7 @@ public class TsonByteImpl extends AbstractNumberTsonElement implements TsonByte 
     }
 
     @Override
-    public Number getNumber() {
+    public Number numberValue() {
         return getValue();
     }
 
@@ -78,62 +78,62 @@ public class TsonByteImpl extends AbstractNumberTsonElement implements TsonByte 
     }
 
     @Override
-    public Byte getByteObject() {
+    public Byte byteObject() {
         return (byte) getValue();
     }
 
     @Override
-    public Long getLongObject() {
+    public Long longObject() {
         return (long)getValue();
     }
 
     @Override
-    public Integer getIntObject() {
+    public Integer intObject() {
         return (int)getValue();
     }
 
     @Override
-    public Short getShortObject() {
+    public Short shortObject() {
         return (short)getValue();
     }
 
     @Override
-    public Float getFloatObject() {
+    public Float floatObject() {
         return (float)getValue();
     }
 
     @Override
-    public Double getDoubleObject() {
+    public Double doubleObject() {
         return (double) getValue();
     }
 
     @Override
-    public byte getByte() {
+    public byte byteValue() {
         return ((byte) getValue());
     }
 
     @Override
-    public short getShort() {
+    public short shortValue() {
         return ((short) getValue());
     }
 
     @Override
-    public int getInt() {
+    public int intValue() {
         return ((int) getValue());
     }
 
     @Override
-    public long getLong() {
+    public long longValue() {
         return ((long) getValue());
     }
 
     @Override
-    public float getFloat() {
+    public float floatValue() {
         return ((float) getValue());
     }
 
     @Override
-    public double getDouble() {
+    public double doubleValue() {
         return (double) getValue();
     }
 
@@ -142,27 +142,27 @@ public class TsonByteImpl extends AbstractNumberTsonElement implements TsonByte 
         if (o.type().isNumber()) {
             switch (o.type()) {
                 case BYTE: {
-                    int i= Byte.compare(getValue(), o.getByte());
+                    int i= Byte.compare(getValue(), o.byteValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case SHORT: {
-                    int i= Short.compare(getValue(), o.getShort());
+                    int i= Short.compare(getValue(), o.shortValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case INT: {
-                    int i= Integer.compare(getValue(), o.getInt());
+                    int i= Integer.compare(getValue(), o.intValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case LONG: {
-                    int i= Long.compare(getValue(), o.getLong());
+                    int i= Long.compare(getValue(), o.longValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case FLOAT: {
-                    int i= Float.compare(getValue(), o.getFloat());
+                    int i= Float.compare(getValue(), o.floatValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case DOUBLE: {
-                    int i= Double.compare(getValue(), o.getDouble());
+                    int i= Double.compare(getValue(), o.doubleValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
             }

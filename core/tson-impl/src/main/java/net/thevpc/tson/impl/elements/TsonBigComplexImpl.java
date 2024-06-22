@@ -18,7 +18,7 @@ public class TsonBigComplexImpl extends AbstractNumberTsonElement implements Tso
     }
 
     @Override
-    public Number getNumber() {
+    public Number numberValue() {
         return new TsonComplex(real, imag);
     }
 
@@ -48,57 +48,57 @@ public class TsonBigComplexImpl extends AbstractNumberTsonElement implements Tso
 
     @Override
     public TsonByte toByte() {
-        return Tson.of(getNumber().byteValue()).toByte();
+        return Tson.of(this.numberValue().byteValue()).toByte();
     }
 
     @Override
     public TsonShort toShort() {
-        return Tson.of(getNumber().shortValue()).toShort();
+        return Tson.of(this.numberValue().shortValue()).toShort();
     }
 
     @Override
     public TsonLong toLong() {
-        return Tson.of(getNumber().longValue()).toLong();
+        return Tson.of(this.numberValue().longValue()).toLong();
     }
 
     @Override
     public TsonFloat toFloat() {
-        return Tson.of(getNumber().floatValue()).toFloat();
+        return Tson.of(this.numberValue().floatValue()).toFloat();
     }
 
     @Override
     public TsonDouble toDouble() {
-        return Tson.of(getNumber().doubleValue()).toDouble();
+        return Tson.of(this.numberValue().doubleValue()).toDouble();
     }
 
     @Override
-    public Byte getByteObject() {
-        return getNumber().byteValue();
+    public Byte byteObject() {
+        return this.numberValue().byteValue();
     }
 
     @Override
-    public Long getLongObject() {
-        return getNumber().longValue();
+    public Long longObject() {
+        return this.numberValue().longValue();
     }
 
     @Override
-    public Integer getIntObject() {
-        return getNumber().intValue();
+    public Integer intObject() {
+        return this.numberValue().intValue();
     }
 
     @Override
-    public Short getShortObject() {
-        return getNumber().shortValue();
+    public Short shortObject() {
+        return this.numberValue().shortValue();
     }
 
     @Override
-    public Float getFloatObject() {
-        return getNumber().floatValue();
+    public Float floatObject() {
+        return this.numberValue().floatValue();
     }
 
     @Override
-    public Double getDoubleObject() {
-        return getNumber().doubleValue();
+    public Double doubleObject() {
+        return this.numberValue().doubleValue();
     }
 
     @Override
@@ -117,33 +117,33 @@ public class TsonBigComplexImpl extends AbstractNumberTsonElement implements Tso
     }
 
     @Override
-    public byte getByte() {
-        return getNumber().byteValue();
+    public byte byteValue() {
+        return this.numberValue().byteValue();
     }
 
     @Override
-    public short getShort() {
-        return getNumber().shortValue();
+    public short shortValue() {
+        return this.numberValue().shortValue();
     }
 
     @Override
-    public int getInt() {
-        return getNumber().intValue();
+    public int intValue() {
+        return this.numberValue().intValue();
     }
 
     @Override
-    public long getLong() {
-        return getNumber().longValue();
+    public long longValue() {
+        return this.numberValue().longValue();
     }
 
     @Override
-    public float getFloat() {
-        return getNumber().floatValue();
+    public float floatValue() {
+        return this.numberValue().floatValue();
     }
 
     @Override
-    public double getDouble() {
-        return getNumber().doubleValue();
+    public double doubleValue() {
+        return this.numberValue().doubleValue();
     }
 
     @Override

@@ -2,6 +2,7 @@ package net.thevpc.tson;
 
 
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
 import java.io.IOException;
 
@@ -62,9 +63,23 @@ public class TestMulti {
 
     @Test
     public void test2() {
-        TsonDocument x = Tson.reader().readDocument(
+        TsonElement x = Tson.reader().readElement(
                 "30"
                 );
-        System.out.println(x.toString());
+        Assertions.assertTrue(x.type().isNumber());
+    }
+    @Test
+    public void test3() {
+        TsonElement x = Tson.reader().readElement(
+                "import(\"a/**/*\")"
+                );
+        Assertions.assertEquals(TsonElementType.FUNCTION,x.type());
+    }
+    @Test
+    public void test4() {
+        TsonElement x = Tson.reader().readElement(
+                "1_λ"
+                );
+        Assertions.assertEquals(TsonElementType.NAME,x.type());
     }
 }

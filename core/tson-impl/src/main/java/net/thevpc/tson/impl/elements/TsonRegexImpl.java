@@ -33,12 +33,12 @@ public class TsonRegexImpl extends AbstractPrimitiveTsonElement implements TsonR
     }
 
     @Override
-    public Pattern getRegex() {
+    public Pattern regexValue() {
         return getValue();
     }
 
     @Override
-    public String getString() {
+    public String stringValue() {
         return getValue().toString();
     }
 

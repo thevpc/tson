@@ -124,7 +124,7 @@ public class TsonAnnotationBuilderImpl implements TsonAnnotationBuilder {
                 return this;
             }
             case OBJECT: {
-                TsonElementHeader h = element.toObject().getHeader();
+                TsonElementHeader h = element.toObject().header();
                 if (h != null) {
                     addAll(h.all());
                 }

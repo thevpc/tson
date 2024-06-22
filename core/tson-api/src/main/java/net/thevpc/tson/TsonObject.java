@@ -3,7 +3,7 @@ package net.thevpc.tson;
 import java.util.List;
 
 public interface TsonObject extends TsonContainer, Iterable<TsonElement> {
-    TsonElementHeader getHeader();
+    TsonElementHeader header();
 
     List<TsonElement> all();
 

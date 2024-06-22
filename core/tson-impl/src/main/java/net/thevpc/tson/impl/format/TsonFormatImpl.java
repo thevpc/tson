@@ -6,14 +6,12 @@ import net.thevpc.tson.impl.parser.CharStreamCodeSupports;
 import net.thevpc.tson.impl.parser.TsonNumberHelper;
 import net.thevpc.tson.impl.util.AppendableWriter;
 import net.thevpc.tson.impl.util.TsonUtils;
-import net.thevpc.tson.util.KmpAlgo;
+import net.thevpc.tson.util.Kmp;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.io.Writer;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -92,7 +90,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
 
     public void formatElement(TsonElement element, boolean showComments, boolean showAnnotations, Writer sb) throws IOException {
         if (showComments) {
-            TsonComments c = element.getComments();
+            TsonComments c = element.comments();
             if (c != null && !c.isBlank()) {
                 TsonComment[] leadingComments = c.getLeadingComments();
                 if (leadingComments.length > 0) {
@@ -122,7 +120,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 }
             }
         }
-        TsonAnnotation[] ann = element.getAnnotations();
+        TsonAnnotation[] ann = element.annotations();
         TsonAnnotation formatAnnotation = null;
 
         if (ann != null && ann.length > 0) {
@@ -135,7 +133,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                             List<TsonElement> params = ab.getAll();
                             for (int i = params.size() - 1; i >= 0; i--) {
                                 TsonElement o = params.get(i);
-                                if (o.type() == TsonElementType.NAME || o.type() == TsonElementType.STRING && FORMAT_NUMBER_TYPES.contains(o.getString())) {
+                                if (o.type() == TsonElementType.NAME || o.type() == TsonElementType.STRING && FORMAT_NUMBER_TYPES.contains(o.stringValue())) {
                                     ab.removeAt(i);
                                 }
                             }
@@ -159,7 +157,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
         }
         formatElementCore(element, formatAnnotation, sb);
         if (showComments) {
-            TsonComments c = element.getComments();
+            TsonComments c = element.comments();
             if (c != null && !c.isBlank()) {
                 TsonComment[] trailingComments = c.getTrailingComments();
                 if (trailingComments.length > 0) {
@@ -213,39 +211,39 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 return;
             }
             case BOOLEAN:
-                writer.append(String.valueOf(element.getBoolean()));
+                writer.append(String.valueOf(element.booleanValue()));
                 return;
             case DATETIME:
-                writer.append(String.valueOf(element.getDateTime()));
+                writer.append(String.valueOf(element.dateTimeValue()));
                 return;
             case DATE:
-                writer.append(String.valueOf(element.getDate()));
+                writer.append(String.valueOf(element.dateValue()));
                 return;
             case TIME:
-                writer.append(String.valueOf(element.getTime()));
+                writer.append(String.valueOf(element.time()));
                 return;
             case REGEX: {
-                writer.append(TsonUtils.toRegex(element.getRegex().toString()));
+                writer.append(TsonUtils.toRegex(element.regexValue().toString()));
                 return;
             }
             case CHAR: {
-                writer.append(TsonUtils.toSmpStr(element.getChar()));
+                writer.append(TsonUtils.toSmpStr(element.charValue()));
                 return;
             }
             case STRING: {
-                String s = element.getString();
-                StringBuilder sb = new StringBuilder(s.length() * 2);
-                TsonUtils.toQuotedStr(s, element.toStr().layout(), sb);
+//                String s = element.getString();
+//                StringBuilder sb = new StringBuilder(s.length() * 2);
+//                TsonUtils.toQuotedStr(s, element.toStr().layout(), sb);
                 //TsonUtils.toDblStr(s, writer);
-                writer.append(sb);
+                writer.append(element.toStr().quoted());
                 return;
             }
             case NAME: {
-                writer.append(element.getString());
+                writer.append(element.stringValue());
                 return;
             }
             case ALIAS: {
-                writer.append("&").append(element.getString());
+                writer.append("&").append(element.stringValue());
                 return;
             }
             case PAIR: {
@@ -316,7 +314,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
             }
             case OBJECT: {
                 TsonObject list = element.toObject();
-                TsonElementHeader h = list.getHeader();
+                TsonElementHeader h = list.header();
                 if (h != null) {
                     String n = TsonUtils.nullIfBlank(h.name());
                     boolean hasName = false;
@@ -383,7 +381,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                         }
                         writer.write("^" + n + "{");
                         String stop = "^" + n + "}";
-                        KmpAlgo kmp = KmpAlgo.compile(stop);
+                        Kmp kmp = Kmp.compile(stop);
                         char[] c = new char[1024];
                         try (Reader r = list.getValue()) {
                             int x;

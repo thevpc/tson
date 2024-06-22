@@ -23,18 +23,18 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
     }
 
     @Override
-    public TsonComments getComments() {
+    public TsonComments comments() {
         return null;
     }
 
 
     @Override
-    public TsonAnnotation[] getAnnotations() {
+    public TsonAnnotation[] annotations() {
         return TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY;
     }
 
     @Override
-    public int getAnnotationsCount() {
+    public int annotationsCount() {
         return 0;
     }
 
@@ -119,111 +119,111 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
     }
 
     @Override
-    public Boolean getBooleanObject() {
+    public Boolean booleanObject() {
         return throwPrimitive(TsonElementType.BOOLEAN);
     }
 
     @Override
-    public Character getCharObject() {
+    public Character charObject() {
         return throwPrimitive(TsonElementType.CHAR);
     }
 
     @Override
-    public Byte getByteObject() {
+    public Byte byteObject() {
         return throwPrimitive(TsonElementType.BYTE);
     }
 
-    public Number getNumber() {
+    public Number numberValue() {
         return throwPrimitive(TsonElementType.DOUBLE);
     }
 
     @Override
-    public Long getLongObject() {
+    public Long longObject() {
         return throwPrimitive(TsonElementType.LONG);
     }
 
     @Override
-    public Integer getIntObject() {
+    public Integer intObject() {
         return throwPrimitive(TsonElementType.INT);
     }
 
     @Override
-    public Short getShortObject() {
+    public Short shortObject() {
         return throwPrimitive(TsonElementType.SHORT);
     }
 
     @Override
-    public Float getFloatObject() {
+    public Float floatObject() {
         return throwPrimitive(TsonElementType.FLOAT);
     }
 
     @Override
-    public Double getDoubleObject() {
+    public Double doubleObject() {
         return throwPrimitive(TsonElementType.DOUBLE);
     }
 
     @Override
-    public float getFloat() {
+    public float floatValue() {
         return throwPrimitive(TsonElementType.FLOAT);
     }
 
     @Override
-    public double getDouble() {
+    public double doubleValue() {
         return throwPrimitive(TsonElementType.DOUBLE);
     }
 
     @Override
-    public byte getByte() {
+    public byte byteValue() {
         return throwPrimitive(TsonElementType.BYTE);
     }
 
     @Override
-    public char getChar() {
+    public char charValue() {
         return throwPrimitive(TsonElementType.CHAR);
     }
 
     @Override
-    public boolean getBoolean() {
+    public boolean booleanValue() {
         return throwPrimitive(TsonElementType.BOOLEAN);
     }
 
     @Override
-    public int getInt() {
+    public int intValue() {
         return throwPrimitive(TsonElementType.INT);
     }
 
     @Override
-    public long getLong() {
+    public long longValue() {
         return throwPrimitive(TsonElementType.LONG);
     }
 
     @Override
-    public short getShort() {
+    public short shortValue() {
         return throwPrimitive(TsonElementType.SHORT);
     }
 
     @Override
-    public LocalDate getDate() {
+    public LocalDate dateValue() {
         return throwPrimitive(TsonElementType.DATE);
     }
 
     @Override
-    public Instant getDateTime() {
+    public Instant dateTimeValue() {
         return throwPrimitive(TsonElementType.DATETIME);
     }
 
     @Override
-    public LocalTime getTime() {
+    public LocalTime time() {
         return throwPrimitive(TsonElementType.TIME);
     }
 
     @Override
-    public Pattern getRegex() {
+    public Pattern regexValue() {
         return throwPrimitive(TsonElementType.REGEX);
     }
 
     @Override
-    public String getString() {
+    public String stringValue() {
         return throwPrimitive(TsonElementType.STRING);
     }
 
@@ -346,12 +346,12 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
         if (i != 0) {
             return i;
         }
-        i = TsonUtils.compareArrays(getAnnotations(), o.getAnnotations());
+        i = TsonUtils.compareArrays(annotations(), o.annotations());
         if (i != 0) {
             return i;
         }
-        TsonComments c1 = getComments();
-        TsonComments c2 = o.getComments();
+        TsonComments c1 = comments();
+        TsonComments c2 = o.comments();
         if (c1 == null) {
             c1 = TsonComments.BLANK;
         }

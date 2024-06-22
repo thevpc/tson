@@ -4,6 +4,7 @@ import net.thevpc.tson.*;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 public class TsonNumberHelper {
@@ -52,32 +53,32 @@ public class TsonNumberHelper {
                 break;
             }
             case BYTE: {
-                this.real = te.getByte();
+                this.real = te.byteValue();
                 this.type = NumberType.BYTE;
                 break;
             }
             case SHORT: {
-                this.real = te.getShort();
+                this.real = te.shortValue();
                 this.type = NumberType.SHORT;
                 break;
             }
             case INT: {
-                this.real = te.getInt();
+                this.real = te.intValue();
                 this.type = NumberType.INT;
                 break;
             }
             case LONG: {
-                this.real = te.getLong();
+                this.real = te.longValue();
                 this.type = NumberType.LONG;
                 break;
             }
             case FLOAT: {
-                this.real = te.getFloat();
+                this.real = te.floatValue();
                 this.type = NumberType.FLOAT;
                 break;
             }
             case DOUBLE: {
-                this.real = te.getDouble();
+                this.real = te.doubleValue();
                 this.type = NumberType.DOUBLE;
                 break;
             }
@@ -315,13 +316,13 @@ public class TsonNumberHelper {
         StrFastReader br = new StrFastReader(s);
         Nbr realStr = readOneDouble(br);
         Nbr imagStr = null;
-        if (realStr.nh.unit==null && br.peekAny('+', '-') != null) {
+        if (realStr.nh.unit == null && br.peekAny('+', '-') != null) {
             imagStr = readOneDouble(br);
             if (br.hasNext()) {
-                throw new IllegalArgumentException("invalid number " + s+". unable to read "+br+" in s");
+                throw new IllegalArgumentException("invalid number " + s + ". unable to read " + br + " in s");
             }
         } else if (br.hasNext()) {
-            throw new IllegalArgumentException("invalid number " + s+". unable to read "+br+" in s");
+            throw new IllegalArgumentException("invalid number " + s + ". unable to read " + br + " in s");
         }
         if (imagStr != null) {
             NumberType newType = realStr.type.combine(imagStr.type);
@@ -556,13 +557,13 @@ public class TsonNumberHelper {
         NbrSpecial special;
 
         public void trimNbr() {
-            StringBuilder sb=new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             for (char c : this.nbr.toCharArray()) {
-                if(c!='_'){
+                if (c != '_') {
                     sb.append(c);
                 }
             }
-            this.nbr=sb.toString();
+            this.nbr = sb.toString();
         }
 
         public void balanceHex() {
@@ -573,6 +574,86 @@ public class TsonNumberHelper {
                     nbr = nbr.substring(0, i);
                 }
             }
+        }
+
+        interface NbrParse {
+            Number parse(String s, int radix);
+        }
+
+        public void fillTsonNumberHelperAsInt() {
+            fillTsonNumberHelper(Integer::parseInt);
+        }
+
+        public void fillTsonNumberHelperAsLong() {
+            fillTsonNumberHelper(Long::parseLong);
+        }
+
+        public void fillTsonNumberHelperAsByte() {
+            fillTsonNumberHelper(Byte::parseByte);
+        }
+
+        public void fillTsonNumberHelperAsShort() {
+            fillTsonNumberHelper(Short::parseShort);
+        }
+
+        public void fillTsonNumberHelperTryAll(NumberType...all) {
+            for (NumberType numberType : all) {
+                try {
+                    type = numberType;
+                    fillTsonNumberHelper();
+                    return;
+                } catch (Exception ex) {
+                    //
+                }
+            }
+            type = all[0];
+            fillTsonNumberHelper();
+        }
+
+        public void fillTsonNumberHelper() {
+            switch (type) {
+                case BYTE: {
+                    fillTsonNumberHelper(Byte::parseByte);
+                    break;
+                }
+                case SHORT: {
+                    fillTsonNumberHelper(Short::parseShort);
+                    break;
+                }
+                case INT: {
+                    fillTsonNumberHelper(Integer::parseInt);
+                    break;
+                }
+                case LONG: {
+                    fillTsonNumberHelper(Long::parseLong);
+                    break;
+                }
+                case BIG_INTEGER: {
+                    fillTsonNumberHelper(BigInteger::new);
+                    break;
+                }
+                case FLOAT: {
+                    fillTsonNumberHelper((s, r) -> Float.parseFloat(s));
+                    break;
+                }
+                case DOUBLE: {
+                    fillTsonNumberHelper((s, r) -> Double.parseDouble(s));
+                    break;
+                }
+                case BIG_DECIMAL: {
+                    fillTsonNumberHelper((s, r) -> new BigDecimal(s));
+                    break;
+                }
+            }
+
+        }
+
+        public void fillTsonNumberHelperValue(Number pp) {
+            nh = new TsonNumberHelper(pp, type, layout, unit);
+        }
+
+        public void fillTsonNumberHelper(NbrParse pp) {
+            nh = new TsonNumberHelper(pp.parse(nbr, layout.radix()), type, layout, unit);
         }
 
         public void parse(TsonNumberLayout tsonNumberLayout, NumberType numberType, StrFastReader br) {
@@ -662,46 +743,51 @@ public class TsonNumberHelper {
             String u = br.peek(2);
             switch ("0u" + u) {
                 case "0u1_": {
+                    n.type=NumberType.BYTE;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.DECIMAL, NumberType.BYTE, br);
                     if (n.special != null) {
                         switch (n.special) {
                             case MIN: {
-                                n.nh = new TsonNumberHelper(Byte.MIN_VALUE, n.type, n.layout, n.unit);
+                                n.fillTsonNumberHelperValue(Byte.MIN_VALUE);
                                 break;
                             }
                             case MAX: {
-                                n.nh = new TsonNumberHelper(Byte.MAX_VALUE, n.type, n.layout, n.unit);
+                                n.fillTsonNumberHelperValue(Byte.MAX_VALUE);
                                 break;
                             }
                         }
                     } else {
-                        n.nh = new TsonNumberHelper(Byte.parseByte(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
+                        n.fillTsonNumberHelper();
                     }
                     return n;
                 }
                 case "0u1b": {
+                    n.type=NumberType.BYTE;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.BINARY, NumberType.BYTE, br);
                     if (n.special != null) {
                         switch (n.special) {
                             case MIN: {
-                                n.nh = new TsonNumberHelper(Byte.MIN_VALUE, n.type, n.layout, n.unit);
+                                n.fillTsonNumberHelperValue(Byte.MIN_VALUE);
                                 break;
                             }
                             case MAX: {
-                                n.nh = new TsonNumberHelper(Byte.MAX_VALUE, n.type, n.layout, n.unit);
+                                n.fillTsonNumberHelperValue(Byte.MAX_VALUE);
                                 break;
                             }
                         }
                     } else {
+                        n.type=NumberType.BYTE;
+                        n.fillTsonNumberHelper();
                         n.nh = new TsonNumberHelper(Byte.parseByte(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
                     }
                     return n;
                 }
                 case "0u1o": {
+                    n.type=NumberType.BYTE;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.OCTAL, NumberType.BYTE, br);
@@ -722,6 +808,7 @@ public class TsonNumberHelper {
                     return n;
                 }
                 case "0u1x": {
+                    n.type=NumberType.BYTE;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.HEXADECIMAL, NumberType.BYTE, br);
@@ -742,6 +829,7 @@ public class TsonNumberHelper {
                     return n;
                 }
                 case "0u2_": {
+                    n.type=NumberType.SHORT;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.DECIMAL, NumberType.SHORT, br);
@@ -762,6 +850,7 @@ public class TsonNumberHelper {
                     return n;
                 }
                 case "0u2b": {
+                    n.type=NumberType.SHORT;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.BINARY, NumberType.SHORT, br);
@@ -782,6 +871,7 @@ public class TsonNumberHelper {
                     return n;
                 }
                 case "0u2o": {
+                    n.type=NumberType.SHORT;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.OCTAL, NumberType.SHORT, br);
@@ -802,6 +892,7 @@ public class TsonNumberHelper {
                     return n;
                 }
                 case "0u2x": {
+                    n.type=NumberType.SHORT;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.HEXADECIMAL, NumberType.SHORT, br);
@@ -822,6 +913,7 @@ public class TsonNumberHelper {
                     return n;
                 }
                 case "0u4_": {
+                    n.type=NumberType.INT;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.DECIMAL, NumberType.INT, br);
@@ -842,6 +934,7 @@ public class TsonNumberHelper {
                     return n;
                 }
                 case "0u4b": {
+                    n.type=NumberType.INT;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.BINARY, NumberType.INT, br);
@@ -862,6 +955,7 @@ public class TsonNumberHelper {
                     return n;
                 }
                 case "0u4o": {
+                    n.type=NumberType.INT;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.OCTAL, NumberType.INT, br);
@@ -882,6 +976,7 @@ public class TsonNumberHelper {
                     return n;
                 }
                 case "0u4x": {
+                    n.type=NumberType.INT;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.HEXADECIMAL, NumberType.INT, br);
@@ -902,6 +997,7 @@ public class TsonNumberHelper {
                     return n;
                 }
                 case "0u8_": {
+                    n.type=NumberType.LONG;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.DECIMAL, NumberType.LONG, br);
@@ -922,6 +1018,7 @@ public class TsonNumberHelper {
                     return n;
                 }
                 case "0u8b": {
+                    n.type=NumberType.LONG;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.BINARY, NumberType.LONG, br);
@@ -942,6 +1039,7 @@ public class TsonNumberHelper {
                     return n;
                 }
                 case "0u8o": {
+                    n.type=NumberType.LONG;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.OCTAL, NumberType.LONG, br);
@@ -962,6 +1060,7 @@ public class TsonNumberHelper {
                     return n;
                 }
                 case "0u8x": {
+                    n.type=NumberType.LONG;
                     br.read(2);
                     n.sb.append(u);
                     n.parse(TsonNumberLayout.HEXADECIMAL, NumberType.LONG, br);
@@ -1014,28 +1113,28 @@ public class TsonNumberHelper {
             n.balanceHex();
             n.trimNbr();
             if (n.special != null) {
-                switch (n.type){
-                    case INT:{
+                switch (n.type) {
+                    case INT: {
                         switch (n.special) {
                             case MIN: {
-                                n.nh = new TsonNumberHelper(Integer.MIN_VALUE, n.type, n.layout, n.unit);
+                                n.fillTsonNumberHelperValue(Integer.MIN_VALUE);
                                 break;
                             }
                             case MAX: {
-                                n.nh = new TsonNumberHelper(Integer.MAX_VALUE, n.type, n.layout, n.unit);
+                                n.fillTsonNumberHelperValue(Integer.MAX_VALUE);
                                 break;
                             }
                         }
                         break;
                     }
-                    case LONG:{
+                    case LONG: {
                         switch (n.special) {
                             case MIN: {
-                                n.nh = new TsonNumberHelper(Long.MIN_VALUE, n.type, n.layout, n.unit);
+                                n.fillTsonNumberHelperValue(Long.MIN_VALUE);
                                 break;
                             }
                             case MAX: {
-                                n.nh = new TsonNumberHelper(Long.MAX_VALUE, n.type, n.layout, n.unit);
+                                n.fillTsonNumberHelperValue(Long.MAX_VALUE);
                                 break;
                             }
                         }
@@ -1043,42 +1142,14 @@ public class TsonNumberHelper {
                     }
                 }
             } else {
-                switch (n.type){
-                    case INT:{
-                        for (NumberType tt : new NumberType[]{NumberType.INT, NumberType.LONG, NumberType.BIG_INTEGER}) {
-                            try {
-                                switch (tt) {
-                                    case INT: {
-                                        n.type = tt;
-                                        n.nh = new TsonNumberHelper(Integer.parseInt(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                                        return n;
-                                    }
-                                    case LONG: {
-                                        n.type = tt;
-                                        n.nh = new TsonNumberHelper(Long.parseLong(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                                        return n;
-                                    }
-                                    case BIG_INTEGER: {
-                                        n.type = tt;
-                                        n.nh = new TsonNumberHelper(new BigInteger(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                                        return n;
-                                    }
-                                }
-                                break;
-                            }catch (Exception ex){
-                                //
-                            }
-                        }
-                        n.type = NumberType.INT;
-                        n.nh = new TsonNumberHelper(Integer.parseInt(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
+                switch (n.type) {
+                    case INT: {
+                        n.fillTsonNumberHelperTryAll(NumberType.INT, NumberType.LONG, NumberType.BIG_INTEGER);
                         return n;
                     }
-                    case LONG:{
-                        n.nh = new TsonNumberHelper(Long.parseLong(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                        break;
-                    }
-                    case BIG_INTEGER:{
-                        n.nh = new TsonNumberHelper(new BigInteger(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
+                    case LONG:
+                    case BIG_INTEGER: {
+                        n.fillTsonNumberHelper();
                         break;
                     }
                 }
@@ -1115,8 +1186,8 @@ public class TsonNumberHelper {
             n.balanceHex();
             n.trimNbr();
             if (n.special != null) {
-                switch (n.type){
-                    case INT:{
+                switch (n.type) {
+                    case INT: {
                         switch (n.special) {
                             case MIN: {
                                 n.nh = new TsonNumberHelper(Integer.MIN_VALUE, n.type, n.layout, n.unit);
@@ -1129,7 +1200,7 @@ public class TsonNumberHelper {
                         }
                         break;
                     }
-                    case LONG:{
+                    case LONG: {
                         switch (n.special) {
                             case MIN: {
                                 n.nh = new TsonNumberHelper(Long.MIN_VALUE, n.type, n.layout, n.unit);
@@ -1144,43 +1215,25 @@ public class TsonNumberHelper {
                     }
                 }
             } else {
-                switch (n.type){
-                    case INT:{
+                switch (n.type) {
+                    case INT: {
                         for (NumberType tt : new NumberType[]{NumberType.INT, NumberType.LONG, NumberType.BIG_INTEGER}) {
                             try {
-                                switch (tt) {
-                                    case INT: {
-                                        n.type = tt;
-                                        n.nh = new TsonNumberHelper(Integer.parseInt(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                                        return n;
-                                    }
-                                    case LONG: {
-                                        n.type = tt;
-                                        n.nh = new TsonNumberHelper(Long.parseLong(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                                        return n;
-                                    }
-                                    case BIG_INTEGER: {
-                                        n.type = tt;
-                                        n.nh = new TsonNumberHelper(new BigInteger(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                                        return n;
-                                    }
-                                }
-                                break;
-                            }catch (Exception ex){
+                                n.type = tt;
+                                n.fillTsonNumberHelper();
+                                return n;
+                            } catch (Exception ex) {
                                 //
                             }
                         }
                         n.type = NumberType.INT;
-                        n.nh = new TsonNumberHelper(Integer.parseInt(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
+                        n.fillTsonNumberHelper(Integer::parseInt);
                         return n;
                     }
-                    case LONG:{
-                        n.nh = new TsonNumberHelper(Long.parseLong(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                        break;
-                    }
-                    case BIG_INTEGER:{
-                        n.nh = new TsonNumberHelper(new BigInteger(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                        break;
+                    case LONG:
+                    case BIG_INTEGER: {
+                        n.fillTsonNumberHelper();
+                        return n;
                     }
                 }
             }
@@ -1197,35 +1250,15 @@ public class TsonNumberHelper {
                 n.sb.append("Max");
                 n.special = NbrSpecial.MAX;
             } else {
-                n.nbr = br.readWhile(c -> (c >= '0' && c <= '7') || c == '_');
-                if(n.nbr.isEmpty()){
-                    n.nbr="0";
-                    n.layout=TsonNumberLayout.DECIMAL;
-                }else{
-                    n.sb.append(n.nbr);
-                }
-                String wasL = br.readAnyIgnoreCase("LL","L");
-                if (wasL != null) {
-                    n.suffix = wasL;
-                    n.sb.append(wasL);
-                    switch (wasL.toUpperCase()){
-                        case "LL":{
-                            n.type = NumberType.BIG_INTEGER;
-                            break;
-                        }
-                        case "L":{
-                            n.type = NumberType.LONG;
-                            break;
-                        }
-                    }
-                }
+                n.sb.append("0");
+                readDblIEEE(br, n, "0");
             }
             n.unit = br.readWhile(c -> true);
             n.sb.append(n.unit);
             n.trimNbr();
             if (n.special != null) {
-                switch (n.type){
-                    case INT:{
+                switch (n.type) {
+                    case INT: {
                         switch (n.special) {
                             case MIN: {
                                 n.nh = new TsonNumberHelper(Integer.MIN_VALUE, n.type, n.layout, n.unit);
@@ -1238,7 +1271,7 @@ public class TsonNumberHelper {
                         }
                         break;
                     }
-                    case LONG:{
+                    case LONG: {
                         switch (n.special) {
                             case MIN: {
                                 n.nh = new TsonNumberHelper(Long.MIN_VALUE, n.type, n.layout, n.unit);
@@ -1253,42 +1286,17 @@ public class TsonNumberHelper {
                     }
                 }
             } else {
-                switch (n.type){
-                    case INT:{
-                        for (NumberType tt : new NumberType[]{NumberType.INT, NumberType.LONG, NumberType.BIG_INTEGER}) {
-                            try {
-                                switch (tt) {
-                                    case INT: {
-                                        n.type = tt;
-                                        n.nh = new TsonNumberHelper(Integer.parseInt(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                                        return n;
-                                    }
-                                    case LONG: {
-                                        n.type = tt;
-                                        n.nh = new TsonNumberHelper(Long.parseLong(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                                        return n;
-                                    }
-                                    case BIG_INTEGER: {
-                                        n.type = tt;
-                                        n.nh = new TsonNumberHelper(new BigInteger(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                                        return n;
-                                    }
-                                }
-                                break;
-                            }catch (Exception ex){
-                                //
-                            }
-                        }
-                        n.type = NumberType.INT;
-                        n.nh = new TsonNumberHelper(Integer.parseInt(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
+                switch (n.type) {
+                    case INT: {
+                        n.fillTsonNumberHelperTryAll(NumberType.INT, NumberType.LONG, NumberType.BIG_INTEGER);
                         return n;
                     }
-                    case LONG:{
-                        n.nh = new TsonNumberHelper(Long.parseLong(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                        break;
-                    }
-                    case BIG_INTEGER:{
-                        n.nh = new TsonNumberHelper(new BigInteger(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
+                    case FLOAT:
+                    case BIG_DECIMAL:
+                    case DOUBLE:
+                    case LONG:
+                    case BIG_INTEGER: {
+                        n.fillTsonNumberHelper();
                         break;
                     }
                 }
@@ -1312,61 +1320,14 @@ public class TsonNumberHelper {
             n.special = NbrSpecial.INF;
             n.type = NumberType.DOUBLE;
         } else {
-            StringBuilder nbr = new StringBuilder();
-            String beforeDot = br.readWhile(c -> (c >= '0' && c <= '9') || c == '_');
-            if(beforeDot!=null) {
-                if (beforeDot.endsWith("_")) {
-                    beforeDot=beforeDot.substring(0,beforeDot.length()-1);
-                    br.unread();
-                }
-                n.sb.append(beforeDot);
-                nbr.append(beforeDot);
-            }
-
-            String afterDot = null;
-            String expSign = null;
-            String exp = null;
-            String expNbr = null;
-            if (br.read('.')) {
-                n.decimal = true;
-                n.sb.append(".");
-                nbr.append(".");
-                afterDot = br.readWhile(c -> (c >= '0' && c <= '9') || c == '_');
-                if(afterDot!=null) {
-                    if (afterDot.endsWith("_")) {
-                        afterDot=afterDot.substring(0,afterDot.length()-1);
-                        br.unread();
-                    }
-                    n.sb.append(afterDot);
-                    nbr.append(afterDot);
-                }
-            }
-            exp = br.readAny('e', 'E');
-            if (exp != null) {
-                n.decimal = true;
-                n.sb.append(exp);
-                nbr.append(exp);
-                expSign = br.readAny('+', '-');
-                if (expSign != null) {
-                    n.sb.append(expSign);
-                    nbr.append(expSign);
-                }
-                expNbr = br.readWhile(c -> c >= '0' && c <= '9');
-                n.sb.append(expNbr);
-            }
-            n.nbr = nbr.toString();
-            if (!n.decimal) {
-                n.suffix = br.readAnyIgnoreCase("LL","L","F");
-            } else {
-                n.suffix = br.readAnyIgnoreCase("LL","L","F");
-            }
+            readDblIEEE(br, n, "");
         }
         if (br.read('_')) {
             n.sb.append('_');
-            n.unit = br.readWhile(c -> (c >= 'a' && c <= 'z') || ((c >= 'A' && c <= 'Z')));
+            n.unit = br.readWhile(c -> Character.isLetter(c));
             n.sb.append(n.unit);
         } else if (br.read('%')) {
-            n.unit = "%" + br.readWhile(c -> (c >= 'a' && c <= 'z') || ((c >= 'A' && c <= 'Z')));
+            n.unit = "%" + br.readWhile(c -> Character.isLetter(c));
             n.sb.append(n.unit);
         }
         n.layout = TsonNumberLayout.DECIMAL;
@@ -1375,46 +1336,22 @@ public class TsonNumberHelper {
                 switch (n.suffix.toUpperCase()) {
                     case "LL": {
                         n.type = NumberType.BIG_INTEGER;
-                        n.nh = new TsonNumberHelper(new BigInteger(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
+                        n.fillTsonNumberHelper();
                         return n;
                     }
                     case "L": {
                         n.type = NumberType.LONG;
-                        n.nh = new TsonNumberHelper(Long.parseLong(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
+                        n.fillTsonNumberHelper();
                         return n;
                     }
                     case "F": {
                         n.type = NumberType.FLOAT;
-                        n.nh = new TsonNumberHelper(Float.parseFloat(n.nbr), n.type, n.layout, n.unit);
+                        n.fillTsonNumberHelper();
                         return n;
                     }
                 }
             } else {
-                for (NumberType numberType : new NumberType[]{NumberType.INT, NumberType.LONG, NumberType.BIG_INTEGER}) {
-                    try {
-                        switch (numberType) {
-                            case INT: {
-                                n.type = numberType;
-                                n.nh = new TsonNumberHelper(Integer.parseInt(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                                return n;
-                            }
-                            case LONG: {
-                                n.type = numberType;
-                                n.nh = new TsonNumberHelper(Long.parseLong(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                                return n;
-                            }
-                            case BIG_INTEGER: {
-                                n.type = numberType;
-                                n.nh = new TsonNumberHelper(new BigInteger(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
-                                return n;
-                            }
-                        }
-                    } catch (Exception ex) {
-                        //
-                    }
-                }
-                n.type = NumberType.INT;
-                n.nh = new TsonNumberHelper(Integer.parseInt(n.nbr, n.layout.radix()), n.type, n.layout, n.unit);
+                n.fillTsonNumberHelperTryAll(NumberType.INT, NumberType.LONG, NumberType.BIG_INTEGER);
             }
         } else {
             if (n.special != null) {
@@ -1458,45 +1395,112 @@ public class TsonNumberHelper {
                 switch (n.suffix.toUpperCase()) {
                     case "LL": {
                         n.type = NumberType.BIG_DECIMAL;
-                        n.nh = new TsonNumberHelper(new BigDecimal(n.nbr), n.type, n.layout, n.unit);
+                        n.fillTsonNumberHelper();
                         return n;
                     }
                     case "L": {
                         n.type = NumberType.DOUBLE;
-                        n.nh = new TsonNumberHelper(Double.parseDouble(n.nbr), n.type, n.layout, n.unit);
+                        n.fillTsonNumberHelper();
                         return n;
                     }
                     case "F": {
                         n.type = NumberType.FLOAT;
-                        n.nh = new TsonNumberHelper(Float.parseFloat(n.nbr), n.type, n.layout, n.unit);
+                        n.fillTsonNumberHelper();
                         return n;
                     }
                 }
             } else {
-                for (NumberType numberType : new NumberType[]{NumberType.DOUBLE, NumberType.BIG_DECIMAL}) {
-                    try {
-                        switch (numberType) {
-                            case DOUBLE: {
-                                n.type = numberType;
-                                n.nh = new TsonNumberHelper(Double.parseDouble(n.nbr), n.type, n.layout, n.unit);
-                                return n;
-                            }
-                            case BIG_DECIMAL: {
-                                n.type = numberType;
-                                n.nh = new TsonNumberHelper(new BigDecimal(n.nbr), n.type, n.layout, n.unit);
-                                return n;
-                            }
-                        }
-                    } catch (Exception ex) {
-                        //
-                    }
-                }
-                n.type = NumberType.DOUBLE;
-                n.nh = new TsonNumberHelper(Double.parseDouble(n.nbr), n.type, n.layout, n.unit);
+                n.fillTsonNumberHelperTryAll(NumberType.DOUBLE, NumberType.BIG_DECIMAL);
                 return n;
             }
         }
         return n;
+    }
+
+    private static void readDblIEEE(StrFastReader br, Nbr n, String prefix) {
+        StringBuilder nbr = new StringBuilder();
+        nbr.append(prefix);
+        String beforeDot = br.readWhile(c -> (c >= '0' && c <= '9') || c == '_');
+        if (beforeDot != null) {
+            if (beforeDot.endsWith("_")) {
+                beforeDot = beforeDot.substring(0, beforeDot.length() - 1);
+                br.unread();
+            }
+            n.sb.append(beforeDot);
+            nbr.append(beforeDot);
+        }
+
+        String afterDot = null;
+        String expSign = null;
+        String exp = null;
+        String expNbr = null;
+        if (br.read('.')) {
+            n.decimal = true;
+            n.sb.append(".");
+            nbr.append(".");
+            afterDot = br.readWhile(c -> (c >= '0' && c <= '9') || c == '_');
+            if (afterDot != null) {
+                if (afterDot.endsWith("_")) {
+                    afterDot = afterDot.substring(0, afterDot.length() - 1);
+                    br.unread();
+                }
+                n.sb.append(afterDot);
+                nbr.append(afterDot);
+            }
+        }
+        exp = br.readAny('e', 'E');
+        if (exp != null) {
+            n.decimal = true;
+            n.sb.append(exp);
+            nbr.append(exp);
+            expSign = br.readAny('+', '-');
+            if (expSign != null) {
+                n.sb.append(expSign);
+                nbr.append(expSign);
+            }
+            expNbr = br.readWhile(c -> c >= '0' && c <= '9');
+            n.sb.append(expNbr);
+        }
+        n.nbr = nbr.toString();
+        if (n.decimal) {
+            n.layout=TsonNumberLayout.DECIMAL;
+            n.suffix = br.readAnyIgnoreCase("LL", "L", "F");
+            switch (n.suffix == null ? "" : n.suffix.toUpperCase()) {
+                case "":
+                case "L": {
+                    n.type = NumberType.DOUBLE;
+                    break;
+                }
+                case "LL": {
+                    n.type = NumberType.BIG_DECIMAL;
+                    break;
+                }
+                case "F": {
+                    n.type = NumberType.FLOAT;
+                    break;
+                }
+            }
+        } else {
+            n.suffix = br.readAnyIgnoreCase("LL", "L", "F");
+            switch (n.suffix == null ? "" : n.suffix.toUpperCase()) {
+                case "": {
+                    n.type = NumberType.INT;
+                    break;
+                }
+                case "L": {
+                    n.type = NumberType.LONG;
+                    break;
+                }
+                case "LL": {
+                    n.type = NumberType.BIG_INTEGER;
+                    break;
+                }
+                case "F": {
+                    n.type = NumberType.FLOAT;
+                    break;
+                }
+            }
+        }
     }
 
     public TsonElement toTson() {

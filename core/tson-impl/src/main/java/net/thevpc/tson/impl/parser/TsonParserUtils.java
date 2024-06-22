@@ -383,40 +383,67 @@ public class TsonParserUtils {
                             int ip = i + 1;
                             boolean processed = false;
                             if (ip < beforeLen) {
-                                switch (s.charAt(ip)) {
-                                    case 'n': {
-                                        sb.append('\n');
-                                        i++;
-                                        processed = true;
-                                        break;
-                                    }
-                                    case 't': {
-                                        sb.append('\t');
-                                        i++;
-                                        processed = true;
-                                        break;
-                                    }
-                                    case 'f': {
-                                        sb.append('\f');
-                                        i++;
-                                        processed = true;
-                                        break;
-                                    }
-                                    case 'b': {
-                                        sb.append('\b');
-                                        i++;
-                                        processed = true;
-                                        break;
-                                    }
+                                char c2 = s.charAt(ip);
+                                switch (c2) {
                                     case '\\': {
                                         sb.append('\\');
                                         i++;
                                         processed = true;
                                         break;
                                     }
+                                    case '\'': {
+                                        if(layout==TsonStringLayout.SINGLE_QUOTE){
+                                            sb.append(c2);
+                                            i++;
+                                            processed = true;
+                                        }
+                                        break;
+                                    }
+                                    case '`': {
+                                        if(layout==TsonStringLayout.ANTI_QUOTE){
+                                            sb.append(c2);
+                                            i++;
+                                            processed = true;
+                                        }
+                                        break;
+                                    }
+                                    case '\"': {
+                                        if(layout==TsonStringLayout.DOUBLE_QUOTE){
+                                            sb.append(c2);
+                                            i++;
+                                            processed = true;
+                                        }
+                                        break;
+                                    }
                                 }
                             }
                             if (!processed) {
+                                sb.append(c);
+                            }
+                            break;
+                        }
+                        case '\'': {
+                            if(layout==TsonStringLayout.SINGLE_QUOTE){
+                                sb.append('\\');
+                                sb.append(c);
+                            }else{
+                                sb.append(c);
+                            }
+                            break;
+                        }
+                        case '`': {
+                            if(layout==TsonStringLayout.ANTI_QUOTE){
+                                sb.append('\\');
+                                sb.append(c);
+                                i++;
+                            }
+                            break;
+                        }
+                        case '\"': {
+                            if(layout==TsonStringLayout.DOUBLE_QUOTE){
+                                sb.append('\\');
+                                sb.append(c);
+                            }else{
                                 sb.append(c);
                             }
                             break;
@@ -521,7 +548,7 @@ public class TsonParserUtils {
         } else if (roots.length == 1) {
             return elementToDocument(roots[0]);
         } else {
-            TsonAnnotation[] annotations = roots[0].getAnnotations();
+            TsonAnnotation[] annotations = roots[0].annotations();
             if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].getName())) {
                 // will remove it
                 TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];
@@ -536,7 +563,7 @@ public class TsonParserUtils {
     }
 
     public static TsonDocument elementToDocument(TsonElement root) {
-        TsonAnnotation[] annotations = root.getAnnotations();
+        TsonAnnotation[] annotations = root.annotations();
         if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].getName())) {
             // will remove it
             TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];

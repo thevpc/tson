@@ -33,12 +33,12 @@ public class TsonBooleanImpl extends AbstractPrimitiveTsonElement implements Tso
     }
 
     @Override
-    public boolean getBoolean() {
+    public boolean booleanValue() {
         return getValue();
     }
 
     @Override
-    public Boolean getBooleanObject() {
+    public Boolean booleanObject() {
         return getValue();
     }
 

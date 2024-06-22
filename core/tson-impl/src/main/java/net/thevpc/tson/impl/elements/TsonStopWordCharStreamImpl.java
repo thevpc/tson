@@ -91,7 +91,7 @@ public class TsonStopWordCharStreamImpl extends AbstractPrimitiveTsonElement imp
     }
 
     @Override
-    public String getString() {
+    public String stringValue() {
         StringBuilder sb = new StringBuilder();
         try (AppendableWriter w = AppendableWriter.of(sb)) {
             try (Reader r = getValue()) {

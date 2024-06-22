@@ -7,7 +7,7 @@ import net.thevpc.tson.TsonParserTokens;
 import net.thevpc.tson.impl.parser.TsonFlexCharStreamReader;
 import net.thevpc.tson.*;
 import net.thevpc.tson.util.Base64DecoderAdapter;
-import net.thevpc.tson.util.KmpAlgo;
+import net.thevpc.tson.util.Kmp;
 
 import java.io.*;
 
@@ -495,7 +495,7 @@ public final class TsonFlex implements TsonLexicalAnalyzer {
     public char charVal = '\0';
     public Reader charStream;
     public InputStream binaryStream;
-    public KmpAlgo kmp = null;
+    public Kmp kmp = null;
     public CharStreamCodeSupport code;
 
     public int nextToken() {
@@ -1223,7 +1223,7 @@ public final class TsonFlex implements TsonLexicalAnalyzer {
                         String streamName = yytext_substring(1, -1);
                         char[] end = java.util.Arrays.copyOfRange(zzBuffer, zzStartRead, zzMarkedPos);
                         end[end.length - 1] = ']';
-                        kmp = KmpAlgo.compile(end);
+                        kmp = Kmp.compile(end);
                         charStream = new TsonFlexCharStreamReader(streamName, this);
                         return TsonParserTokens.CHARSTREAM_START;
                     }
@@ -1236,7 +1236,7 @@ public final class TsonFlex implements TsonLexicalAnalyzer {
                         String streamName = yytext_substring(1, -1);
                         char[] end = java.util.Arrays.copyOfRange(zzBuffer, zzStartRead, zzMarkedPos);
                         end[end.length - 1] = '}';
-                        kmp = KmpAlgo.compile(end);
+                        kmp = Kmp.compile(end);
                         charStream = new TsonFlexCharStreamReader(streamName, this);
                         return TsonParserTokens.CHARSTREAM_START;
                     }

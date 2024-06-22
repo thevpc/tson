@@ -51,11 +51,11 @@ public class TsonAliasImpl extends AbstractPrimitiveTsonElement implements TsonA
 
     @Override
     protected int compareCore(TsonElement o) {
-        return value.compareTo(o.toName().getName());
+        return value.compareTo(o.toName().value());
     }
 
     @Override
-    public String getString() {
+    public String stringValue() {
         return getName();
     }
 

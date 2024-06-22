@@ -14,7 +14,7 @@ public class TsonDoubleImpl extends AbstractNumberTsonElement implements TsonDou
     }
 
     @Override
-    public Number getNumber() {
+    public Number numberValue() {
         return getValue();
     }
 
@@ -63,63 +63,63 @@ public class TsonDoubleImpl extends AbstractNumberTsonElement implements TsonDou
     }
 
     @Override
-    public Byte getByteObject() {
+    public Byte byteObject() {
         return (byte) getValue();
     }
 
     @Override
-    public Long getLongObject() {
+    public Long longObject() {
         return (long) getValue();
     }
 
     @Override
-    public Integer getIntObject() {
+    public Integer intObject() {
         return (int) getValue();
     }
 
     @Override
-    public Short getShortObject() {
+    public Short shortObject() {
         return (short) getValue();
     }
 
     @Override
-    public Float getFloatObject() {
+    public Float floatObject() {
         return (float) getValue();
     }
 
     @Override
-    public Double getDoubleObject() {
+    public Double doubleObject() {
         return (double) getValue();
     }
 
     //
     @Override
-    public byte getByte() {
+    public byte byteValue() {
         return ((byte) getValue());
     }
 
     @Override
-    public short getShort() {
+    public short shortValue() {
         return ((short) getValue());
     }
 
     @Override
-    public int getInt() {
+    public int intValue() {
         return ((int) getValue());
     }
 
     @Override
-    public long getLong() {
+    public long longValue() {
         return ((long) getValue());
     }
 
     @Override
-    public float getFloat() {
+    public float floatValue() {
         return ((float) getValue());
     }
 
     @Override
-    public double getDouble() {
+    public double doubleValue() {
         return (double) getValue();
     }
 
@@ -148,7 +148,7 @@ public class TsonDoubleImpl extends AbstractNumberTsonElement implements TsonDou
                 case LONG:
                 case FLOAT:
                 case DOUBLE: {
-                    int i = Double.compare(getValue(), o.getDouble());
+                    int i = Double.compare(getValue(), o.doubleValue());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
             }

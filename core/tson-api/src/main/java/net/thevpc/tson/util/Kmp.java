@@ -2,7 +2,7 @@ package net.thevpc.tson.util;
 
 import java.util.Arrays;
 
-public class KmpAlgo {
+public class Kmp {
 //    public static void main(String[] args) {
 //        KmpAlgo kmp = KmpAlgo.compile("AB");
 //        System.out.println(kmp.search("EZABH"));
@@ -20,27 +20,27 @@ public class KmpAlgo {
     private int incrementalIndex = 0;
     private int len = 0;
 
-    public static KmpAlgo compile(char[] pattern, int offset, int count) {
-        return new KmpAlgo(Arrays.copyOfRange(pattern, offset, offset + count));
+    public static Kmp compile(char[] pattern, int offset, int count) {
+        return new Kmp(Arrays.copyOfRange(pattern, offset, offset + count));
     }
-    public static KmpAlgo compile(char[] pattern) {
-        return new KmpAlgo(pattern);
-    }
-
-    public static KmpAlgo compile(String pattern) {
-        return new KmpAlgo(pattern);
+    public static Kmp compile(char[] pattern) {
+        return new Kmp(pattern);
     }
 
-    private KmpAlgo(char[] pattern, int offset, int count) {
+    public static Kmp compile(String pattern) {
+        return new Kmp(pattern);
+    }
+
+    private Kmp(char[] pattern, int offset, int count) {
         this(Arrays.copyOfRange(pattern, offset, offset + count));
 
     }
 
-    private KmpAlgo(String pattern) {
+    private Kmp(String pattern) {
         this(pattern.toCharArray());
     }
 
-    private KmpAlgo(char[] patternChars) {
+    private Kmp(char[] patternChars) {
         init(patternChars);
     }
 
@@ -67,7 +67,7 @@ public class KmpAlgo {
     public int length() {
         return len;
     }
-    public KmpAlgo reset() {
+    public Kmp reset() {
         incrementalIndex = 0;
         return this;
     }

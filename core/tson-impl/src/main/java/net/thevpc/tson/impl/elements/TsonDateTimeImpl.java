@@ -28,28 +28,28 @@ public class TsonDateTimeImpl extends AbstractTemporalTsonElement implements Tso
     }
 
     @Override
-    public Instant getDateTime() {
+    public Instant dateTimeValue() {
         return getValue();
     }
 
     @Override
     public TsonTime toTime() {
-        return (TsonTime) Tson.ofTime(getTime());
+        return (TsonTime) Tson.ofTime(time());
     }
 
     @Override
-    public LocalDate getDate() {
+    public LocalDate dateValue() {
         return getValue().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     @Override
-    public LocalTime getTime() {
+    public LocalTime time() {
         return LocalTime.from(getValue());
     }
 
     @Override
     public TsonDate toDate() {
-        return (TsonDate) Tson.ofDate(getDate());
+        return (TsonDate) Tson.ofDate(dateValue());
     }
 
     @Override
@@ -86,15 +86,15 @@ public class TsonDateTimeImpl extends AbstractTemporalTsonElement implements Tso
         if (o.type().isTemporal()) {
             switch (o.type()) {
                 case DATETIME: {
-                    int i = getValue().compareTo(o.getDateTime());
+                    int i = getValue().compareTo(o.dateTimeValue());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
                 case DATE: {
-                    int i = getValue().compareTo(o.getDateTime());
+                    int i = getValue().compareTo(o.dateTimeValue());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
                 case TIME: {
-                    int i = getValue().compareTo(o.getDateTime());
+                    int i = getValue().compareTo(o.dateTimeValue());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
             }

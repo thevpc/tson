@@ -1167,7 +1167,7 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
         } else if (roots.length == 1) {
             return elementToDocument(roots[0]);
         } else {
-            TsonAnnotation[] annotations = roots[0].getAnnotations();
+            TsonAnnotation[] annotations = roots[0].annotations();
             if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].getName())) {
                 // will remove it
                 TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];
@@ -1182,7 +1182,7 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
     }
 
     public TsonDocument elementToDocument(TsonElement root) {
-        TsonAnnotation[] annotations = root.getAnnotations();
+        TsonAnnotation[] annotations = root.annotations();
         if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].getName())) {
             // will remove it
             TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];

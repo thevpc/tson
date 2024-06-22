@@ -27,12 +27,12 @@ public class TsonCharImpl extends AbstractPrimitiveTsonElement implements TsonCh
     }
 
     @Override
-    public char getChar() {
+    public char charValue() {
         return getValue();
     }
 
     @Override
-    public Character getCharObject() {
+    public Character charObject() {
         return getValue();
     }
 

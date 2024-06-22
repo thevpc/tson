@@ -12,11 +12,11 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
         return any == null ? Tson.ofNull() : any.build();
     }
 
-    int getAnnotationsCount();
+    int annotationsCount();
 
-    TsonAnnotation[] getAnnotations();
+    TsonAnnotation[] annotations();
 
-    TsonComments getComments();
+    TsonComments comments();
 
     TsonString toStr();
 
@@ -80,53 +80,53 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     TsonDoubleComplex toDoubleComplex();
 
-    String getString();
+    String stringValue();
 
-    boolean getBoolean();
+    boolean booleanValue();
 
-    char getChar();
+    char charValue();
 
-    byte getByte();
+    byte byteValue();
 
-    int getInt();
+    int intValue();
 
-    long getLong();
+    long longValue();
 
-    short getShort();
+    short shortValue();
 
-    float getFloat();
+    float floatValue();
 
-    double getDouble();
+    double doubleValue();
 
     BigInteger getBigInteger();
 
     BigDecimal getBigDecimal();
 
-    Boolean getBooleanObject();
+    Boolean booleanObject();
 
-    Character getCharObject();
+    Character charObject();
 
-    Number getNumber();
+    Number numberValue();
 
-    Byte getByteObject();
+    Byte byteObject();
 
-    Integer getIntObject();
+    Integer intObject();
 
-    Long getLongObject();
+    Long longObject();
 
-    Short getShortObject();
+    Short shortObject();
 
-    Float getFloatObject();
+    Float floatObject();
 
-    Double getDoubleObject();
+    Double doubleObject();
 
-    Instant getDateTime();
+    Instant dateTimeValue();
 
-    LocalDate getDate();
+    LocalDate dateValue();
 
-    LocalTime getTime();
+    LocalTime time();
 
-    Pattern getRegex();
+    Pattern regexValue();
 
     TsonElementBuilder builder();
 

@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonObjectBuilderImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.impl.util.UnmodifiableArrayList;
@@ -21,7 +20,7 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
     }
 
     @Override
-    public TsonElementHeader getHeader() {
+    public TsonElementHeader header() {
         return header;
     }
 
@@ -120,7 +119,7 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
     @Override
     protected int compareCore(TsonElement o) {
         TsonObject no = o.toObject();
-        int i = TsonUtils.compareHeaders(header, no.getHeader());
+        int i = TsonUtils.compareHeaders(header, no.header());
         if (i != 0) {
             return i;
         }

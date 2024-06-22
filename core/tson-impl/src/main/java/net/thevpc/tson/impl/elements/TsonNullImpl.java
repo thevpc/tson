@@ -28,62 +28,62 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     }
 
     @Override
-    public String getString() {
+    public String stringValue() {
         return null;
     }
 
     @Override
-    public Boolean getBooleanObject() {
+    public Boolean booleanObject() {
         return null;
     }
 
     @Override
-    public Character getCharObject() {
+    public Character charObject() {
         return null;
     }
 
     @Override
-    public Byte getByteObject() {
+    public Byte byteObject() {
         return null;
     }
 
     @Override
-    public Integer getIntObject() {
+    public Integer intObject() {
         return null;
     }
 
     @Override
-    public Long getLongObject() {
+    public Long longObject() {
         return null;
     }
 
     @Override
-    public Short getShortObject() {
+    public Short shortObject() {
         return null;
     }
 
     @Override
-    public Float getFloatObject() {
+    public Float floatObject() {
         return null;
     }
 
     @Override
-    public Number getNumber() {
+    public Number numberValue() {
         return null;
     }
 
     @Override
-    public Double getDoubleObject() {
+    public Double doubleObject() {
         return null;
     }
 
     @Override
-    public short getShort() {
+    public short shortValue() {
         throw new NullPointerException();
     }
 
     @Override
-    public LocalDate getDate() {
+    public LocalDate dateValue() {
         return null;
     }
 
@@ -93,67 +93,67 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     }
 
     @Override
-    public Instant getDateTime() {
+    public Instant dateTimeValue() {
         return null;
     }
 
     @Override
-    public LocalTime getTime() {
+    public LocalTime time() {
         return null;
     }
 
     @Override
-    public Pattern getRegex() {
+    public Pattern regexValue() {
         return null;
     }
 
     @Override
-    public float getFloat() {
+    public float floatValue() {
         throw new NullPointerException();
     }
 
     @Override
-    public double getDouble() {
+    public double doubleValue() {
         throw new NullPointerException();
     }
 
     @Override
-    public byte getByte() {
+    public byte byteValue() {
         throw new NullPointerException();
     }
 
     @Override
-    public char getChar() {
+    public char charValue() {
         throw new NullPointerException();
     }
 
     @Override
-    public boolean getBoolean() {
+    public boolean booleanValue() {
         throw new NullPointerException();
     }
 
     @Override
-    public int getInt() {
+    public int intValue() {
         throw new NullPointerException();
     }
 
     @Override
-    public long getLong() {
+    public long longValue() {
         throw new NullPointerException();
     }
 
     @Override
-    public TsonComments getComments() {
+    public TsonComments comments() {
         return null;
     }
 
     @Override
-    public TsonAnnotation[] getAnnotations() {
+    public TsonAnnotation[] annotations() {
         return TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY;
     }
 
     @Override
-    public int getAnnotationsCount() {
+    public int annotationsCount() {
         return 0;
     }
     //element implementation

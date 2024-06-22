@@ -47,8 +47,8 @@ public class TsonUtils {
         TsonComments c2 = comments;
         TsonAnnotation[] a2 = annotations == null ? new TsonAnnotation[0] : annotations;
 
-        TsonComments c = element.getComments();
-        TsonAnnotation[] a = element.getAnnotations();
+        TsonComments c = element.comments();
+        TsonAnnotation[] a = element.annotations();
 
         if (!Objects.equals(c, c2) || !Arrays.equals(a, a2)) {
             return TsonElementDecorator.of(element, c2, a2);
@@ -57,26 +57,26 @@ public class TsonUtils {
     }
 
     public static TsonElement setComments(TsonElement e, TsonComments comments) {
-        TsonComments c = e.getComments();
+        TsonComments c = e.comments();
         if (Objects.equals(c, comments)) {
             return e;
         }
         return TsonElementDecorator.of(
                 e,
                 comments,
-                e.getAnnotations()
+                e.annotations()
         );
     }
 
     public static TsonElement setAnnotations(TsonElement e, TsonAnnotation[] annotations) {
-        TsonAnnotation[] c = e.getAnnotations();
+        TsonAnnotation[] c = e.annotations();
         if (Arrays.equals(c, annotations)) {
             return e;
         }
         return TsonElementDecorator.of(
                 e,
-                e.getComments(),
-                e.getAnnotations()
+                e.comments(),
+                e.annotations()
         );
     }
 

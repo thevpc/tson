@@ -52,8 +52,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
             annotations = TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY;
         }
         if (decorated) {
-            TsonComments oldComments = base.getComments();
-            TsonAnnotation[] oldAnnotations = base.getAnnotations();
+            TsonComments oldComments = base.comments();
+            TsonAnnotation[] oldAnnotations = base.annotations();
             if (
                     Objects.equals(comments, oldComments)
                     && Arrays.equals(annotations, oldAnnotations)) {
@@ -134,8 +134,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
         TsonAnnotation[] annotations = annotationsList == null ? TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY : annotationsList.toArray(TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY);
         if (decorated) {
-            TsonComments oldComments = base.getComments();
-            TsonAnnotation[] oldAnnotations = base.getAnnotations();
+            TsonComments oldComments = base.comments();
+            TsonAnnotation[] oldAnnotations = base.annotations();
             if (Objects.equals(comments, oldComments)
                     && Arrays.equals(annotations, oldAnnotations)) {
                 return base;
@@ -196,10 +196,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     protected void processCommentsAndAnnotations(TsonParserVisitor visitor) {
-        for (TsonComment c : getComments().getLeadingComments()) {
+        for (TsonComment c : comments().getLeadingComments()) {
             visitor.visitComments(c);
         }
-        for (TsonAnnotation annotation : getAnnotations()) {
+        for (TsonAnnotation annotation : annotations()) {
             visitor.visitAnnotationStart(annotation.getName());
             for (TsonElement param : annotation.getAll()) {
                 visitor.visitAnnotationParamStart();
@@ -232,16 +232,16 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
-    public TsonComments getComments() {
+    public TsonComments comments() {
         return comments;
     }
 
-    public TsonAnnotation[] getAnnotations() {
+    public TsonAnnotation[] annotations() {
         return Arrays.copyOf(annotations, annotations.length);
     }
 
     @Override
-    public int getAnnotationsCount() {
+    public int annotationsCount() {
         return annotations.length;
     }
 
@@ -331,38 +331,38 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
-    public byte getByte() {
-        return base.getByte();
+    public byte byteValue() {
+        return base.byteValue();
     }
 
     @Override
-    public char getChar() {
-        return base.getChar();
+    public char charValue() {
+        return base.charValue();
     }
 
     @Override
-    public boolean getBoolean() {
-        return base.getBoolean();
+    public boolean booleanValue() {
+        return base.booleanValue();
     }
 
     @Override
-    public String getString() {
-        return base.getString();
+    public String stringValue() {
+        return base.stringValue();
     }
 
     @Override
-    public int getInt() {
-        return base.getInt();
+    public int intValue() {
+        return base.intValue();
     }
 
     @Override
-    public long getLong() {
-        return base.getLong();
+    public long longValue() {
+        return base.longValue();
     }
 
     @Override
-    public short getShort() {
-        return base.getShort();
+    public short shortValue() {
+        return base.shortValue();
     }
 
     @Override
@@ -386,23 +386,23 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
-    public LocalDate getDate() {
-        return base.getDate();
+    public LocalDate dateValue() {
+        return base.dateValue();
     }
 
     @Override
-    public Instant getDateTime() {
-        return base.getDateTime();
+    public Instant dateTimeValue() {
+        return base.dateTimeValue();
     }
 
     @Override
-    public LocalTime getTime() {
-        return base.getTime();
+    public LocalTime time() {
+        return base.time();
     }
 
     @Override
-    public Pattern getRegex() {
-        return base.getRegex();
+    public Pattern regexValue() {
+        return base.regexValue();
     }
 
     @Override
@@ -426,53 +426,53 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
-    public float getFloat() {
-        return base.getFloat();
+    public float floatValue() {
+        return base.floatValue();
     }
 
     @Override
-    public double getDouble() {
-        return base.getDouble();
+    public double doubleValue() {
+        return base.doubleValue();
     }
 
     @Override
-    public Boolean getBooleanObject() {
-        return base.getBooleanObject();
+    public Boolean booleanObject() {
+        return base.booleanObject();
     }
 
     @Override
-    public Character getCharObject() {
-        return base.getCharObject();
+    public Character charObject() {
+        return base.charObject();
     }
 
     @Override
-    public Byte getByteObject() {
-        return base.getByteObject();
+    public Byte byteObject() {
+        return base.byteObject();
     }
 
     @Override
-    public Integer getIntObject() {
-        return base.getIntObject();
+    public Integer intObject() {
+        return base.intObject();
     }
 
     @Override
-    public Long getLongObject() {
-        return base.getLongObject();
+    public Long longObject() {
+        return base.longObject();
     }
 
     @Override
-    public Short getShortObject() {
-        return base.getShortObject();
+    public Short shortObject() {
+        return base.shortObject();
     }
 
     @Override
-    public Float getFloatObject() {
-        return base.getFloatObject();
+    public Float floatObject() {
+        return base.floatObject();
     }
 
     @Override
-    public Double getDoubleObject() {
-        return base.getDoubleObject();
+    public Double doubleObject() {
+        return base.doubleObject();
     }
 
     @Override
@@ -560,8 +560,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
-    public Number getNumber() {
-        return base.getNumber();
+    public Number numberValue() {
+        return base.numberValue();
     }
 
     @Override
@@ -777,6 +777,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public String getValue() {
             return getBase().getValue();
         }
+
+        @Override
+        public String quoted() {
+            return getBase().quoted();
+        }
     }
 
     public static class AsName extends AsPrimitive<TsonName> implements TsonName {
@@ -786,8 +791,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public String getName() {
-            return getBase().getName();
+        public String value() {
+            return getBase().value();
         }
     }
 
@@ -1046,8 +1051,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonElementHeader getHeader() {
-            return getBase().getHeader();
+        public TsonElementHeader header() {
+            return getBase().header();
         }
 
         @Override
@@ -1084,8 +1089,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public void visit(TsonParserVisitor visitor) {
             visitor.visitElementStart();
             processCommentsAndAnnotations(visitor);
-            if (getHeader() != null) {
-                TsonElementHeader h = getHeader();
+            if (header() != null) {
+                TsonElementHeader h = header();
                 if (h != null) {
                     if (!h.name().isEmpty()) {
                         visitor.visitNamedStart(h.name());

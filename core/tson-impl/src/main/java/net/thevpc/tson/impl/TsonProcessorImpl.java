@@ -32,7 +32,7 @@ public class TsonProcessorImpl implements TsonProcessor {
                     if (aliasParam.type() == TsonElementType.NAME) {
                         //this is an alias definition
                         //mark it
-                        String aliasName = aliasParam.getString();
+                        String aliasName = aliasParam.stringValue();
                         peek().addToSetContextValue("alias", aliasName);
                         //and remove it
                         return null;
@@ -54,7 +54,7 @@ public class TsonProcessorImpl implements TsonProcessor {
                     }
                     if (ac.value.type() == TsonElementType.ALIAS) {
                         Map<String, TsonElement> vars = getMergedMapsContextValues("vars", 1);
-                        TsonElement tt = vars.get(ac.value.getString());
+                        TsonElement tt = vars.get(ac.value.stringValue());
                         if (tt == null) {
                             throw new IllegalArgumentException("Alias " + ac.value + " not found");
                         }

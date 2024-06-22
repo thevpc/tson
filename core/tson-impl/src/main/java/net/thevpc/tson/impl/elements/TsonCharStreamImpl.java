@@ -72,7 +72,7 @@ public class TsonCharStreamImpl extends AbstractPrimitiveTsonElement implements 
     }
 
     @Override
-    public String getString() {
+    public String stringValue() {
         StringBuilder sb = new StringBuilder();
         try (AppendableWriter w = AppendableWriter.of(sb)) {
             try (Reader r = getValue()) {

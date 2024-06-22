@@ -106,7 +106,7 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
                 return this;
             }
             case OBJECT: {
-                TsonElementHeader h = element.toObject().getHeader();
+                TsonElementHeader h = element.toObject().header();
                 if (h != null) {
                     addAll(h.all());
                 }

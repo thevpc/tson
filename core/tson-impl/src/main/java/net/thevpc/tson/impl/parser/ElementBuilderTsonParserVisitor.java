@@ -296,7 +296,7 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
                 && !remainingComments.isBlank()
                 && !allChildren.isEmpty()) {
             TsonElement s = allChildren.get(allChildren.size() - 1);
-            allChildren.set(allChildren.size() - 1, s.builder().setComments(TsonComments.concat(s.getComments(), remainingComments)).build());
+            allChildren.set(allChildren.size() - 1, s.builder().setComments(TsonComments.concat(s.comments(), remainingComments)).build());
         }
         push(TsonParserUtils.elementsToDocument(allChildren.toArray(new TsonElement[0])));
     }

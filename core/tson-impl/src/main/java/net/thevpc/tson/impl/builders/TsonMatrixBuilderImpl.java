@@ -261,11 +261,11 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
                 break;
             }
             case NAME: {
-                header.setName(e.toName().getName());
+                header.setName(e.toName().value());
                 break;
             }
             case OBJECT: {
-                TsonElementHeader h = e.toObject().getHeader();
+                TsonElementHeader h = e.toObject().header();
                 this.header.set(h);
                 addRow(TsonUtils.toArray(e.toObject().all()));
                 break;

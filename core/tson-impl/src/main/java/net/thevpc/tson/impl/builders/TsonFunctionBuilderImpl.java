@@ -132,7 +132,7 @@ public class TsonFunctionBuilderImpl extends AbstractTsonElementBuilder<TsonFunc
             }
             case OBJECT: {
                 TsonObject e = element.toObject();
-                TsonElementHeader h = e.getHeader();
+                TsonElementHeader h = e.header();
                 if(h!=null) {
                     addAll(h.all());
                     setName(h.name());

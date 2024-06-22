@@ -27,7 +27,7 @@ public class TsonNameImpl extends AbstractPrimitiveTsonElement implements TsonNa
     }
 
     @Override
-    public String getName() {
+    public String value() {
         return value;
     }
 
@@ -51,12 +51,12 @@ public class TsonNameImpl extends AbstractPrimitiveTsonElement implements TsonNa
 
     @Override
     protected int compareCore(TsonElement o) {
-        return value.compareTo(o.toName().getName());
+        return value.compareTo(o.toName().value());
     }
 
     @Override
-    public String getString() {
-        return getName();
+    public String stringValue() {
+        return value();
     }
 
 

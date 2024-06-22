@@ -134,30 +134,30 @@ public class TsonSerializerConfig {
         });
 
         registerElemToObjConverter(TsonElementType.NULL, null, null, (element, to, context) -> null);
-        registerElemToObjConverter(TsonElementType.STRING, null, null, (element, to, context) -> element.getString());
-        registerElemToObjConverter(TsonElementType.INT, null, null, (element, to, context) -> element.getInt());
-        registerElemToObjConverter(TsonElementType.LONG, null, null, (element, to, context) -> element.getLong());
-        registerElemToObjConverter(TsonElementType.SHORT, null, null, (element, to, context) -> element.getShort());
-        registerElemToObjConverter(TsonElementType.BYTE, null, null, (element, to, context) -> element.getByte());
-        registerElemToObjConverter(TsonElementType.BOOLEAN, null, null, (element, to, context) -> element.getBoolean());
-        registerElemToObjConverter(TsonElementType.CHAR, null, null, (element, to, context) -> element.getChar());
-        registerElemToObjConverter(TsonElementType.FLOAT, null, null, (element, to, context) -> element.getFloat());
-        registerElemToObjConverter(TsonElementType.DOUBLE, null, null, (element, to, context) -> element.getDouble());
+        registerElemToObjConverter(TsonElementType.STRING, null, null, (element, to, context) -> element.stringValue());
+        registerElemToObjConverter(TsonElementType.INT, null, null, (element, to, context) -> element.intValue());
+        registerElemToObjConverter(TsonElementType.LONG, null, null, (element, to, context) -> element.longValue());
+        registerElemToObjConverter(TsonElementType.SHORT, null, null, (element, to, context) -> element.shortValue());
+        registerElemToObjConverter(TsonElementType.BYTE, null, null, (element, to, context) -> element.byteValue());
+        registerElemToObjConverter(TsonElementType.BOOLEAN, null, null, (element, to, context) -> element.booleanValue());
+        registerElemToObjConverter(TsonElementType.CHAR, null, null, (element, to, context) -> element.charValue());
+        registerElemToObjConverter(TsonElementType.FLOAT, null, null, (element, to, context) -> element.floatValue());
+        registerElemToObjConverter(TsonElementType.DOUBLE, null, null, (element, to, context) -> element.doubleValue());
 
-        registerElemToObjConverter(TsonElementType.DATETIME, null, null, (element, to, context) -> element.getDateTime());
-        registerElemToObjConverter(TsonElementType.DATETIME, null, Instant.class, (element, to, context) -> element.getDateTime());
-        registerElemToObjConverter(TsonElementType.DATETIME, null, Date.class, (element, to, context) -> TsonUtils.convertToDate(element.getDateTime()));
+        registerElemToObjConverter(TsonElementType.DATETIME, null, null, (element, to, context) -> element.dateTimeValue());
+        registerElemToObjConverter(TsonElementType.DATETIME, null, Instant.class, (element, to, context) -> element.dateTimeValue());
+        registerElemToObjConverter(TsonElementType.DATETIME, null, Date.class, (element, to, context) -> TsonUtils.convertToDate(element.dateTimeValue()));
 
-        registerElemToObjConverter(TsonElementType.DATE, null, null, (element, to, context) -> element.getDate());
-        registerElemToObjConverter(TsonElementType.DATE, null, LocalDate.class, (element, to, context) -> element.getDate());
-        registerElemToObjConverter(TsonElementType.DATE, null, Date.class, (element, to, context) -> TsonUtils.convertToDate(element.getDate()));
-        registerElemToObjConverter(TsonElementType.DATE, null, java.sql.Date.class, (element, to, context) -> TsonUtils.convertToSqlDate(element.getDate()));
+        registerElemToObjConverter(TsonElementType.DATE, null, null, (element, to, context) -> element.dateValue());
+        registerElemToObjConverter(TsonElementType.DATE, null, LocalDate.class, (element, to, context) -> element.dateValue());
+        registerElemToObjConverter(TsonElementType.DATE, null, Date.class, (element, to, context) -> TsonUtils.convertToDate(element.dateValue()));
+        registerElemToObjConverter(TsonElementType.DATE, null, java.sql.Date.class, (element, to, context) -> TsonUtils.convertToSqlDate(element.dateValue()));
 
-        registerElemToObjConverter(TsonElementType.TIME, null, null, (element, to, context) -> element.getTime());
-        registerElemToObjConverter(TsonElementType.TIME, null, LocalTime.class, (element, to, context) -> element.getTime());
-        registerElemToObjConverter(TsonElementType.TIME, null, Time.class, (element, to, context) -> TsonUtils.convertToSqlTime(element.getTime()));
+        registerElemToObjConverter(TsonElementType.TIME, null, null, (element, to, context) -> element.time());
+        registerElemToObjConverter(TsonElementType.TIME, null, LocalTime.class, (element, to, context) -> element.time());
+        registerElemToObjConverter(TsonElementType.TIME, null, Time.class, (element, to, context) -> TsonUtils.convertToSqlTime(element.time()));
 
-        registerElemToObjConverter(TsonElementType.REGEX, null, null, (element, to, context) -> element.getRegex());
+        registerElemToObjConverter(TsonElementType.REGEX, null, null, (element, to, context) -> element.regexValue());
 
         registerElemToObjConverter(TsonElementType.PAIR, null, null, (element1, to, context1) -> keyValueToMapEntry(element1, to, context1));
         registerElemToObjConverter(TsonElementType.UPLET, null, null, (element, to, context) -> {
@@ -183,7 +183,7 @@ public class TsonSerializerConfig {
             if (to == null || to.equals(Map.class)) {
                 TsonObject ee = element.toObject();
                 Map<String, Object> namedArray = new LinkedHashMap<>();
-                TsonElementHeader h = ee.getHeader();
+                TsonElementHeader h = ee.header();
                 if(h!=null){
                     Map<String, Object> mheader = new LinkedHashMap<>();
                     mheader.put("name", h.name());
@@ -441,7 +441,7 @@ public class TsonSerializerConfig {
                 return new TypeElementSignature(etype, h==null?null:h.name(), to);
             }
             case OBJECT: {
-                TsonElementHeader h = e.toObject().getHeader();
+                TsonElementHeader h = e.toObject().header();
                 return new TypeElementSignature(etype, h==null?null:h.name(), to);
             }
             case FUNCTION: {
