@@ -9,7 +9,7 @@ import net.thevpc.tson.impl.util.TsonUtils;
 
 public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor {
 
-    private Object[] stack = new Object[10];
+    private Object[] stack = new Object[100];
     private List<TsonComment> comments = new ArrayList<>();
     private int stackSize = 0;
 
