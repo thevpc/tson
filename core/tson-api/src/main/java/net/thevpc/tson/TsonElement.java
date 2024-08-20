@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.Temporal;
 import java.util.regex.Pattern;
 
 public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
@@ -108,6 +109,8 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     Number numberValue();
 
+    Temporal temporalValue();
+
     Byte byteObject();
 
     Integer intObject();
@@ -144,6 +147,29 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
     boolean isContainer();
 
     boolean isNumber();
+
+    boolean isBoolean();
+    boolean isName();
+
+    boolean isArray();
+
+    boolean isNamedArray();
+
+    boolean isObject();
+
+    boolean isNamedObject();
+
+    boolean isUplet();
+
+    boolean isPair();
+
+    boolean isSimple();
+
+    boolean isSimplePair();
+
+    boolean isString();
+
+    boolean isAnyString();
 
     boolean isPrimitive();
 

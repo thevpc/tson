@@ -1,6 +1,6 @@
 package net.thevpc.tson;
 
 public interface TsonBoolean extends TsonElement {
-    boolean getValue();
+    boolean value();
     TsonPrimitiveBuilder builder();
 }

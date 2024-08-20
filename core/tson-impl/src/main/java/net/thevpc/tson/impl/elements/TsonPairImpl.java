@@ -29,17 +29,22 @@ public class TsonPairImpl extends AbstractNonPrimitiveTsonElement implements Tso
     }
 
     @Override
+    public boolean isSimplePair() {
+        return type() == TsonElementType.PAIR && key().isSimple();
+    }
+
+    @Override
     public TsonPair toPair() {
         return this;
     }
 
     @Override
-    public TsonElement getValue() {
+    public TsonElement value() {
         return value;
     }
 
     @Override
-    public TsonElement getKey() {
+    public TsonElement key() {
         return key;
     }
 
@@ -60,7 +65,7 @@ public class TsonPairImpl extends AbstractNonPrimitiveTsonElement implements Tso
 
     @Override
     public TsonKeyValueBuilder builder() {
-        return new TsonKeyValueBuilderImpl().setKey(getKey()).setValue(getValue());
+        return new TsonKeyValueBuilderImpl().setKey(key()).setValue(value());
     }
 
     @Override
@@ -80,16 +85,16 @@ public class TsonPairImpl extends AbstractNonPrimitiveTsonElement implements Tso
     protected int compareCore(TsonElement o) {
         TsonPair oo = o.toPair();
         return TsonUtils.compareElementsArray(
-                new TsonElement[]{getKey(), getValue()},
-                new TsonElement[]{oo.getKey(), oo.getValue()}
+                new TsonElement[]{key(), value()},
+                new TsonElement[]{oo.key(), oo.value()}
         );
     }
 
     @Override
     public void visit(TsonParserVisitor visitor) {
         visitor.visitInstructionStart();
-        getKey().visit(visitor);
-        getValue().visit(visitor);
+        key().visit(visitor);
+        value().visit(visitor);
         visitor.visitKeyValueEnd();
     }
 }

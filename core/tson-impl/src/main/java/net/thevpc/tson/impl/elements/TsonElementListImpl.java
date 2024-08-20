@@ -22,23 +22,23 @@ public class TsonElementListImpl implements TsonElementList {
     }
 
     @Override
-    public TsonElement getValueAt(int index) {
+    public TsonElement getAt(int index) {
         return elements.get(index);
     }
 
     @Override
-    public TsonElement getValue(String name) {
-        return getValue(name == null ? null : Tson.ofString(name));
+    public TsonElement get(String name) {
+        return get(name == null ? null : Tson.ofString(name));
     }
 
     @Override
-    public TsonElement getValue(TsonElement name) {
+    public TsonElement get(TsonElement name) {
         TsonElement vn = (name == null ? Tson.ofNull() : name).build();
         for (TsonElement element : elements) {
             if (element instanceof TsonPair) {
                 TsonPair element1 = (TsonPair) element;
-                if (Objects.equals(element1.getKey().build(), vn)) {
-                    return element1.getValue();
+                if (Objects.equals(element1.key().build(), vn)) {
+                    return element1.value();
                 }
             } else {
                 if (Objects.equals(element.build(), vn)) {
@@ -62,8 +62,8 @@ public class TsonElementListImpl implements TsonElementList {
         for (TsonElement element : elements) {
             if (element instanceof TsonPair) {
                 TsonPair element1 = (TsonPair) element;
-                if (Objects.equals(element1.getKey().build(), vn)) {
-                    all.add(element1.getValue());
+                if (Objects.equals(element1.key().build(), vn)) {
+                    all.add(element1.value());
                 }
             } else {
                 if (Objects.equals(element.build(), vn)) {
@@ -97,7 +97,7 @@ public class TsonElementListImpl implements TsonElementList {
         for (TsonElement element : elements) {
             if (element instanceof TsonPair) {
                 TsonPair element1 = (TsonPair) element;
-                m.put(element1.getKey(), element1.getValue());
+                m.put(element1.key(), element1.value());
             } else {
                 m.put(element, element);
             }
@@ -111,7 +111,7 @@ public class TsonElementListImpl implements TsonElementList {
         for (TsonElement element : elements) {
             if (element instanceof TsonPair) {
                 TsonPair element1 = (TsonPair) element;
-                m.computeIfAbsent(element1.getKey(), k -> new ArrayList<>()).add(element1.getValue());
+                m.computeIfAbsent(element1.key(), k -> new ArrayList<>()).add(element1.value());
             } else {
                 m.computeIfAbsent(element, k -> new ArrayList<>()).add(element);
             }

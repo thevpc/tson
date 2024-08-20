@@ -87,9 +87,9 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
     }
 
     @Override
-    public TsonElement build() {
+    public TsonUplet build() {
         TsonUpletImpl built = new TsonUpletImpl(TsonUtils.unmodifiableElements(elements));
-        return TsonUtils.decorate(
+        return (TsonUplet) TsonUtils.decorate(
                 built,
                 getComments(), getAnnotations());
     }

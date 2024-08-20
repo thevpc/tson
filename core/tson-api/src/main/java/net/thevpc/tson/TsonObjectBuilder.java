@@ -108,4 +108,6 @@ public interface TsonObjectBuilder extends Iterable<TsonElement>, TsonElementBui
     TsonObjectBuilder remove(String name);
 
     TsonObjectBuilder ensureCapacity(int length);
+
+    TsonObject build();
 }

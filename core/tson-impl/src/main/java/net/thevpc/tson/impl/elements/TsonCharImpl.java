@@ -22,18 +22,18 @@ public class TsonCharImpl extends AbstractPrimitiveTsonElement implements TsonCh
     }
 
     @Override
-    public char getValue() {
+    public char value() {
         return value;
     }
 
     @Override
     public char charValue() {
-        return getValue();
+        return value();
     }
 
     @Override
     public Character charObject() {
-        return getValue();
+        return value();
     }
 
 
@@ -59,6 +59,6 @@ public class TsonCharImpl extends AbstractPrimitiveTsonElement implements TsonCh
 
     @Override
     protected int compareCore(TsonElement o) {
-        return Character.compare(value,o.toChar().getValue());
+        return Character.compare(value,o.toChar().value());
     }
 }

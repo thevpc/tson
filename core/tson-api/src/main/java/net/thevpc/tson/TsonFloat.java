@@ -1,7 +1,7 @@
 package net.thevpc.tson;
 
 public interface TsonFloat extends TsonNumber {
-    float getValue();
+    float value();
 
     TsonPrimitiveBuilder builder();
 }

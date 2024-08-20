@@ -51,7 +51,7 @@ public class TsonStopWordCharStreamImpl extends AbstractPrimitiveTsonElement imp
     }
 
     @Override
-    public Reader getValue() {
+    public Reader value() {
         return value.open();
     }
 
@@ -67,12 +67,12 @@ public class TsonStopWordCharStreamImpl extends AbstractPrimitiveTsonElement imp
             return false;
         }
         TsonStopWordCharStreamImpl that = (TsonStopWordCharStreamImpl) o;
-        return Objects.equals(getValue(), that.getValue());
+        return Objects.equals(value(), that.value());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getValue());
+        return Objects.hash(super.hashCode(), value());
     }
 
     @Override
@@ -94,7 +94,7 @@ public class TsonStopWordCharStreamImpl extends AbstractPrimitiveTsonElement imp
     public String stringValue() {
         StringBuilder sb = new StringBuilder();
         try (AppendableWriter w = AppendableWriter.of(sb)) {
-            try (Reader r = getValue()) {
+            try (Reader r = value()) {
                 char[] b = new char[1024];
                 int c;
                 while ((c = r.read(b)) > 0) {

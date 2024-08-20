@@ -3,7 +3,7 @@ package net.thevpc.tson;
 import java.time.LocalDate;
 
 public interface TsonDate extends TsonTemporal {
-    LocalDate getValue();
+    LocalDate value();
 
     TsonPrimitiveBuilder builder();
 }

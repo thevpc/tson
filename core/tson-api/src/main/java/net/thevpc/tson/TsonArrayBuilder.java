@@ -26,7 +26,7 @@ public interface TsonArrayBuilder extends Iterable<TsonElement>, TsonElementBuil
 
     TsonArrayBuilder removeAt(int index);
 
-    TsonElement build();
+    TsonArray build();
 
     List<TsonElement> all();
 

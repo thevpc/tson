@@ -1,8 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
-import net.thevpc.tson.TsonElementType;
-import net.thevpc.tson.TsonNumber;
-import net.thevpc.tson.TsonNumberLayout;
+import net.thevpc.tson.*;
 
 public abstract class AbstractNumberTsonElement extends AbstractPrimitiveTsonElement implements TsonNumber{
     private TsonNumberLayout layout;
@@ -33,6 +31,12 @@ public abstract class AbstractNumberTsonElement extends AbstractPrimitiveTsonEle
             }
         }
     }
+
+    @Override
+    public TsonString toStr() {
+        return (TsonString) Tson.of(String.valueOf(numberValue()));
+    }
+
 
     @Override
     public TsonNumber toNumber() {

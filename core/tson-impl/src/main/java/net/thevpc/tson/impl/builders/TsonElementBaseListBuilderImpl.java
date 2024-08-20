@@ -26,7 +26,7 @@ public class TsonElementBaseListBuilderImpl implements TsonElementBaseListBuilde
         for (int i = 0; i < elements.size(); i++) {
             TsonElementBase e = elements.get(i);
             if (e.type() == TsonElementType.PAIR) {
-                TsonElement k = ((TsonPair) e).getKey();
+                TsonElement k = ((TsonPair) e).key();
                 if ((key == null || key.type() == TsonElementType.NULL)) {
                     if (k.type() == TsonElementType.NULL) {
                         elements.set(i, Tson.ofPair(key, value));
@@ -257,8 +257,8 @@ public class TsonElementBaseListBuilderImpl implements TsonElementBaseListBuilde
         for (TsonElementBase element : elements) {
             if (element instanceof TsonPair) {
                 TsonPair element1 = (TsonPair) element;
-                if (Objects.equals(element1.getKey().build(), vn)) {
-                    return element1.getValue();
+                if (Objects.equals(element1.key().build(), vn)) {
+                    return element1.value();
                 }
             } else {
                 if (Objects.equals(element.build(), vn)) {
@@ -282,8 +282,8 @@ public class TsonElementBaseListBuilderImpl implements TsonElementBaseListBuilde
         for (TsonElementBase element : elements) {
             if (element instanceof TsonPair) {
                 TsonPair element1 = (TsonPair) element;
-                if (Objects.equals(element1.getKey().build(), vn)) {
-                    all.add(element1.getValue());
+                if (Objects.equals(element1.key().build(), vn)) {
+                    all.add(element1.value());
                 }
             } else {
                 if (Objects.equals(element.build(), vn)) {
@@ -305,7 +305,7 @@ public class TsonElementBaseListBuilderImpl implements TsonElementBaseListBuilde
         for (TsonElementBase element : elements) {
             if (element instanceof TsonPair) {
                 TsonPair element1 = (TsonPair) element;
-                m.put(element1.getKey(), element1.getValue());
+                m.put(element1.key(), element1.value());
             } else {
                 m.put(element, element);
             }
@@ -319,7 +319,7 @@ public class TsonElementBaseListBuilderImpl implements TsonElementBaseListBuilde
         for (TsonElementBase element : elements) {
             if (element instanceof TsonPair) {
                 TsonPair element1 = (TsonPair) element;
-                m.put(element1.getKey(), element1.getValue());
+                m.put(element1.key(), element1.value());
             } else {
                 m.put(element.build(), element.build());
             }
@@ -333,7 +333,7 @@ public class TsonElementBaseListBuilderImpl implements TsonElementBaseListBuilde
         for (TsonElementBase element : elements) {
             if (element instanceof TsonPair) {
                 TsonPair element1 = (TsonPair) element;
-                m.computeIfAbsent(element1.getKey(), k -> new ArrayList<>()).add(element1.getValue());
+                m.computeIfAbsent(element1.key(), k -> new ArrayList<>()).add(element1.value());
             } else {
                 m.computeIfAbsent(element, k -> new ArrayList<>()).add(element);
             }
@@ -347,7 +347,7 @@ public class TsonElementBaseListBuilderImpl implements TsonElementBaseListBuilde
         for (TsonElementBase element : elements) {
             if (element instanceof TsonPair) {
                 TsonPair element1 = (TsonPair) element;
-                m.computeIfAbsent(element1.getKey(), k -> new ArrayList<>()).add(element1.getValue());
+                m.computeIfAbsent(element1.key(), k -> new ArrayList<>()).add(element1.value());
             } else {
                 m.computeIfAbsent(element.build(), k -> new ArrayList<>()).add(element.build());
             }

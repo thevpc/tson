@@ -16,8 +16,8 @@ public class TsonKeyValueBuilderImpl extends AbstractTsonElementBuilder<TsonKeyV
 
     @Override
     public TsonKeyValueBuilder merge(TsonPair other) {
-        key = other.getKey();
-        value = other.getValue();
+        key = other.key();
+        value = other.value();
         return this;
     }
 
@@ -29,7 +29,7 @@ public class TsonKeyValueBuilderImpl extends AbstractTsonElementBuilder<TsonKeyV
     }
 
     @Override
-    public TsonElement getKey() {
+    public TsonElement key() {
         return key;
     }
 
@@ -41,7 +41,7 @@ public class TsonKeyValueBuilderImpl extends AbstractTsonElementBuilder<TsonKeyV
 
 
     @Override
-    public TsonElement getValue() {
+    public TsonElement value() {
         return value;
     }
 

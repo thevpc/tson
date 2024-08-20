@@ -8,6 +8,7 @@ import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.Temporal;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -85,6 +86,32 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
 
     @Override
     public TsonBoolean toBoolean() {
+        if (isBoolean()) {
+            return (TsonBoolean) this;
+        }else if (isNumber()) {
+            Number value=numberValue();
+            if (value instanceof Number) {
+                if (value instanceof Byte || value instanceof Short || value instanceof Integer || value instanceof Long || value instanceof BigInteger) {
+                    return (TsonBoolean) Tson.of((((Number) value).longValue() != 0));
+                }
+                if (value instanceof Float || value instanceof Double || value instanceof BigDecimal) {
+                    double d = value.doubleValue();
+                    return (TsonBoolean) Tson.of(
+                            d != 0 && !Double.isNaN(d)
+                    );
+                }
+            }
+        }else if (isAnyString()) {
+            String svalue = toStr().value().trim().toLowerCase();
+            if (!svalue.isEmpty()) {
+                if (svalue.matches("true|enable|enabled|yes|always|y|on|ok|t|o")) {
+                    return (TsonBoolean) Tson.of(true);
+                }
+                if (svalue.matches("false|disable|disabled|no|none|never|n|off|ko|f")) {
+                    return (TsonBoolean) Tson.of(false);
+                }
+            }
+        }
         return throwPrimitive(TsonElementType.BOOLEAN);
     }
 
@@ -135,6 +162,11 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
 
     public Number numberValue() {
         return throwPrimitive(TsonElementType.DOUBLE);
+    }
+
+    @Override
+    public Temporal temporalValue() {
+        return throwPrimitive(TsonElementType.DATETIME);
     }
 
     @Override
@@ -237,10 +269,6 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
         throw new ClassCastException(type() + " is not a number");
     }
 
-    @Override
-    public TsonArray toArray() {
-        return throwNonPrimitive(TsonElementType.ARRAY);
-    }
 
     @Override
     public TsonMatrix toMatrix() {
@@ -368,10 +396,5 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
         return false;
     }
 
-
-    @Override
-    public TsonContainer toContainer() {
-        throw new ClassCastException(type() + " cannot be cast to Container");
-    }
 
 }

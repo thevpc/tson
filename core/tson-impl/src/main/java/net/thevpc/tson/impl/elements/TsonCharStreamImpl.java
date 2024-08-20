@@ -4,7 +4,6 @@ import net.thevpc.tson.TsonCharStream;
 import net.thevpc.tson.TsonElement;
 import net.thevpc.tson.TsonElementType;
 import net.thevpc.tson.TsonPrimitiveBuilder;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 import net.thevpc.tson.impl.parser.CharStreamCodeSupports;
 import net.thevpc.tson.impl.util.AppendableWriter;
@@ -32,7 +31,7 @@ public class TsonCharStreamImpl extends AbstractPrimitiveTsonElement implements 
     }
 
     @Override
-    public Reader getValue() {
+    public Reader value() {
         return value.open();
     }
 
@@ -48,12 +47,12 @@ public class TsonCharStreamImpl extends AbstractPrimitiveTsonElement implements 
             return false;
         }
         TsonCharStreamImpl that = (TsonCharStreamImpl) o;
-        return Objects.equals(getValue(), that.getValue());
+        return Objects.equals(value(), that.value());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getValue());
+        return Objects.hash(super.hashCode(), value());
     }
 
     @Override
@@ -75,7 +74,7 @@ public class TsonCharStreamImpl extends AbstractPrimitiveTsonElement implements 
     public String stringValue() {
         StringBuilder sb = new StringBuilder();
         try (AppendableWriter w = AppendableWriter.of(sb)) {
-            try (Reader r = getValue()) {
+            try (Reader r = value()) {
                 char[] b = new char[1024];
                 int c;
                 while ((c = r.read(b)) > 0) {

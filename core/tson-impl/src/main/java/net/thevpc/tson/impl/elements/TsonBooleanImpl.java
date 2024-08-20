@@ -1,9 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
-import net.thevpc.tson.TsonBoolean;
-import net.thevpc.tson.TsonElement;
-import net.thevpc.tson.TsonElementType;
-import net.thevpc.tson.TsonPrimitiveBuilder;
+import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 
 import java.util.Objects;
@@ -23,23 +20,29 @@ public class TsonBooleanImpl extends AbstractPrimitiveTsonElement implements Tso
     }
 
     @Override
+    public TsonString toStr() {
+        return (TsonString) Tson.of(String.valueOf(value));
+    }
+
+
+    @Override
     public TsonBoolean toBoolean() {
         return this;
     }
 
     @Override
-    public boolean getValue() {
+    public boolean value() {
         return value;
     }
 
     @Override
     public boolean booleanValue() {
-        return getValue();
+        return value();
     }
 
     @Override
     public Boolean booleanObject() {
-        return getValue();
+        return value();
     }
 
     @Override
@@ -63,6 +66,6 @@ public class TsonBooleanImpl extends AbstractPrimitiveTsonElement implements Tso
 
     @Override
     protected int compareCore(TsonElement o) {
-        return Boolean.compare(value, o.toBoolean().getValue());
+        return Boolean.compare(value, o.toBoolean().value());
     }
 }

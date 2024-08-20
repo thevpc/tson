@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.time.temporal.Temporal;
 import java.util.Objects;
 
 public class TsonDateImpl extends AbstractTemporalTsonElement implements TsonDate {
@@ -23,6 +24,20 @@ public class TsonDateImpl extends AbstractTemporalTsonElement implements TsonDat
     }
 
     @Override
+    public Temporal temporalValue() {
+        return value;
+    }
+
+    @Override
+    public TsonElement build() {
+        return (TsonString) Tson.of(String.valueOf(value));
+    }
+    @Override
+    public TsonString toStr() {
+        return (TsonString) Tson.of(String.valueOf(value));
+    }
+
+    @Override
     public TsonTime toTime() {
         return (TsonTime) Tson.ofTime(this.time());
     }
@@ -34,17 +49,17 @@ public class TsonDateImpl extends AbstractTemporalTsonElement implements TsonDat
 
     @Override
     public LocalDate dateValue() {
-        return getValue();
+        return value();
     }
 
     @Override
     public LocalTime time() {
-        return LocalTime.from(getValue());
+        return LocalTime.from(value());
     }
 
     @Override
     public Instant dateTimeValue() {
-        return getValue().atStartOfDay().toInstant(ZoneOffset.UTC);
+        return value().atStartOfDay().toInstant(ZoneOffset.UTC);
     }
 
     @Override
@@ -53,7 +68,7 @@ public class TsonDateImpl extends AbstractTemporalTsonElement implements TsonDat
     }
 
     @Override
-    public LocalDate getValue() {
+    public LocalDate value() {
         return value;
     }
 
@@ -78,7 +93,7 @@ public class TsonDateImpl extends AbstractTemporalTsonElement implements TsonDat
 
     @Override
     protected int compareCore(TsonElement o) {
-        return value.compareTo(o.toDate().getValue());
+        return value.compareTo(o.toDate().value());
     }
 
     @Override
@@ -90,11 +105,11 @@ public class TsonDateImpl extends AbstractTemporalTsonElement implements TsonDat
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
                 case DATE: {
-                    int i = getValue().compareTo(o.dateValue());
+                    int i = value().compareTo(o.dateValue());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
                 case TIME: {
-                    int i = getValue().compareTo(o.dateValue());
+                    int i = value().compareTo(o.dateValue());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
             }

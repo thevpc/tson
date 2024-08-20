@@ -3,7 +3,7 @@ package net.thevpc.tson;
 import java.math.BigDecimal;
 
 public interface TsonBigDecimal extends TsonNumber {
-    BigDecimal getValue();
+    BigDecimal value();
 
     TsonPrimitiveBuilder builder();
 }

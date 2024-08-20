@@ -33,13 +33,13 @@ public class TsonDocumentHeaderBuilderImpl implements TsonDocumentHeaderBuilder 
                     case PAIR: {
                         acceptStr=false;
                         TsonPair kv = param.toPair();
-                        switch (kv.getKey().stringValue()) {
+                        switch (kv.key().stringValue()) {
                             case "version": {
-                                version = kv.getValue().stringValue();
+                                version = kv.value().stringValue();
                                 break;
                             }
                             case "encoding": {
-                                encoding = kv.getValue().stringValue();
+                                encoding = kv.value().stringValue();
                                 break;
                             }
                             default: {

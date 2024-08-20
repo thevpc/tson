@@ -6,6 +6,7 @@ import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.Temporal;
 import java.util.Objects;
 
 public class TsonTimeImpl extends AbstractTemporalTsonElement implements TsonTime {
@@ -20,6 +21,14 @@ public class TsonTimeImpl extends AbstractTemporalTsonElement implements TsonTim
         super(TsonElementType.DATE);
         this.value = LocalTime.parse(value);
     }
+    @Override
+    public TsonString toStr() {
+        return (TsonString) Tson.of(String.valueOf(value));
+    }
+    @Override
+    public Temporal temporalValue() {
+        return value;
+    }
 
     @Override
     public TsonDate toDate() {
@@ -31,7 +40,7 @@ public class TsonTimeImpl extends AbstractTemporalTsonElement implements TsonTim
         return this;
     }
 
-    @Override public LocalTime getValue() {
+    @Override public LocalTime value() {
         return value;
     }
 
@@ -47,7 +56,7 @@ public class TsonTimeImpl extends AbstractTemporalTsonElement implements TsonTim
 
     @Override
     public LocalTime time() {
-        return getValue();
+        return value();
     }
 
     @Override
@@ -77,7 +86,7 @@ public class TsonTimeImpl extends AbstractTemporalTsonElement implements TsonTim
 
     @Override
     protected int compareCore(TsonElement o) {
-        return value.compareTo(o.toTime().getValue());
+        return value.compareTo(o.toTime().value());
     }
 
     @Override
@@ -93,7 +102,7 @@ public class TsonTimeImpl extends AbstractTemporalTsonElement implements TsonTim
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
                 case TIME: {
-                    int i = getValue().compareTo(o.time());
+                    int i = value().compareTo(o.time());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
             }

@@ -35,7 +35,7 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
 
     @Override
     public TsonElement get(int index) {
-        return elements.getValueAt(index);
+        return elements.getAt(index);
     }
 
     @Override

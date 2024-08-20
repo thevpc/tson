@@ -11,7 +11,7 @@ public class TsonStringImpl extends AbstractPrimitiveTsonElement implements Tson
     private String rawValue;
     private String value;
 
-    public TsonStringImpl(String value,String rawValue,TsonStringLayout layout) {
+    public TsonStringImpl(String value, String rawValue, TsonStringLayout layout) {
         super(TsonElementType.STRING);
         this.value = value;
         this.rawValue = rawValue;
@@ -19,8 +19,22 @@ public class TsonStringImpl extends AbstractPrimitiveTsonElement implements Tson
     }
 
     @Override
+    public TsonBoolean toBoolean() {
+        String svalue = String.valueOf(value).trim().toLowerCase();
+        if (!svalue.isEmpty()) {
+            if (svalue.matches("true|enable|enabled|yes|always|y|on|ok|t|o")) {
+                return (TsonBoolean) Tson.of(true);
+            }
+            if (svalue.matches("false|disable|disabled|no|none|never|n|off|ko|f")) {
+                return (TsonBoolean) Tson.of(false);
+            }
+        }
+        return super.toBoolean();
+    }
+
+    @Override
     public String quoted() {
-        switch (layout()){
+        switch (layout()) {
             case DOUBLE_QUOTE:
                 return quoted("\"");
             case SINGLE_QUOTE:
@@ -37,50 +51,50 @@ public class TsonStringImpl extends AbstractPrimitiveTsonElement implements Tson
         throw new IllegalArgumentException("unexpected");
     }
 
-    private String quoted(String quotes){
-        String str=raw();
-        if(quotes.length()==1){
-            char c0=quotes.charAt(0);
-            StringBuilder sb=new StringBuilder();
+    private String quoted(String quotes) {
+        String str = raw();
+        if (quotes.length() == 1) {
+            char c0 = quotes.charAt(0);
+            StringBuilder sb = new StringBuilder();
             for (char c : str.toCharArray()) {
-                if(c==c0){
+                if (c == c0) {
                     sb.append('\\');
                     sb.append(c);
-                }else if(c=='\''){
+                } else if (c == '\'') {
                     sb.append('\\');
                     sb.append('\\');
-                }else{
+                } else {
                     sb.append(c);
                 }
             }
-            sb.insert(0,c0);
+            sb.insert(0, c0);
             sb.append(c0);
             return sb.toString();
         }
-        StringBuilder sb=new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         char[] charArray = str.toCharArray();
         for (int i = 0; i < charArray.length; i++) {
-            char c=charArray[i];
+            char c = charArray[i];
             if (c == '\\'
-                    && i+3<charArray.length
-                    && charArray[i+1] == quotes.charAt(0)&& charArray[i+2] == quotes.charAt(1)&& charArray[i+3] == quotes.charAt(2)) {
+                    && i + 3 < charArray.length
+                    && charArray[i + 1] == quotes.charAt(0) && charArray[i + 2] == quotes.charAt(1) && charArray[i + 3] == quotes.charAt(2)) {
                 sb.append("\\\\");
-            }else if(i+2<charArray.length
-                    && charArray[i+0] == quotes.charAt(0)&& charArray[i+1] == quotes.charAt(1)&& charArray[i+2] == quotes.charAt(2)
-            ){
+            } else if (i + 2 < charArray.length
+                    && charArray[i + 0] == quotes.charAt(0) && charArray[i + 1] == quotes.charAt(1) && charArray[i + 2] == quotes.charAt(2)
+            ) {
                 sb.append("\\");
                 sb.append(quotes);
-                i+=quotes.length()-1;
-            }else{
+                i += quotes.length() - 1;
+            } else {
                 sb.append(c);
             }
         }
-        sb.insert(0,quotes);
+        sb.insert(0, quotes);
         sb.append(quotes);
         return sb.toString();
     }
 
-    public TsonStringLayout layout(){
+    public TsonStringLayout layout() {
         return layout;
     }
 
@@ -90,7 +104,7 @@ public class TsonStringImpl extends AbstractPrimitiveTsonElement implements Tson
     }
 
     @Override
-    public String getValue() {
+    public String value() {
         return value;
     }
 
@@ -111,12 +125,12 @@ public class TsonStringImpl extends AbstractPrimitiveTsonElement implements Tson
             return false;
         }
         TsonStringImpl that = (TsonStringImpl) o;
-        return Objects.equals(getValue(), that.getValue());
+        return Objects.equals(value(), that.value());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getValue());
+        return Objects.hash(super.hashCode(), value());
     }
 
     @Override
@@ -126,11 +140,11 @@ public class TsonStringImpl extends AbstractPrimitiveTsonElement implements Tson
 
     @Override
     protected int compareCore(TsonElement o) {
-        return getValue().compareTo(o.stringValue());
+        return value().compareTo(o.stringValue());
     }
 
     @Override
     public String stringValue() {
-        return getValue();
+        return value();
     }
 }

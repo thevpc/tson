@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 public interface TsonElementList extends Iterable<TsonElement> {
-    TsonElement getValueAt(int index);
+    TsonElement getAt(int index);
 
-    TsonElement getValue(String name);
+    TsonElement get(String name);
 
-    TsonElement getValue(TsonElement name);
+    TsonElement get(TsonElement name);
 
     Map<TsonElement, TsonElement> toMap();
 

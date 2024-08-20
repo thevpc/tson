@@ -1,9 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
-import net.thevpc.tson.TsonElement;
-import net.thevpc.tson.TsonElementType;
-import net.thevpc.tson.TsonPrimitiveBuilder;
-import net.thevpc.tson.TsonRegex;
+import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 
 import java.util.Objects;
@@ -23,23 +20,28 @@ public class TsonRegexImpl extends AbstractPrimitiveTsonElement implements TsonR
     }
 
     @Override
+    public TsonString toStr() {
+        return (TsonString) Tson.of(value.toString());
+    }
+
+    @Override
     public TsonRegex toRegex() {
         return this;
     }
 
     @Override
-    public Pattern getValue() {
+    public Pattern value() {
         return value;
     }
 
     @Override
     public Pattern regexValue() {
-        return getValue();
+        return value();
     }
 
     @Override
     public String stringValue() {
-        return getValue().toString();
+        return value().toString();
     }
 
     @Override
@@ -62,6 +64,6 @@ public class TsonRegexImpl extends AbstractPrimitiveTsonElement implements TsonR
 
     @Override
     protected int compareCore(TsonElement o) {
-        return value.toString().compareTo(o.toRegex().getValue().toString());
+        return value.toString().compareTo(o.toRegex().value().toString());
     }
 }

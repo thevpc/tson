@@ -212,9 +212,9 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
     }
 
     @Override
-    public TsonElement build() {
+    public TsonObject build() {
         TsonObjectImpl built = new TsonObjectImpl(header.build(), TsonUtils.unmodifiableElements(elementsSupport.toList()));
-        return TsonUtils.decorate(
+        return (TsonObject) TsonUtils.decorate(
                 built,
                 getComments(), getAnnotations());
     }

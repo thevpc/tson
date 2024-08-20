@@ -1,7 +1,7 @@
 package net.thevpc.tson;
 
 public interface TsonLong extends TsonNumber {
-    long getValue();
+    long value();
 
     TsonPrimitiveBuilder builder();
 }

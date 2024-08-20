@@ -1,6 +1,6 @@
 package net.thevpc.tson;
 
 public interface TsonShort extends TsonNumber {
-    short getValue();
+    short value();
     TsonPrimitiveBuilder builder();
 }

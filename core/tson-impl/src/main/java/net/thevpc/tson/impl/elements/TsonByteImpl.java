@@ -15,7 +15,7 @@ public class TsonByteImpl extends AbstractNumberTsonElement implements TsonByte 
 
     @Override
     public Number numberValue() {
-        return getValue();
+        return value();
     }
 
     @Override
@@ -24,7 +24,7 @@ public class TsonByteImpl extends AbstractNumberTsonElement implements TsonByte 
     }
 
     @Override
-    public byte getValue() {
+    public byte value() {
         return value;
     }
 
@@ -49,92 +49,92 @@ public class TsonByteImpl extends AbstractNumberTsonElement implements TsonByte 
 
     @Override
     protected int compareCore(TsonElement o) {
-        return Byte.compare(value, o.toByte().getValue());
+        return Byte.compare(value, o.toByte().value());
     }
 
     @Override
     public TsonShort toShort() {
-        return Tson.of((short) getValue()).toShort();
+        return Tson.of((short) value()).toShort();
     }
 
     @Override
     public TsonInt toInt() {
-        return Tson.of((int) getValue()).toInt();
+        return Tson.of((int) value()).toInt();
     }
 
     @Override
     public TsonLong toLong() {
-        return Tson.of((long) getValue()).toLong();
+        return Tson.of((long) value()).toLong();
     }
 
     @Override
     public TsonFloat toFloat() {
-        return Tson.of((float) getValue()).toFloat();
+        return Tson.of((float) value()).toFloat();
     }
 
     @Override
     public TsonDouble toDouble() {
-        return Tson.of((double) getValue()).toDouble();
+        return Tson.of((double) value()).toDouble();
     }
 
     @Override
     public Byte byteObject() {
-        return (byte) getValue();
+        return (byte) value();
     }
 
     @Override
     public Long longObject() {
-        return (long)getValue();
+        return (long) value();
     }
 
     @Override
     public Integer intObject() {
-        return (int)getValue();
+        return (int) value();
     }
 
     @Override
     public Short shortObject() {
-        return (short)getValue();
+        return (short) value();
     }
 
     @Override
     public Float floatObject() {
-        return (float)getValue();
+        return (float) value();
     }
 
     @Override
     public Double doubleObject() {
-        return (double) getValue();
+        return (double) value();
     }
 
     @Override
     public byte byteValue() {
-        return ((byte) getValue());
+        return ((byte) value());
     }
 
     @Override
     public short shortValue() {
-        return ((short) getValue());
+        return ((short) value());
     }
 
     @Override
     public int intValue() {
-        return ((int) getValue());
+        return ((int) value());
     }
 
     @Override
     public long longValue() {
-        return ((long) getValue());
+        return ((long) value());
     }
 
     @Override
     public float floatValue() {
-        return ((float) getValue());
+        return ((float) value());
     }
 
     @Override
     public double doubleValue() {
-        return (double) getValue();
+        return (double) value();
     }
 
     @Override
@@ -142,27 +142,27 @@ public class TsonByteImpl extends AbstractNumberTsonElement implements TsonByte 
         if (o.type().isNumber()) {
             switch (o.type()) {
                 case BYTE: {
-                    int i= Byte.compare(getValue(), o.byteValue());
+                    int i= Byte.compare(value(), o.byteValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case SHORT: {
-                    int i= Short.compare(getValue(), o.shortValue());
+                    int i= Short.compare(value(), o.shortValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case INT: {
-                    int i= Integer.compare(getValue(), o.intValue());
+                    int i= Integer.compare(value(), o.intValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case LONG: {
-                    int i= Long.compare(getValue(), o.longValue());
+                    int i= Long.compare(value(), o.longValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case FLOAT: {
-                    int i= Float.compare(getValue(), o.floatValue());
+                    int i= Float.compare(value(), o.floatValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case DOUBLE: {
-                    int i= Double.compare(getValue(), o.doubleValue());
+                    int i= Double.compare(value(), o.doubleValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
             }

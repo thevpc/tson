@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.regex.Pattern;
 
 public interface TsonPrimitiveBuilder extends TsonElementBuilder {
-    TsonElement getValue();
+    TsonElement value();
 
 
     TsonPrimitiveBuilder set(TsonElementBase element);

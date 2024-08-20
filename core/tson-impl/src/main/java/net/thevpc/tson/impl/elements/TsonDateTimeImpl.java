@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.temporal.Temporal;
 import java.util.Objects;
 
 public class TsonDateTimeImpl extends AbstractTemporalTsonElement implements TsonDateTime {
@@ -21,6 +22,14 @@ public class TsonDateTimeImpl extends AbstractTemporalTsonElement implements Tso
         super(TsonElementType.DATE);
         this.value = Instant.parse(value);
     }
+    @Override
+    public TsonString toStr() {
+        return (TsonString) Tson.of(String.valueOf(value));
+    }
+    @Override
+    public Temporal temporalValue() {
+        return value;
+    }
 
     @Override
     public TsonDateTime toDateTime() {
@@ -29,7 +38,7 @@ public class TsonDateTimeImpl extends AbstractTemporalTsonElement implements Tso
 
     @Override
     public Instant dateTimeValue() {
-        return getValue();
+        return value();
     }
 
     @Override
@@ -39,12 +48,12 @@ public class TsonDateTimeImpl extends AbstractTemporalTsonElement implements Tso
 
     @Override
     public LocalDate dateValue() {
-        return getValue().atZone(ZoneId.systemDefault()).toLocalDate();
+        return value().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     @Override
     public LocalTime time() {
-        return LocalTime.from(getValue());
+        return LocalTime.from(value());
     }
 
     @Override
@@ -53,7 +62,7 @@ public class TsonDateTimeImpl extends AbstractTemporalTsonElement implements Tso
     }
 
     @Override
-    public Instant getValue() {
+    public Instant value() {
         return value;
     }
 
@@ -78,7 +87,7 @@ public class TsonDateTimeImpl extends AbstractTemporalTsonElement implements Tso
 
     @Override
     protected int compareCore(TsonElement o) {
-        return value.compareTo(o.toDateTime().getValue());
+        return value.compareTo(o.toDateTime().value());
     }
 
     @Override
@@ -86,15 +95,15 @@ public class TsonDateTimeImpl extends AbstractTemporalTsonElement implements Tso
         if (o.type().isTemporal()) {
             switch (o.type()) {
                 case DATETIME: {
-                    int i = getValue().compareTo(o.dateTimeValue());
+                    int i = value().compareTo(o.dateTimeValue());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
                 case DATE: {
-                    int i = getValue().compareTo(o.dateTimeValue());
+                    int i = value().compareTo(o.dateTimeValue());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
                 case TIME: {
-                    int i = getValue().compareTo(o.dateTimeValue());
+                    int i = value().compareTo(o.dateTimeValue());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
             }

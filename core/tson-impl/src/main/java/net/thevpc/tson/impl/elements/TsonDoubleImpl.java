@@ -15,7 +15,7 @@ public class TsonDoubleImpl extends AbstractNumberTsonElement implements TsonDou
 
     @Override
     public Number numberValue() {
-        return getValue();
+        return value();
     }
 
     @Override
@@ -24,7 +24,7 @@ public class TsonDoubleImpl extends AbstractNumberTsonElement implements TsonDou
     }
 
     @Override
-    public double getValue() {
+    public double value() {
         return value;
     }
 
@@ -39,88 +39,88 @@ public class TsonDoubleImpl extends AbstractNumberTsonElement implements TsonDou
 
     @Override
     public TsonByte toByte() {
-        return Tson.of((byte) getValue()).toByte();
+        return Tson.of((byte) value()).toByte();
     }
 
     @Override
     public TsonShort toShort() {
-        return Tson.of((short) getValue()).toShort();
+        return Tson.of((short) value()).toShort();
     }
 
     @Override
     public TsonInt toInt() {
-        return Tson.of((int) getValue()).toInt();
+        return Tson.of((int) value()).toInt();
     }
 
     @Override
     public TsonLong toLong() {
-        return Tson.of((long) getValue()).toLong();
+        return Tson.of((long) value()).toLong();
     }
 
     @Override
     public TsonFloat toFloat() {
-        return Tson.of((float) getValue()).toFloat();
+        return Tson.of((float) value()).toFloat();
     }
 
     @Override
     public Byte byteObject() {
-        return (byte) getValue();
+        return (byte) value();
     }
 
     @Override
     public Long longObject() {
-        return (long) getValue();
+        return (long) value();
     }
 
     @Override
     public Integer intObject() {
-        return (int) getValue();
+        return (int) value();
     }
 
     @Override
     public Short shortObject() {
-        return (short) getValue();
+        return (short) value();
     }
 
     @Override
     public Float floatObject() {
-        return (float) getValue();
+        return (float) value();
     }
 
     @Override
     public Double doubleObject() {
-        return (double) getValue();
+        return (double) value();
     }
 
     //
     @Override
     public byte byteValue() {
-        return ((byte) getValue());
+        return ((byte) value());
     }
 
     @Override
     public short shortValue() {
-        return ((short) getValue());
+        return ((short) value());
     }
 
     @Override
     public int intValue() {
-        return ((int) getValue());
+        return ((int) value());
     }
 
     @Override
     public long longValue() {
-        return ((long) getValue());
+        return ((long) value());
     }
 
     @Override
     public float floatValue() {
-        return ((float) getValue());
+        return ((float) value());
     }
 
     @Override
     public double doubleValue() {
-        return (double) getValue();
+        return (double) value();
     }
 
     @Override
@@ -135,7 +135,7 @@ public class TsonDoubleImpl extends AbstractNumberTsonElement implements TsonDou
 
     @Override
     protected int compareCore(TsonElement o) {
-        return Double.compare(value, o.toDouble().getValue());
+        return Double.compare(value, o.toDouble().value());
     }
 
     @Override
@@ -148,7 +148,7 @@ public class TsonDoubleImpl extends AbstractNumberTsonElement implements TsonDou
                 case LONG:
                 case FLOAT:
                 case DOUBLE: {
-                    int i = Double.compare(getValue(), o.doubleValue());
+                    int i = Double.compare(value(), o.doubleValue());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
             }

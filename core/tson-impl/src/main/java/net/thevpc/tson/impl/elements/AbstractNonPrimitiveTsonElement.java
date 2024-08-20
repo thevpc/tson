@@ -5,6 +5,7 @@ import net.thevpc.tson.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.Temporal;
 import java.util.regex.Pattern;
 
 public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElement {
@@ -12,12 +13,12 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
         super(type);
     }
 
-    protected <T> T throwPrimitive(TsonElementType type){
-        throw new ClassCastException(type()+" is not a primitive. Cannot cast to "+type);
+    protected <T> T throwPrimitive(TsonElementType type) {
+        throw new ClassCastException(type() + " is not a primitive. Cannot cast to " + type);
     }
 
-    protected <T> T throwNonPrimitive(TsonElementType type){
-        throw new ClassCastException(type()+" cannot be cast to "+type);
+    protected <T> T throwNonPrimitive(TsonElementType type) {
+        throw new ClassCastException(type() + " cannot be cast to " + type);
     }
 
     @Override
@@ -230,14 +231,12 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
     public TsonPair toPair() {
         return throwNonPrimitive(TsonElementType.PAIR);
     }
+
     @Override
     public TsonBinOp toBinOp() {
         return throwNonPrimitive(TsonElementType.BINOP);
     }
-    @Override
-    public Number numberValue() {
-        return throwNonPrimitive(TsonElementType.DOUBLE);
-    }
+
 
     @Override
     public boolean visit(TsonDocumentVisitor visitor) {

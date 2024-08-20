@@ -9,7 +9,7 @@ public interface TsonDocumentBuilder {
 
     TsonDocumentBuilder header(TsonDocumentHeader header);
 
-    TsonElement getValue();
+    TsonElement value();
 
     TsonElement content();
 

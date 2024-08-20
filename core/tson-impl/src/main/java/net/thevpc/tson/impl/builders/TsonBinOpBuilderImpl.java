@@ -17,8 +17,8 @@ public class TsonBinOpBuilderImpl extends AbstractTsonElementBuilder<TsonBinOpBu
 
     @Override
     public TsonBinOpBuilderImpl merge(TsonPair other) {
-        key = other.getKey();
-        value = other.getValue();
+        key = other.key();
+        value = other.value();
         return this;
     }
 

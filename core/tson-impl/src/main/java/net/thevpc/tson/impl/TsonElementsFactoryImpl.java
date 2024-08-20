@@ -916,8 +916,8 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
     @Override
     public TsonElement parseChar(String s) {
         TsonString e = (TsonString) parseString(s).toStr();
-        if (e.layout() == TsonStringLayout.SINGLE_QUOTE && e.getValue().length() == 1) {
-            return new TsonCharImpl(e.getValue().charAt(0));
+        if (e.layout() == TsonStringLayout.SINGLE_QUOTE && e.value().length() == 1) {
+            return new TsonCharImpl(e.value().charAt(0));
         }
         throw new TsonParseException("invalid char " + s, null);
     }

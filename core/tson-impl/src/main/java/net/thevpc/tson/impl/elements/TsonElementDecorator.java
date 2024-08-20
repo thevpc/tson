@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.Temporal;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -18,7 +19,6 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     private TsonElement base;
     private TsonComments comments;
-    private TsonComment[] trailingComments;
     private TsonAnnotation[] annotations;
 
     private static TsonComment[] trimToNull(TsonComment[] comments) {
@@ -132,7 +132,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 return ((TsonElementDecorator) base).base;
             }
         }
-        TsonAnnotation[] annotations = annotationsList == null ? TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY : annotationsList.toArray(TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY);
+        TsonAnnotation[] annotations = annotationsList == null ? TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY : annotationsList.stream().filter(Objects::nonNull).toArray(TsonAnnotation[]::new);
         if (decorated) {
             TsonComments oldComments = base.comments();
             TsonAnnotation[] oldAnnotations = base.annotations();
@@ -140,6 +140,9 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                     && Arrays.equals(annotations, oldAnnotations)) {
                 return base;
             }
+        }
+        if((comments==null || comments.isBlank()) && annotations.length==0){
+            return base;
         }
         switch (base.type()) {
             case NULL:
@@ -308,6 +311,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     @Override
     public TsonAlias toAlias() {
         return base.toAlias();
+    }
+
+    @Override
+    public Temporal temporalValue() {
+        return base.temporalValue();
     }
 
     @Override
@@ -605,8 +613,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public BigInteger getValue() {
-            return getBase().getValue();
+        public BigInteger value() {
+            return getBase().value();
         }
 
         @Override
@@ -627,8 +635,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public BigDecimal getValue() {
-            return getBase().getValue();
+        public BigDecimal value() {
+            return getBase().value();
         }
 
         @Override
@@ -671,8 +679,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public InputStream getValue() {
-            return getBase().getValue();
+        public InputStream value() {
+            return getBase().value();
         }
 
         @Override
@@ -698,8 +706,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public Reader getValue() {
-            return getBase().getValue();
+        public Reader value() {
+            return getBase().value();
         }
     }
 
@@ -774,8 +782,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public String getValue() {
-            return getBase().getValue();
+        public String value() {
+            return getBase().value();
         }
 
         @Override
@@ -815,8 +823,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public Pattern getValue() {
-            return getBase().getValue();
+        public Pattern value() {
+            return getBase().value();
         }
     }
 
@@ -827,8 +835,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public LocalDate getValue() {
-            return getBase().getValue();
+        public LocalDate value() {
+            return getBase().value();
         }
     }
 
@@ -839,8 +847,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public Instant getValue() {
-            return getBase().getValue();
+        public Instant value() {
+            return getBase().value();
         }
     }
 
@@ -851,8 +859,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public LocalTime getValue() {
-            return getBase().getValue();
+        public LocalTime value() {
+            return getBase().value();
         }
     }
 
@@ -870,8 +878,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public boolean getValue() {
-            return getBase().getValue();
+        public boolean value() {
+            return getBase().value();
         }
     }
 
@@ -882,8 +890,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public char getValue() {
-            return getBase().getValue();
+        public char value() {
+            return getBase().value();
         }
     }
 
@@ -899,8 +907,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public byte getValue() {
-            return getBase().getValue();
+        public byte value() {
+            return getBase().value();
         }
 
         @Override
@@ -921,8 +929,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public short getValue() {
-            return getBase().getValue();
+        public short value() {
+            return getBase().value();
         }
 
         @Override
@@ -943,8 +951,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public int getValue() {
-            return getBase().getValue();
+        public int value() {
+            return getBase().value();
         }
 
         @Override
@@ -965,8 +973,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public long getValue() {
-            return getBase().getValue();
+        public long value() {
+            return getBase().value();
         }
 
         @Override
@@ -987,8 +995,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public float getValue() {
-            return getBase().getValue();
+        public float value() {
+            return getBase().value();
         }
 
         @Override
@@ -1009,8 +1017,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public double getValue() {
-            return getBase().getValue();
+        public double value() {
+            return getBase().value();
         }
 
         @Override
@@ -1264,13 +1272,13 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonElement getValue() {
-            return getBase().getValue();
+        public TsonElement value() {
+            return getBase().value();
         }
 
         @Override
-        public TsonElement getKey() {
-            return getBase().getKey();
+        public TsonElement key() {
+            return getBase().key();
         }
 
         @Override
@@ -1282,8 +1290,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public void visit(TsonParserVisitor visitor) {
             visitor.visitInstructionStart();
             processCommentsAndAnnotations(visitor);
-            getKey().visit(visitor);
-            getValue().visit(visitor);
+            key().visit(visitor);
+            value().visit(visitor);
             visitor.visitKeyValueEnd();
         }
     }
@@ -1482,4 +1490,5 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     public boolean isNull() {
         return base.isNull();
     }
+
 }

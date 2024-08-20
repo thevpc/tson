@@ -20,7 +20,7 @@ public class TsonDocumentBuilderImpl implements TsonDocumentBuilder {
     }
 
     @Override
-    public TsonElement getValue() {
+    public TsonElement value() {
         return value;
     }
 
@@ -47,7 +47,7 @@ public class TsonDocumentBuilderImpl implements TsonDocumentBuilder {
 
     @Override
     public TsonElement content() {
-        return getValue();
+        return value();
     }
 
     @Override

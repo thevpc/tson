@@ -10,13 +10,14 @@ import java.util.stream.Collectors;
 
 public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements TsonObject {
     private TsonElementList elements;
-    private Map<TsonElement, TsonElement> cachedMap = new LinkedHashMap<>();
+    private Map<TsonElement, TsonElement> map;
     private TsonElementHeader header;
 
     public TsonObjectImpl(TsonElementHeader header, UnmodifiableArrayList<TsonElement> elements) {
         super(TsonElementType.OBJECT);
         this.elements = new TsonElementListImpl(elements.stream().map(x->x).collect(Collectors.toList()));
         this.header = header;
+        this.map = this.elements.toMap();
     }
 
     @Override
@@ -55,10 +56,7 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
     }
 
     private Map<TsonElement, TsonElement> asMap() {
-        if (cachedMap == null) {
-            cachedMap = elements.toMap();
-        }
-        return cachedMap;
+        return map;
     }
 
     @Override

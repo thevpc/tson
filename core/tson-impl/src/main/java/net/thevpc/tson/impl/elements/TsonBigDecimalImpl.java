@@ -17,7 +17,7 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
 
     @Override
     public Number numberValue() {
-        return getValue();
+        return value();
     }
 
     @Override
@@ -26,7 +26,7 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
     }
 
     @Override
-    public BigDecimal getValue() {
+    public BigDecimal value() {
         return value;
     }
 
@@ -96,12 +96,12 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
 
     @Override
     public BigDecimal getBigDecimal() {
-        return getValue();
+        return value();
     }
 
     @Override
     public BigInteger getBigInteger() {
-        return getValue().toBigInteger();
+        return value().toBigInteger();
     }
 
 
@@ -151,7 +151,7 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
 
     @Override
     protected int compareCore(TsonElement o) {
-        return value.compareTo(o.toBigDecimal().getValue());
+        return value.compareTo(o.toBigDecimal().value());
     }
 
     @Override

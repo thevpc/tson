@@ -7,11 +7,11 @@ public interface TsonKeyValueBuilder extends TsonElementBuilder{
 
     TsonKeyValueBuilder reset();
 
-    TsonElement getKey();
+    TsonElement key();
 
     TsonKeyValueBuilder setKey(TsonElementBase key);
 
-    TsonElement getValue();
+    TsonElement value();
 
     TsonKeyValueBuilder setValue(TsonElementBase value);
 

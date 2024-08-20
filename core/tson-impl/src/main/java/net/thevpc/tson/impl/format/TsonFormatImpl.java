@@ -248,8 +248,8 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
             }
             case PAIR: {
                 TsonPair t = element.toPair();
-                format(t.getKey(), writer);
-                String vs = format(t.getValue());
+                format(t.key(), writer);
+                String vs = format(t.value());
                 writer.append(config.afterKey);
                 if (config.indent.length() > 0 && vs.indexOf("\n") > 0) {
                     writer.append(":\n").append(TsonUtils.indent(vs, config.indent));
@@ -357,7 +357,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                         writer.write("^{");
                         char[] c = new char[1024];
                         CharStreamCodeSupport cscs = CharStreamCodeSupports.of("");
-                        try (Reader r = list.getValue()) {
+                        try (Reader r = list.value()) {
                             int x;
                             while ((x = r.read(c)) > 0) {
                                 writer.write(c, 0, x);
@@ -383,7 +383,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                         String stop = "^" + n + "}";
                         Kmp kmp = Kmp.compile(stop);
                         char[] c = new char[1024];
-                        try (Reader r = list.getValue()) {
+                        try (Reader r = list.value()) {
                             int x;
                             while ((x = r.read(c)) > 0) {
                                 for (int i = 0; i < x; i++) {
@@ -520,7 +520,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
             if (tsonElement.isNull()) {
                 return false;
             }
-            if (tsonElement.type() == TsonElementType.PAIR && tsonElement.toPair().getValue().isNull()) {
+            if (tsonElement.type() == TsonElementType.PAIR && tsonElement.toPair().value().isNull()) {
                 return false;
             }
         }

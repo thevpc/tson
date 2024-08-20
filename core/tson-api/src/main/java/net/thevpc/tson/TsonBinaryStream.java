@@ -3,7 +3,7 @@ package net.thevpc.tson;
 import java.io.*;
 
 public interface TsonBinaryStream extends TsonElement {
-    InputStream getValue();
+    InputStream value();
 
     Reader getBase64Value();
 

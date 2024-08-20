@@ -9,12 +9,18 @@ import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.Temporal;
 import java.util.regex.Pattern;
 
 public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     public static final TsonNull INSTANCE = new TsonNullImpl();
 
     public TsonNullImpl() {
+    }
+
+    @Override
+    public Temporal temporalValue() {
+        return null;
     }
 
     @Override

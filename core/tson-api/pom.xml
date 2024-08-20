@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.thevpc.tson</groupId>
     <artifactId>tson-api</artifactId>
-    <version>1.0.0</version><!--updated-->
+    <version>1.1.0</version><!--updated-->
     <packaging>jar</packaging>
     <name>net.thevpc.tson.tson-api</name>
     <url>https://github.com/thevpc/upa/wiki</url>

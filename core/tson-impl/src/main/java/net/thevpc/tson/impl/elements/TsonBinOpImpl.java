@@ -91,7 +91,7 @@ public class TsonBinOpImpl extends AbstractNonPrimitiveTsonElement implements Ts
         TsonPair oo = o.toPair();
         return TsonUtils.compareElementsArray(
                 new TsonElement[]{getFirst(), getSecond()},
-                new TsonElement[]{oo.getKey(), oo.getValue()}
+                new TsonElement[]{oo.key(), oo.value()}
         );
     }
 

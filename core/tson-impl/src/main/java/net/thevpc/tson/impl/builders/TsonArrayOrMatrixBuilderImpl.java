@@ -79,9 +79,9 @@ public class TsonArrayOrMatrixBuilderImpl extends AbstractTsonElementBuilder<Tso
     }
 
     @Override
-    public TsonElement build() {
+    public TsonArray build() {
         TsonArray built = TsonUtils.toArray(header.build(),elementsSupport.getRows());
-        return TsonUtils.decorate(
+        return (TsonArray) TsonUtils.decorate(
                 built
                 , getComments(), getAnnotations())
                 ;

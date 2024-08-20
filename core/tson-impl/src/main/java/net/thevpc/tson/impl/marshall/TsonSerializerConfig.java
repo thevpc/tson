@@ -333,13 +333,13 @@ public class TsonSerializerConfig {
             for (TsonElement a : elements) {
                 if (a.type() == TsonElementType.PAIR) {
                     TsonPair kv = a.toPair();
-                    Object u = context.obj(kv.getKey(), null);
+                    Object u = context.obj(kv.key(), null);
                     if (u instanceof String) {
                         ClassPropertiesRegistry.TypeProperty property = ci.getProperty((String) u, true);
                         if (property == null) {
                             throw new IllegalArgumentException("Property not found " + u + " in " + ci.name());
                         }
-                        property.set(o, context.obj(kv.getValue(), property.type()));
+                        property.set(o, context.obj(kv.value(), property.type()));
                     } else {
                         throw new IllegalArgumentException("Unable to initialize object with non name property");
                     }
@@ -353,8 +353,8 @@ public class TsonSerializerConfig {
             if (a.type() == TsonElementType.PAIR) {
                 TsonPair kv = a.toPair();
                 coll.put(
-                        context.obj(kv.getKey(), null),
-                        context.obj(kv.getValue(), null)
+                        context.obj(kv.key(), null),
+                        context.obj(kv.value(), null)
                 );
             } else {
                 coll.put(
@@ -370,12 +370,12 @@ public class TsonSerializerConfig {
         return new Map.Entry() {
             @Override
             public Object getKey() {
-                return context.obj(element.toPair().getKey(), null);
+                return context.obj(element.toPair().key(), null);
             }
 
             @Override
             public Object getValue() {
-                return context.obj(element.toPair().getValue(), null);
+                return context.obj(element.toPair().value(), null);
             }
 
             @Override

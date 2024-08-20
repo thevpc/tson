@@ -1,6 +1,6 @@
 package net.thevpc.tson;
 
 public interface TsonDouble extends TsonNumber {
-    double getValue();
+    double value();
     TsonPrimitiveBuilder builder();
 }

@@ -50,7 +50,7 @@ public class TsonPrimitiveElementBuilderImpl extends AbstractTsonElementBuilder<
     }
 
     @Override
-    public TsonElement getValue() {
+    public TsonElement value() {
         return value == null ? TsonNullImpl.INSTANCE : value;
     }
 
@@ -255,107 +255,107 @@ public class TsonPrimitiveElementBuilderImpl extends AbstractTsonElementBuilder<
 
     @Override
     public Boolean getBooleanObject() {
-        return getValue().booleanObject();
+        return value().booleanObject();
     }
 
     @Override
     public Character getCharObject() {
-        return getValue().charObject();
+        return value().charObject();
     }
 
     @Override
     public Byte getByteObject() {
-        return getValue().byteObject();
+        return value().byteObject();
     }
 
     @Override
     public Short getShortObject() {
-        return getValue().shortObject();
+        return value().shortObject();
     }
 
     @Override
     public Integer getIntObject() {
-        return getValue().intObject();
+        return value().intObject();
     }
 
     @Override
     public Long getLongObject() {
-        return getValue().longObject();
+        return value().longObject();
     }
 
     @Override
     public Float getFloatObject() {
-        return getValue().floatObject();
+        return value().floatObject();
     }
 
     @Override
     public Double getDoubleObject() {
-        return getValue().doubleObject();
+        return value().doubleObject();
     }
 
     @Override
     public float getFloat() {
-        return getValue().floatValue();
+        return value().floatValue();
     }
 
     @Override
     public double getDouble() {
-        return getValue().doubleValue();
+        return value().doubleValue();
     }
 
     @Override
     public byte getByte() {
-        return getValue().byteValue();
+        return value().byteValue();
     }
 
     @Override
     public char getChar() {
-        return getValue().charValue();
+        return value().charValue();
     }
 
     @Override
     public boolean getBoolean() {
-        return getValue().booleanValue();
+        return value().booleanValue();
     }
 
     @Override
     public String getString() {
-        return getValue().stringValue();
+        return value().stringValue();
     }
 
     @Override
     public int getInt() {
-        return getValue().intValue();
+        return value().intValue();
     }
 
     @Override
     public long getLong() {
-        return getValue().longValue();
+        return value().longValue();
     }
 
     @Override
     public short getShort() {
-        return getValue().shortValue();
+        return value().shortValue();
     }
 
     @Override
     public LocalDate getDate() {
-        return getValue().dateValue();
+        return value().dateValue();
     }
 
     @Override
     public Instant getDateTime() {
-        return getValue().dateTimeValue();
+        return value().dateTimeValue();
     }
 
     @Override
     public LocalTime getTime() {
-        return getValue().time();
+        return value().time();
     }
 
     @Override
     public Pattern getRegex() {
-        return getValue().regexValue();
+        return value().regexValue();
     }
 
     @Override

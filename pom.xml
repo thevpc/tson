@@ -6,7 +6,7 @@
     <groupId>tson</groupId>
     <name>net.thevpc.tson</name>
     <artifactId>tson-builder</artifactId>
-    <version>1.0.0.0</version>
+    <version>1.1.0.0</version>
     <packaging>pom</packaging>
     <modules>
         <module>core/tson-api</module>

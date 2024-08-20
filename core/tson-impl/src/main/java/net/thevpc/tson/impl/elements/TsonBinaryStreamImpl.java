@@ -21,7 +21,7 @@ public class TsonBinaryStreamImpl extends AbstractPrimitiveTsonElement implement
     }
 
     @Override
-    public InputStream getValue() {
+    public InputStream value() {
         return value.open();
     }
 
@@ -32,7 +32,7 @@ public class TsonBinaryStreamImpl extends AbstractPrimitiveTsonElement implement
 
     @Override
     public Reader getBase64Value(int lineMax) {
-        return new Base64EncoderAdapter(getValue(), lineMax);
+        return new Base64EncoderAdapter(value(), lineMax);
     }
 
     @Override
@@ -47,12 +47,12 @@ public class TsonBinaryStreamImpl extends AbstractPrimitiveTsonElement implement
             return false;
         }
         TsonBinaryStreamImpl that = (TsonBinaryStreamImpl) o;
-        return Objects.equals(getValue(), that.getValue());
+        return Objects.equals(value(), that.value());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getValue());
+        return Objects.hash(super.hashCode(), value());
     }
 
     @Override
