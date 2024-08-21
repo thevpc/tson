@@ -64,6 +64,11 @@ public abstract class AbstractTsonElementBase implements TsonElement {
     }
 
     @Override
+    public boolean isFunction() {
+        return type() == TsonElementType.FUNCTION;
+    }
+
+    @Override
     public boolean isArray() {
         return type() == TsonElementType.ARRAY;
     }
