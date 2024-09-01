@@ -23,6 +23,11 @@ public class TsonSerializerBuilderImpl implements TsonSerializerBuilder {
     }
 
     @Override
+    public <T> TsonSerializerBuilder setDeserializer(TsonElementType type, Class<T> to, TsonElementToObject<T> elemToObj) {
+        return setDeserializer(type,null,to,elemToObj);
+    }
+
+    @Override
     public <T> TsonSerializerBuilder setDeserializer(TsonElementType type, String name, Class<T> to, TsonElementToObject<T> elemToObj) {
         config.registerElemToObjConverter(type,name, to, elemToObj);
         return this;

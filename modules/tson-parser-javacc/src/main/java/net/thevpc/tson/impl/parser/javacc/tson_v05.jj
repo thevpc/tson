@@ -158,7 +158,7 @@ void elementLevel1() :
 
     |<NUMBER>{ visitor.visitPrimitiveEnd(Tson.parseNumber(token.image));}
 
-    |<SINGLE_QUOTE_STR> {  visitor.visitPrimitiveEnd(Tson.parseCharElem(token.image));}
+    |<SINGLE_QUOTE_STR> {  visitor.visitPrimitiveEnd(Tson.parseString(token.image));}
     |<DOUBLE_QUOTE_STR> {  visitor.visitPrimitiveEnd(Tson.parseString(token.image));}
     |<ANTI_QUOTE_STR> {  visitor.visitPrimitiveEnd(Tson.parseString(token.image));}
     |<TRIPLE_DOUBLE_QUOTE_STR> {  visitor.visitPrimitiveEnd(Tson.parseString(token.image));}

@@ -179,7 +179,7 @@ public class CustomJavaccTsonStreamParserImpl implements TsonStreamParser {
             }
 
             case TsonStreamParserImplConstants.SINGLE_QUOTE_STR: {
-                visitor.visitPrimitiveEnd(Tson.parseCharElem(token.image));
+                visitor.visitPrimitiveEnd(Tson.parseString(token.image));
                 break;
             }
             case TsonStreamParserImplConstants.ANTI_QUOTE_STR: {

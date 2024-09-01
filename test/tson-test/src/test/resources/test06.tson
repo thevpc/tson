@@ -1,0 +1,26 @@
+{
+  jvmOnVersion: "1.1.0",
+  commands: [
+    dump(plain){
+      triggers: [
+        {
+          conditions: [
+            {
+              or: {
+                SM80{
+                  vars: {
+                    vper: """percent('"net.thevpc.jvmon.extensions.OperatingSystem:name=memory"','used.ivalue','total.ivalue')""",
+                    vabs: """get('"net.thevpc.jvmon.extensions.OperatingSystem:name=memory".used.ivalue')"""
+                  },
+                  msg: "Used Heap Memory {{vper}}% >= 80% ({{formatBytes(vabs)}})",
+                  expr: "vper >= 80",
+                  forceValue: true
+                }
+              },
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

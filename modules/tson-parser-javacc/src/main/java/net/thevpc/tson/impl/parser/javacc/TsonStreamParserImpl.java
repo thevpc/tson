@@ -369,7 +369,7 @@ Token t ;
       break;
     case SINGLE_QUOTE_STR:
       jj_consume_token(SINGLE_QUOTE_STR);
-                           visitor.visitPrimitiveEnd(Tson.parseCharElem(token.image));
+                           visitor.visitPrimitiveEnd(Tson.parseString(token.image));
       break;
     case DOUBLE_QUOTE_STR:
       jj_consume_token(DOUBLE_QUOTE_STR);

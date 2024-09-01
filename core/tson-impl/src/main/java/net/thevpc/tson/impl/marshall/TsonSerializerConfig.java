@@ -177,7 +177,7 @@ public class TsonSerializerConfig {
                 namedArray.put("values", arrayElementToObject(ee.all(), null, context));
                 return namedArray;
             }
-            throw new UnsupportedOperationException("Unsupported Named Array to " + to);
+            throw new UnsupportedOperationException("Unsupported conversion from from Array to " + to);
         });
         registerElemToObjConverter(TsonElementType.OBJECT, null, null, (element, to, context) -> {
             if (to == null || to.equals(Map.class)) {
@@ -193,7 +193,7 @@ public class TsonSerializerConfig {
                 namedArray.put("values", arrayElementToObject(ee.all(), null, context));
                 return namedArray;
             }
-            throw new UnsupportedOperationException("Unsupported Named Array to " + to);
+            throw new UnsupportedOperationException("Unsupported conversion from Object to " + to);
         });
         registerElemToObjConverter(TsonElementType.FUNCTION, null, null, (element, to, context) -> {
             if (to == null || to.equals(Map.class)) {
@@ -203,7 +203,7 @@ public class TsonSerializerConfig {
                 namedArray.put("params", arrayElementToObject(ee.all(), null, context));
                 return namedArray;
             }
-            throw new UnsupportedOperationException("Unsupported Named Array to " + to);
+            throw new UnsupportedOperationException("Unsupported conversion from function to " + to);
         });
 
     }

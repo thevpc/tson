@@ -1,0 +1,109 @@
+{
+  jvmOnVersion: "1.1.0",
+  commands: [
+    dump(plain){
+      appId: "digiclaim-backend-vpc",
+      serverId: prod,
+      repeatPeriod: "5s",
+      immediate: true,
+      incremental: true,
+      gc: true,
+      output: "log/${appId}-${serverId}-${TIMESTAMP_SAFE}.jmx-mon",
+      procs: [
+        "*AvideaOps*"
+      ],
+      run: null,
+
+      triggers: [
+        {
+          conditions: [
+            {
+              HighHeapMemoryUsage(95,90)
+              HighOsMemoryUsage(95,90)
+              LowOsPartitionUsableSpacePercent("/dev/sda5",3,2)
+              or: {
+                M95{
+                  vars: {
+                    vper: """percent('"java.lang:type=Memory".HeapMemoryUsage','used.ivalue','max.ivalue')""",
+                    vabs: """get('"java.lang:type=Memory".HeapMemoryUsage.used.ivalue')"""
+                  },
+                  msg: "Used App  Memory {{vper}}% >= 95% ({{formatBytes(vabs)}})",
+                  expr: "vper >= 95",
+                  forceValue: true
+                },
+                M90{
+                  vars: {
+                    vper: """percent('"java.lang:type=Memory".HeapMemoryUsage','used.ivalue','max.ivalue')""",
+                    vabs: """get('"java.lang:type=Memory".HeapMemoryUsage.used.ivalue')"""
+                  },
+                  msg: "Used App Memory {{vper}}% >= 90% ({{formatBytes(vabs)}})",
+                  expr: "vper >= 90",
+                  forceValue: true
+                }
+              }
+            },
+            {
+              or: {
+                SM90{
+                  vars: {
+                    vper: """percent('"net.thevpc.jvmon.extensions.OperatingSystem:name=memory"','used.ivalue','total.ivalue')""",
+                    vabs: """get('"net.thevpc.jvmon.extensions.OperatingSystem:name=memory".used.ivalue')"""
+                  },
+                  msg: "Used System Memory {{vper}}% >= 90% ({{formatBytes(vabs)}})",
+                  expr: "vper >= 90",
+                  forceValue: true
+                },
+                SM80{
+                  vars": {
+                    vper: """percent('"net.thevpc.jvmon.extensions.OperatingSystem:name=memory"','used.ivalue','total.ivalue')""",
+                    vabs: """get('"net.thevpc.jvmon.extensions.OperatingSystem:name=memory".used.ivalue')"""
+                  },
+                  msg: "Used Heap Memory {{vper}}% >= 80% ({{formatBytes(vabs)}})",
+                  expr: "vper >= 80",
+                  forceValue: true
+                }
+              }
+            },
+            {
+              or: {
+                D03{
+                  vars: {
+                    vper: """ get('"net.thevpc.jvmon.extensions.DiskMonitor:name=/dev/sda5".usableSpacePercent') """
+                  },
+                  msg: "Disk Usage {{vper}}% <= 3%",
+                  expr: "vper <= 3%",
+                  forceValue: true
+                },
+                D02{
+                  vars: {
+                    vper: """get('"net.thevpc.jvmon.extensions.DiskMonitor:name=/dev/sda5".usableSpacePercent')"""
+                  },
+                  msg: "Disk Usage {{vper}}% <=2%",
+                  expr: "vper <= 2%",
+                  forceValue: true
+                }
+              }
+            }
+          ],
+          notifiers: [
+            log(enabled: true){
+              minInterval: "5mn",
+              output: "events/${appId}-${serverId}-events-${TIMESTAMP}.log",
+              maxFiles: 5
+            },
+            email(enabled: true){
+              minInterval: "1mn",
+              mailApp: "Avidea Monitor",
+              mailProvider: "ovh",
+              user: "no_reply@avidea.tn",
+              password: "avidea1243!!!",
+              to: "taha.bensalah@gmail.com;!j.nasri@avidea.tn",
+              cc: "taha.bensalah@gmail.com",
+              sendTestEmail: true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
