@@ -52,14 +52,7 @@ public class TsonSerializerImpl implements TsonSerializer {
     public <T> T defaultElementToObject(TsonElement e, Class<T> to, TsonObjectContext context) {
         TsonElementToObject<T> p = config.getElemToObj(e, to);
         if (p == null) {
-            if (to != null) {
-                p = config.getElemToObj(e, null);
-                if (p == null) {
-                    throw new IllegalArgumentException("Unable to parse as " + to);
-                }
-            } else {
-                throw new IllegalArgumentException("Unable to parse as " + to);
-            }
+            throw new IllegalArgumentException("Unable to parse " + e.type() + " as " + to);
         }
         return p.toObject(e, to, context);
     }

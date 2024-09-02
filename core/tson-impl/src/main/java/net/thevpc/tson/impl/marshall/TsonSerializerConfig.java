@@ -135,11 +135,12 @@ public class TsonSerializerConfig {
 
         registerElemToObjConverter(TsonElementType.NULL, null, null, (element, to, context) -> null);
         registerElemToObjConverter(TsonElementType.STRING, null, null, (element, to, context) -> element.stringValue());
+        registerElemToObjConverter(TsonElementType.NAME, null, null, (element, to, context) -> element.stringValue());
         registerElemToObjConverter(TsonElementType.INT, null, null, (element, to, context) -> element.intValue());
         registerElemToObjConverter(TsonElementType.LONG, null, null, (element, to, context) -> element.longValue());
         registerElemToObjConverter(TsonElementType.SHORT, null, null, (element, to, context) -> element.shortValue());
         registerElemToObjConverter(TsonElementType.BYTE, null, null, (element, to, context) -> element.byteValue());
-        registerElemToObjConverter(TsonElementType.BOOLEAN, null, null, (element, to, context) -> element.booleanValue());
+        registerElemToObjConverter(TsonElementType.BOOLEAN, null, null, new BooleanTsonElementToObject());
         registerElemToObjConverter(TsonElementType.CHAR, null, null, (element, to, context) -> element.charValue());
         registerElemToObjConverter(TsonElementType.FLOAT, null, null, (element, to, context) -> element.floatValue());
         registerElemToObjConverter(TsonElementType.DOUBLE, null, null, (element, to, context) -> element.doubleValue());
@@ -171,27 +172,36 @@ public class TsonSerializerConfig {
                 if(h!=null){
                     Map<String, Object> mheader = new LinkedHashMap<>();
                     mheader.put("name", h.name());
-                    mheader.put("values", arrayElementToObject(h.all(), null, context));
+                    mheader.put("values", arrayElementToObject(h.all(), to, context));
                     namedArray.put("header",mheader);
                 }
-                namedArray.put("values", arrayElementToObject(ee.all(), null, context));
+                namedArray.put("values", arrayElementToObject(ee.all(), to, context));
                 return namedArray;
             }
-            throw new UnsupportedOperationException("Unsupported conversion from from Array to " + to);
+            TsonArray ee = element.toArray();
+            return arrayElementToObject(ee.all(), to, context);
         });
         registerElemToObjConverter(TsonElementType.OBJECT, null, null, (element, to, context) -> {
             if (to == null || to.equals(Map.class)) {
                 TsonObject ee = element.toObject();
-                Map<String, Object> namedArray = new LinkedHashMap<>();
-                TsonElementHeader h = ee.header();
-                if(h!=null){
-                    Map<String, Object> mheader = new LinkedHashMap<>();
-                    mheader.put("name", h.name());
-                    mheader.put("values", arrayElementToObject(h.all(), null, context));
-                    namedArray.put("header",mheader);
+                Map<Object, Object> mmap = new LinkedHashMap<>();
+                Class keyType=null;
+                Class valType=null;
+                for (TsonElement entry : ee.body()) {
+                    if(entry.isPair()){
+                        TsonPair pair = entry.toPair();
+                        mmap.put(
+                                context.obj(pair.key(),keyType),
+                                context.obj(pair.value(),valType)
+                        );
+                    }else{
+                        mmap.put(
+                                context.obj(entry,keyType),
+                                null
+                                );
+                    }
                 }
-                namedArray.put("values", arrayElementToObject(ee.all(), null, context));
-                return namedArray;
+                return mmap;
             }
             throw new UnsupportedOperationException("Unsupported conversion from Object to " + to);
         });
@@ -208,7 +218,7 @@ public class TsonSerializerConfig {
 
     }
 
-    private Object upletElementToObject(TsonElement element, Class to, TsonObjectContext context) {
+    private Object upletElementToObject(TsonElement element, Class<?> to, TsonObjectContext context) {
         if (to == null) {
             TsonUplet ee = element.toUplet();
             Map<String, Object> namedArray = new LinkedHashMap<>();
@@ -220,19 +230,19 @@ public class TsonSerializerConfig {
         }
     }
 
-    private Object arrayElementToObject(TsonElement element, Class to, TsonObjectContext context) {
+    private Object arrayElementToObject(TsonElement element, Class<?> to, TsonObjectContext context) {
         return arrayElementToObject(element.toArray().all(), to, context);
     }
 
-    private Object objectElementToObject(TsonElement element, Class to, TsonObjectContext context) {
+    private Object objectElementToObject(TsonElement element, Class<?> to, TsonObjectContext context) {
         return objectElementToObject(element.toObject().all(), to, context);
     }
 
-    private Object arrayElementToObject(List<TsonElement> elements, Class to, TsonObjectContext context) {
+    private Object arrayElementToObject(List<TsonElement> elements, Class<?> to, TsonObjectContext context) {
         return arrayElementToObject(elements == null ? null : elements.toArray(new TsonElement[0]), to, context);
     }
 
-    private Object arrayElementToObject(TsonElement[] elements, Class to, TsonObjectContext context) {
+    private Object arrayElementToObject(TsonElement[] elements, Class<?> to, TsonObjectContext context) {
         Collection coll = null;
         if (to == null) {
             coll = new ArrayList();
@@ -433,30 +443,57 @@ public class TsonSerializerConfig {
 //    }
 
 
-    private TypeElementSignature sig(TsonElement e, Class to) {
+    private TypeElementSignature[] sig(TsonElement e, Class to) {
         final TsonElementType etype = e.type();
         switch (etype) {
             case ARRAY: {
                 TsonElementHeader h = e.toArray().header();
-                return new TypeElementSignature(etype, h==null?null:h.name(), to);
+                String name = h == null ? null : h.name();
+                LinkedHashSet<TypeElementSignature> all=new LinkedHashSet<>();
+                all.add(new TypeElementSignature(etype, name, to));
+                all.add(new TypeElementSignature(etype, null, to));
+                all.add(new TypeElementSignature(etype, name, null));
+                all.add(new TypeElementSignature(etype, null, null));
+                return all.toArray(new TypeElementSignature[0]);
             }
             case OBJECT: {
                 TsonElementHeader h = e.toObject().header();
-                return new TypeElementSignature(etype, h==null?null:h.name(), to);
+                String name = h == null ? null : h.name();
+                LinkedHashSet<TypeElementSignature> all=new LinkedHashSet<>();
+                all.add(new TypeElementSignature(etype, name, to));
+                all.add(new TypeElementSignature(etype, null, to));
+                all.add(new TypeElementSignature(etype, name, null));
+                all.add(new TypeElementSignature(etype, null, null));
+                return all.toArray(new TypeElementSignature[0]);
             }
             case FUNCTION: {
-                return new TypeElementSignature(etype, e.toFunction().name(), to);
+                String name = e.toFunction().name();
+                LinkedHashSet<TypeElementSignature> all=new LinkedHashSet<>();
+                all.add(new TypeElementSignature(etype, name, to));
+                all.add(new TypeElementSignature(etype, null, to));
+                all.add(new TypeElementSignature(etype, name, null));
+                all.add(new TypeElementSignature(etype, null, null));
+                return all.toArray(new TypeElementSignature[0]);
             }
         }
         if (to == null) {
-            return CACHED[etype.ordinal()];
+            return new TypeElementSignature[]{CACHED[etype.ordinal()]};
         }
-        return new TypeElementSignature(etype, null, to);
+        LinkedHashSet<TypeElementSignature> all=new LinkedHashSet<>();
+        all.add(new TypeElementSignature(etype, null, to));
+        all.add(new TypeElementSignature(etype, null, null));
+        return all.toArray(new TypeElementSignature[0]);
     }
 
 
     public <T> TsonElementToObject<T> getElemToObj(TsonElement e, Class<T> to) {
-        return (TsonElementToObject<T>) elemToObj.get(sig(e, to));
+        for (TypeElementSignature ss : sig(e, to)) {
+            TsonElementToObject<T> v = elemToObj.get(ss);
+            if(v!=null){
+                return v;
+            }
+        }
+        return null;
     }
 
 
@@ -496,5 +533,40 @@ public class TsonSerializerConfig {
 
     public TsonSerializerConfig copy() {
         return new TsonSerializerConfig(this);
+    }
+
+    private static class BooleanTsonElementToObject implements TsonElementToObject<Object> {
+        @Override
+        public Object toObject(TsonElement element, Class<Object> to, TsonObjectContext context) {
+            if (to == null) {
+                return element.booleanValue();
+            }
+            switch (to.getName()) {
+                case "boolean":
+                case "java.lang.Boolean":
+                    return element.booleanValue();
+                case "byte":
+                case "java.lang.Byte":
+                    return element.booleanValue() ? (byte) 1 : (byte) 0;
+                case "short":
+                case "java.lang.Short":
+                    return element.booleanValue() ? (short) 1 : (short) 0;
+                case "int":
+                case "java.lang.Integer":
+                    return element.booleanValue() ? 1 : 0;
+                case "long":
+                case "java.lang.Long":
+                    return element.booleanValue() ? (long) 1 : (long) 0;
+                case "float":
+                case "java.lang.Float":
+                    return element.booleanValue() ? (float) 1 : (float) 0;
+                case "double":
+                case "java.lang.Double":
+                    return element.booleanValue() ? (double) 1 : (double) 0;
+                case "java.lang.String":
+                    return String.valueOf(element.booleanValue());
+            }
+            throw new IllegalArgumentException("Unable to convert boolean to " + to);
+        }
     }
 }
