@@ -148,10 +148,18 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     boolean isNumber();
 
+    boolean isOrdinalNumber();
+
+    boolean isFloatingNumber();
+
+    boolean isComplexNumber();
+
     boolean isBoolean();
+
     boolean isName();
 
     boolean isFunction();
+
     boolean isArray();
 
     boolean isNamedArray();

@@ -32,6 +32,44 @@ public abstract class AbstractTsonElementBase implements TsonElement {
     }
 
     @Override
+    public boolean isFloatingNumber() {
+        switch (type()) {
+            case FLOAT:
+            case DOUBLE:
+            case BIG_DECIMAL: {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isComplexNumber() {
+        switch (type()) {
+            case BIG_COMPLEX:
+            case FLOAT_COMPLEX:
+            case DOUBLE_COMPLEX: {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isOrdinalNumber() {
+        switch (type()) {
+            case BYTE:
+            case SHORT:
+            case INT:
+            case LONG:
+            case BIG_INT: {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public boolean isString() {
         return type() == TsonElementType.STRING;
     }
@@ -48,7 +86,7 @@ public abstract class AbstractTsonElementBase implements TsonElement {
 
     @Override
     public boolean isSimplePair() {
-        if(!isPair()) return false;
+        if (!isPair()) return false;
         TsonPair pair = toPair();
         return type() == TsonElementType.PAIR && pair.key().isSimple();
     }
@@ -60,7 +98,7 @@ public abstract class AbstractTsonElementBase implements TsonElement {
 
     @Override
     public boolean isBoolean() {
-        return type()==TsonElementType.BOOLEAN;
+        return type() == TsonElementType.BOOLEAN;
     }
 
     @Override
