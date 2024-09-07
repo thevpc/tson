@@ -1,0 +1,31 @@
+@normal page{
+    @Header {
+        text("Objects"),
+    }
+    @OneColumn{
+        ul{
+            "Objects can key value pairs"
+            source(
+                tson
+                """
+                    {
+                        name:"myObject"
+                        count:12
+                        enabled:true
+                    }
+                """
+            )
+            "Or any other constructs"
+            source(
+                tson
+                """
+                    {
+                        name:"myObject"
+                        enabled
+                        max(12,13)
+                    }
+                """
+            )
+        }
+    }
+}

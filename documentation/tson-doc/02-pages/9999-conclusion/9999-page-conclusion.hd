@@ -1,0 +1,4 @@
+@conclusion page{
+    @(title)    text("Thank you!"),
+    @(date)     text("taha.bensalah@gmail.com"),
+}

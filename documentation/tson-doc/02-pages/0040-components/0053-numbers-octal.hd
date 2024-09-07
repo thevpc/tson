@@ -1,0 +1,23 @@
+@normal page{
+    @Header {
+        text("Octal Numbers"),
+    }
+    @OneColumn{
+        ul{
+            "this is an example"
+            source(
+                tson
+                """
+                    04556 (int)
+                    0u1o71 (byte)
+                    0u2o71 (short)
+                    0u4o71 (int)
+                    0u8o71 (long)
+                    071LL (big integer)
+                    071LL_amp (big integer with unit 'amp')
+                    071% (int with unit '%')
+                """
+            )
+        }
+    }
+}

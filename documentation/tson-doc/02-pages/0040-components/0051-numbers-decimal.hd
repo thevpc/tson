@@ -1,0 +1,21 @@
+@normal page{
+    @Header {
+        text("Numbers"),
+    }
+    @OneColumn{
+        ul{
+            "Decimal numbers have a range of sizes"
+            source(
+                tson
+                """
+                    0u1_12 // this is a byte (8bits) with value 12
+                    0u2_12 // this is a short (16bits) with value 12
+                    0u4_12 // this is an int (32bits) with value 12
+                             // this is equivalent to 12
+                    0u8_12 // this is an int (64bits) with value 12
+                             // this is equivalent to 12L
+                """
+            )
+        }
+    }
+}

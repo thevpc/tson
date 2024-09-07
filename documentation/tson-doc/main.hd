@@ -1,0 +1,3 @@
+import("github://thevpc/halfa-templates/2024/simple-01/**/*.hd")
+import("01-styles/**/*.hd")
+import("02-pages/**/*.hd")

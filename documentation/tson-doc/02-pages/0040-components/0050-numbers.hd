@@ -1,0 +1,25 @@
+@normal page{
+    @Header {
+        text("Numbers"),
+    }
+    @OneColumn{
+        ul{
+            "this is an example"
+            source(
+                tson
+                """
+                    // regular numbers
+                    1 (int), 12L (long), 1.0 (double), 1445.0f (float),
+                    // big numbers
+                    1245LL (big int), 1.2336LL (big decimal)
+                    // can include '_'
+                    123_100 // int
+                    // can have unit that starts with '_' or '%'
+                    123_100L_amp // int with unit 'amp'
+                    10%   // int with unit '%'
+                    23%g  // int with unit '%g'
+                """
+            )
+        }
+    }
+}

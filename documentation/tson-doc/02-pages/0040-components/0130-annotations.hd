@@ -1,0 +1,20 @@
+@normal page{
+    @Header {
+        text("Annotations"),
+    }
+    @OneColumn{
+        ul{
+            "Annotations are metadata that can prefix any TSON element"
+            source(
+                tson
+                """
+                    @unsigned int:12
+                    @Entity object{
+                        @Id column:string
+                    }
+                """
+            )
+        }
+    }
+
+}

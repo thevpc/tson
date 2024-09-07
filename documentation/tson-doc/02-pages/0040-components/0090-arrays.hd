@@ -1,0 +1,29 @@
+@normal page{
+    @Header {
+        text("Arrays & Matrices"),
+    }
+    @OneColumn{
+        ul{
+            "These are arrays"
+            source(
+                tson
+                """
+                    [ 1, 2, 3, 4]
+                    [ 1  2  3  4]
+                    [ 1  2
+                      3  4]
+                """
+            )
+            "These are matrices (use ';' for row separator)"
+            source(
+                tson
+                """
+                    [ 1, 2 ; 3, 4]
+                    [ 1  2 ; 3  4]
+                    [ 1  2 ;
+                      3  4 ]
+                """
+            )
+        }
+    }
+}

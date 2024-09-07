@@ -1,0 +1,16 @@
+@normal page{
+    @Header {
+        text("Dates"),
+    }
+    @OneColumn{
+        ul{
+            "this is an example"
+            source(
+                tson
+                """
+                    2024-02-05-10-10 //CHECK ME
+                """
+            )
+        }
+    }
+}

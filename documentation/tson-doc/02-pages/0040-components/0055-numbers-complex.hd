@@ -1,0 +1,18 @@
+@normal page{
+    @Header {
+        text("Complex Numbers"),
+    }
+    @OneColumn{
+        ul{
+            "this is an example"
+            source(
+                tson
+                """
+                    1.2+i15.0 (double complex)
+                    1.2f+i15.0f (float complex)
+                    1.2LL+i15.0f (big decimal complex)
+                """
+            )
+        }
+    }
+}

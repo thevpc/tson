@@ -1,0 +1,29 @@
+@normal page{
+    @Header {
+        text("NamedObjects"),
+    }
+    @OneColumn{
+        ul{
+            "this is an example"
+            source(
+                tson
+                """
+                    myObject{
+                        item1,
+                        item2
+                    }
+                """
+            )
+            "and this is a named object with args"
+            source(
+                tson
+                """
+                    myObject(color:red){
+                        item1,
+                        item2
+                    }
+                """
+            )
+        }
+    }
+}

@@ -1,0 +1,16 @@
+@normal page{
+    @Header {
+        text("Pairs"),
+    }
+    @OneColumn{
+        ul{
+            "this is an example"
+            source(
+                tson
+                """
+                    name:"myObject"
+                """
+            )
+        }
+    }
+}

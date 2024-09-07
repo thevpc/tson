@@ -1,0 +1,16 @@
+@normal page(name:"Literal"){
+    @Header {
+        text("Literals"),
+    }
+    @OneColumn{
+        ul{
+            "this is an example"
+            source(
+                tson
+                """
+                    true, false
+                """
+            )
+        }
+    }
+}

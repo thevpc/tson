@@ -1,0 +1,13 @@
+@normal page(name:Rationale){
+    @Header {
+        text("Rationale"),
+    }
+    @OneColumn{
+        ul{
+        "TSON : Type Safe Object Notation"
+        "Simple yet versatile file format for Configuration & Serialization"
+        "Addresses missing consistent types support in props, XML, JSON, YAML, RAML, TOML,..."
+        "Adds support for Primitive & Complex types, Metadata, Comments"
+        }
+    }
+}

@@ -1,0 +1,24 @@
+@normal page{
+    @Header {
+        text("Streams"),
+    }
+    @OneColumn{
+        ul{
+            "
+            Stream can include any binary content but the used defined prefix/suffix
+            (identified by the '^' char)
+            "
+
+           source(
+                       tson
+                       """
+                           ^SAFE_TAG[
+                               ANY DATA
+                           ]SAFE_TAG
+                       """
+           )
+        }
+
+    }
+
+}

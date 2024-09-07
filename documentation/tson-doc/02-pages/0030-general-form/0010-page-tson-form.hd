@@ -1,0 +1,14 @@
+@normal page(name:"General Form"){
+    @Header {
+        text("General Form"),
+    }
+    @OneColumn{
+        ul{
+            "TSON is a superset of JSON"
+            "It adds single line and multiline comments"
+            "It supports a bunch of primitive types including complex numbers and matrices"
+            "It supports dates & times, regex and multiline strings"
+        }
+    }
+    
+}

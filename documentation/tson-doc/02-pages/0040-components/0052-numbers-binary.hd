@@ -1,0 +1,22 @@
+@normal page{
+    @Header {
+        text("Binary Numbers"),
+    }
+    @OneColumn{
+        ul{
+            "this is an example"
+            source(
+                tson
+                """
+                    0b1010_0101 (int)
+                    0u1x01 (byte)
+                    0u2x0101 (short)
+                    0u4x0101 (int)
+                    0u8x0101 (long)
+                    0x0101_0101_01_0101LL (big integer)
+                    0x0101_amp (int with unit 'amp')
+                """
+            )
+        }
+    }
+}

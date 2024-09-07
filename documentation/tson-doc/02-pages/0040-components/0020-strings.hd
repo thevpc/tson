@@ -1,0 +1,21 @@
+@normal page(name:"Strings"){
+    @Header {
+        text("Strings"),
+    }
+    @OneColumn{
+        ul{
+            "this is an example"
+            source(
+                tson
+                """
+                    "a" 'b' `c` simple strings
+                    \"""
+                        block string
+                    \"""
+                    '''b'''
+                    ```c```
+                """
+            )
+        }
+    }
+}

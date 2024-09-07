@@ -1,0 +1,23 @@
+@normal page{
+    @Header {
+        text("Hexadecimal Numbers"),
+    }
+    @OneColumn{
+        ul{
+            "this is an example"
+            source(
+                tson
+                """
+                    0x4556 (int)
+                    0u1x71 (byte)
+                    0u2x71 (short)
+                    0u4x71 (int)
+                    0u8x71 (long)
+                    0x71LL (big integer)
+                    0x71LL_amp (big integer with unit 'amp')
+                    0x71% (big integer with unit '%')
+                """
+            )
+        }
+    }
+}

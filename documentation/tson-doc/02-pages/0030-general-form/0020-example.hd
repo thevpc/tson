@@ -1,0 +1,17 @@
+@normal page(name:"Example"){
+    @Header {
+        text("Example"),
+    }
+    @OneColumn{
+        source(tson,file:"0020-example.tson", position: (2,2))
+//        text(
+//            position: (2,2),
+//            ntf
+//            "
+//                #) Title 1
+//                hello ##hello## are you ###Okkay### ?
+//                ##) Title 2
+//                hello ##hello## are you ###Okkay### ?
+//            ")
+    }
+}

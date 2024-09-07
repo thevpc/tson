@@ -1,0 +1,18 @@
+@normal page(name:"General Form"){
+    @Header {
+        text("General Form"),
+    }
+    @OneColumn{
+        ul{
+            "
+            TSON supports also complex constructs like arrays, uplets,
+            function calls and named objects"
+            "To an extent, it even supports expressions"
+            "
+            It provides consistent Metadata support with
+            annotations and parsable comments"
+            "UTF8 compliant while supporting char and binary streams"
+        }
+    }
+    
+}

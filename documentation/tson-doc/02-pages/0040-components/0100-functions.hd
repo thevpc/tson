@@ -1,0 +1,16 @@
+@normal page{
+    @Header {
+        text("Functions"),
+    }
+    @OneColumn{
+        ul{
+            "this is an example"
+            source(
+                tson
+                """
+                    myFunction(arg1,arg2)
+                """
+            )
+        }
+    }
+}

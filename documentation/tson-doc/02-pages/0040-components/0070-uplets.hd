@@ -1,0 +1,16 @@
+@normal page{
+    @Header {
+        text("Uplets"),
+    }
+    @OneColumn{
+        ul{
+            "this is an example"
+            source(
+                tson
+                """
+                    ( name:"myObject", enabled, 3)
+                """
+            )
+        }
+    }
+}
