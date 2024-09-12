@@ -1,6 +1,7 @@
 package net.thevpc.tson.impl.marshall;
 
 import net.thevpc.tson.*;
+import net.thevpc.tson.impl.marshall.reflect.JavaWord;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class TsonSerializerConfig {
 
     private final ClassMap<TsonObjectToElement> objToElem = new ClassMap<TsonObjectToElement>(Object.class, TsonObjectToElement.class);
     private final Map<TypeElementSignature, TsonElementToObject> elemToObj = new HashMap<>();
+    private JavaWord javaWord = new JavaWord();
 
     private static TypeElementSignature[] CACHED = new TypeElementSignature[TsonElementType.values().length];
     private final TsonObjectToElement objToElem_arr = new TsonObjectToElement() {
@@ -169,11 +171,11 @@ public class TsonSerializerConfig {
                 TsonArray ee = element.toArray();
                 Map<String, Object> namedArray = new LinkedHashMap<>();
                 TsonElementHeader h = ee.header();
-                if(h!=null){
+                if (h != null) {
                     Map<String, Object> mheader = new LinkedHashMap<>();
                     mheader.put("name", h.name());
                     mheader.put("values", arrayElementToObject(h.all(), to, context));
-                    namedArray.put("header",mheader);
+                    namedArray.put("header", mheader);
                 }
                 namedArray.put("values", arrayElementToObject(ee.all(), to, context));
                 return namedArray;
@@ -185,25 +187,28 @@ public class TsonSerializerConfig {
             if (to == null || to.equals(Map.class)) {
                 TsonObject ee = element.toObject();
                 Map<Object, Object> mmap = new LinkedHashMap<>();
-                Class keyType=null;
-                Class valType=null;
+                Class keyType = null;
+                Class valType = null;
                 for (TsonElement entry : ee.body()) {
-                    if(entry.isPair()){
+                    if (entry.isPair()) {
                         TsonPair pair = entry.toPair();
                         mmap.put(
-                                context.obj(pair.key(),keyType),
-                                context.obj(pair.value(),valType)
+                                context.obj(pair.key(), keyType),
+                                context.obj(pair.value(), valType)
                         );
-                    }else{
+                    } else {
                         mmap.put(
-                                context.obj(entry,keyType),
+                                context.obj(entry, keyType),
                                 null
-                                );
+                        );
                     }
                 }
                 return mmap;
             }
-            throw new UnsupportedOperationException("Unsupported conversion from Object to " + to);
+            return customDeserializer(to)
+                    .configureLenient()
+                    .setInstanceFactory(context12 -> classPropertiesRegistry.getClassInfo(to).newInstance())
+                    .toObject(element, to, context);
         });
         registerElemToObjConverter(TsonElementType.FUNCTION, null, null, (element, to, context) -> {
             if (to == null || to.equals(Map.class)) {
@@ -213,7 +218,10 @@ public class TsonSerializerConfig {
                 namedArray.put("params", arrayElementToObject(ee.all(), null, context));
                 return namedArray;
             }
-            throw new UnsupportedOperationException("Unsupported conversion from function to " + to);
+            return customDeserializer(to)
+                    .configureLenient()
+                    .setInstanceFactory(context12 -> classPropertiesRegistry.getClassInfo(to).newInstance())
+                    .toObject(element, to, context);
         });
 
     }
@@ -395,6 +403,9 @@ public class TsonSerializerConfig {
         };
     }
 
+    public <T> TsonCustomDeserializer<T> customDeserializer(Class<T> to) {
+        return new CustomTsonObjectDeserializerImpl<>(javaWord, to);
+    }
 
     public final <T> void registerElemToObjConverter(TsonElementType type, String name, Class to, TsonElementToObject<T> converter) {
         switch (type) {
@@ -449,7 +460,7 @@ public class TsonSerializerConfig {
             case ARRAY: {
                 TsonElementHeader h = e.toArray().header();
                 String name = h == null ? null : h.name();
-                LinkedHashSet<TypeElementSignature> all=new LinkedHashSet<>();
+                LinkedHashSet<TypeElementSignature> all = new LinkedHashSet<>();
                 all.add(new TypeElementSignature(etype, name, to));
                 all.add(new TypeElementSignature(etype, null, to));
                 all.add(new TypeElementSignature(etype, name, null));
@@ -459,7 +470,7 @@ public class TsonSerializerConfig {
             case OBJECT: {
                 TsonElementHeader h = e.toObject().header();
                 String name = h == null ? null : h.name();
-                LinkedHashSet<TypeElementSignature> all=new LinkedHashSet<>();
+                LinkedHashSet<TypeElementSignature> all = new LinkedHashSet<>();
                 all.add(new TypeElementSignature(etype, name, to));
                 all.add(new TypeElementSignature(etype, null, to));
                 all.add(new TypeElementSignature(etype, name, null));
@@ -468,7 +479,7 @@ public class TsonSerializerConfig {
             }
             case FUNCTION: {
                 String name = e.toFunction().name();
-                LinkedHashSet<TypeElementSignature> all=new LinkedHashSet<>();
+                LinkedHashSet<TypeElementSignature> all = new LinkedHashSet<>();
                 all.add(new TypeElementSignature(etype, name, to));
                 all.add(new TypeElementSignature(etype, null, to));
                 all.add(new TypeElementSignature(etype, name, null));
@@ -479,7 +490,7 @@ public class TsonSerializerConfig {
         if (to == null) {
             return new TypeElementSignature[]{CACHED[etype.ordinal()]};
         }
-        LinkedHashSet<TypeElementSignature> all=new LinkedHashSet<>();
+        LinkedHashSet<TypeElementSignature> all = new LinkedHashSet<>();
         all.add(new TypeElementSignature(etype, null, to));
         all.add(new TypeElementSignature(etype, null, null));
         return all.toArray(new TypeElementSignature[0]);
@@ -489,7 +500,7 @@ public class TsonSerializerConfig {
     public <T> TsonElementToObject<T> getElemToObj(TsonElement e, Class<T> to) {
         for (TypeElementSignature ss : sig(e, to)) {
             TsonElementToObject<T> v = elemToObj.get(ss);
-            if(v!=null){
+            if (v != null) {
                 return v;
             }
         }
@@ -568,5 +579,9 @@ public class TsonSerializerConfig {
             }
             throw new IllegalArgumentException("Unable to convert boolean to " + to);
         }
+    }
+
+    public JavaWord getJavaWord() {
+        return javaWord;
     }
 }

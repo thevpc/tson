@@ -6,6 +6,7 @@ public interface TsonCustomDeserializer<T> extends TsonElementToObject<T> {
     TsonCustomDeserializer<T> addAllFields();
 
     TsonCustomDeserializer<T> setWrapCollections(boolean wrapCollections);
+    TsonCustomDeserializer<T> setContainerIsCollection(boolean value) ;
 
     TsonCustomDeserializer<T> addFields(String... names);
 
@@ -21,18 +22,19 @@ public interface TsonCustomDeserializer<T> extends TsonElementToObject<T> {
 
     TsonCustomDeserializer<T> setInstanceFactory(InstanceFactory<T> instanceFactory);
 
-    TsonCustomDeserializer<T> setTrueWhenMissing();
+    TsonCustomDeserializer<T> setTrueDefault();
 
     TsonCustomDeserializer<T> configureLenient();
 
     interface FieldConfig<T> {
 
-        FieldConfig<T> setTrueWhenMissing();
+        FieldConfig<T> setTrueDefault();
 
-        FieldConfig<T> setValueWhenMissing(Object valueWhenMissing);
+        FieldConfig<T> setDefaultValue(Object valueWhenMissing);
 
         FieldConfig<T> setWrapCollections(Boolean value);
 
+        FieldConfig<T> setContainerIsCollection(Boolean value) ;
         FieldConfig<T> setArg(boolean arg);
 
         FieldConfig<T> setBody(boolean body);

@@ -8,6 +8,7 @@ public class JavaField {
 
     public JavaField(Field field, JavaType type) {
         this.field = field;
+        this.field.setAccessible(true);
         this.type = type;
     }
 

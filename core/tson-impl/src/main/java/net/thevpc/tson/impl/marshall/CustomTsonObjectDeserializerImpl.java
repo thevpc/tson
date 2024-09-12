@@ -17,6 +17,7 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
     Map<String, TFieldImpl<T>> bodyFields = new HashMap<>();
     boolean built = false;
     boolean wrapCollections = true;
+    boolean containerIsCollection = false;
     List<MissingFieldConfigurer<T>> onUnsupportedBody = new ArrayList<>();
     List<MissingFieldConfigurer<T>> onUnsupportedArg = new ArrayList<>();
     List<InstanceConfigurer<T>> postProcess = new ArrayList<>();
@@ -31,7 +32,7 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
     public TsonCustomDeserializer<T> configureLenient() {
         this
                 .addAllFields()
-                .setTrueWhenMissing()
+                .setTrueDefault()
                 .setWrapCollections(true)
         ;
         return this;
@@ -39,6 +40,12 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
 
     public TsonCustomDeserializer<T> setWrapCollections(boolean wrapCollections) {
         this.wrapCollections = wrapCollections;
+        invalidateBuild();
+        return this;
+    }
+
+    public TsonCustomDeserializer<T> setContainerIsCollection(boolean value) {
+        this.containerIsCollection = value;
         invalidateBuild();
         return this;
     }
@@ -86,6 +93,7 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
         boolean body;
         JavaField field;
         Boolean wrapCollections = true;
+        Boolean containerIsCollection = false;
         Boolean useDefaultWhenMissingValue;
         Object valueWhenMissing;
 
@@ -95,9 +103,9 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
         }
 
         @Override
-        public FieldConfig<T> setTrueWhenMissing() {
+        public FieldConfig<T> setTrueDefault() {
             if (isBooleanType()) {
-                setValueWhenMissing(Boolean.TRUE);
+                setDefaultValue(Boolean.TRUE);
                 return this;
             } else {
                 throw new IllegalArgumentException("expected boolean");
@@ -105,7 +113,7 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
         }
 
         @Override
-        public FieldConfig<T> setValueWhenMissing(Object valueWhenMissing) {
+        public FieldConfig<T> setDefaultValue(Object valueWhenMissing) {
             this.useDefaultWhenMissingValue = true;
             this.valueWhenMissing = valueWhenMissing;
             return this;
@@ -158,11 +166,25 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
             return this;
         }
 
+        @Override
+        public FieldConfig<T> setContainerIsCollection(Boolean value) {
+            this.containerIsCollection = value;
+            return this;
+        }
+
+
         public boolean isWrapCollections() {
             if (wrapCollections != null) {
                 return wrapCollections;
             }
             return parent.wrapCollections;
+        }
+
+        public boolean isContainerIsCollection() {
+            if (containerIsCollection != null) {
+                return containerIsCollection;
+            }
+            return parent.containerIsCollection;
         }
 
         @Override
@@ -184,7 +206,7 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
     }
 
     @Override
-    public TsonCustomDeserializer<T> setTrueWhenMissing() {
+    public TsonCustomDeserializer<T> setTrueDefault() {
         return setDefaultValueByType(Boolean.class, true);
     }
 
@@ -300,7 +322,23 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
             if (tField != null) {
                 TsonElement value = pair.value();
                 if (tField.isCollectionType() && tField.isWrapCollections()) {
-                    value = Tson.ofArray().addAll(value.toContainer().body().toList()).build();
+                    if (!value.isArray()) {
+                        if (tField.isContainerIsCollection()) {
+                            if (value.isContainer()) {
+                                TsonContainer container = value.toContainer();
+                                TsonArrayBuilder tsonElements = Tson.ofArray();
+                                if (container.args() != null) {
+                                    tsonElements.addAll(container.args().toList());
+                                }
+                                if (container.body() != null) {
+                                    tsonElements.addAll(container.body().toList());
+                                }
+                                value = tsonElements.build();
+                            }
+                        } else {
+                            value = Tson.ofArray(value).build();
+                        }
+                    }
                 }
                 tField.field.set(instance, context.obj(value, (Class<?>) tField.field.getType().raw()));
             } else {
@@ -349,7 +387,7 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
 
                 @Override
                 public <T1> T1 obj(TsonElement element, Class<T1> clazz) {
-                    return context.obj(element,clazz);
+                    return context.obj(element, clazz);
                 }
             });
         }
@@ -404,7 +442,7 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
 
             @Override
             public <T1> T1 obj(TsonElement element, Class<T1> clazz) {
-                return context.obj(element,clazz);
+                return context.obj(element, clazz);
             }
         };
         for (InstanceConfigurer<T> process : postProcess) {
@@ -446,7 +484,7 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
 
                 @Override
                 public <T1> T1 obj(TsonElement element, Class<T1> clazz) {
-                    return context.obj(element,clazz);
+                    return context.obj(element, clazz);
                 }
             };
             for (MissingFieldConfigurer<T> tOnUnsupported : list) {

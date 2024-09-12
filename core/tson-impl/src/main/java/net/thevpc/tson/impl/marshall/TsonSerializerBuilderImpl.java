@@ -6,7 +6,6 @@ import net.thevpc.tson.impl.marshall.reflect.JavaWord;
 public class TsonSerializerBuilderImpl implements TsonSerializerBuilder {
 
     private TsonSerializerConfig config;
-    private JavaWord javaWord = new JavaWord();
 
     public TsonSerializerBuilderImpl(TsonSerializerConfig other) {
         config = new TsonSerializerConfig(other);
@@ -36,7 +35,7 @@ public class TsonSerializerBuilderImpl implements TsonSerializerBuilder {
 
     @Override
     public <T> TsonCustomDeserializer<T> customDeserializer(Class<T> to) {
-        return new CustomTsonObjectDeserializerImpl<>(javaWord, to);
+        return config.customDeserializer(to);
     }
 
     @Override
