@@ -3,15 +3,15 @@ package net.thevpc.tson.impl.marshall.reflect;
 import java.lang.reflect.Field;
 
 public class JavaField {
+
     private Field field;
     private JavaType type;
+    private boolean enabled;
 
     public JavaField(Field field, JavaType type) {
         this.field = field;
-        this.field.setAccessible(true);
         this.type = type;
     }
-
 
     public String getName() {
         return field.getName();
@@ -26,6 +26,10 @@ public class JavaField {
     }
 
     public void set(Object instance, Object fieldValue) {
+        if (!enabled) {
+            this.field.setAccessible(true);
+            enabled = true;
+        }
         try {
             field.set(instance, fieldValue);
         } catch (IllegalAccessException e) {
