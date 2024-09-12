@@ -1,8 +1,8 @@
 @normal page(name:Rationale){
-    @Header {
+    @header {
         text("Rationale"),
     }
-    @OneColumn{
+    @body{
         ul{
         "TSON : Type Safe Object Notation"
         "Simple yet versatile file format for Configuration & Serialization"

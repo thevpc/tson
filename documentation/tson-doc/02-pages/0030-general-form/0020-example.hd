@@ -1,8 +1,8 @@
 @normal page(name:"Example"){
-    @Header {
+    @header {
         text("Example"),
     }
-    @OneColumn{
+    @body{
         source(tson,file:"0020-example.tson", position: (2,2))
 //        text(
 //            position: (2,2),

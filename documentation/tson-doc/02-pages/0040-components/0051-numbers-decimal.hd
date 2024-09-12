@@ -1,8 +1,8 @@
 @normal page{
-    @Header {
+    @header {
         text("Numbers"),
     }
-    @OneColumn{
+    @body{
         ul{
             "Decimal numbers have a range of sizes"
             source(

@@ -1,8 +1,8 @@
 @normal page(name:"General Form"){
-    @Header {
+    @header {
         text("General Form"),
     }
-    @OneColumn{
+    @body{
         ul{
             "TSON is a superset of JSON"
             "It adds single line and multiline comments"

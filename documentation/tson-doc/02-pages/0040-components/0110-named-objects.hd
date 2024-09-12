@@ -1,8 +1,8 @@
 @normal page{
-    @Header {
+    @header {
         text("NamedObjects"),
     }
-    @OneColumn{
+    @body{
         ul{
             "this is an example"
             source(

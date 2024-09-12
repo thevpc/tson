@@ -1,8 +1,8 @@
 @normal page{
-    @Header {
+    @header {
         text("Arrays & Matrices"),
     }
-    @OneColumn{
+    @body{
         ul{
             "These are arrays"
             source(

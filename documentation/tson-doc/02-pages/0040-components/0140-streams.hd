@@ -1,8 +1,8 @@
 @normal page{
-    @Header {
+    @header {
         text("Streams"),
     }
-    @OneColumn{
+    @body{
         ul{
             "
             Stream can include any binary content but the used defined prefix/suffix

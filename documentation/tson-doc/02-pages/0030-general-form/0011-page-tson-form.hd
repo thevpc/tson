@@ -1,8 +1,8 @@
 @normal page(name:"General Form"){
-    @Header {
+    @header {
         text("General Form"),
     }
-    @OneColumn{
+    @body{
         ul{
             "
             TSON supports also complex constructs like arrays, uplets,

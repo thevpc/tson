@@ -1,7 +1,8 @@
 @cover page{
     @(title)    text("TSON")
     @(subtitle) text("Type Safe Object Notation")
-    @(author)   text("https://github.com/thevpc/tson")
+    @(author)   text("thevpc")
+    @(email)   text("https://github.com/thevpc/tson")
     @(date)     text("2024-06-15")
     @(version)  text("v1.0")
 }

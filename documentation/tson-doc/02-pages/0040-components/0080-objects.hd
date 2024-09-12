@@ -1,8 +1,8 @@
 @normal page{
-    @Header {
+    @header {
         text("Objects"),
     }
-    @OneColumn{
+    @body{
         ul{
             "Objects can key value pairs"
             source(

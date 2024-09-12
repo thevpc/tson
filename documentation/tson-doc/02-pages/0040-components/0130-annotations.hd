@@ -1,8 +1,8 @@
 @normal page{
-    @Header {
+    @header {
         text("Annotations"),
     }
-    @OneColumn{
+    @body{
         ul{
             "Annotations are metadata that can prefix any TSON element"
             source(
