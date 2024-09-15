@@ -39,6 +39,8 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     TsonBoolean toBoolean();
 
+    TsonCustom toCustom();
+
     TsonFunction toFunction();
 
     TsonName toName();

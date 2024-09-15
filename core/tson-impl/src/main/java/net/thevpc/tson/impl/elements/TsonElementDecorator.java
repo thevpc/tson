@@ -22,25 +22,26 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     private TsonAnnotation[] annotations;
 
     private static TsonComment[] trimToNull(TsonComment[] comments) {
-        if(comments==null) {
+        if (comments == null) {
             return null;
         }
-        List<TsonComment> ok=new ArrayList<>();
+        List<TsonComment> ok = new ArrayList<>();
         for (TsonComment c : comments) {
-            if(c!=null){
+            if (c != null) {
                 ok.add(c);
             }
         }
-        if(ok.isEmpty()){
+        if (ok.isEmpty()) {
             return null;
         }
         return ok.toArray(new TsonComment[0]);
     }
+
     public static TsonElement of(TsonElement base, TsonComments comments, TsonAnnotation[] annotations) {
         boolean decorated = base instanceof TsonElementDecorator;
         if (
-                comments == null 
-                && (annotations == null || annotations.length == 0)
+                comments == null
+                        && (annotations == null || annotations.length == 0)
         ) {
             if (!decorated) {
                 return base;
@@ -56,7 +57,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
             TsonAnnotation[] oldAnnotations = base.annotations();
             if (
                     Objects.equals(comments, oldComments)
-                    && Arrays.equals(annotations, oldAnnotations)) {
+                            && Arrays.equals(annotations, oldAnnotations)) {
                 return base;
             }
         }
@@ -119,6 +120,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 return new AsDoubleComplex((TsonDoubleComplex) base, comments, annotations);
             case FLOAT_COMPLEX:
                 return new AsFloatComplex((TsonFloatComplex) base, comments, annotations);
+            case BINOP:
+                return new AsBinOp((TsonBinOp) base, comments, annotations);
+            case CUSTOM:
+                return new AsCustom((TsonBinOp) base, comments, annotations);
         }
         throw new IllegalArgumentException("Unsupported " + base.type());
     }
@@ -141,7 +146,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 return base;
             }
         }
-        if((comments==null || comments.isBlank()) && annotations.length==0){
+        if ((comments == null || comments.isBlank()) && annotations.length == 0) {
             return base;
         }
         switch (base.type()) {
@@ -256,6 +261,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     @Override
     public TsonLong toLong() {
         return base.toLong();
+    }
+
+    @Override
+    public TsonCustom toCustom() {
+        return base.toCustom();
     }
 
     @Override
@@ -762,6 +772,72 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         @Override
         public String unit() {
             return getBase().unit();
+        }
+    }
+
+    public static class AsBinOp extends TsonElementDecorator implements TsonBinOp {
+
+        public AsBinOp(TsonBinOp base, TsonComments comments, TsonAnnotation[] annotations) {
+            super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonBinOp getBase() {
+            return (TsonBinOp) super.getBase();
+        }
+
+        @Override
+        public TsonElement second() {
+            return getBase().second();
+        }
+
+        @Override
+        public TsonElement first() {
+            return getBase().first();
+        }
+
+        @Override
+        public String op() {
+            return getBase().op();
+        }
+
+
+        @Override
+        public void visit(TsonParserVisitor visitor) {
+            visitor.visitElementStart();
+            processCommentsAndAnnotations(visitor);
+            first().visit(visitor);
+            visitor.visitBinOpEnd(op());
+            second().visit(visitor);
+        }
+    }
+
+    public static class AsCustom extends TsonElementDecorator implements TsonCustom {
+
+        public AsCustom(TsonBinOp base, TsonComments comments, TsonAnnotation[] annotations) {
+            super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonCustom getBase() {
+            return (TsonCustom) super.getBase();
+        }
+
+        @Override
+        public Object value() {
+            return getBase().value();
+        }
+
+        @Override
+        public TsonCustomBuilder builder() {
+            return getBase().builder();
+        }
+
+        @Override
+        public void visit(TsonParserVisitor visitor) {
+            visitor.visitElementStart();
+            processCommentsAndAnnotations(visitor);
+            visitor.visitCustomEnd(this);
         }
     }
 

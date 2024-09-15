@@ -85,6 +85,11 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
     }
 
     @Override
+    public TsonCustom toCustom() {
+        return throwPrimitive(TsonElementType.CUSTOM);
+    }
+
+    @Override
     public TsonBoolean toBoolean() {
         if (isBoolean()) {
             return (TsonBoolean) this;

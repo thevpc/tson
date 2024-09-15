@@ -44,12 +44,12 @@ public class TsonBinOpImpl extends AbstractNonPrimitiveTsonElement implements Ts
     }
 
     @Override
-    public TsonElement getSecond() {
+    public TsonElement second() {
         return value;
     }
 
     @Override
-    public TsonElement getFirst() {
+    public TsonElement first() {
         return key;
     }
 
@@ -70,7 +70,7 @@ public class TsonBinOpImpl extends AbstractNonPrimitiveTsonElement implements Ts
 
     @Override
     public TsonBinOpBuilder builder() {
-        return new TsonBinOpBuilderImpl().setFirst(getFirst()).setSecond(getSecond());
+        return new TsonBinOpBuilderImpl().setFirst(first()).setSecond(second());
     }
 
     @Override
@@ -90,7 +90,7 @@ public class TsonBinOpImpl extends AbstractNonPrimitiveTsonElement implements Ts
     protected int compareCore(TsonElement o) {
         TsonPair oo = o.toPair();
         return TsonUtils.compareElementsArray(
-                new TsonElement[]{getFirst(), getSecond()},
+                new TsonElement[]{first(), second()},
                 new TsonElement[]{oo.key(), oo.value()}
         );
     }
@@ -98,8 +98,8 @@ public class TsonBinOpImpl extends AbstractNonPrimitiveTsonElement implements Ts
     @Override
     public void visit(TsonParserVisitor visitor) {
         visitor.visitInstructionStart();
-        getFirst().visit(visitor);
-        getSecond().visit(visitor);
+        first().visit(visitor);
+        second().visit(visitor);
         visitor.visitKeyValueEnd();
     }
 }

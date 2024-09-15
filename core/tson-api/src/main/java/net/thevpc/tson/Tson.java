@@ -10,6 +10,7 @@ import java.sql.Time;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.ServiceLoader;
 import java.util.regex.Pattern;
@@ -19,17 +20,19 @@ public class Tson {
     private static String VERSION = "1.0";
     private static TsonElementsFactory factory;
     private static TsonSerializer serializer;
+
     static {
-        ServiceLoader<TsonElementsFactory> loader=ServiceLoader.load(TsonElementsFactory.class);
+        ServiceLoader<TsonElementsFactory> loader = ServiceLoader.load(TsonElementsFactory.class);
         for (TsonElementsFactory f : loader) {
-            factory=f;
+            factory = f;
             break;
         }
-        if(factory==null){
+        if (factory == null) {
             throw new IllegalArgumentException("Missing TsonElementsFactory");
         }
-        serializer=factory.serializer();
+        serializer = factory.serializer();
     }
+
     public static final TsonFormat COMPACT_FORMAT = format().setCompact(true).build();
     public static final TsonFormat DEFAULT_FORMAT = format().build();
 
@@ -45,9 +48,11 @@ public class Tson {
     public static TsonElement ofTrue() {
         return of(true);
     }
+
     public static TsonElement ofFalse() {
         return of(false);
     }
+
     public static TsonElement ofNull() {
         return factory.ofNull();
     }
@@ -149,7 +154,7 @@ public class Tson {
     }
 
     public static TsonElement ofInt(int value, TsonNumberLayout layout) {
-        return factory.ofInt(value, layout,null);
+        return factory.ofInt(value, layout, null);
     }
 
     public static TsonElement ofInt(int value, TsonNumberLayout layout, String unit) {
@@ -256,7 +261,7 @@ public class Tson {
         return factory.ofFloatComplex(real, imag, null);
     }
 
-    public static TsonElement ofFloatComplex(float real, float imag,String unit) {
+    public static TsonElement ofFloatComplex(float real, float imag, String unit) {
         return factory.ofFloatComplex(real, imag, unit);
     }
 
@@ -265,7 +270,7 @@ public class Tson {
         return factory.ofDoubleComplex(real, imag, null);
     }
 
-    public static TsonElement ofDoubleComplex(double real, double imag,String unit) {
+    public static TsonElement ofDoubleComplex(double real, double imag, String unit) {
         return factory.ofDoubleComplex(real, imag, unit);
     }
 
@@ -306,6 +311,37 @@ public class Tson {
 
     public static TsonElement of(boolean value) {
         return ofBoolean(value);
+    }
+
+    public static TsonElement of(Number value) {
+        if(value==null){
+            return ofNull();
+        }
+        switch (value.getClass().getName()){
+            case "byte":
+            case "java.lang.Byte":
+                return of(value.byteValue());
+            case "short":
+            case "java.lang.Short":
+                return of(value.shortValue());
+            case "int":
+            case "java.lang.Integer":
+                return of(value.intValue());
+            case "long":
+            case "java.lang.Long":
+                return of(value.longValue());
+            case "float":
+            case "java.lang.Float":
+                return of(value.floatValue());
+            case "double":
+            case "java.lang.Double":
+                return of(value.doubleValue());
+            case "java.math.BigInteger":
+                return of((java.math.BigInteger)value);
+            case "java.math.BigDecimal":
+                return of((java.math.BigDecimal)value);
+        }
+        throw new IllegalArgumentException("Unsupported number type: " + value.getClass().getName());
     }
 
     public static TsonElement of(char value) {
@@ -361,6 +397,7 @@ public class Tson {
     public static TsonBinaryStreamBuilder ofBinStream() {
         return factory.ofBinStream();
     }
+
     public static TsonElement ofBinStream(byte[] value) {
         if (value == null) {
             return ofNull();
@@ -591,6 +628,80 @@ public class Tson {
         return ofString(value);
     }
 
+    public static TsonElement of(String[] value) {
+        return value == null ? ofNull() : ofArray(Arrays.stream(value).map(x -> Tson.of(x)).toArray(TsonElementBase[]::new)).build();
+    }
+
+    public static TsonElement of(boolean[] value) {
+        if (value == null) {
+            return ofNull();
+        }
+        TsonArrayBuilder a = ofArray();
+        for (boolean b : value) {
+            a.add(of(b));
+        }
+        return a.build();
+    }
+
+    public static TsonElement of(short[] value) {
+        if (value == null) {
+            return ofNull();
+        }
+        TsonArrayBuilder a = ofArray();
+        for (short b : value) {
+            a.add(of(b));
+        }
+        return a.build();
+    }
+
+    public static TsonElement of(float[] value) {
+        if (value == null) {
+            return ofNull();
+        }
+        TsonArrayBuilder a = ofArray();
+        for (float b : value) {
+            a.add(of(b));
+        }
+        return a.build();
+    }
+
+    public static TsonElement of(int[] value) {
+        return value == null ? ofNull() : ofArray(Arrays.stream(value).mapToObj(x -> Tson.of(x)).toArray(TsonElementBase[]::new)).build();
+    }
+
+    public static TsonElement of(long[] value) {
+        return value == null ? ofNull() : ofArray(Arrays.stream(value).mapToObj(x -> Tson.of(x)).toArray(TsonElementBase[]::new)).build();
+    }
+
+    public static TsonElement of(double[] value) {
+        return value == null ? ofNull() : ofArray(Arrays.stream(value).mapToObj(x -> Tson.of(x)).toArray(TsonElementBase[]::new)).build();
+    }
+
+
+    public static TsonElement of(Boolean[] value) {
+        return value == null ? ofNull() : ofArray(Arrays.stream(value).map(x -> Tson.of(x)).toArray(TsonElementBase[]::new)).build();
+    }
+
+    public static TsonElement of(Short[] value) {
+        return value == null ? ofNull() : ofArray(Arrays.stream(value).map(x -> Tson.of(x)).toArray(TsonElementBase[]::new)).build();
+    }
+
+    public static TsonElement of(Float[] value) {
+        return value == null ? ofNull() : ofArray(Arrays.stream(value).map(x -> Tson.of(x)).toArray(TsonElementBase[]::new)).build();
+    }
+
+    public static TsonElement of(Integer[] value) {
+        return value == null ? ofNull() : ofArray(Arrays.stream(value).map(x -> Tson.of(x)).toArray(TsonElementBase[]::new)).build();
+    }
+
+    public static TsonElement of(Long[] value) {
+        return value == null ? ofNull() : ofArray(Arrays.stream(value).map(x -> Tson.of(x)).toArray(TsonElementBase[]::new)).build();
+    }
+
+    public static TsonElement of(Double[] value) {
+        return value == null ? ofNull() : ofArray(Arrays.stream(value).map(x -> Tson.of(x)).toArray(TsonElementBase[]::new)).build();
+    }
+
     public static TsonPrimitiveBuilder of() {
         return factory.of();
     }
@@ -746,6 +857,7 @@ public class Tson {
     public static TsonComment parseComments(String image) {
         return factory.parseComments(image);
     }
+
     public static CharStreamCodeSupport charStreamCodeSupportOf(String language) {
         return factory.charStreamCodeSupportOf(language);
     }

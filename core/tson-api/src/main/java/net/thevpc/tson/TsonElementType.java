@@ -31,6 +31,7 @@ public enum TsonElementType {
     OBJECT(false, false, false, true),
     FUNCTION(false, false, false, true),
     UPLET(false, false, false, true),
+    CUSTOM(false, false, false, false),
     ;
 
     private boolean primitiveType;

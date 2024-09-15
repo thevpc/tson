@@ -112,4 +112,8 @@ public interface TsonParserVisitor {
     default void matrixRowSeparator(){
 
     }
+
+    default void visitCustomEnd(TsonCustom custom) {
+    }
+
 }

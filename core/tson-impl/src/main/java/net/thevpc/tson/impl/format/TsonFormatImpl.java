@@ -8,10 +8,7 @@ import net.thevpc.tson.impl.util.AppendableWriter;
 import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.util.Kmp;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.UncheckedIOException;
-import java.io.Writer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -205,9 +202,8 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
             case BIG_DECIMAL:
             case BIG_COMPLEX:
             case FLOAT_COMPLEX:
-            case DOUBLE_COMPLEX:
-            {
-                writer.append(new TsonNumberHelper((TsonNumber)element).toString());
+            case DOUBLE_COMPLEX: {
+                writer.append(new TsonNumberHelper((TsonNumber) element).toString());
                 return;
             }
             case BOOLEAN:
@@ -261,8 +257,8 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
             case BINOP: {
                 TsonBinOp t = element.toBinOp();
                 String op = t.op();
-                format(t.getFirst(), writer);
-                String vs = format(t.getSecond());
+                format(t.first(), writer);
+                String vs = format(t.second());
                 writer.append(config.afterKey);
                 if (config.indent.length() > 0 && vs.indexOf("\n") > 0) {
                     writer.append(op).append("\n").append(TsonUtils.indent(vs, config.indent));
@@ -429,20 +425,47 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
         }
     }
 
-    private void listToString(boolean indent, Iterable<TsonElement> it, char start, char end, Writer out, ListType applyIgnore) throws
-            IOException {
+    private void listToString(boolean indent, Iterable<TsonElement> it, char start, char end, Writer out, ListType listType) throws IOException{
+        IndentMode indentMode=indent?IndentMode.OPTIMIZE : IndentMode.NEVER;
+        listToString(indentMode, it, start, end, out, listType);
+    }
+
+    private void listToString(IndentMode indent, Iterable<TsonElement> it, char start, char end, Writer out, ListType listType) throws IOException {
         if (it == null) {
             return;
         }
-        if (indent) {
-            listToStringIndented(it, start, end, out, applyIgnore);
-        } else {
-            listToStringNotIndented(it, start, end, out, applyIgnore);
+        if (indent == null) {
+            indent = IndentMode.OPTIMIZE;
+        }
+        switch (indent) {
+            case ALWAYS: {
+                listToStringIndented(it, start, end, out, listType);
+                break;
+            }
+            case NEVER: {
+                listToStringNotIndented(it, start, end, out, listType);
+                break;
+            }
+            case OPTIMIZE: {
+                listToStringIndentOptimized(it, start, end, out, listType);
+            }
         }
     }
 
-    private void listToStringIndented(Iterable<TsonElement> it, char start, char end, Writer out, ListType type) throws
-            IOException {
+    private void listToStringIndentOptimized(Iterable<TsonElement> it, char start, char end, Writer out, ListType listType) throws IOException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        Writer w2 = new PrintWriter(os);
+        listToStringNotIndented(it, start, end, w2, listType);
+        w2.flush();
+        String s = os.toString();
+        if (s.indexOf('\n') >= 0 || s.indexOf('\r') >= 0 || (config.getLineLength() >= 0 && s.length() > config.getLineLength())) {
+            listToStringIndented(it, start, end, out, listType);
+        } else {
+            out.append(s);
+        }
+    }
+
+    private void listToStringIndented(Iterable<TsonElement> it, char start, char end, Writer out, ListType listType) throws IOException {
         List<TsonElement> a = new ArrayList<>();
         for (TsonElement e : it) {
             a.add(e);
@@ -457,7 +480,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
         try (AppendableWriter w = AppendableWriter.of(sb2)) {
             int i = 0;
 
-            switch (type) {
+            switch (listType) {
                 case OBJECT: {
                     for (TsonElement tsonElement : a) {
                         if (acceptObjectElement(tsonElement)) {
@@ -603,6 +626,12 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
     @Override
     public TsonFormatBuilder builder() {
         return new TsonFormatImplBuilder().setConfig(config);
+    }
+
+    private enum IndentMode {
+        ALWAYS,
+        NEVER,
+        OPTIMIZE,
     }
 
     private enum ListType {

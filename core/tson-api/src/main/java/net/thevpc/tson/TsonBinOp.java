@@ -1,7 +1,7 @@
 package net.thevpc.tson;
 
 public interface TsonBinOp extends TsonElement {
-    TsonElement getSecond();
-    TsonElement getFirst();
+    TsonElement second();
+    TsonElement first();
     String op();
 }

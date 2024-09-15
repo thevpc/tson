@@ -18,6 +18,7 @@ class DefaultTsonFormatConfig implements Cloneable {
     boolean showComments = true;
     boolean showAnnotations = true;
     boolean compact = false;
+    int lineLength = 80;
 
     public Object get(String optionName) {
         if (optionName != null) {
@@ -30,6 +31,8 @@ class DefaultTsonFormatConfig implements Cloneable {
                     return ignoreObjectNullFields;
                 case "ignoreObjectEmptyArrayFields":
                     return ignoreObjectEmptyArrayFields;
+                case "lineLength":
+                    return lineLength;
             }
         }
         return null;
@@ -48,6 +51,10 @@ class DefaultTsonFormatConfig implements Cloneable {
                 }
                 case "ignoreObjectEmptyArrayFields": {
                     setIgnoreObjectEmptyArrayFields(Boolean.valueOf(String.valueOf(configValue)));
+                    break;
+                }
+                case "lineLength": {
+                    setLineLength(((Number)configValue).intValue());
                     break;
                 }
                 case "indent": {
@@ -235,6 +242,15 @@ class DefaultTsonFormatConfig implements Cloneable {
 
     public DefaultTsonFormatConfig setIndentBrackets(boolean indentBrackets) {
         this.indentBrackets = indentBrackets;
+        return this;
+    }
+
+    public int getLineLength() {
+        return lineLength;
+    }
+
+    public DefaultTsonFormatConfig setLineLength(int lineLength) {
+        this.lineLength = lineLength;
         return this;
     }
 

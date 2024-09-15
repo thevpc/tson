@@ -68,6 +68,11 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
     }
 
     @Override
+    public TsonCustom toCustom() {
+        return throwPrimitive(TsonElementType.CUSTOM);
+    }
+
+    @Override
     public TsonName toName() {
         return throwPrimitive(TsonElementType.NAME);
     }

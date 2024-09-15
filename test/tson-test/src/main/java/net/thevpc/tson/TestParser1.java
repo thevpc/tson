@@ -3,10 +3,11 @@ package net.thevpc.tson;
 public class TestParser1 {
     public static void main(String[] args) {
         a01();
-//        a02();
+        a02();
+        a03();
     }
     public static void a01() {
-        String text="-1";
+        String text="-1-2";
         TsonDocument e = Tson.reader().readDocument(text);
         System.out.println(e);
     }

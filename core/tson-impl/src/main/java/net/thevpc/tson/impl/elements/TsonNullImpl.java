@@ -220,6 +220,11 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     }
 
     @Override
+    public TsonCustom toCustom() {
+        throw new ClassCastException("Cannot cast Null to Non Null type");
+    }
+
+    @Override
     public TsonFunction toFunction() {
         throw new ClassCastException("Cannot cast Null to Non Null type");
     }
