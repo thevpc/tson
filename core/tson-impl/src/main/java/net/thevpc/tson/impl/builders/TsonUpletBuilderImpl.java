@@ -97,27 +97,28 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
     @Override
     public TsonUpletBuilder merge(TsonElementBase element0) {
         TsonElement element = element0.build();
+        addAnnotations(element.annotations());
         switch (element.type()) {
             case ARRAY: {
                 TsonElementHeader h = element.toArray().header();
                 if (h != null) {
-                    addAll(h.all());
+                    addAll(h.args());
                 }
                 return this;
             }
             case OBJECT: {
                 TsonElementHeader h = element.toObject().header();
                 if (h != null) {
-                    addAll(h.all());
+                    addAll(h.args());
                 }
                 return this;
             }
             case FUNCTION: {
-                addAll(element.toFunction().all());
+                addAll(element.toFunction().args());
                 return this;
             }
             case UPLET: {
-                addAll(element.toUplet().all());
+                addAll(element.toUplet().args());
                 return this;
             }
         }

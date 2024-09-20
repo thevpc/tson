@@ -80,7 +80,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
 
     @Override
     public TsonMatrixBuilder addRow(TsonArray element) {
-        rows.add(new ArrayList<>(element.all()));
+        rows.add(new ArrayList<>(element.body().toList()));
         ensureCapacity(columnsCount, rowsCount + 1);
         return this;
     }
@@ -88,7 +88,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
     @Override
     public TsonMatrixBuilder addRows(TsonArray... elements) {
         for (TsonArray element : elements) {
-            rows.add(new ArrayList<>(element.all()));
+            rows.add(new ArrayList<>(element.body().toList()));
         }
         ensureCapacity(columnsCount, rowsCount + elements.length);
         return this;
@@ -98,7 +98,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
     public TsonMatrixBuilder addRows(Iterable<? extends TsonArray> elements) {
         int count = 0;
         for (TsonArray element : elements) {
-            rows.add(new ArrayList<>(element.all()));
+            rows.add(new ArrayList<>(element.body().toList()));
             count++;
         }
         ensureCapacity(columnsCount, rowsCount + count);
@@ -267,13 +267,13 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
             case OBJECT: {
                 TsonElementHeader h = e.toObject().header();
                 this.header.set(h);
-                addRow(TsonUtils.toArray(e.toObject().all()));
+                addRow(TsonUtils.toArray(e.toObject().body()));
                 break;
             }
             case ARRAY: {
                 TsonElementHeader h = e.toArray().header();
                 this.header.set(h);
-                addRow(TsonUtils.toArray(e.toObject().all()));
+                addRow(TsonUtils.toArray(e.toArray().body()));
                 break;
             }
             case MATRIX: {

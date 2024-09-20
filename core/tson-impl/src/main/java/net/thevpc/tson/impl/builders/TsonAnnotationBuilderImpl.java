@@ -119,23 +119,23 @@ public class TsonAnnotationBuilderImpl implements TsonAnnotationBuilder {
             case ARRAY: {
                 TsonElementHeader h = element.toArray().header();
                 if (h != null) {
-                    addAll(h.all());
+                    addAll(h.args());
                 }
                 return this;
             }
             case OBJECT: {
                 TsonElementHeader h = element.toObject().header();
                 if (h != null) {
-                    addAll(h.all());
+                    addAll(h.args());
                 }
                 return this;
             }
             case FUNCTION: {
-                addAll(element.toFunction().all());
+                addAll(element.toFunction().args());
                 return this;
             }
             case UPLET: {
-                addAll(element.toUplet().all());
+                addAll(element.toUplet().args());
                 return this;
             }
         }
@@ -144,8 +144,8 @@ public class TsonAnnotationBuilderImpl implements TsonAnnotationBuilder {
 
     @Override
     public TsonAnnotationBuilder merge(TsonAnnotation element) {
-        this.name = element.getName();
-        addAll(element.getAll());
+        this.name = element.name();
+        addAll(element.args());
         return this;
     }
 

@@ -549,7 +549,7 @@ public class TsonParserUtils {
             return elementToDocument(roots[0]);
         } else {
             TsonAnnotation[] annotations = roots[0].annotations();
-            if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].getName())) {
+            if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].name())) {
                 // will remove it
                 TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];
                 System.arraycopy(annotations, 1, annotations2, 0, annotations.length - 1);
@@ -564,11 +564,11 @@ public class TsonParserUtils {
 
     public static TsonDocument elementToDocument(TsonElement root) {
         TsonAnnotation[] annotations = root.annotations();
-        if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].getName())) {
+        if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].name())) {
             // will remove it
             TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];
             System.arraycopy(annotations, 1, annotations2, 0, annotations.length - 1);
-            return Tson.ofDocument().header(Tson.ofDocumentHeader().addParams(annotations[0].getAll()).build())
+            return Tson.ofDocument().header(Tson.ofDocumentHeader().addParams(annotations[0].args()).build())
                     .content(root.builder().setAnnotations(annotations2).build()).build();
         }
         return Tson.ofDocument().header(null).content(root).build();

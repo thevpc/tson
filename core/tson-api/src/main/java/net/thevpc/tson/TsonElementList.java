@@ -16,6 +16,8 @@ public interface TsonElementList extends Iterable<TsonElement> {
 
     List<TsonElement> toList();
 
+    TsonElement[] toArray();
+
     List<TsonElement> getValues(String name);
 
     List<TsonElement> getValues(TsonElement name);

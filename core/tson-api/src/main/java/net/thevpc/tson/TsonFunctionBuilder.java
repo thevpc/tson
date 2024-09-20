@@ -26,9 +26,7 @@ public interface TsonFunctionBuilder extends TsonElementBuilder {
 
     TsonFunctionBuilder removeAt(int index);
 
-    List<TsonElement> all();
-
-    List<TsonElement> getAll();
+    List<TsonElement> args();
 
     TsonFunctionBuilder removeAllParams();
 

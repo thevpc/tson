@@ -19,14 +19,10 @@ public class TsonFunctionBuilderImpl extends AbstractTsonElementBuilder<TsonFunc
     }
 
     @Override
-    public List<TsonElement> all() {
-        return getAll();
+    public List<TsonElement> args() {
+        return params;
     }
 
-    @Override
-    public List<TsonElement> getAll() {
-        return Collections.unmodifiableList(params);
-    }
 
     @Override
     public TsonFunctionBuilder removeAllParams() {
@@ -119,13 +115,14 @@ public class TsonFunctionBuilderImpl extends AbstractTsonElementBuilder<TsonFunc
 
     @Override
     public TsonFunctionBuilder merge(TsonElementBase element0) {
+        addAnnotations(element0.build().annotations());
         TsonElement element=element0.build();
         switch (element.type()) {
             case ARRAY: {
                 TsonArray e = element.toArray();
                 TsonElementHeader h = e.header();
                 if(h!=null) {
-                    addAll(h.all());
+                    addAll(h.args());
                     setName(h.name());
                 }
                 return this;
@@ -134,19 +131,19 @@ public class TsonFunctionBuilderImpl extends AbstractTsonElementBuilder<TsonFunc
                 TsonObject e = element.toObject();
                 TsonElementHeader h = e.header();
                 if(h!=null) {
-                    addAll(h.all());
+                    addAll(h.args());
                     setName(h.name());
                 }
                 return this;
             }
             case FUNCTION: {
                 TsonFunction o = element.toFunction();
-                addAll(o.all());
+                addAll(o.args());
                 setName(o.name());
                 return this;
             }
             case UPLET: {
-                addAll(element.toUplet().all());
+                addAll(element.toUplet().args());
                 return this;
             }
         }

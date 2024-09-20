@@ -3,22 +3,22 @@ package net.thevpc.tson.impl.elements;
 import net.thevpc.tson.TsonAnnotation;
 import net.thevpc.tson.TsonAnnotationBuilder;
 import net.thevpc.tson.TsonElement;
-import net.thevpc.tson.*;
+import net.thevpc.tson.TsonElementList;
 import net.thevpc.tson.impl.builders.TsonAnnotationBuilderImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.impl.util.UnmodifiableArrayList;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class TsonAnnotationImpl implements TsonAnnotation {
 
     private String name;
-    private UnmodifiableArrayList<TsonElement> params;
+    private TsonElementList params;
 
     public TsonAnnotationImpl(String name, UnmodifiableArrayList<TsonElement> params) {
         this.name = name;
-        this.params = params;
+        this.params = new TsonElementListImpl(new ArrayList<>(params));
     }
 
     @Override
@@ -27,18 +27,13 @@ public class TsonAnnotationImpl implements TsonAnnotation {
     }
 
     @Override
-    public String getName() {
+    public String name() {
         return name;
     }
 
     @Override
-    public String name() {
-        return getName();
-    }
-
-    @Override
-    public List<TsonElement> all() {
-        return getAll();
+    public TsonElementList args() {
+        return params;
     }
 
     @Override
@@ -47,13 +42,8 @@ public class TsonAnnotationImpl implements TsonAnnotation {
     }
 
     @Override
-    public TsonElement get(int index) {
-        return params.get(index);
-    }
-
-    @Override
-    public List<TsonElement> getAll() {
-        return params;
+    public TsonElement arg(int index) {
+        return params.getAt(index);
     }
 
     @Override
@@ -78,10 +68,10 @@ public class TsonAnnotationImpl implements TsonAnnotation {
 
     @Override
     public int compareTo(TsonAnnotation o) {
-        int i = TsonUtils.compare(name, o.getName());
+        int i = TsonUtils.compare(name, o.name());
         if (i != 0) {
             return i;
         }
-        return TsonUtils.compareElementsArray(params, o.getAll());
+        return TsonUtils.compareElementsArray(params.toArray(), o.args().toArray());
     }
 }

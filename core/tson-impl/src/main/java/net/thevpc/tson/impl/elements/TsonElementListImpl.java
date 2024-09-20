@@ -82,7 +82,7 @@ public class TsonElementListImpl implements TsonElementList {
     @Override
     public TsonElementBaseListBuilder builder() {
         return new TsonElementBaseListBuilderImpl(
-                elements.stream().map(x->x).collect(Collectors.toList())
+                elements.stream().map(x -> x).collect(Collectors.toList())
         );
     }
 
@@ -122,5 +122,10 @@ public class TsonElementListImpl implements TsonElementList {
     @Override
     public List<TsonElement> toList() {
         return new ArrayList<>(elements);
+    }
+
+    @Override
+    public TsonElement[] toArray() {
+        return elements.toArray(new TsonElement[0]);
     }
 }

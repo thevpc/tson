@@ -25,9 +25,7 @@ public interface TsonElementHeaderBuilder<T extends TsonElementBuilder> {
 
     TsonElementHeaderBuilder<T> removeAt(int index);
 
-    List<TsonElement> all();
-
-    List<TsonElement> getAll();
+    List<TsonElement> args();
 
     int size();
 

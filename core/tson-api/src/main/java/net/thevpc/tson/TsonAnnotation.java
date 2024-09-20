@@ -6,15 +6,11 @@ public interface TsonAnnotation extends Comparable<TsonAnnotation> {
 
     String name();
 
-    String getName();
-
     int size();
 
-    TsonElement get(int index);
+    TsonElement arg(int index);
 
-    List<TsonElement> all();
-
-    List<TsonElement> getAll();
+    TsonElementList args();
 
     TsonAnnotationBuilder builder();
 }

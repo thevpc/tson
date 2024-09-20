@@ -4,27 +4,26 @@ import net.thevpc.tson.*;
 import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.impl.util.UnmodifiableArrayList;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TsonElementHeaderImpl implements TsonElementHeader {
     private String name;
-    private TsonElementList params;
+    private TsonElementList args;
 
-    public TsonElementHeaderImpl(String name, UnmodifiableArrayList<TsonElement> params) {
+    public TsonElementHeaderImpl(String name, UnmodifiableArrayList<TsonElement> args) {
         this.name = name;
-        this.params = new TsonElementListImpl(params.stream().map(x->x).collect(Collectors.toList()));
+        this.args = new TsonElementListImpl(args.stream().map(x->x).collect(Collectors.toList()));
     }
 
     @Override
-    public TsonElementList toElementList() {
-        return params;
+    public TsonElementList args() {
+        return args;
     }
 
     @Override
     public int size() {
-        return params.size();
+        return args.size();
     }
 
 
@@ -34,30 +33,25 @@ public class TsonElementHeaderImpl implements TsonElementHeader {
     }
 
     @Override
-    public List<TsonElement> all() {
-        return params.toList();
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         TsonElementHeaderImpl that = (TsonElementHeaderImpl) o;
         return Objects.equals(name, that.name) &&
-                Objects.equals(params, that.params);
+                Objects.equals(args, that.args);
     }
 
     @Override
     public int hashCode() {
         int result = Objects.hash(super.hashCode(), name);
-        result = 31 * result + Objects.hashCode(params);
+        result = 31 * result + Objects.hashCode(args);
         return result;
     }
 
     @Override
     public boolean visit(TsonDocumentVisitor visitor) {
-        for (TsonElement element : params) {
+        for (TsonElement element : args) {
             if (!element.visit(visitor)) {
                 return false;
             }
@@ -70,7 +64,7 @@ public class TsonElementHeaderImpl implements TsonElementHeader {
         if (i != 0) {
             return i;
         }
-        return TsonUtils.compareElementsArray(this.all(), o.all());
+        return TsonUtils.compareElementsArray(this.args(), o.args());
     }
 
     @Override
@@ -78,9 +72,9 @@ public class TsonElementHeaderImpl implements TsonElementHeader {
         if (name != null && !name.isEmpty()) {
             visitor.visitNamedStart(this.name());
         }
-        if (!params.isEmpty()) {
+        if (!args.isEmpty()) {
             visitor.visitParamsStart();
-            for (TsonElement param : this.all()) {
+            for (TsonElement param : this.args()) {
                 visitor.visitParamElementStart();
                 param.visit(visitor);
                 visitor.visitParamElementEnd();

@@ -25,7 +25,7 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
 
     @Override
     public TsonElementList args() {
-        return header==null?null:header.toElementList();
+        return header==null?null:header.args();
     }
 
     @Override
@@ -64,13 +64,8 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
     }
 
     @Override
-    public List<TsonElement> all() {
-        return elements.toList();
-    }
-
-    @Override
     public Iterator<TsonElement> iterator() {
-        return this.all().iterator();
+        return this.elements.iterator();
     }
 
     @Override
@@ -117,7 +112,7 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
         if (i != 0) {
             return i;
         }
-        return TsonUtils.compareElementsArray(this.all(), na.all());
+        return TsonUtils.compareElementsArray(this.body(), na.body());
     }
 
     @Override
@@ -127,7 +122,7 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
             header.visit(visitor);
         }
         visitor.visitNamedArrayStart();
-        for (TsonElement element : this.all()) {
+        for (TsonElement element : this.body()) {
             visitor.visitArrayElementStart();
             element.visit(visitor);
             visitor.visitArrayElementEnd();

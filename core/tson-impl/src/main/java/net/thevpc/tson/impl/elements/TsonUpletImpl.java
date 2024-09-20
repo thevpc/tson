@@ -47,13 +47,8 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
     }
 
     @Override
-    public List<TsonElement> all() {
-        return elements.toList();
-    }
-
-    @Override
     public Iterator<TsonElement> iterator() {
-        return this.all().iterator();
+        return this.args().iterator();
     }
 
     @Override
@@ -97,14 +92,14 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
 
     @Override
     protected int compareCore(TsonElement o) {
-        return TsonUtils.compareElementsArray(this.all(), o.toUplet().all());
+        return TsonUtils.compareElementsArray(this.args(), o.toUplet().args());
     }
 
     @Override
     public void visit(TsonParserVisitor visitor) {
         visitor.visitElementStart();
         visitor.visitParamsStart();
-        for (TsonElement param : this.all()) {
+        for (TsonElement param : this.args()) {
             visitor.visitParamElementStart();
             param.visit(visitor);
             visitor.visitParamElementEnd();

@@ -49,11 +49,6 @@ public class TsonFunctionImpl extends AbstractNonPrimitiveTsonElement implements
     }
 
     @Override
-    public List<TsonElement> all() {
-        return params.toList();
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -94,7 +89,7 @@ public class TsonFunctionImpl extends AbstractNonPrimitiveTsonElement implements
         if (i != 0) {
             return i;
         }
-        return TsonUtils.compareElementsArray(this.all(), o.toFunction().all());
+        return TsonUtils.compareElementsArray(this.args().toArray(), o.toFunction().args().toArray());
     }
 
     @Override
@@ -102,7 +97,7 @@ public class TsonFunctionImpl extends AbstractNonPrimitiveTsonElement implements
         visitor.visitElementStart();
         visitor.visitNamedStart(this.name());
         visitor.visitParamsStart();
-        for (TsonElement param : this.all()) {
+        for (TsonElement param : this.args()) {
             visitor.visitParamElementStart();
             param.visit(visitor);
             visitor.visitParamElementEnd();

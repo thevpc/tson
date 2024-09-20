@@ -174,14 +174,14 @@ public class TsonSerializerConfig {
                 if (h != null) {
                     Map<String, Object> mheader = new LinkedHashMap<>();
                     mheader.put("name", h.name());
-                    mheader.put("values", arrayElementToObject(h.all(), to, context));
+                    mheader.put("values", arrayElementToObject(h.args(), to, context));
                     namedArray.put("header", mheader);
                 }
-                namedArray.put("values", arrayElementToObject(ee.all(), to, context));
+                namedArray.put("values", arrayElementToObject(ee.body(), to, context));
                 return namedArray;
             }
             TsonArray ee = element.toArray();
-            return arrayElementToObject(ee.all(), to, context);
+            return arrayElementToObject(ee.body(), to, context);
         });
         registerElemToObjConverter(TsonElementType.OBJECT, null, null, (element, to, context) -> {
             if (to == null || to.equals(Map.class)) {
@@ -215,7 +215,7 @@ public class TsonSerializerConfig {
                 TsonFunction ee = element.toFunction();
                 Map<String, Object> namedArray = new LinkedHashMap<>();
                 namedArray.put("function", ee.name());
-                namedArray.put("params", arrayElementToObject(ee.all(), null, context));
+                namedArray.put("params", arrayElementToObject(ee.args().toList(), null, context));
                 return namedArray;
             }
             return customDeserializer(to)
@@ -231,23 +231,27 @@ public class TsonSerializerConfig {
             TsonUplet ee = element.toUplet();
             Map<String, Object> namedArray = new LinkedHashMap<>();
             namedArray.put("uplet", true);
-            namedArray.put("params", arrayElementToObject(ee.all(), null, context));
+            namedArray.put("params", arrayElementToObject(ee.args(), null, context));
             return namedArray;
         } else {
-            return arrayElementToObject(element.toUplet().all(), to, context);
+            return arrayElementToObject(element.toUplet().args(), to, context);
         }
     }
 
     private Object arrayElementToObject(TsonElement element, Class<?> to, TsonObjectContext context) {
-        return arrayElementToObject(element.toArray().all(), to, context);
+        return arrayElementToObject(element.toArray().body(), to, context);
     }
 
     private Object objectElementToObject(TsonElement element, Class<?> to, TsonObjectContext context) {
-        return objectElementToObject(element.toObject().all(), to, context);
+        return objectElementToObject(element.toObject().body(), to, context);
     }
 
     private Object arrayElementToObject(List<TsonElement> elements, Class<?> to, TsonObjectContext context) {
         return arrayElementToObject(elements == null ? null : elements.toArray(new TsonElement[0]), to, context);
+    }
+
+    private Object arrayElementToObject(TsonElementList elements, Class<?> to, TsonObjectContext context) {
+        return arrayElementToObject(elements == null ? null : elements.toArray(), to, context);
     }
 
     private Object arrayElementToObject(TsonElement[] elements, Class<?> to, TsonObjectContext context) {
@@ -308,6 +312,9 @@ public class TsonSerializerConfig {
 
     private Object objectElementToObject(List<TsonElement> elements, Class to, TsonObjectContext context) {
         return objectElementToObject(elements == null ? null : elements.toArray(new TsonElement[0]), to, context);
+    }
+    private Object objectElementToObject(TsonElementList elements, Class to, TsonObjectContext context) {
+        return objectElementToObject(elements == null ? null : elements.toArray(), to, context);
     }
 
     private Object objectElementToObject(TsonElement[] elements, Class to, TsonObjectContext context) {

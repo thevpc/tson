@@ -28,7 +28,7 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
 
     @Override
     public TsonElementList args() {
-        return header==null ? null:header.toElementList();
+        return header==null ? null:header.args();
     }
     @Override
     public TsonContainer toContainer() {
@@ -43,11 +43,6 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
     @Override
     public TsonObject toObject() {
         return this;
-    }
-
-    @Override
-    public List<TsonElement> all() {
-        return elements.toList();
     }
 
     @Override
@@ -121,7 +116,7 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
         if (i != 0) {
             return i;
         }
-        return TsonUtils.compareElementsArray(all(), no.all());
+        return TsonUtils.compareElementsArray(body(), no.body());
     }
 
     @Override
@@ -131,7 +126,7 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
             header.visit(visitor);
         }
         visitor.visitNamedObjectStart();
-        for (TsonElement element : all()) {
+        for (TsonElement element : body()) {
             visitor.visitObjectElementStart();
             element.visit(visitor);
             visitor.visitObjectElementEnd();

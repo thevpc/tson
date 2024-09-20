@@ -27,7 +27,7 @@ public class TsonUtils {
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
     };
 
-    public static <T extends Comparable<T>> int compareArrays(T[] a1,T[] a2) {
+    public static <T extends Comparable<T>> int compareArrays(T[] a1, T[] a2) {
         for (int j = 0; j < Math.max(a1.length, a2.length); j++) {
             if (j >= a1.length) {
                 return -1;
@@ -660,6 +660,26 @@ public class TsonUtils {
         return a1.compareTo(a2);
     }
 
+    public static int compareElementsArray(TsonElementList a1, TsonElementList a2) {
+        int i = 0;
+        int size1 = a1.size();
+        int size2 = a2.size();
+        final int max = Math.max(size1, size2);
+        for (int j = 0; j < max; j++) {
+            if (j >= size1) {
+                return -1;
+            }
+            if (j >= size2) {
+                return 1;
+            }
+            i = a1.getAt(j).compareTo(a2.getAt(j));
+            if (i != 0) {
+                return i;
+            }
+        }
+        return i;
+    }
+
     public static int compareElementsArray(List<TsonElement> a1, List<TsonElement> a2) {
         int i = 0;
         int size1 = a1.size();
@@ -723,6 +743,10 @@ public class TsonUtils {
 
     public static TsonArray toArray(List<TsonElement> elements) {
         return new TsonArrayImpl(null, TsonUtils.unmodifiableElements(elements));
+    }
+
+    public static TsonArray toArray(TsonElementList elements) {
+        return new TsonArrayImpl(null, TsonUtils.unmodifiableElements(elements.toList()));
     }
 
     public static TsonArray toArray(TsonElementHeader header, List<TsonElement> elements) {

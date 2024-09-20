@@ -131,13 +131,13 @@ public class TsonArrayOrMatrixBuilderImpl extends AbstractTsonElementBuilder<Tso
             case OBJECT: {
                 TsonElementHeader h = e.toObject().header();
                 this.header.set(h);
-                addAll(e.toObject().all());
+                addAll(e.toObject().body());
                 break;
             }
             case ARRAY: {
                 TsonElementHeader h = e.toArray().header();
                 this.header.set(h);
-                addAll(e.toArray().all());
+                addAll(e.toArray().body());
                 break;
             }
         }

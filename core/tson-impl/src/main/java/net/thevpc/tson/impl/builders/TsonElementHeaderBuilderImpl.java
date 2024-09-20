@@ -19,18 +19,13 @@ public class TsonElementHeaderBuilderImpl<T extends TsonElementBuilder> implemen
     }
 
     @Override
-    public List<TsonElement> all() {
-        return getAll();
+    public List<TsonElement> args() {
+        return elements;
     }
 
     @Override
     public int size() {
         return elements.size();
-    }
-
-    @Override
-    public List<TsonElement> getAll() {
-        return Collections.unmodifiableList(elements);
     }
 
     @Override
@@ -86,13 +81,13 @@ public class TsonElementHeaderBuilderImpl<T extends TsonElementBuilder> implemen
     }
 
     public TsonElementHeader build() {
-        String n=name==null?null:name.trim();
-        if(n!=null) {
+        String n = name == null ? null : name.trim();
+        if (n != null) {
             if (!TsonUtils.isValidIdentifier(name)) {
                 throw new IllegalArgumentException("Invalid header name '" + name + "'");
             }
         }
-        if(n==null && elements.isEmpty()){
+        if (n == null && elements.isEmpty()) {
             return null;
         }
         return new TsonElementHeaderImpl(name, TsonUtils.unmodifiableElements(elements));
@@ -130,8 +125,8 @@ public class TsonElementHeaderBuilderImpl<T extends TsonElementBuilder> implemen
 
     @Override
     public TsonElementHeaderBuilder set(TsonElementHeader header) {
-        if(header!=null) {
-            addAll(header.all());
+        if (header != null) {
+            addAll(header.args());
             setName(header.name());
         }
         return this;

@@ -114,6 +114,7 @@ public class TsonArrayBuilderImpl extends AbstractTsonElementBuilder<TsonArrayBu
     @Override
     public TsonArrayBuilder merge(TsonElementBase element) {
         TsonElement e = Tson.of(element);
+        addAnnotations(e.annotations());
         switch (e.type()) {
             case UPLET: {
                 header.addAll(e.toUplet());
@@ -131,13 +132,13 @@ public class TsonArrayBuilderImpl extends AbstractTsonElementBuilder<TsonArrayBu
             case OBJECT: {
                 TsonElementHeader h = e.toObject().header();
                 this.header.set(h);
-                addAll(e.toObject().all());
+                addAll(e.toObject().body());
                 break;
             }
             case ARRAY: {
                 TsonElementHeader h = e.toArray().header();
                 this.header.set(h);
-                addAll(e.toArray().all());
+                addAll(e.toArray().body());
                 break;
             }
         }

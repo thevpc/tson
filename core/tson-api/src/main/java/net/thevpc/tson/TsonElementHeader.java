@@ -6,10 +6,7 @@ public interface TsonElementHeader extends Comparable<TsonElementHeader> {
 
     String name();
 
-    TsonElementList toElementList();
-
-    List<TsonElement> all();
-
+    TsonElementList args();
 
     int size();
 

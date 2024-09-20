@@ -83,7 +83,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
             case NAME:
                 return new AsName((TsonName) base, comments, annotations);
             case ALIAS:
-                return new Asalias((TsonAlias) base, comments, annotations);
+                return new AsAlias((TsonAlias) base, comments, annotations);
             case REGEX:
                 return new AsRegex((TsonRegex) base, comments, annotations);
             case DATE:
@@ -208,8 +208,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
             visitor.visitComments(c);
         }
         for (TsonAnnotation annotation : annotations()) {
-            visitor.visitAnnotationStart(annotation.getName());
-            for (TsonElement param : annotation.getAll()) {
+            visitor.visitAnnotationStart(annotation.name());
+            for (TsonElement param : annotation.args()) {
                 visitor.visitAnnotationParamStart();
                 param.visit(visitor);
                 visitor.visitAnnotationParamEnd();
@@ -618,6 +618,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonBigInt toBigInt() {
+            return this;
+        }
+
+        @Override
         public TsonNumberLayout layout() {
             return getBase().layout();
         }
@@ -640,6 +645,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonBigDecimal toBigDecimal() {
+            return this;
+        }
+
+        @Override
         public TsonNumberLayout layout() {
             return getBase().layout();
         }
@@ -659,6 +669,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsBigComplex(TsonBigComplex base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonBigComplex toBigComplex() {
+            return this;
         }
 
         @Override
@@ -689,6 +704,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonBinaryStream toBinaryStream() {
+            return this;
+        }
+
+        @Override
         public InputStream value() {
             return getBase().value();
         }
@@ -711,6 +731,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonCharStream toCharStream() {
+            return this;
+        }
+
+        @Override
         public String getStreamType() {
             return getBase().getStreamType();
         }
@@ -725,6 +750,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsDoubleComplex(TsonDoubleComplex base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonDoubleComplex toDoubleComplex() {
+            return this;
         }
 
         @Override
@@ -755,6 +785,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonFloatComplex toFloatComplex() {
+            return this;
+        }
+
+        @Override
         public TsonNumberLayout layout() {
             return getBase().layout();
         }
@@ -779,6 +814,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsBinOp(TsonBinOp base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonBinOp toBinOp() {
+            return this;
         }
 
         @Override
@@ -819,6 +859,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonCustom toCustom() {
+            return this;
+        }
+
+        @Override
         public TsonCustom getBase() {
             return (TsonCustom) super.getBase();
         }
@@ -845,6 +890,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsString(TsonString base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonString toStr() {
+            return this;
         }
 
         @Override
@@ -875,15 +925,25 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonName toName() {
+            return this;
+        }
+
+        @Override
         public String value() {
             return getBase().value();
         }
     }
 
-    public static class Asalias extends AsPrimitive<TsonAlias> implements TsonAlias {
+    public static class AsAlias extends AsPrimitive<TsonAlias> implements TsonAlias {
 
-        public Asalias(TsonAlias base, TsonComments comments, TsonAnnotation[] annotations) {
+        public AsAlias(TsonAlias base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonAlias toAlias() {
+            return this;
         }
 
         @Override
@@ -899,6 +959,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonRegex toRegex() {
+            return this;
+        }
+
+        @Override
         public Pattern value() {
             return getBase().value();
         }
@@ -908,6 +973,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsDate(TsonDate base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonDate toDate() {
+            return this;
         }
 
         @Override
@@ -923,6 +993,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonDateTime toDateTime() {
+            return this;
+        }
+
+        @Override
         public Instant value() {
             return getBase().value();
         }
@@ -932,6 +1007,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsTime(TsonTime base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonTime toTime() {
+            return this;
         }
 
         @Override
@@ -945,12 +1025,18 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public AsNull(TsonNull base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
+
     }
 
     public static class AsBoolean extends AsPrimitive<TsonBoolean> implements TsonBoolean {
 
         public AsBoolean(TsonBoolean base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonBoolean toBoolean() {
+            return this;
         }
 
         @Override
@@ -966,6 +1052,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonChar toChar() {
+            return this;
+        }
+
+        @Override
         public char value() {
             return getBase().value();
         }
@@ -975,6 +1066,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsByte(TsonByte base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonByte toByte() {
+            return this;
         }
 
         @Override
@@ -1000,6 +1096,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonShort toShort() {
+            return this;
+        }
+
+        @Override
         public TsonNumberLayout layout() {
             return getBase().layout();
         }
@@ -1019,6 +1120,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsInt(TsonInt base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonInt toInt() {
+            return this;
         }
 
         @Override
@@ -1044,6 +1150,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonLong toLong() {
+            return this;
+        }
+
+        @Override
         public TsonNumberLayout layout() {
             return getBase().layout();
         }
@@ -1063,6 +1174,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsFloat(TsonFloat base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonFloat toFloat() {
+            return this;
         }
 
         @Override
@@ -1088,6 +1204,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonDouble toDouble() {
+            return this;
+        }
+
+        @Override
         public TsonNumberLayout layout() {
             return getBase().layout();
         }
@@ -1107,6 +1228,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsObject(TsonObject base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonObject toObject() {
+            return this;
         }
 
         @Override
@@ -1137,11 +1263,6 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         @Override
         public TsonElementHeader header() {
             return getBase().header();
-        }
-
-        @Override
-        public List<TsonElement> all() {
-            return getBase().all();
         }
 
         @Override
@@ -1180,7 +1301,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                         visitor.visitNamedStart(h.name());
                     }
                     visitor.visitParamsStart();
-                    for (TsonElement param : h.all()) {
+                    for (TsonElement param : h.args()) {
                         visitor.visitParamElementStart();
                         param.visit(visitor);
                         visitor.visitParamElementEnd();
@@ -1189,7 +1310,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 }
             }
             visitor.visitNamedObjectStart();
-            for (TsonElement element : all()) {
+            for (TsonElement element : body()) {
                 visitor.visitObjectElementStart();
                 element.visit(visitor);
                 visitor.visitObjectElementEnd();
@@ -1235,11 +1356,6 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public List<TsonElement> all() {
-            return getBase().all();
-        }
-
-        @Override
         public int size() {
             return getBase().size();
         }
@@ -1264,7 +1380,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
             visitor.visitElementStart();
             processCommentsAndAnnotations(visitor);
             visitor.visitParamsStart();
-            for (TsonElement param : this.all()) {
+            for (TsonElement param : this.args()) {
                 visitor.visitParamElementStart();
                 param.visit(visitor);
                 visitor.visitParamElementEnd();
@@ -1278,6 +1394,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsFunction(TsonFunction base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonFunction toFunction() {
+            return this;
         }
 
         @Override
@@ -1311,11 +1432,6 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public List<TsonElement> all() {
-            return getBase().all();
-        }
-
-        @Override
         public TsonFunctionBuilder builder() {
             return new TsonFunctionBuilderImpl().merge(this);
         }
@@ -1326,7 +1442,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
             processCommentsAndAnnotations(visitor);
             visitor.visitNamedStart(this.name());
             visitor.visitParamsStart();
-            for (TsonElement param : this.all()) {
+            for (TsonElement param : this.args()) {
                 visitor.visitParamElementStart();
                 param.visit(visitor);
                 visitor.visitParamElementEnd();
@@ -1342,6 +1458,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
             super(base, comments, annotations);
         }
 
+        @Override
+        public TsonPair toPair() {
+            return this;
+        }
         @Override
         public TsonPair getBase() {
             return (TsonPair) super.getBase();
@@ -1376,6 +1496,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsArray(TsonArray base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonArray toArray() {
+            return this;
         }
 
         @Override
@@ -1419,11 +1544,6 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public List<TsonElement> all() {
-            return getBase().all();
-        }
-
-        @Override
         public int size() {
             return getBase().size();
         }
@@ -1449,7 +1569,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                         visitor.visitNamedStart(h.name());
                     }
                     visitor.visitParamsStart();
-                    for (TsonElement param : h.all()) {
+                    for (TsonElement param : h.args()) {
                         visitor.visitParamElementStart();
                         param.visit(visitor);
                         visitor.visitParamElementEnd();
@@ -1458,7 +1578,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 }
             }
             visitor.visitNamedArrayStart();
-            for (TsonElement element : this.all()) {
+            for (TsonElement element : this.body()) {
                 visitor.visitArrayElementStart();
                 element.visit(visitor);
                 visitor.visitArrayElementEnd();
@@ -1471,6 +1591,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsMatrix(TsonMatrix base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public TsonMatrix toMatrix() {
+            return this;
         }
 
         @Override
@@ -1544,7 +1669,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                         visitor.visitNamedStart(h.name());
                     }
                     visitor.visitParamsStart();
-                    for (TsonElement param : h.all()) {
+                    for (TsonElement param : h.args()) {
                         visitor.visitParamElementStart();
                         param.visit(visitor);
                         visitor.visitParamElementEnd();
