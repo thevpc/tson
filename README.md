@@ -1,21 +1,50 @@
 # tson
 Type Safe Object Notation
 
-``tson`` (read Tyson) is a comprehensive, json like format, that supports out of the box:
+``tson`` (read Tyson) is a comprehensive, json-like format, that supports out of the box several simple and complex types.
+``tson`` is ideal as a configuration format but can also be used as for communication (serialization).
 
+Supported features include :
+* null values and boolean type
 * byte, short, int, long and bigint types
 * float, double, bigdecimal types
 * arrays, objects (maps)
-* complex, matrices
-* functions
+* complex types (float, double and bigdecimal based complex values)
+* arrays and matrices (of any other type)
 * expressions (+,-,*...)
 * annotations
-* comments
+* function calls
+* json object
+* uplets
 
 
-# Rational
-Why not JSON. Well json does not support type safe primitives and is very limited
-Why not YAML. YAML is error-prone
+# Rationale
+Why not JSON. Well json does not support type safe primitives and is very limited. For instance it does not even support comments.
+Why not YAML. YAML is a superset of json. So is ``tson``, however, unlike yaml, tson does not support space based syntax and hence 
+is less error prone. Besides, ``tson`` is ways more comprehensive and support ways more types and features.
+``tson`` is also more user friendly with support of multiline strings, regular expressions, numeric values with units (think of 3GHz for three Giga Hertz for instance), 
+complex values, and so on.
+
+# Some Examples
+The simplest ``tson`` file may contain a single literal, such as
+
+```tson
+12
+```
+or even a bar null value
+```tson
+null
+```
+
+``tson`` file may contain a more complex value such as
+
+```tson
+{
+    name:"some name",
+    value:12.3,
+}
+```
+
 
 # Elements
 ## Primitive types
