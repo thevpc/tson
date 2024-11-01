@@ -80,6 +80,6 @@ public class TestMulti {
         TsonElement x = Tson.reader().readElement(
                 "1_λ"
                 );
-        Assertions.assertEquals(TsonElementType.NAME,x.type());
+        Assertions.assertEquals(TsonElementType.INT,x.type());
     }
 }
