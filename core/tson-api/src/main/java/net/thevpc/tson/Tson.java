@@ -45,6 +45,10 @@ public class Tson {
         return factory.reader(serializer());
     }
 
+    public static TsonReader reader(TsonSerializer serializer) {
+        return factory.reader(serializer==null?serializer():serializer);
+    }
+
     public static TsonElement ofTrue() {
         return of(true);
     }
