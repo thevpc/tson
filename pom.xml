@@ -5,6 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.thevpc.tson.builder</groupId>
     <artifactId>tson-builder</artifactId>
+    <name>TSON :: ALL Builder</name>
     <version>1.1.0.0</version>
     <packaging>pom</packaging>
     <modules>
