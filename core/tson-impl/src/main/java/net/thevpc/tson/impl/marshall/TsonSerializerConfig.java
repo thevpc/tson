@@ -5,6 +5,7 @@ import net.thevpc.tson.impl.marshall.reflect.JavaWord;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.lang.reflect.Array;
 import java.sql.Time;
@@ -73,7 +74,7 @@ public class TsonSerializerConfig {
     public void registerDefaults() {
         registerObjToElemConverter(TsonSerializable.class, TsonSerializable::toTsonElement);
         registerObjToElemConverter(TsonElementBase.class, (object, context) -> object.build());
-        registerObjToElemConverter(Enum.class, (object, context) -> Tson.name(object.name()));
+        registerObjToElemConverter(Enum.class, (object, context) -> Tson.ofName(object.name()));
         registerObjToElemConverter(String.class, (object, context) -> Tson.of((String) object));
         registerObjToElemConverter(Double.class, (object, context) -> Tson.of((Double) object));
         registerObjToElemConverter(Double.TYPE, (object, context) -> Tson.of((Double) object));
@@ -452,8 +453,12 @@ public class TsonSerializerConfig {
         return w;
     }
 
-    public void writeDefaultElement(Tson element, Writer writer) throws IOException {
-        writer.write(element.toString());
+    public void writeDefaultElement(Tson element, Writer writer)  {
+        try {
+            writer.write(element.toString());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
 //    protected TsonElement objectToElement(Object any) {

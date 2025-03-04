@@ -41,18 +41,22 @@ public class Base64DecoderAdapter extends InputStream {
         if (outBufferSize < 10) {
             outBufferSize = 10;
         }
-        outBuffer = new byte[outBufferSize+4];
+        outBuffer = new byte[outBufferSize + 4];
         tempBuffer = new char[outBufferSize];
     }
 
 
-    public static byte[] fromBase64(String bytes) throws IOException {
+    public static byte[] fromBase64(String bytes) {
         Base64DecoderAdapter r = new Base64DecoderAdapter(new StringReader(bytes));
         byte[] buffer = new byte[1024];
         int i;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        while ((i = r.read(buffer)) != 0) {
-            out.write(buffer, 0, i);
+        try {
+            while ((i = r.read(buffer)) != 0) {
+                out.write(buffer, 0, i);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
         return out.toByteArray();
     }
@@ -156,20 +160,24 @@ public class Base64DecoderAdapter extends InputStream {
         }
     }
 
-    private int dataReady() throws IOException {
+    private int dataReady() {
         if (outBufferReadIndex >= outBufferWriteIndex) {
             while (true) {
-                int c = in.read(tempBuffer);
-                if (c <= 0) {
-                    finish();
-                    break;
-                } else {
-                    for (int i = 0; i < c; i++) {
-                        pushChar(tempBuffer[i]);
-                    }
-                    if ((outBufferWriteIndex - outBufferReadIndex) > 0) {
+                try {
+                    int c = in.read(tempBuffer);
+                    if (c <= 0) {
+                        finish();
                         break;
+                    } else {
+                        for (int i = 0; i < c; i++) {
+                            pushChar(tempBuffer[i]);
+                        }
+                        if ((outBufferWriteIndex - outBufferReadIndex) > 0) {
+                            break;
+                        }
                     }
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
                 }
             }
         }
@@ -177,7 +185,7 @@ public class Base64DecoderAdapter extends InputStream {
     }
 
     @Override
-    public int read() throws IOException {
+    public int read() {
         int r = dataReady();
         if (r > 0) {
             byte b = outBuffer[outBufferReadIndex++];

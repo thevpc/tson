@@ -224,7 +224,7 @@ public class CustomJavaccTsonStreamParserImpl implements TsonStreamParser {
                         break;
                     }
                     default: {
-                        visitor.visitPrimitiveEnd(Tson.name(nt.image));
+                        visitor.visitPrimitiveEnd(Tson.ofName(nt.image));
                     }
                 }
                 break;

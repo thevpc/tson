@@ -519,13 +519,13 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
-    public BigInteger getBigInteger() {
-        return base.getBigInteger();
+    public BigInteger bigIntegerValue() {
+        return base.bigIntegerValue();
     }
 
     @Override
-    public BigDecimal getBigDecimal() {
-        return base.getBigDecimal();
+    public BigDecimal bigDecimalValue() {
+        return base.bigDecimalValue();
     }
 
     @Override

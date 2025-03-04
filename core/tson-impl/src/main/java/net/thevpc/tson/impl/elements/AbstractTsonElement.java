@@ -336,12 +336,12 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
     }
 
     @Override
-    public BigInteger getBigInteger() {
+    public BigInteger bigIntegerValue() {
         return throwPrimitive(TsonElementType.BIG_INT);
     }
 
     @Override
-    public BigDecimal getBigDecimal() {
+    public BigDecimal bigDecimalValue() {
         return throwPrimitive(TsonElementType.BIG_DECIMAL);
     }
 

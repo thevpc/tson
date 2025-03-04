@@ -1,10 +1,12 @@
 package net.thevpc.tson;
 
-import java.util.List;
-
 public interface TsonElementHeader extends Comparable<TsonElementHeader> {
 
     String name();
+
+    boolean isBlank();
+
+    boolean isArgs();
 
     TsonElementList args();
 

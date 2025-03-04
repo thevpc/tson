@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.thevpc.tson</groupId>
     <artifactId>tson-impl</artifactId>
-    <version>1.1.0</version><!--updated-->
+    <version>1.2.0</version><!--updated-->
     <packaging>jar</packaging>
     <name>TSON :: Impl</name>
     <url>https://github.com/thevpc/upa/wiki</url>
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>net.thevpc.tson</groupId>
             <artifactId>tson-api</artifactId>
-            <version>1.1.0</version>
+            <version>1.2.0</version>
         </dependency>
     </dependencies>
     <distributionManagement>

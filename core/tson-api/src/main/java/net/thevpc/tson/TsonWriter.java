@@ -3,44 +3,48 @@ package net.thevpc.tson;
 import java.io.*;
 import java.nio.file.Path;
 
-public interface TsonWriter{
+public interface TsonWriter {
     TsonWriter setOptionCompact(boolean configValue);
 
     TsonWriter setOption(String configName, Object configValue);
 
-    void write(Appendable sb, Object any) throws IOException;
+    void write(Appendable sb, Object any);
 
-    void write(Path file, Object any) throws IOException;
+    void write(PrintStream sb, Object any);
 
-    void write(File file, Object any) throws IOException;
+    void write(Path file, Object any);
 
-    void write(OutputStream stream, Object any) throws IOException;
+    void write(File file, Object any);
 
-    void write(OutputStream stream, String encoding, Object any) throws IOException;
+    void write(OutputStream stream, Object any);
 
-    void write(Writer writer, Object any) throws IOException;
+    void write(OutputStream stream, String encoding, Object any);
 
-    void writeDocument(Appendable sb, Object any) throws IOException;
+    void write(Writer writer, Object any);
 
-    void writeDocument(Path file, Object any) throws IOException;
+    void writeDocument(Appendable sb, Object any);
 
-    void writeDocument(File file, Object any) throws IOException;
+    void writeDocument(Path file, Object any);
 
-    void writeDocument(OutputStream stream, Object any) throws IOException;
+    void writeDocument(File file, Object any);
 
-    void writeDocument(OutputStream stream, String encoding, Object any) throws IOException;
+    void writeDocument(OutputStream stream, Object any);
 
-    void writeDocument(Writer writer, Object any) throws IOException;
+    void writeDocument(OutputStream stream, String encoding, Object any);
 
-    void write(Appendable sb, TsonElement any) throws IOException;
+    void writeDocument(Writer writer, Object any);
 
-    void write(Path file, TsonElement any) throws IOException;
+    void write(PrintStream sb, TsonElement any);
 
-    void write(File file, TsonElement any) throws IOException;
+    void write(Appendable sb, TsonElement any);
 
-    void write(OutputStream stream, TsonElement any) throws IOException;
+    void write(Path file, TsonElement any);
 
-    void write(OutputStream stream, String encoding, TsonElement any) throws IOException;
+    void write(File file, TsonElement any);
+
+    void write(OutputStream stream, TsonElement any);
+
+    void write(OutputStream stream, String encoding, TsonElement any);
 
     void write(Writer writer, TsonElement any) throws IOException;
 

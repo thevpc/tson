@@ -17,12 +17,7 @@ public class TestErrors {
         String name = "/test06.tson";
         System.out.println(name + "  ==============================================================");
         TsonElement t;
-        try {
-            t = Tson.reader().readElement(TestFormats.class.getResource(name));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        t = Tson.reader().readElement(TestFormats.class.getResource(name));
         System.out.println(t);
     }
 

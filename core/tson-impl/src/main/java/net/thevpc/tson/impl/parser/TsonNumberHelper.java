@@ -82,12 +82,12 @@ public class TsonNumberHelper {
                 break;
             }
             case BIG_INT: {
-                this.real = te.getBigInteger();
+                this.real = te.bigIntegerValue();
                 this.type = NumberType.BIG_INTEGER;
                 break;
             }
             case BIG_DECIMAL: {
-                this.real = te.getBigDecimal();
+                this.real = te.bigDecimalValue();
                 this.type = NumberType.BIG_DECIMAL;
                 break;
             }

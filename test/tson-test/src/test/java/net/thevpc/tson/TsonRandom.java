@@ -80,7 +80,7 @@ public class TsonRandom {
             case REGEX:
                 return Tson.ofRegex(Pattern.compile(randomRegex()));
             case NAME:
-                return Tson.name(randomId());
+                return Tson.ofName(randomId());
             case STRING:
                 return Tson.ofString(randomString());
             case CHAR:

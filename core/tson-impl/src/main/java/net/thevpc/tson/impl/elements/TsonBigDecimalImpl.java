@@ -95,18 +95,18 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
     }
 
     @Override
-    public BigDecimal getBigDecimal() {
+    public BigDecimal bigDecimalValue() {
         return value();
     }
 
     @Override
-    public BigInteger getBigInteger() {
+    public BigInteger bigIntegerValue() {
         return value().toBigInteger();
     }
 
 
     public TsonBigInt toBigInt(){
-        return new TsonBigIntImpl(getBigInteger(),layout(),unit());
+        return new TsonBigIntImpl(this.bigIntegerValue(),layout(),unit());
     }
 
     @Override
@@ -167,7 +167,7 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
                 case DOUBLE:
                 case BIG_DECIMAL:
                     {
-                    int i= getBigDecimal().compareTo(o.getBigDecimal());
+                    int i= this.bigDecimalValue().compareTo(o.bigDecimalValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
             }

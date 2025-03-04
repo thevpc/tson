@@ -31,7 +31,7 @@ public class TsonBigIntImpl extends AbstractNumberTsonElement implements TsonBig
     }
 
     @Override
-    public BigInteger getBigInteger() {
+    public BigInteger bigIntegerValue() {
         return value();
     }
 
@@ -100,12 +100,12 @@ public class TsonBigIntImpl extends AbstractNumberTsonElement implements TsonBig
     }
 
     @Override
-    public BigDecimal getBigDecimal() {
+    public BigDecimal bigDecimalValue() {
         return new BigDecimal(value());
     }
 
     public TsonBigDecimal toBigDecimal(){
-        return new TsonBigDecimalImpl(getBigDecimal(),unit());
+        return new TsonBigDecimalImpl(this.bigDecimalValue(),unit());
     }
 
     @Override
@@ -162,13 +162,13 @@ public class TsonBigIntImpl extends AbstractNumberTsonElement implements TsonBig
                 case INT:
                 case LONG:
                 case BIG_INT:{
-                    int i= value().compareTo(o.getBigInteger());
+                    int i= value().compareTo(o.bigIntegerValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
                 case FLOAT:
                 case DOUBLE:
                     {
-                    int i= getBigDecimal().compareTo(o.getBigDecimal());
+                    int i= this.bigDecimalValue().compareTo(o.bigDecimalValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
             }

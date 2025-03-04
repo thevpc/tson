@@ -10,14 +10,12 @@ import java.util.stream.Collectors;
 
 public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements TsonObject {
     private TsonElementList elements;
-    private Map<TsonElement, TsonElement> map;
     private TsonElementHeader header;
 
     public TsonObjectImpl(TsonElementHeader header, UnmodifiableArrayList<TsonElement> elements) {
         super(TsonElementType.OBJECT);
         this.elements = new TsonElementListImpl(elements.stream().map(x->x).collect(Collectors.toList()));
         this.header = header;
-        this.map = this.elements.toMap();
     }
 
     @Override
@@ -47,12 +45,31 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
 
     @Override
     public TsonElement get(String name) {
-        return get(Tson.name(name));
+        TsonElement tsonElementAsName = Tson.ofName(name);
+        TsonElement tsonElementAsString = Tson.ofString(name);
+        for (TsonElement element : elements) {
+            if (element instanceof TsonPair) {
+                TsonPair element1 = (TsonPair) element;
+                TsonElement key = element1.key();
+                if(eqKey(key, tsonElementAsName)) {
+                    return element1.value();
+                }
+                if(eqKey(key, tsonElementAsString)) {
+                    return element1.value();
+                }
+            } else {
+                //check self
+                if(eqKey(element, tsonElementAsName)) {
+                    return element;
+                }
+                if(eqKey(element, tsonElementAsString)) {
+                    return element;
+                }
+            }
+        }
+        return null;
     }
 
-    private Map<TsonElement, TsonElement> asMap() {
-        return map;
-    }
 
     @Override
     public TsonElementList body() {
@@ -61,7 +78,25 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
 
     @Override
     public TsonElement get(TsonElement element) {
-        return asMap().get(element);
+        for (TsonElement element2 : elements) {
+            if (element2 instanceof TsonPair) {
+                TsonPair element1 = (TsonPair) element2;
+                TsonElement key = element1.key();
+                if(eqKey(key, element)) {
+                    return element1.value();
+                }
+            } else {
+                //check self
+                if(eqKey(element2, element)) {
+                    return element2;
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean eqKey(TsonElement a,TsonElement b) {
+        return Objects.equals(a, b);
     }
 
     @Override

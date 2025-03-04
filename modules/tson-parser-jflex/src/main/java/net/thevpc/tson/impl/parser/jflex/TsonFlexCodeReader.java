@@ -16,7 +16,7 @@ public class TsonFlexCodeReader extends Reader {
     }
 
     @Override
-    public int read(char[] cbuf, int off, int len) throws IOException {
+    public int read(char[] cbuf, int off, int len)  {
         if (buffer.length() == 0) {
             if (!end) {
                 int token = flex.nextToken();
@@ -45,7 +45,7 @@ public class TsonFlexCodeReader extends Reader {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close()  {
         end = true;
     }
 }

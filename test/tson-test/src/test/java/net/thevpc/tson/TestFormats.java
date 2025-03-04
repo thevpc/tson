@@ -32,18 +32,18 @@ public class TestFormats {
     public void test5() {
         TsonElement e;
 
-        e = ofArray(name("a")).build();
+        e = ofArray(ofName("a")).build();
         Assertions.assertEquals("[\n a\n]", e.toString(false));
         Assertions.assertEquals("[a]", e.toString(true));
 
-        e = ofObj(ofPair(name("a"), of(16))).build();
+        e = ofObj(ofPair(ofName("a"), of(16))).build();
         Assertions.assertEquals("{\n a : 16\n}", e.toString(false));
         Assertions.assertEquals("{a:16}", e.toString(true));
 
-        e = ofObj("hello", new TsonElementBase[]{ofPair(name("a"), of(16))}, of('p')).build();
+        e = ofObj("hello", new TsonElementBase[]{ofPair(ofName("a"), of(16))}, of('p')).build();
         Assertions.assertEquals("hello(a:16){'p'}", e.toString(true));
 
-        e = ofObj("hello", null, of('p')).build();
+        e = ofObj("hello", of('p')).build();
         Assertions.assertEquals("hello{'p'}", e.toString(true));
 
         e = ofObj(of('p')).build();

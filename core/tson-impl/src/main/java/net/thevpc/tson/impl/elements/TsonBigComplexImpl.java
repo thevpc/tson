@@ -102,18 +102,18 @@ public class TsonBigComplexImpl extends AbstractNumberTsonElement implements Tso
     }
 
     @Override
-    public BigDecimal getBigDecimal() {
+    public BigDecimal bigDecimalValue() {
         return getReal();
     }
 
     @Override
-    public BigInteger getBigInteger() {
+    public BigInteger bigIntegerValue() {
         return getReal().toBigInteger();
     }
 
 
     public TsonBigInt toBigInt() {
-        return new TsonBigIntImpl(getBigInteger(),layout(),unit());
+        return new TsonBigIntImpl(this.bigIntegerValue(),layout(),unit());
     }
 
     @Override

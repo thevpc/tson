@@ -53,6 +53,7 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
         public ArrayList<TsonElement> array;
         public ArrayList<TsonElement> object;
         boolean decorated;
+        boolean hasParams;
         TsonComments comments;
         List<TsonAnnotation> annotations;
 
@@ -228,7 +229,7 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
         PartialElemNode a = peek();
         TsonElementHeader h = null;
         if (a.name != null || !a.paramsEmpty()) {
-            h = new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params()));
+            h = new TsonElementHeaderImpl(a.name, a.hasParams,TsonUtils.unmodifiableElements(a.params()));
         }
         repushDecorated(new TsonObjectImpl(h, TsonUtils.unmodifiableElements(a.object())), a);
     }
@@ -238,7 +239,7 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
         PartialElemNode a = peek();
         TsonElementHeader h = null;
         if (a.name != null || !a.params.isEmpty()) {
-            h = new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params()));
+            h = new TsonElementHeaderImpl(a.name, a.hasParams,TsonUtils.unmodifiableElements(a.params()));
         }
         repushDecorated(TsonUtils.toArray(h, a.array()), a);
     }

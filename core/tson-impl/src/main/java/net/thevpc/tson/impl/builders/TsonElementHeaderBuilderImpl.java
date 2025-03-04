@@ -12,10 +12,20 @@ public class TsonElementHeaderBuilderImpl<T extends TsonElementBuilder> implemen
 
     private String name;
     private List<TsonElement> elements = new ArrayList<>();
+    private boolean hasArgs;
     private T then;
 
     public TsonElementHeaderBuilderImpl(T then) {
         this.then = then;
+    }
+
+    public boolean isArgs() {
+        return hasArgs;
+    }
+
+    public TsonElementHeaderBuilder<T> setHas(boolean hasArgs) {
+        this.hasArgs = hasArgs;
+        return this;
     }
 
     @Override
@@ -90,7 +100,7 @@ public class TsonElementHeaderBuilderImpl<T extends TsonElementBuilder> implemen
         if (n == null && elements.isEmpty()) {
             return null;
         }
-        return new TsonElementHeaderImpl(name, TsonUtils.unmodifiableElements(elements));
+        return new TsonElementHeaderImpl(name, hasArgs, TsonUtils.unmodifiableElements(elements));
     }
 
     @Override

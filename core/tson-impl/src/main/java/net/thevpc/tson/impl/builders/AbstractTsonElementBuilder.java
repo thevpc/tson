@@ -126,7 +126,7 @@ public abstract class AbstractTsonElementBuilder<T extends TsonElementBuilder> i
 
     @Override
     public TsonElementBuilder anchor(String name) {
-        return addAnnotation(null, Tson.name(name));
+        return addAnnotation(null, Tson.ofName(name));
     }
 
 }

@@ -27,16 +27,12 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
     public String format(TsonElement element) {
         StringBuilder sb = new StringBuilder();
         try (AppendableWriter w = AppendableWriter.of(sb)) {
-            try {
-                formatElement(element, config.isShowComments(), config.isShowAnnotations(), w);
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            }
+            formatElement(element, config.isShowComments(), config.isShowAnnotations(), w);
         }
         return sb.toString();
     }
 
-    public void format(TsonElement element, Writer sb) throws IOException {
+    public void format(TsonElement element, Writer sb) {
         formatElement(element, config.isShowComments(), config.isShowAnnotations(), sb);
     }
 
@@ -44,358 +40,370 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
     public String format(TsonDocument document) {
         StringBuilder sb = new StringBuilder();
         try (AppendableWriter w = AppendableWriter.of(sb)) {
-            try {
-                formatDocument(document, w);
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            }
+            formatDocument(document, w);
         }
         return sb.toString();
     }
 
-    public void formatDocument(TsonDocument document, Writer sb) throws IOException {
+    public void formatDocument(TsonDocument document, Writer sb) {
         TsonDocumentHeader h = document.getHeader();
         TsonElement elem = document.getContent();
         formatAnnotation(h.builder().toAnnotation(), config.isShowComments(), config.isShowAnnotations(), sb);
-        if (config.compact) {
-            sb.append(' ');
-        } else {
-            sb.append('\n');
+        try {
+            if (config.compact) {
+                sb.append(' ');
+            } else {
+                sb.append('\n');
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
         formatElement(elem, config.isShowComments(), config.isShowAnnotations(), sb);
     }
 
-    public void formatAnnotation(TsonAnnotation a, boolean showComments, boolean showAnnotations, Writer sb) throws IOException {
+    public void formatAnnotation(TsonAnnotation a, boolean showComments, boolean showAnnotations, Writer sb) {
         final TsonElementList params = a.args();
-        sb.append('@');
-        if (a.name() != null) {
-            sb.append(a.name());
-        }
-        sb.append('(');
-        int i = 0;
-        for (TsonElement p : params) {
-            if (i > 0) {
-                sb.append(',');
-                sb.append(config.afterComma);
+        try {
+            sb.append('@');
+            if (a.name() != null) {
+                sb.append(a.name());
             }
-            //cannot have embedded annotations
-            formatElement(p, showComments, showAnnotations, sb);
-            i++;
+            sb.append('(');
+            int i = 0;
+            for (TsonElement p : params) {
+                if (i > 0) {
+                    sb.append(',');
+                    sb.append(config.afterComma);
+                }
+                //cannot have embedded annotations
+                formatElement(p, showComments, showAnnotations, sb);
+                i++;
+            }
+            sb.append(')');
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
-        sb.append(')');
     }
 
-    public void formatElement(TsonElement element, boolean showComments, boolean showAnnotations, Writer sb) throws IOException {
-        if (showComments) {
-            TsonComments c = element.comments();
-            if (c != null && !c.isBlank()) {
-                TsonComment[] leadingComments = c.getLeadingComments();
-                if (leadingComments.length > 0) {
-                    boolean wasSLC = false;
-                    for (TsonComment lc : leadingComments) {
-                        switch (lc.type()) {
-                            case MULTI_LINE: {
-                                if (config.isIndentBraces()) {
-                                    sb.append(TsonUtils.formatComments(lc.text()));
-                                } else {
-                                    sb.append("/*").append(lc.text()).append("*/");
+    public void formatElement(TsonElement element, boolean showComments, boolean showAnnotations, Writer sb) {
+        try {
+            if (showComments) {
+                TsonComments c = element.comments();
+                if (c != null && !c.isBlank()) {
+                    TsonComment[] leadingComments = c.getLeadingComments();
+                    if (leadingComments.length > 0) {
+                        boolean wasSLC = false;
+                        for (TsonComment lc : leadingComments) {
+                            switch (lc.type()) {
+                                case MULTI_LINE: {
+                                    if (config.isIndentBraces()) {
+                                        sb.append(TsonUtils.formatComments(lc.text()));
+                                    } else {
+                                        sb.append("/*").append(lc.text()).append("*/");
+                                    }
+                                    sb.append(config.afterMultiLineComments);
+                                    wasSLC = false;
+                                    break;
                                 }
-                                sb.append(config.afterMultiLineComments);
-                                wasSLC = false;
-                                break;
-                            }
-                            case SINGLE_LINE: {
-                                if (!wasSLC) {
-                                    sb.append("\n");
+                                case SINGLE_LINE: {
+                                    if (!wasSLC) {
+                                        sb.append("\n");
+                                    }
+                                    sb.append("//").append(lc.text()).append("\n");
+                                    wasSLC = true;
+                                    break;
                                 }
-                                sb.append("//").append(lc.text()).append("\n");
-                                wasSLC = true;
-                                break;
                             }
                         }
                     }
                 }
             }
-        }
-        TsonAnnotation[] ann = element.annotations();
-        TsonAnnotation formatAnnotation = null;
+            TsonAnnotation[] ann = element.annotations();
+            TsonAnnotation formatAnnotation = null;
 
-        if (ann != null && ann.length > 0) {
-            for (TsonAnnotation a : ann) {
-                if ("format".equals(a.name())) {
-                    formatAnnotation = a;
-                    if (showAnnotations) {
-                        if (!config.showFormatNumber) {
-                            TsonAnnotationBuilder ab = a.builder();
-                            List<TsonElement> params = ab.getAll();
-                            for (int i = params.size() - 1; i >= 0; i--) {
-                                TsonElement o = params.get(i);
-                                if (o.type() == TsonElementType.NAME || o.type() == TsonElementType.STRING && FORMAT_NUMBER_TYPES.contains(o.stringValue())) {
-                                    ab.removeAt(i);
+            if (ann != null && ann.length > 0) {
+                for (TsonAnnotation a : ann) {
+                    if ("format".equals(a.name())) {
+                        formatAnnotation = a;
+                        if (showAnnotations) {
+                            if (!config.showFormatNumber) {
+                                TsonAnnotationBuilder ab = a.builder();
+                                List<TsonElement> params = ab.getAll();
+                                for (int i = params.size() - 1; i >= 0; i--) {
+                                    TsonElement o = params.get(i);
+                                    if (o.type() == TsonElementType.NAME || o.type() == TsonElementType.STRING && FORMAT_NUMBER_TYPES.contains(o.stringValue())) {
+                                        ab.removeAt(i);
+                                    }
                                 }
-                            }
-                            if (ab.size() != 0) {
+                                if (ab.size() != 0) {
+                                    formatAnnotation(a, showComments, true, sb);
+                                    sb.append(config.afterAnnotation);
+                                }
+                            } else {
                                 formatAnnotation(a, showComments, true, sb);
                                 sb.append(config.afterAnnotation);
                             }
-                        } else {
+                        }
+                    } else {
+                        if (showAnnotations) {
                             formatAnnotation(a, showComments, true, sb);
                             sb.append(config.afterAnnotation);
                         }
                     }
-                } else {
-                    if (showAnnotations) {
-                        formatAnnotation(a, showComments, true, sb);
-                        sb.append(config.afterAnnotation);
-                    }
                 }
+                sb.append(config.afterAnnotations);
             }
-            sb.append(config.afterAnnotations);
-        }
-        formatElementCore(element, formatAnnotation, sb);
-        if (showComments) {
-            TsonComments c = element.comments();
-            if (c != null && !c.isBlank()) {
-                TsonComment[] trailingComments = c.getTrailingComments();
-                if (trailingComments.length > 0) {
-                    boolean wasSLC = false;
-                    for (TsonComment lc : trailingComments) {
-                        switch (lc.type()) {
-                            case MULTI_LINE: {
-                                if (config.isIndentBraces()) {
-                                    sb.append(TsonUtils.formatComments(lc.text()));
-                                } else {
-                                    sb.append("/*").append(lc.text()).append("*/");
+            formatElementCore(element, formatAnnotation, sb);
+            if (showComments) {
+                TsonComments c = element.comments();
+                if (c != null && !c.isBlank()) {
+                    TsonComment[] trailingComments = c.getTrailingComments();
+                    if (trailingComments.length > 0) {
+                        boolean wasSLC = false;
+                        for (TsonComment lc : trailingComments) {
+                            switch (lc.type()) {
+                                case MULTI_LINE: {
+                                    if (config.isIndentBraces()) {
+                                        sb.append(TsonUtils.formatComments(lc.text()));
+                                    } else {
+                                        sb.append("/*").append(lc.text()).append("*/");
+                                    }
+                                    sb.append(config.afterMultiLineComments);
+                                    wasSLC = false;
+                                    break;
                                 }
-                                sb.append(config.afterMultiLineComments);
-                                wasSLC = false;
-                                break;
-                            }
-                            case SINGLE_LINE: {
-                                if (!wasSLC) {
-                                    sb.append("\n");
+                                case SINGLE_LINE: {
+                                    if (!wasSLC) {
+                                        sb.append("\n");
+                                    }
+                                    sb.append("//").append(lc.text()).append("\n");
+                                    wasSLC = true;
+                                    break;
                                 }
-                                sb.append("//").append(lc.text()).append("\n");
-                                wasSLC = true;
-                                break;
                             }
                         }
                     }
                 }
             }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
-    public void formatElementCore(TsonElement element, TsonAnnotation format, Writer writer) throws IOException {
+    public void formatElementCore(TsonElement element, TsonAnnotation format, Writer writer) {
+        try {
 //        sb.ensureCapacity(sb.length() + 10);
-        switch (element.type()) {
-            case NULL:
-                writer.append("null");
-                return;
-            case BYTE:
-            case SHORT:
-            case INT:
-            case LONG:
-            case BIG_INT:
-            case FLOAT:
-            case DOUBLE:
-            case BIG_DECIMAL:
-            case BIG_COMPLEX:
-            case FLOAT_COMPLEX:
-            case DOUBLE_COMPLEX: {
-                writer.append(new TsonNumberHelper((TsonNumber) element).toString());
-                return;
-            }
-            case BOOLEAN:
-                writer.append(String.valueOf(element.booleanValue()));
-                return;
-            case DATETIME:
-                writer.append(String.valueOf(element.dateTimeValue()));
-                return;
-            case DATE:
-                writer.append(String.valueOf(element.dateValue()));
-                return;
-            case TIME:
-                writer.append(String.valueOf(element.time()));
-                return;
-            case REGEX: {
-                writer.append(TsonUtils.toRegex(element.regexValue().toString()));
-                return;
-            }
-            case CHAR: {
-                writer.append(TsonUtils.toSmpStr(element.charValue()));
-                return;
-            }
-            case STRING: {
+            switch (element.type()) {
+                case NULL:
+                    writer.append("null");
+                    return;
+                case BYTE:
+                case SHORT:
+                case INT:
+                case LONG:
+                case BIG_INT:
+                case FLOAT:
+                case DOUBLE:
+                case BIG_DECIMAL:
+                case BIG_COMPLEX:
+                case FLOAT_COMPLEX:
+                case DOUBLE_COMPLEX: {
+                    writer.append(new TsonNumberHelper((TsonNumber) element).toString());
+                    return;
+                }
+                case BOOLEAN:
+                    writer.append(String.valueOf(element.booleanValue()));
+                    return;
+                case DATETIME:
+                    writer.append(String.valueOf(element.dateTimeValue()));
+                    return;
+                case DATE:
+                    writer.append(String.valueOf(element.dateValue()));
+                    return;
+                case TIME:
+                    writer.append(String.valueOf(element.time()));
+                    return;
+                case REGEX: {
+                    writer.append(TsonUtils.toRegex(element.regexValue().toString()));
+                    return;
+                }
+                case CHAR: {
+                    writer.append(TsonUtils.toSmpStr(element.charValue()));
+                    return;
+                }
+                case STRING: {
 //                String s = element.getString();
 //                StringBuilder sb = new StringBuilder(s.length() * 2);
 //                TsonUtils.toQuotedStr(s, element.toStr().layout(), sb);
-                //TsonUtils.toDblStr(s, writer);
-                writer.append(element.toStr().quoted());
-                return;
-            }
-            case NAME: {
-                writer.append(element.stringValue());
-                return;
-            }
-            case ALIAS: {
-                writer.append("&").append(element.stringValue());
-                return;
-            }
-            case PAIR: {
-                TsonPair t = element.toPair();
-                format(t.key(), writer);
-                String vs = format(t.value());
-                writer.append(config.afterKey);
-                if (config.indent.length() > 0 && vs.indexOf("\n") > 0) {
-                    writer.append(":\n").append(TsonUtils.indent(vs, config.indent));
-                } else {
-                    writer.append(':').append(config.beforeValue).append(vs);
+                    //TsonUtils.toDblStr(s, writer);
+                    writer.append(element.toStr().quoted());
+                    return;
                 }
-                return;
-            }
-            case BINOP: {
-                TsonBinOp t = element.toBinOp();
-                String op = t.op();
-                format(t.first(), writer);
-                String vs = format(t.second());
-                writer.append(config.afterKey);
-                if (config.indent.length() > 0 && vs.indexOf("\n") > 0) {
-                    writer.append(op).append("\n").append(TsonUtils.indent(vs, config.indent));
-                } else {
-                    writer.append(op).append(config.beforeValue).append(vs);
+                case NAME: {
+                    writer.append(element.stringValue());
+                    return;
                 }
-                return;
-            }
-            case UPLET: {
-                TsonUplet list = element.toUplet();
-                listToString(config.indentList, list.args(), '(', ')', writer, ListType.PARAMS);
-                return;
-            }
-            case ARRAY: {
-                TsonArray list = element.toArray();
-                TsonElementHeader h = list.header();
-                if (h != null) {
-                    String n = TsonUtils.nullIfBlank(h.name());
-                    boolean hasName = false;
-                    if (n != null) {
-                        writer.append(n);
-                        hasName = n.length() > 0;
-                    }
-                    TsonElementList params = h.args();
-                    if (!hasName || params.size() > 0) {
-                        listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
-                    }
+                case ALIAS: {
+                    writer.append("&").append(element.stringValue());
+                    return;
                 }
-                listToString(config.indentBrackets, list, '[', ']', writer, ListType.PARAMS);
-                return;
-            }
-            case MATRIX: {
-                TsonMatrix list = element.toMatrix();
-                TsonElementHeader h = list.getHeader();
-                if (h != null) {
-                    String n = TsonUtils.nullIfBlank(h.name());
-                    boolean hasName = false;
-                    if (n != null) {
-                        writer.append(n);
-                        hasName = n.length() > 0;
+                case PAIR: {
+                    TsonPair t = element.toPair();
+                    format(t.key(), writer);
+                    String vs = format(t.value());
+                    writer.append(config.afterKey);
+                    if (config.indent.length() > 0 && vs.indexOf("\n") > 0) {
+                        writer.append(":\n").append(TsonUtils.indent(vs, config.indent));
+                    } else {
+                        writer.append(':').append(config.beforeValue).append(vs);
                     }
-                    TsonElementList params = h.args();
-                    if (!hasName || params.size() > 0) {
-                        listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
-                    }
+                    return;
                 }
-                listToString(config.indentBrackets, (Iterable) list.rows(), '[', ']', writer, ListType.MATRIX);
-                return;
-            }
-            case OBJECT: {
-                TsonObject list = element.toObject();
-                TsonElementHeader h = list.header();
-                if (h != null) {
-                    String n = TsonUtils.nullIfBlank(h.name());
-                    boolean hasName = false;
-                    if (n != null) {
-                        writer.append(n);
-                        hasName = n.length() > 0;
+                case BINOP: {
+                    TsonBinOp t = element.toBinOp();
+                    String op = t.op();
+                    format(t.first(), writer);
+                    String vs = format(t.second());
+                    writer.append(config.afterKey);
+                    if (config.indent.length() > 0 && vs.indexOf("\n") > 0) {
+                        writer.append(op).append("\n").append(TsonUtils.indent(vs, config.indent));
+                    } else {
+                        writer.append(op).append(config.beforeValue).append(vs);
                     }
-                    TsonElementList params = h.args();
-                    if (!hasName || params.size() > 0) {
-                        listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
-                    }
+                    return;
                 }
-                listToString(config.indentBraces, list, '{', '}', writer, ListType.OBJECT);
-                return;
-            }
-            case FUNCTION: {
-                TsonFunction list = element.toFunction();
-                writer.append(list.name());
-                listToString(config.indentList, list.args(), '(', ')', writer, ListType.PARAMS);
-                return;
-            }
-            case BINARY_STREAM: {
-                TsonBinaryStream list = element.toBinaryStream();
-                writer.write("^[");
-                char[] c = new char[1024];
-                try (Reader r = list.getBase64Value()) {
-                    int x;
-                    while ((x = r.read(c)) > 0) {
-                        writer.write(c, 0, x);
-                    }
+                case UPLET: {
+                    TsonUplet list = element.toUplet();
+                    listToString(config.indentList, list.args(), '(', ')', writer, ListType.PARAMS);
+                    return;
                 }
-                writer.write("]");
-                return;
-            }
-            case CHAR_STREAM: {
-                TsonCharStream list = element.toCharStream();
-                switch (list.getStreamType()) {
-                    case "": {
-                        //code
-                        writer.write("^{");
-                        char[] c = new char[1024];
-                        CharStreamCodeSupport cscs = CharStreamCodeSupports.of("");
-                        try (Reader r = list.value()) {
-                            int x;
-                            while ((x = r.read(c)) > 0) {
-                                writer.write(c, 0, x);
-                                cscs.next(c, 0, x);
-                            }
+                case ARRAY: {
+                    TsonArray list = element.toArray();
+                    TsonElementHeader h = list.header();
+                    if (h != null) {
+                        String n = TsonUtils.nullIfBlank(h.name());
+                        boolean hasName = false;
+                        if (n != null) {
+                            writer.append(n);
+                            hasName = n.length() > 0;
                         }
-                        if (!cscs.isValid()) {
-                            throw new IllegalArgumentException("Invalid Code CharStream : " + cscs.getErrorMessage());
+                        TsonElementList params = h.args();
+                        if (!hasName || params.size() > 0) {
+                            listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
                         }
-                        writer.write("}");
                     }
-                    default: {
-                        String n = list.getStreamType();
-                        for (char c : n.toCharArray()) {
-                            switch (c) {
-                                case '}':
-                                case '{': {
-                                    throw new IllegalArgumentException("Invalid StopWord CharStream : " + n);
+                    listToString(config.indentBrackets, list, '[', ']', writer, ListType.PARAMS);
+                    return;
+                }
+                case MATRIX: {
+                    TsonMatrix list = element.toMatrix();
+                    TsonElementHeader h = list.getHeader();
+                    if (h != null) {
+                        String n = TsonUtils.nullIfBlank(h.name());
+                        boolean hasName = false;
+                        if (n != null) {
+                            writer.append(n);
+                            hasName = n.length() > 0;
+                        }
+                        TsonElementList params = h.args();
+                        if (!hasName || params.size() > 0) {
+                            listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
+                        }
+                    }
+                    listToString(config.indentBrackets, (Iterable) list.rows(), '[', ']', writer, ListType.MATRIX);
+                    return;
+                }
+                case OBJECT: {
+                    TsonObject list = element.toObject();
+                    TsonElementHeader h = list.header();
+                    if (h != null) {
+                        String n = TsonUtils.nullIfBlank(h.name());
+                        boolean hasName = false;
+                        if (n != null) {
+                            writer.append(n);
+                            hasName = n.length() > 0;
+                        }
+                        TsonElementList params = h.args();
+                        if (!hasName || params.size() > 0) {
+                            listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
+                        }
+                    }
+                    listToString(config.indentBraces, list, '{', '}', writer, ListType.OBJECT);
+                    return;
+                }
+                case FUNCTION: {
+                    TsonFunction list = element.toFunction();
+                    writer.append(list.name());
+                    listToString(config.indentList, list.args(), '(', ')', writer, ListType.PARAMS);
+                    return;
+                }
+                case BINARY_STREAM: {
+                    TsonBinaryStream list = element.toBinaryStream();
+                    writer.write("^[");
+                    char[] c = new char[1024];
+                    try (Reader r = list.getBase64Value()) {
+                        int x;
+                        while ((x = r.read(c)) > 0) {
+                            writer.write(c, 0, x);
+                        }
+                    }
+                    writer.write("]");
+                    return;
+                }
+                case CHAR_STREAM: {
+                    TsonCharStream list = element.toCharStream();
+                    switch (list.getStreamType()) {
+                        case "": {
+                            //code
+                            writer.write("^{");
+                            char[] c = new char[1024];
+                            CharStreamCodeSupport cscs = CharStreamCodeSupports.of("");
+                            try (Reader r = list.value()) {
+                                int x;
+                                while ((x = r.read(c)) > 0) {
+                                    writer.write(c, 0, x);
+                                    cscs.next(c, 0, x);
                                 }
                             }
+                            if (!cscs.isValid()) {
+                                throw new IllegalArgumentException("Invalid Code CharStream : " + cscs.getErrorMessage());
+                            }
+                            writer.write("}");
                         }
-                        writer.write("^" + n + "{");
-                        String stop = "^" + n + "}";
-                        Kmp kmp = Kmp.compile(stop);
-                        char[] c = new char[1024];
-                        try (Reader r = list.value()) {
-                            int x;
-                            while ((x = r.read(c)) > 0) {
-                                for (int i = 0; i < x; i++) {
-                                    if (kmp.next(c[i])) {
-                                        throw new IllegalArgumentException("Invalid StopWord CharStream StopWord detected in content : " + n);
+                        default: {
+                            String n = list.getStreamType();
+                            for (char c : n.toCharArray()) {
+                                switch (c) {
+                                    case '}':
+                                    case '{': {
+                                        throw new IllegalArgumentException("Invalid StopWord CharStream : " + n);
                                     }
                                 }
-                                writer.write(c, 0, x);
+                            }
+                            writer.write("^" + n + "{");
+                            String stop = "^" + n + "}";
+                            Kmp kmp = Kmp.compile(stop);
+                            char[] c = new char[1024];
+                            try (Reader r = list.value()) {
+                                int x;
+                                while ((x = r.read(c)) > 0) {
+                                    for (int i = 0; i < x; i++) {
+                                        if (kmp.next(c[i])) {
+                                            throw new IllegalArgumentException("Invalid StopWord CharStream StopWord detected in content : " + n);
+                                        }
+                                    }
+                                    writer.write(c, 0, x);
+                                }
                             }
                         }
                     }
+                    return;
                 }
-                return;
             }
+            throw new IllegalArgumentException("Format Tson : Unexpected type " + element.type());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
-        throw new IllegalArgumentException("Format Tson : Unexpected type " + element.type());
     }
 
     private void formatAppendUnit(String ll, TsonNumber element, Writer writer) throws IOException {
@@ -425,8 +433,8 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
         }
     }
 
-    private void listToString(boolean indent, Iterable<TsonElement> it, char start, char end, Writer out, ListType listType) throws IOException{
-        IndentMode indentMode=indent?IndentMode.OPTIMIZE : IndentMode.NEVER;
+    private void listToString(boolean indent, Iterable<TsonElement> it, char start, char end, Writer out, ListType listType) throws IOException {
+        IndentMode indentMode = indent ? IndentMode.OPTIMIZE : IndentMode.NEVER;
         listToString(indentMode, it, start, end, out, listType);
     }
 

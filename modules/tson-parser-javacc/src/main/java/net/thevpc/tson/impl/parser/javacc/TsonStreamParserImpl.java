@@ -840,7 +840,7 @@ Token t ;
     }
         if(!hasArr && !hasObj){
             if(!hasPars){
-                visitor.visitPrimitiveEnd(Tson.name(id.image));
+                visitor.visitPrimitiveEnd(Tson.ofName(id.image));
             }else {
                 visitor.visitFunctionEnd();
             }

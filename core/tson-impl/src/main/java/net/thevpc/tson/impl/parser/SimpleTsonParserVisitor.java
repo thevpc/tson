@@ -139,6 +139,7 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
 
         public TsonElement element;
         public String name;
+        public boolean hasParams;
         public ArrayList<TsonElement> params;
         public ArrayList<TsonElement> array;
         public ArrayList<TsonElement> object;
@@ -273,7 +274,7 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
     @Override
     public void visitComments(TsonComment comments) {
         PartialElementContext a = peek();
-        a.comments = TsonComments.concat(a.comments,new TsonComments(new TsonComment[]{comments},null));
+        a.comments = TsonComments.concat(a.comments, new TsonComments(new TsonComment[]{comments}, null));
     }
 
     @Override
@@ -281,7 +282,7 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
         PartialElementContext a = peek();
         TsonElementHeader h = null;
         if (a.name != null || !a.paramsEmpty()) {
-            h = new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params()));
+            h = new TsonElementHeaderImpl(a.name, a.hasParams, TsonUtils.unmodifiableElements(a.params()));
         }
         repush(new ElementContext(
                 TsonElementDecorator.of(
@@ -332,7 +333,7 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
         PartialElementContext a = peek();
         TsonElementHeader h = null;
         if (a.name != null || !a.paramsEmpty()) {
-            h = new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params()));
+            h = new TsonElementHeaderImpl(a.name, a.hasParams, TsonUtils.unmodifiableElements(a.params()));
         }
         repush(new ElementContext(
                 TsonElementDecorator.of(
@@ -349,7 +350,7 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
         PartialElementContext a = peek();
         TsonElementHeader h = null;
         if (a.name != null || !a.paramsEmpty()) {
-            h = new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params()));
+            h = new TsonElementHeaderImpl(a.name, a.hasParams, TsonUtils.unmodifiableElements(a.params()));
         }
         repush(new ElementContext(
                 TsonElementDecorator.of(
@@ -369,7 +370,7 @@ public class SimpleTsonParserVisitor implements TsonParserVisitor {
         PartialElementContext a = peek();
         TsonElementHeader h = null;
         if (a.name != null || !a.paramsEmpty()) {
-            h = new TsonElementHeaderImpl(a.name, TsonUtils.unmodifiableElements(a.params()));
+            h = new TsonElementHeaderImpl(a.name, a.hasParams,TsonUtils.unmodifiableElements(a.params()));
         }
         repush(new ElementContext(
                 TsonElementDecorator.of(

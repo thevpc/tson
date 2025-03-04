@@ -101,9 +101,9 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     double doubleValue();
 
-    BigInteger getBigInteger();
+    BigInteger bigIntegerValue();
 
-    BigDecimal getBigDecimal();
+    BigDecimal bigDecimalValue();
 
     Boolean booleanObject();
 

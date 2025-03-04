@@ -112,18 +112,18 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
     }
 
     @Override
-    public BigDecimal getBigDecimal() {
+    public BigDecimal bigDecimalValue() {
         return BigDecimal.valueOf(getReal());
     }
 
     @Override
-    public BigInteger getBigInteger() {
-        return getBigDecimal().toBigInteger();
+    public BigInteger bigIntegerValue() {
+        return this.bigDecimalValue().toBigInteger();
     }
 
 
     public TsonBigInt toBigInt() {
-        return new TsonBigIntImpl(getBigInteger(),layout(),unit());
+        return new TsonBigIntImpl(bigIntegerValue(),layout(),unit());
     }
 
     @Override

@@ -3,6 +3,7 @@ package net.thevpc.tson;
 import java.util.List;
 
 public interface TsonElementHeaderBuilder<T extends TsonElementBuilder> {
+
     TsonElementHeaderBuilder<T> clear();
 
     TsonElementHeaderBuilder<T> set(TsonElementHeader header);
@@ -31,5 +32,8 @@ public interface TsonElementHeaderBuilder<T extends TsonElementBuilder> {
 
     TsonElementHeaderBuilder<T> removeAll();
 
+    boolean isArgs() ;
+
+    TsonElementHeaderBuilder<T> setHas(boolean hasArgs);
     T then();
 }

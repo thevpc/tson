@@ -360,7 +360,7 @@ public class TsonPrimitiveElementBuilderImpl extends AbstractTsonElementBuilder<
 
     @Override
     public TsonPrimitiveBuilder setName(String value) {
-        this.value = Tson.name(value);
+        this.value = Tson.ofName(value);
         return this;
     }
 

@@ -320,12 +320,12 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     }
 
     @Override
-    public BigInteger getBigInteger() {
+    public BigInteger bigIntegerValue() {
         return null;
     }
 
     @Override
-    public BigDecimal getBigDecimal() {
+    public BigDecimal bigDecimalValue() {
         return null;
     }
 

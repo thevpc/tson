@@ -3,6 +3,7 @@ package net.thevpc.tson.impl.util;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.UncheckedIOException;
 
 public class StringBuilderReader extends Reader {
 
@@ -16,19 +17,19 @@ public class StringBuilderReader extends Reader {
         this.length = s.length();
     }
 
-    private void ensureOpen() throws IOException {
+    private void ensureOpen()  {
         if (str == null)
-            throw new IOException("Stream closed");
+            throw new UncheckedIOException(new IOException("Stream closed"));
     }
 
-    public int read() throws IOException {
+    public int read()  {
         ensureOpen();
         if (next >= length)
             return -1;
         return str.charAt(next++);
     }
 
-    public int read(char cbuf[], int off, int len) throws IOException {
+    public int read(char cbuf[], int off, int len)  {
         synchronized (lock) {
             ensureOpen();
             if ((off < 0) || (off > cbuf.length) || (len < 0) ||
@@ -47,7 +48,7 @@ public class StringBuilderReader extends Reader {
         }
     }
 
-    public long skip(long ns) throws IOException {
+    public long skip(long ns)  {
         ensureOpen();
         if (next >= length)
             return 0;
@@ -58,7 +59,7 @@ public class StringBuilderReader extends Reader {
         return n;
     }
 
-    public boolean ready() throws IOException {
+    public boolean ready()  {
         ensureOpen();
         return true;
     }
@@ -67,7 +68,7 @@ public class StringBuilderReader extends Reader {
         return true;
     }
 
-    public void mark(int readAheadLimit) throws IOException {
+    public void mark(int readAheadLimit)  {
         if (readAheadLimit < 0){
             throw new IllegalArgumentException();
         }
@@ -75,7 +76,7 @@ public class StringBuilderReader extends Reader {
         mark = next;
     }
 
-    public void reset() throws IOException {
+    public void reset()  {
         ensureOpen();
         next = mark;
     }

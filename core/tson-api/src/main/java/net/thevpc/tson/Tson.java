@@ -46,7 +46,7 @@ public class Tson {
     }
 
     public static TsonReader reader(TsonSerializer serializer) {
-        return factory.reader(serializer==null?serializer():serializer);
+        return factory.reader(serializer == null ? serializer() : serializer);
     }
 
     public static TsonElement ofTrue() {
@@ -287,7 +287,7 @@ public class Tson {
         return factory.ofDouble(value, unit);
     }
 
-    public static TsonElement name(String value) {
+    public static TsonElement ofName(String value) {
         if (value == null) {
             return ofNull();
         }
@@ -310,7 +310,7 @@ public class Tson {
     }
 
     public static TsonPair ofPair(String key, TsonElementBase value) {
-        return factory.ofPair(name(key), of(value));
+        return factory.ofPair(ofName(key), of(value));
     }
 
     public static TsonElement of(boolean value) {
@@ -318,10 +318,10 @@ public class Tson {
     }
 
     public static TsonElement of(Number value) {
-        if(value==null){
+        if (value == null) {
             return ofNull();
         }
-        switch (value.getClass().getName()){
+        switch (value.getClass().getName()) {
             case "byte":
             case "java.lang.Byte":
                 return of(value.byteValue());
@@ -341,9 +341,9 @@ public class Tson {
             case "java.lang.Double":
                 return of(value.doubleValue());
             case "java.math.BigInteger":
-                return of((java.math.BigInteger)value);
+                return of((java.math.BigInteger) value);
             case "java.math.BigDecimal":
-                return of((java.math.BigDecimal)value);
+                return of((java.math.BigDecimal) value);
         }
         throw new IllegalArgumentException("Unsupported number type: " + value.getClass().getName());
     }
@@ -726,6 +726,10 @@ public class Tson {
         return ofArray().getHeader().setName(name).addAll(params).then().addAll(elems);
     }
 
+    public static TsonArrayBuilder ofArray(String name, TsonElementBase... elems) {
+        return ofArray().getHeader().setName(name).then().addAll(elems);
+    }
+
     public static TsonMatrixBuilder ofMatrix() {
         return factory.ofMatrix();
     }
@@ -768,6 +772,12 @@ public class Tson {
     public static TsonObjectBuilder ofObj(String name, TsonElementBase[] params, TsonElementBase... elems) {
         TsonObjectBuilder o = ofObj();
         o.getHeader().name(name).addAll(params);
+        return o.addAll(elems);
+    }
+
+    public static TsonObjectBuilder ofObj(String name, TsonElementBase... elems) {
+        TsonObjectBuilder o = ofObj();
+        o.getHeader().name(name);
         return o.addAll(elems);
     }
 
@@ -819,7 +829,7 @@ public class Tson {
     }
 
     public static TsonElement of(Enum b) {
-        return b == null ? ofNull() : name(b.name());
+        return b == null ? ofNull() : ofName(b.name());
     }
 
     public static TsonElement of(TsonElementBase b) {

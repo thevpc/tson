@@ -18,39 +18,39 @@ public interface TsonReader {
 
     <T> T read(TsonElement  tson, Class<? extends T> clazz);
 
-    <T> T read(InputStream stream, Class<? extends T> clazz) throws IOException;
+    <T> T read(InputStream stream, Class<? extends T> clazz) ;
 
     <T> T read(CharSequence string, Class<? extends T> clazz);
 
-    <T> T read(InputStream stream, String encoding, Class<? extends T> clazz) throws IOException;
+    <T> T read(InputStream stream, String encoding, Class<? extends T> clazz) ;
 
-    <T> T read(Reader reader, Class<? extends T> clazz) throws IOException;
+    <T> T read(Reader reader, Class<? extends T> clazz) ;
 
-    <T> T read(File file, Class<? extends T> clazz) throws IOException;
+    <T> T read(File file, Class<? extends T> clazz) ;
 
-    <T> T read(Path file, Class<? extends T> clazz) throws IOException;
+    <T> T read(Path file, Class<? extends T> clazz) ;
 
-    <T> T read(URL url, Class<? extends T> clazz) throws IOException;
+    <T> T read(URL url, Class<? extends T> clazz) ;
 
-    TsonElement readElement(InputStream stream) throws IOException;
+    TsonElement readElement(InputStream stream) ;
 
     TsonElement readElement(CharSequence string);
 
-    TsonElement readElement(InputStream stream, String encoding) throws IOException;
+    TsonElement readElement(InputStream stream, String encoding) ;
 
-    TsonElement readElement(Reader reader) throws IOException;
+    TsonElement readElement(Reader reader) ;
 
-    TsonElement readElement(File file) throws IOException;
+    TsonElement readElement(File file) ;
 
-    TsonElement readElement(Path file) throws IOException;
+    TsonElement readElement(Path file) ;
 
-    TsonElement readElement(URL url) throws IOException;
+    TsonElement readElement(URL url) ;
 
-    TsonDocument readDocument(InputStream stream) throws IOException;
+    TsonDocument readDocument(InputStream stream) ;
 
     TsonDocument readDocument(CharSequence string);
 
-    TsonDocument readDocument(InputStream stream, String encoding) throws IOException;
+    TsonDocument readDocument(InputStream stream, String encoding) ;
 
     TsonDocument readDocument(Reader reader) throws IOException;
 

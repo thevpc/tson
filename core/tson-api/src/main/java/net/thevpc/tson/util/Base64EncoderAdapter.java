@@ -1,9 +1,6 @@
 package net.thevpc.tson.util;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
+import java.io.*;
 
 public class Base64EncoderAdapter extends Reader {
     private static final char[] BASE64_CHARS = {
@@ -26,7 +23,6 @@ public class Base64EncoderAdapter extends Reader {
     private byte[] tempBuffer;
 
 
-
     public Base64EncoderAdapter(InputStream in) {
         this(in, 76, -1);
     }
@@ -41,22 +37,26 @@ public class Base64EncoderAdapter extends Reader {
         if (bufferSize <= 0) {
             bufferSize = 1;
         }
-        outBuffer = new char[bufferSize*4/3+4+3];
+        outBuffer = new char[bufferSize * 4 / 3 + 4 + 3];
         tempBuffer = new byte[bufferSize];
     }
 
 
-    public static String toBase64(byte[] bytes) throws IOException {
-        return toBase64(bytes,-1);
+    public static String toBase64(byte[] bytes) {
+        return toBase64(bytes, -1);
     }
 
-    public static String toBase64(byte[] bytes, int linemax) throws IOException {
+    public static String toBase64(byte[] bytes, int linemax) {
         Base64EncoderAdapter r = new Base64EncoderAdapter(new ByteArrayInputStream(bytes), linemax);
         char[] chars = new char[1024];
         int i;
         StringBuilder sb = new StringBuilder();
-        while ((i = r.read(chars)) != 0) {
-            sb.append(chars, 0, i);
+        try {
+            while ((i = r.read(chars)) != 0) {
+                sb.append(chars, 0, i);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
         return sb.toString();
     }
@@ -122,10 +122,15 @@ public class Base64EncoderAdapter extends Reader {
         }
     }
 
-    private int dataReady() throws IOException {
+    private int dataReady() {
         if (outBufferReadIndex >= outBufferWriteIndex) {
             while (true) {
-                int c = in.read(tempBuffer);
+                int c = 0;
+                try {
+                    c = in.read(tempBuffer);
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
                 if (c <= 0) {
                     finish();
                     break;
@@ -143,7 +148,7 @@ public class Base64EncoderAdapter extends Reader {
     }
 
     @Override
-    public int read(char[] cbuf, int off, int len) throws IOException {
+    public int read(char[] cbuf, int off, int len) {
         if (len > 0) {
             int r = dataReady();
             if (r > 0) {
@@ -159,7 +164,11 @@ public class Base64EncoderAdapter extends Reader {
     }
 
     @Override
-    public void close() throws IOException {
-        in.close();
+    public void close() {
+        try {
+            in.close();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }

@@ -10,10 +10,28 @@ import java.util.stream.Collectors;
 public class TsonElementHeaderImpl implements TsonElementHeader {
     private String name;
     private TsonElementList args;
+    private boolean hasArgs;
 
-    public TsonElementHeaderImpl(String name, UnmodifiableArrayList<TsonElement> args) {
+    public TsonElementHeaderImpl(String name, boolean hasArgs,UnmodifiableArrayList<TsonElement> args) {
         this.name = name;
         this.args = new TsonElementListImpl(args.stream().map(x->x).collect(Collectors.toList()));
+        this.hasArgs = hasArgs || args.size() > 0;
+    }
+
+    @Override
+    public boolean isBlank() {
+        if(name != null && !name.trim().isEmpty()) {
+            return false;
+        }
+        if(hasArgs) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isArgs() {
+        return hasArgs;
     }
 
     @Override
