@@ -5,4 +5,9 @@ public interface TsonObjectContext {
 
     <T> T obj(TsonElement element, Class<T> clazz);
 
+    boolean isPreferName() ;
+
+    TsonObjectContext setPreferName(boolean preferName) ;
+
+    TsonObjectContext copy() ;
 }

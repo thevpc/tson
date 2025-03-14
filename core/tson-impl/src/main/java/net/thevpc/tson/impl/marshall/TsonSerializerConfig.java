@@ -75,7 +75,15 @@ public class TsonSerializerConfig {
         registerObjToElemConverter(TsonSerializable.class, TsonSerializable::toTsonElement);
         registerObjToElemConverter(TsonElementBase.class, (object, context) -> object.build());
         registerObjToElemConverter(Enum.class, (object, context) -> Tson.ofName(object.name()));
-        registerObjToElemConverter(String.class, (object, context) -> Tson.of((String) object));
+        registerObjToElemConverter(String.class, (object, context) -> {
+            if (context.isPreferName()) {
+                String s = (String) object;
+                if (s != null && s.matches("^[a-zA-Z_]+[a-zA-Z_0-9_]+$")) {
+                    return Tson.ofName(s);
+                }
+            }
+            return Tson.of((String) object);
+        });
         registerObjToElemConverter(Double.class, (object, context) -> Tson.of((Double) object));
         registerObjToElemConverter(Double.TYPE, (object, context) -> Tson.of((Double) object));
         registerObjToElemConverter(Float.class, (object, context) -> Tson.of((Float) object));
@@ -129,7 +137,7 @@ public class TsonSerializerConfig {
             ClassPropertiesRegistry.ClassInfo ci = classPropertiesRegistry.getClassInfo(object.getClass());
             for (ClassPropertiesRegistry.TypeProperty o : ci.getProperties(true)) {
                 a.add(
-                        context.elem(o.name()),
+                        context.copy().setPreferName(true).elem(o.name()),
                         context.elem(o.get(object))
                 );
             }
@@ -314,6 +322,7 @@ public class TsonSerializerConfig {
     private Object objectElementToObject(List<TsonElement> elements, Class to, TsonObjectContext context) {
         return objectElementToObject(elements == null ? null : elements.toArray(new TsonElement[0]), to, context);
     }
+
     private Object objectElementToObject(TsonElementList elements, Class to, TsonObjectContext context) {
         return objectElementToObject(elements == null ? null : elements.toArray(), to, context);
     }
@@ -453,7 +462,7 @@ public class TsonSerializerConfig {
         return w;
     }
 
-    public void writeDefaultElement(Tson element, Writer writer)  {
+    public void writeDefaultElement(Tson element, Writer writer) {
         try {
             writer.write(element.toString());
         } catch (IOException e) {

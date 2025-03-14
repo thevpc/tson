@@ -3,12 +3,22 @@ package net.thevpc.tson.impl.marshall;
 import net.thevpc.tson.TsonElement;
 import net.thevpc.tson.TsonObjectContext;
 
-class DefaultTsonObjectContext implements TsonObjectContext {
+class DefaultTsonObjectContext implements TsonObjectContext, Cloneable {
 
     private TsonSerializerImpl m;
+    private boolean preferName;
 
     public DefaultTsonObjectContext(TsonSerializerImpl m) {
         this.m = m;
+    }
+
+    public boolean isPreferName() {
+        return preferName;
+    }
+
+    public TsonObjectContext setPreferName(boolean preferName) {
+        this.preferName = preferName;
+        return this;
     }
 
     public <T> TsonElement elem(T any) {
@@ -20,4 +30,12 @@ class DefaultTsonObjectContext implements TsonObjectContext {
         return m.defaultElementToObject(element, clazz, this);
     }
 
+    @Override
+    public TsonObjectContext copy() {
+        try {
+            return (TsonObjectContext) clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
