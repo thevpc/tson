@@ -1,7 +1,9 @@
 package net.thevpc.tson;
 
 public interface TsonUplet extends TsonContainer, Iterable<TsonElement> {
-    boolean isEmpty();
+    boolean isNamed();
+
+    boolean isBlank();
 
     int size();
 

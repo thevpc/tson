@@ -3,7 +3,11 @@ package net.thevpc.tson;
 import java.util.List;
 
 public interface TsonMatrix extends TsonElement, Iterable<TsonArray> {
-    TsonElementHeader getHeader();
+    String name();
+
+    boolean isWithArgs();
+
+    TsonElementList args();
 
     boolean isEmpty();
 

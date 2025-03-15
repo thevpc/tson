@@ -102,11 +102,6 @@ public abstract class AbstractTsonElementBase implements TsonElement {
     }
 
     @Override
-    public boolean isFunction() {
-        return type() == TsonElementType.FUNCTION;
-    }
-
-    @Override
     public boolean isArray() {
         return type() == TsonElementType.ARRAY;
     }
@@ -119,6 +114,16 @@ public abstract class AbstractTsonElementBase implements TsonElement {
     @Override
     public boolean isNamedObject() {
         return type() == TsonElementType.OBJECT && toObject().name() != null;
+    }
+
+    @Override
+    public boolean isNamedUplet() {
+        return type() == TsonElementType.UPLET && toUplet().isNamed();
+    }
+
+    @Override
+    public boolean isUnNamedUplet() {
+        return type() == TsonElementType.UPLET && !toUplet().isNamed();
     }
 
     @Override

@@ -52,41 +52,41 @@ public interface TsonReader {
 
     TsonDocument readDocument(InputStream stream, String encoding) ;
 
-    TsonDocument readDocument(Reader reader) throws IOException;
+    TsonDocument readDocument(Reader reader) ;
 
-    TsonDocument readDocument(File file) throws IOException;
+    TsonDocument readDocument(File file) ;
 
-    TsonDocument readDocument(Path file) throws IOException;
+    TsonDocument readDocument(Path file) ;
 
-    TsonDocument readDocument(URL url) throws IOException;
+    TsonDocument readDocument(URL url) ;
 
-    void visitElement(InputStream stream, TsonParserVisitor visitor) throws IOException;
+    void visitElement(InputStream stream, TsonParserVisitor visitor) ;
 
     void visitElement(CharSequence string, TsonParserVisitor visitor);
 
-    void visitElement(InputStream stream, String encoding, TsonParserVisitor visitor) throws IOException;
+    void visitElement(InputStream stream, String encoding, TsonParserVisitor visitor) ;
 
-    void visitElement(Reader reader, TsonParserVisitor visitor) throws IOException;
+    void visitElement(Reader reader, TsonParserVisitor visitor) ;
 
-    void visitElement(File file, TsonParserVisitor visitor) throws IOException;
+    void visitElement(File file, TsonParserVisitor visitor) ;
 
-    void visitElement(Path file, TsonParserVisitor visitor) throws IOException;
+    void visitElement(Path file, TsonParserVisitor visitor) ;
 
-    void visitElement(URL url, TsonParserVisitor visitor) throws IOException;
+    void visitElement(URL url, TsonParserVisitor visitor) ;
 
-    void visitDocument(InputStream stream, TsonParserVisitor visitor) throws IOException;
+    void visitDocument(InputStream stream, TsonParserVisitor visitor) ;
 
     void visitDocument(CharSequence string, TsonParserVisitor visitor);
 
-    void visitDocument(InputStream stream, String encoding, TsonParserVisitor visitor) throws IOException;
+    void visitDocument(InputStream stream, String encoding, TsonParserVisitor visitor) ;
 
-    void visitDocument(Reader reader, TsonParserVisitor visitor) throws IOException;
+    void visitDocument(Reader reader, TsonParserVisitor visitor) ;
 
-    void visitDocument(File file, TsonParserVisitor visitor) throws IOException;
+    void visitDocument(File file, TsonParserVisitor visitor) ;
 
-    void visitDocument(Path file, TsonParserVisitor visitor) throws IOException;
+    void visitDocument(Path file, TsonParserVisitor visitor) ;
 
-    void visitDocument(URL url, TsonParserVisitor visitor) throws IOException;
+    void visitDocument(URL url, TsonParserVisitor visitor) ;
 
     void visitElement(String tsonString,TsonParserVisitor visitor);
 

@@ -5,7 +5,6 @@ import net.thevpc.tson.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.Temporal;
 import java.util.regex.Pattern;
 
 public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElement {
@@ -208,11 +207,6 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
     }
 
     @Override
-    public TsonFunction toFunction() {
-        return (TsonFunction) this;
-    }
-
-    @Override
     public TsonArray toArray() {
         return throwNonPrimitive(TsonElementType.ARRAY);
     }
@@ -238,8 +232,8 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
     }
 
     @Override
-    public TsonBinOp toBinOp() {
-        return throwNonPrimitive(TsonElementType.BINOP);
+    public TsonOp toOp() {
+        return throwNonPrimitive(TsonElementType.OP);
     }
 
 

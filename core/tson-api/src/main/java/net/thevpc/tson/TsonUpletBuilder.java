@@ -3,6 +3,14 @@ package net.thevpc.tson;
 import java.util.Collection;
 
 public interface TsonUpletBuilder extends Iterable<TsonElement>, TsonElementBuilder {
+    String name();
+
+    boolean isNamed();
+
+    boolean isBlank();
+
+    TsonUpletBuilder name(String name);
+
     TsonUpletBuilder reset();
 
     TsonUpletBuilder merge(TsonElementBase element);
@@ -26,7 +34,7 @@ public interface TsonUpletBuilder extends Iterable<TsonElement>, TsonElementBuil
     TsonUpletBuilder removeAll();
 
 
-    ////////////////////////////////////////////////
+    /// /////////////////////////////////////////////
 
     TsonUpletBuilder comments(TsonComments comments);
 

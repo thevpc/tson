@@ -265,11 +265,6 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
     }
 
     @Override
-    public TsonFunction toFunction() {
-        return (TsonFunction) this;
-    }
-
-    @Override
     public TsonNumber toNumber() {
         throw new ClassCastException(type() + " is not a number");
     }
@@ -296,8 +291,8 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
     }
 
     @Override
-    public TsonBinOp toBinOp() {
-        return throwNonPrimitive(TsonElementType.BINOP);
+    public TsonOp toOp() {
+        return throwNonPrimitive(TsonElementType.OP);
     }
 
     @Override

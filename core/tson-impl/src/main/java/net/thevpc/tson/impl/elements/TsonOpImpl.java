@@ -1,56 +1,66 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.impl.builders.TsonBinOpBuilderImpl;
+import net.thevpc.tson.impl.builders.TsonOpBuilderImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.util.Objects;
 
-public class TsonBinOpImpl extends AbstractNonPrimitiveTsonElement implements TsonBinOp {
-    private String op;
-    private TsonElement key;
-    private TsonElement value;
+public class TsonOpImpl extends AbstractNonPrimitiveTsonElement implements TsonOp {
+    private String opName;
+    private TsonElement first;
+    private TsonElement second;
+    private TsonOpType opType;
 
-    public TsonBinOpImpl(String op,TsonElement key, TsonElement value) {
-        super(TsonElementType.BINOP);
-        if (op == null) {
+    public TsonOpImpl(String opName, TsonOpType opType, TsonElement first, TsonElement second) {
+        super(TsonElementType.OP);
+        if (opName == null) {
             throw new IllegalArgumentException("op cannot be null. Try to use NULL Tson element");
         }
-        if (key == null) {
+        if (first == null) {
             throw new IllegalArgumentException("Key cannot be null. Try to use NULL Tson element");
         }
-        if (value == null) {
+        if (second == null) {
             throw new IllegalArgumentException("Value cannot be null. Try to use NULL Tson element");
         }
-        if (key.type() == TsonElementType.PAIR) {
+        if (opType == null) {
+            throw new IllegalArgumentException("opType cannot be null. Try to use NULL Tson element");
+        }
+        if (first.type() == TsonElementType.PAIR) {
             throw new IllegalArgumentException("Key of Key Value cannot be a key value as well");
         }
-        if (value.type() == TsonElementType.PAIR) {
+        if (second.type() == TsonElementType.PAIR) {
             throw new IllegalArgumentException("Key of Key Value cannot be a key value as well");
         }
-        this.op=op;
-        this.key = key;
-        this.value = value;
+        this.opName = opName;
+        this.opType = opType;
+        this.first = first;
+        this.second = second;
     }
 
     @Override
-    public String op() {
-        return op;
+    public TsonOpType opType() {
+        return opType;
     }
 
     @Override
-    public TsonBinOp toBinOp() {
+    public String opName() {
+        return opName;
+    }
+
+    @Override
+    public TsonOp toOp() {
         return this;
     }
 
     @Override
     public TsonElement second() {
-        return value;
+        return second;
     }
 
     @Override
     public TsonElement first() {
-        return key;
+        return first;
     }
 
     @Override
@@ -58,28 +68,30 @@ public class TsonBinOpImpl extends AbstractNonPrimitiveTsonElement implements Ts
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        TsonBinOpImpl that = (TsonBinOpImpl) o;
-        return Objects.equals(key, that.key) &&
-                Objects.equals(value, that.value);
+        TsonOpImpl that = (TsonOpImpl) o;
+        return Objects.equals(first, that.first) &&
+                Objects.equals(second, that.second) &&
+                Objects.equals(opType, that.opType)
+                ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), key, value);
+        return Objects.hash(super.hashCode(), first, second, opType);
     }
 
     @Override
-    public TsonBinOpBuilder builder() {
-        return new TsonBinOpBuilderImpl().setFirst(first()).setSecond(second());
+    public TsonOpBuilder builder() {
+        return new TsonOpBuilderImpl().setFirst(first()).setSecond(second());
     }
 
     @Override
     public boolean visit(TsonDocumentVisitor visitor) {
         if (visitor.visit(this)) {
-            if (!key.visit(visitor)) {
+            if (!first.visit(visitor)) {
                 return false;
             }
-            if (!value.visit(visitor)) {
+            if (!second.visit(visitor)) {
                 return false;
             }
         }

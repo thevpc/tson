@@ -259,9 +259,9 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     }
                     return;
                 }
-                case BINOP: {
-                    TsonBinOp t = element.toBinOp();
-                    String op = t.op();
+                case OP: {
+                    TsonOp t = element.toOp();
+                    String op = t.opName();
                     format(t.first(), writer);
                     String vs = format(t.second());
                     writer.append(config.afterKey);
@@ -274,20 +274,22 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 }
                 case UPLET: {
                     TsonUplet list = element.toUplet();
+                    if (list.isNamed()) {
+                        writer.append(list.name());
+                    }
                     listToString(config.indentList, list.args(), '(', ')', writer, ListType.PARAMS);
                     return;
                 }
                 case ARRAY: {
                     TsonArray list = element.toArray();
-                    TsonElementHeader h = list.header();
-                    if (h != null) {
-                        String n = TsonUtils.nullIfBlank(h.name());
-                        boolean hasName = false;
-                        if (n != null) {
-                            writer.append(n);
-                            hasName = n.length() > 0;
-                        }
-                        TsonElementList params = h.args();
+                    String n = TsonUtils.nullIfBlank(list.name());
+                    boolean hasName = false;
+                    if (n != null) {
+                        writer.append(n);
+                        hasName = n.length() > 0;
+                    }
+                    TsonElementList params = list.args();
+                    if(params!=null) {
                         if (!hasName || params.size() > 0) {
                             listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
                         }
@@ -297,15 +299,14 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 }
                 case MATRIX: {
                     TsonMatrix list = element.toMatrix();
-                    TsonElementHeader h = list.getHeader();
-                    if (h != null) {
-                        String n = TsonUtils.nullIfBlank(h.name());
-                        boolean hasName = false;
-                        if (n != null) {
-                            writer.append(n);
-                            hasName = n.length() > 0;
-                        }
-                        TsonElementList params = h.args();
+                    String n = TsonUtils.nullIfBlank(list.name());
+                    boolean hasName = false;
+                    if (n != null) {
+                        writer.append(n);
+                        hasName = n.length() > 0;
+                    }
+                    TsonElementList params = list.args();
+                    if(params!=null) {
                         if (!hasName || params.size() > 0) {
                             listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
                         }
@@ -315,26 +316,19 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 }
                 case OBJECT: {
                     TsonObject list = element.toObject();
-                    TsonElementHeader h = list.header();
-                    if (h != null) {
-                        String n = TsonUtils.nullIfBlank(h.name());
-                        boolean hasName = false;
-                        if (n != null) {
-                            writer.append(n);
-                            hasName = n.length() > 0;
-                        }
-                        TsonElementList params = h.args();
+                    String n = TsonUtils.nullIfBlank(list.name());
+                    boolean hasName = false;
+                    if (n != null) {
+                        writer.append(n);
+                        hasName = n.length() > 0;
+                    }
+                    TsonElementList params = list.args();
+                    if(params!=null){
                         if (!hasName || params.size() > 0) {
                             listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
                         }
                     }
                     listToString(config.indentBraces, list, '{', '}', writer, ListType.OBJECT);
-                    return;
-                }
-                case FUNCTION: {
-                    TsonFunction list = element.toFunction();
-                    writer.append(list.name());
-                    listToString(config.indentList, list.args(), '(', ')', writer, ListType.PARAMS);
                     return;
                 }
                 case BINARY_STREAM: {

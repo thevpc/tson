@@ -6,10 +6,6 @@ import java.util.List;
 public interface TsonArrayBuilder extends Iterable<TsonElement>, TsonElementBuilder {
     TsonArrayBuilder reset();
 
-    TsonElementHeaderBuilder<TsonArrayBuilder> header();
-
-    TsonElementHeaderBuilder<TsonArrayBuilder> getHeader();
-
     TsonArrayBuilder merge(TsonElementBase element);
 
     TsonArrayBuilder addAll(TsonElement... element);
@@ -57,4 +53,32 @@ public interface TsonArrayBuilder extends Iterable<TsonElement>, TsonElementBuil
     TsonArrayBuilder removeAllAnnotations();
 
     TsonArrayBuilder ensureCapacity(int length);
+
+    boolean isWithArgs();
+
+    TsonArrayBuilder setWithArgs(boolean hasArgs);
+
+    List<TsonElement> args();
+
+    int argsCount();
+
+    TsonArrayBuilder clearArgs();
+
+    String name();
+
+    TsonArrayBuilder name(String name);
+
+    TsonArrayBuilder addArg(TsonElementBase element);
+
+    TsonArrayBuilder removeArg(TsonElementBase element);
+
+    TsonArrayBuilder addArg(TsonElementBase element, int index);
+
+    TsonArrayBuilder removeArgAt(int index);
+
+    TsonArrayBuilder addArgs(TsonElement[] element);
+
+    TsonArrayBuilder addArgs(TsonElementBase[] element);
+
+    TsonArrayBuilder addArgs(Iterable<? extends TsonElementBase> element);
 }

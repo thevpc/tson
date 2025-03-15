@@ -179,12 +179,11 @@ public class TsonSerializerConfig {
             if (to == null || to.equals(Map.class)) {
                 TsonArray ee = element.toArray();
                 Map<String, Object> namedArray = new LinkedHashMap<>();
-                TsonElementHeader h = ee.header();
-                if (h != null) {
-                    Map<String, Object> mheader = new LinkedHashMap<>();
-                    mheader.put("name", h.name());
-                    mheader.put("values", arrayElementToObject(h.args(), to, context));
-                    namedArray.put("header", mheader);
+                if(ee.isNamed()) {
+                    namedArray.put("name", ee.name());
+                }
+                if(ee.isWithArgs()) {
+                    namedArray.put("args", arrayElementToObject(ee.args(), to, context));
                 }
                 namedArray.put("values", arrayElementToObject(ee.body(), to, context));
                 return namedArray;
@@ -219,13 +218,16 @@ public class TsonSerializerConfig {
                     .setInstanceFactory(context12 -> classPropertiesRegistry.getClassInfo(to).newInstance())
                     .toObject(element, to, context);
         });
-        registerElemToObjConverter(TsonElementType.FUNCTION, null, null, (element, to, context) -> {
+        registerElemToObjConverter(TsonElementType.UPLET, null, null, (element, to, context) -> {
             if (to == null || to.equals(Map.class)) {
-                TsonFunction ee = element.toFunction();
-                Map<String, Object> namedArray = new LinkedHashMap<>();
-                namedArray.put("function", ee.name());
-                namedArray.put("params", arrayElementToObject(ee.args().toList(), null, context));
-                return namedArray;
+                TsonUplet ee = element.toUplet();
+                if(ee.isNamed()) {
+                    Map<String, Object> namedArray = new LinkedHashMap<>();
+                    namedArray.put("name", ee.name());
+                    namedArray.put("params", arrayElementToObject(ee.args().toList(), null, context));
+                    return namedArray;
+                }
+                return arrayElementToObject(ee.args().toList(), null, context);
             }
             return customDeserializer(to)
                     .configureLenient()
@@ -428,7 +430,7 @@ public class TsonSerializerConfig {
         switch (type) {
             case ARRAY:
             case OBJECT:
-            case FUNCTION: {
+            case UPLET: {
                 break;
             }
             default: {
@@ -479,7 +481,7 @@ public class TsonSerializerConfig {
         final TsonElementType etype = e.type();
         switch (etype) {
             case ARRAY: {
-                TsonElementHeader h = e.toArray().header();
+                TsonArray h = e.toArray();
                 String name = h == null ? null : h.name();
                 LinkedHashSet<TypeElementSignature> all = new LinkedHashSet<>();
                 all.add(new TypeElementSignature(etype, name, to));
@@ -489,7 +491,7 @@ public class TsonSerializerConfig {
                 return all.toArray(new TypeElementSignature[0]);
             }
             case OBJECT: {
-                TsonElementHeader h = e.toObject().header();
+                TsonObject h = e.toObject();
                 String name = h == null ? null : h.name();
                 LinkedHashSet<TypeElementSignature> all = new LinkedHashSet<>();
                 all.add(new TypeElementSignature(etype, name, to));
@@ -498,14 +500,18 @@ public class TsonSerializerConfig {
                 all.add(new TypeElementSignature(etype, null, null));
                 return all.toArray(new TypeElementSignature[0]);
             }
-            case FUNCTION: {
-                String name = e.toFunction().name();
-                LinkedHashSet<TypeElementSignature> all = new LinkedHashSet<>();
-                all.add(new TypeElementSignature(etype, name, to));
-                all.add(new TypeElementSignature(etype, null, to));
-                all.add(new TypeElementSignature(etype, name, null));
-                all.add(new TypeElementSignature(etype, null, null));
-                return all.toArray(new TypeElementSignature[0]);
+            case UPLET: {
+                TsonUplet h = e.toUplet();
+                if (h.isNamed()) {
+                    String name = h == null ? null : h.name();
+                    LinkedHashSet<TypeElementSignature> all = new LinkedHashSet<>();
+                    all.add(new TypeElementSignature(etype, name, to));
+                    all.add(new TypeElementSignature(etype, null, to));
+                    all.add(new TypeElementSignature(etype, name, null));
+                    all.add(new TypeElementSignature(etype, null, null));
+                    return all.toArray(new TypeElementSignature[0]);
+                }
+                break;
             }
         }
         if (to == null) {

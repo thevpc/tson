@@ -107,7 +107,9 @@ public interface TsonElementsFactory {
 
     TsonPair ofPair(TsonElementBase key, TsonElementBase value);
 
-    TsonBinOp ofBinOp(String op, TsonElementBase key, TsonElementBase value);
+    TsonOp ofOp(String op, TsonOpType opType, TsonElementBase key, TsonElementBase value);
+
+    TsonOp ofBinOp(String op, TsonElementBase key, TsonElementBase value);
 
     TsonPair ofPair(String key, TsonElementBase value);
 
@@ -220,10 +222,6 @@ public interface TsonElementsFactory {
     TsonMatrixBuilder ofMatrix(String name);
 
     TsonMatrixBuilder ofMatrix(String name, TsonElementBase[] params);
-
-    TsonFunctionBuilder ofFunction(String name, TsonElementBase... elems);
-
-    TsonFunctionBuilder ofFunction();
 
     TsonElementBuilder ofPair();
 

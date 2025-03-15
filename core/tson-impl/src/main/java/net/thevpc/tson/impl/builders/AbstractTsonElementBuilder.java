@@ -120,11 +120,6 @@ public abstract class AbstractTsonElementBuilder<T extends TsonElementBuilder> i
     }
 
     @Override
-    public TsonFunctionBuilder toFunction() {
-        return (TsonFunctionBuilder) this;
-    }
-
-    @Override
     public TsonElementBuilder anchor(String name) {
         return addAnnotation(null, Tson.ofName(name));
     }

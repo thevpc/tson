@@ -285,11 +285,7 @@ public class CustomJavaccTsonStreamParserImpl implements TsonStreamParser {
                 break;
             }
             default: {
-                if (named) {
-                    visitor.visitFunctionEnd();
-                } else {
-                    visitor.visitUpletEnd();
-                }
+                visitor.visitUpletEnd();
             }
         }
     }

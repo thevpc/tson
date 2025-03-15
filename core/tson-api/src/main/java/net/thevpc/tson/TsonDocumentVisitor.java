@@ -11,8 +11,6 @@ public interface TsonDocumentVisitor {
 
     boolean visit(TsonDocumentHeader element);
 
-    boolean visit(TsonElementHeader header,TsonElement element);
-
     boolean visit(TsonAnnotation element);
 
     boolean visit(TsonDocument element);

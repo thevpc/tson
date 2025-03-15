@@ -26,10 +26,9 @@ public enum TsonElementType {
     REGEX(true, false, false, false),
     MATRIX(false, false, false, false),
     PAIR(false, false, false, false),
-    BINOP(false, false, false, false),
+    OP(false, false, false, false),
     ARRAY(false, false, false, true),
     OBJECT(false, false, false, true),
-    FUNCTION(false, false, false, true),
     UPLET(false, false, false, true),
     CUSTOM(false, false, false, false),
     ;
@@ -64,13 +63,12 @@ public enum TsonElementType {
 
     public boolean isSimple() {
         switch (this) {
-            case FUNCTION:
             case CHAR_STREAM:
             case BINARY_STREAM:
             case OBJECT:
             case ARRAY:
             case ALIAS:
-            case BINOP:
+            case OP:
             case MATRIX:
             case UPLET:
             case PAIR:

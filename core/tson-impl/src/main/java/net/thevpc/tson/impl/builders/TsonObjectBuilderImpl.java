@@ -1,16 +1,19 @@
 package net.thevpc.tson.impl.builders;
 
 import net.thevpc.tson.*;
+import net.thevpc.tson.impl.elements.TsonElementListImpl;
 import net.thevpc.tson.impl.elements.TsonObjectImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObjectBuilder> implements TsonObjectBuilder {
 
     private TsonElementBaseListBuilder elementsSupport = new TsonElementBaseListBuilderImpl();
-    private TsonElementHeaderBuilderImpl<TsonObjectBuilder> header = new TsonElementHeaderBuilderImpl(this);
+    private String name;
+    private List<TsonElement> args = new ArrayList<>();
 
     @Override
     public TsonElementType type() {
@@ -19,7 +22,7 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
 
     @Override
     public TsonObjectBuilder clear() {
-        header.clear();
+        setWithArgs(false);
         elementsSupport.clear();
         return this;
     }
@@ -96,7 +99,7 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
         return this;
     }
 
-    //////////////
+    /// ///////////
     @Override
     public TsonObjectBuilder set(TsonElementBase key, TsonElementBase value) {
         elementsSupport.set(key, value);
@@ -159,7 +162,7 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
         return this;
     }
 
-    //////////////
+    /// ///////////
     @Override
     public TsonObjectBuilder add(TsonElementBase element) {
         elementsSupport.add(element);
@@ -196,15 +199,6 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
         return this;
     }
 
-    @Override
-    public TsonElementHeaderBuilder<TsonObjectBuilder> header() {
-        return getHeader();
-    }
-
-    @Override
-    public TsonElementHeaderBuilder<TsonObjectBuilder> getHeader() {
-        return header;
-    }
 
     @Override
     public List<TsonElement> all() {
@@ -213,7 +207,9 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
 
     @Override
     public TsonObject build() {
-        TsonObjectImpl built = new TsonObjectImpl(header.build(), TsonUtils.unmodifiableElements(elementsSupport.toList()));
+        TsonObjectImpl built = new TsonObjectImpl(name,
+                args==null?null: new TsonElementListImpl((List) args),
+                TsonUtils.unmodifiableElements(elementsSupport.toList()));
         return (TsonObject) TsonUtils.decorate(
                 built,
                 getComments(), getAnnotations());
@@ -237,33 +233,153 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
         return this;
     }
 
+    /// ////////////////
+    /// args
+
+    @Override
+    public boolean isWithArgs() {
+        return args != null;
+    }
+
+    @Override
+    public TsonObjectBuilder setWithArgs(boolean hasArgs) {
+        if (hasArgs) {
+            if (args == null) {
+                args = new ArrayList<>();
+            }
+        } else {
+            args = null;
+        }
+        return this;
+    }
+
+    @Override
+    public List<TsonElement> args() {
+        return args;
+    }
+
+    @Override
+    public int argsCount() {
+        return args == null ? 0 : args.size();
+    }
+
+    @Override
+    public TsonObjectBuilder clearArgs() {
+        args.clear();
+        return this;
+    }
+
+
+    @Override
+    public String name() {
+        return name;
+    }
+
+    @Override
+    public TsonObjectBuilder name(String name) {
+        this.name=name;
+        return this;
+    }
+
+    @Override
+    public TsonObjectBuilder addArg(TsonElementBase element) {
+        if (element != null) {
+            if (args == null) {
+                args = new ArrayList<>();
+            }
+            args.add(Tson.of(element).build());
+        }
+        return this;
+    }
+
+    @Override
+    public TsonObjectBuilder removeArg(TsonElementBase element) {
+        if (element != null && args != null) {
+            args.remove(Tson.of(element).build());
+        }
+        return this;
+    }
+
+    @Override
+    public TsonObjectBuilder addArg(TsonElementBase element, int index) {
+        if (element != null) {
+            if (args == null) {
+                args = new ArrayList<>();
+            }
+            args.add(index, Tson.of(element).build());
+        }
+        return this;
+    }
+
+    @Override
+    public TsonObjectBuilder removeArgAt(int index) {
+        if (args != null) {
+            args.remove(index);
+        }
+        return this;
+    }
+
+    @Override
+    public TsonObjectBuilder addArgs(TsonElement[] element) {
+        if (element != null) {
+            for (TsonElement tsonElement : element) {
+                addArg(tsonElement);
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public TsonObjectBuilder addArgs(TsonElementBase[] element) {
+        if (element != null) {
+            for (TsonElementBase tsonElement : element) {
+                addArg(tsonElement);
+            }
+        }
+        return this;
+    }
+
+    @Override
+    public TsonObjectBuilder addArgs(Iterable<? extends TsonElementBase> element) {
+        if (element != null) {
+            for (TsonElementBase tsonElement : element) {
+                addArg(tsonElement);
+            }
+        }
+        return this;
+    }
+
+    /// ////////////////
+
+
     @Override
     public TsonObjectBuilder merge(TsonElementBase element) {
         TsonElement e = Tson.of(element);
         addAnnotations(e.annotations());
         switch (e.type()) {
             case UPLET: {
-                header.addAll(e.toUplet());
-                break;
-            }
-            case FUNCTION: {
-                header.setName(e.toFunction().name());
-                header.addAll(e.toUplet());
+                TsonUplet uplet = e.toUplet();
+                if (uplet.isNamed()) {
+                    name(uplet.name());
+                }
+                addArgs(uplet);
                 break;
             }
             case NAME: {
-                header.setName(e.toName().value());
+                name(e.toName().value());
                 break;
             }
             case OBJECT: {
-                TsonElementHeader h = e.toObject().header();
-                this.header.set(h);
+                TsonObject h = e.toObject();
+                name(h.name());
+                addArgs(h.args());
                 addAll(e.toObject().body());
                 break;
             }
             case ARRAY: {
-                TsonElementHeader h = e.toArray().header();
-                this.header.set(h);
+                TsonArray h = e.toArray();
+                name(h.name());
+                addArgs(h.args());
                 addAll(e.toArray().body());
                 break;
             }

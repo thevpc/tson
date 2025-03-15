@@ -9,11 +9,23 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements TsonUplet {
+    private String name;
     private TsonElementList elements;
 
-    public TsonUpletImpl(UnmodifiableArrayList<TsonElement> elements) {
+    public TsonUpletImpl(String name, UnmodifiableArrayList<TsonElement> elements) {
         super(TsonElementType.UPLET);
+        this.name = name;
         this.elements = new TsonElementListImpl(elements.stream().map(x -> x).collect(Collectors.toList()));
+    }
+
+    @Override
+    public boolean isNamed() {
+        return name != null;
+    }
+
+    @Override
+    public int argsCount() {
+        return elements.size();
     }
 
     @Override
@@ -28,7 +40,7 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
 
     @Override
     public String name() {
-        return null;
+        return name;
     }
 
     @Override
@@ -37,7 +49,7 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
     }
 
     @Override
-    public boolean isEmpty() {
+    public boolean isBlank() {
         return elements.isEmpty();
     }
 
@@ -98,6 +110,9 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
     @Override
     public void visit(TsonParserVisitor visitor) {
         visitor.visitElementStart();
+        if (name != null) {
+            visitor.visitNamedStart(this.name());
+        }
         visitor.visitParamsStart();
         for (TsonElement param : this.args()) {
             visitor.visitParamElementStart();

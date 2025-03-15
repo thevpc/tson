@@ -34,8 +34,6 @@ public interface TsonElementBuilder extends TsonElementBase{
 
     TsonUpletBuilder toUplet();
 
-    TsonFunctionBuilder toFunction();
-
     TsonElementType type();
 
     TsonComments getComments();

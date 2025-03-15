@@ -9,13 +9,20 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements TsonArray {
+    private String name;
+    private TsonElementList args;
     private TsonElementList elements;
-    private final TsonElementHeader header;
 
-    public TsonArrayImpl(TsonElementHeader header, UnmodifiableArrayList<TsonElement> elements) {
+    public TsonArrayImpl(String name, TsonElementList args, UnmodifiableArrayList<TsonElement> elements) {
         super(TsonElementType.ARRAY);
-        this.header = header;
-        this.elements = new TsonElementListImpl(elements.stream().map(x->x).collect(Collectors.toList()));
+        this.name = name;
+        this.args = args;
+        this.elements = new TsonElementListImpl(elements.stream().map(x -> x).collect(Collectors.toList()));
+    }
+
+    @Override
+    public boolean isNamed() {
+        return name != null;
     }
 
     @Override
@@ -25,12 +32,12 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
 
     @Override
     public TsonElementList args() {
-        return header==null?null:header.args();
+        return args;
     }
 
     @Override
     public String name() {
-        return header==null?null:header.name();
+        return name;
     }
 
     @Override
@@ -39,8 +46,13 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
     }
 
     @Override
-    public TsonElementHeader header() {
-        return header;
+    public boolean isWithArgs() {
+        return args != null;
+    }
+
+    @Override
+    public int argsCount() {
+        return args == null ? 0 : args.size();
     }
 
     @Override
@@ -74,13 +86,15 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         TsonArrayImpl that = (TsonArrayImpl) o;
-        return Objects.equals(elements, that.elements) &&
-                Objects.equals(header, that.header);
+        return Objects.equals(elements, that.elements)
+                && Objects.equals(name, that.name)
+                && Objects.equals(args, that.args)
+                ;
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(super.hashCode(), header);
+        int result = Objects.hash(super.hashCode(), name, args);
         result = 31 * result + Objects.hashCode(elements);
         return result;
     }
@@ -92,9 +106,11 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
 
     @Override
     public boolean visit(TsonDocumentVisitor visitor) {
-        if (header!=null) {
-            if (!visitor.visit(header,this)) {
-                return false;
+        if (args != null) {
+            for (TsonElement element : args) {
+                if (!visitor.visit(element)) {
+                    return false;
+                }
             }
         }
         for (TsonElement element : elements) {
@@ -108,7 +124,11 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
     @Override
     protected int compareCore(TsonElement o) {
         TsonArray na = o.toArray();
-        int i = TsonUtils.compareHeaders(header, na.header());
+        int i = this.name().compareTo(na.name());
+        if (i != 0) {
+            return i;
+        }
+        i = TsonUtils.compareElementsArray(this.args(), na.args());
         if (i != 0) {
             return i;
         }
@@ -118,9 +138,20 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
     @Override
     public void visit(TsonParserVisitor visitor) {
         visitor.visitElementStart();
-        if(header!=null){
-            header.visit(visitor);
+
+        if (name != null) {
+            visitor.visitNamedStart(this.name());
         }
+        if (args != null) {
+            visitor.visitParamsStart();
+            for (TsonElement param : this.args()) {
+                visitor.visitParamElementStart();
+                param.visit(visitor);
+                visitor.visitParamElementEnd();
+            }
+            visitor.visitParamsEnd();
+        }
+
         visitor.visitNamedArrayStart();
         for (TsonElement element : this.body()) {
             visitor.visitArrayElementStart();
@@ -129,5 +160,6 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
         }
         visitor.visitArrayEnd();
     }
+
 
 }

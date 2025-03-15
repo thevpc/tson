@@ -502,11 +502,7 @@
 //                break;
 //            }
 //            default: {
-//                if (named) {
-//                    visitor.visitFunctionEnd();
-//                } else {
 //                    visitor.visitUpletEnd();
-//                }
 //            }
 //        }
 //    }

@@ -3,10 +3,10 @@ package net.thevpc.tson.impl.util;
 import net.thevpc.tson.TsonAnnotation;
 import net.thevpc.tson.TsonArray;
 import net.thevpc.tson.TsonElement;
-import net.thevpc.tson.TsonElementHeader;
 import net.thevpc.tson.impl.elements.TsonArrayImpl;
 import net.thevpc.tson.impl.elements.TsonElementDecorator;
 import net.thevpc.tson.*;
+import net.thevpc.tson.impl.elements.TsonElementListImpl;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -15,10 +15,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class TsonUtils {
 
@@ -652,8 +649,21 @@ public class TsonUtils {
         return i;
     }
 
-    public static int compareHeaders(TsonElementHeader a1, TsonElementHeader a2) {
-        if (a1 == a2) {
+//    public static int compareHeaders(TsonElementHeader a1, TsonElementHeader a2) {
+//        if (a1 == a2) {
+//            return 0;
+//        }
+//        if (a1 == null) {
+//            return -1;
+//        }
+//        if (a2 == null) {
+//            return 1;
+//        }
+//        return a1.compareTo(a2);
+//    }
+
+    public static int compareElementsArray(TsonElementList a1, TsonElementList a2) {
+        if (a1 == null && a2 == null) {
             return 0;
         }
         if (a1 == null) {
@@ -662,10 +672,6 @@ public class TsonUtils {
         if (a2 == null) {
             return 1;
         }
-        return a1.compareTo(a2);
-    }
-
-    public static int compareElementsArray(TsonElementList a1, TsonElementList a2) {
         int i = 0;
         int size1 = a1.size();
         int size2 = a2.size();
@@ -738,6 +744,14 @@ public class TsonUtils {
         return null;
     }
 
+    public static TsonElementList elementsListBaseOrNull(List<TsonElementBase> all) {
+        return all == null ? null : new TsonElementListImpl(new ArrayList<>(all));
+    }
+
+    public static TsonElementList elementsListOrNull(List<TsonElement> all) {
+        return all == null ? null : new TsonElementListImpl(new ArrayList<>(all));
+    }
+
     public static UnmodifiableArrayList<TsonElement> unmodifiableElements(List<TsonElement> all) {
         return UnmodifiableArrayList.ofRef(all.toArray(new TsonElement[0]));
     }
@@ -747,14 +761,14 @@ public class TsonUtils {
     }
 
     public static TsonArray toArray(List<TsonElement> elements) {
-        return new TsonArrayImpl(null, TsonUtils.unmodifiableElements(elements));
+        return new TsonArrayImpl(null, null, TsonUtils.unmodifiableElements(elements));
     }
 
     public static TsonArray toArray(TsonElementList elements) {
-        return new TsonArrayImpl(null, TsonUtils.unmodifiableElements(elements.toList()));
+        return new TsonArrayImpl(null, null, TsonUtils.unmodifiableElements(elements.toList()));
     }
 
-    public static TsonArray toArray(TsonElementHeader header, List<TsonElement> elements) {
-        return new TsonArrayImpl(header, TsonUtils.unmodifiableElements(elements));
-    }
+//    public static TsonArray toArray(TsonElementHeader header, List<TsonElement> elements) {
+//        return new TsonArrayImpl(header, TsonUtils.unmodifiableElements(elements));
+//    }
 }

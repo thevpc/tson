@@ -842,7 +842,7 @@ Token t ;
             if(!hasPars){
                 visitor.visitPrimitiveEnd(Tson.ofName(id.image));
             }else {
-                visitor.visitFunctionEnd();
+                visitor.visitUpletEnd();
             }
         }
   }

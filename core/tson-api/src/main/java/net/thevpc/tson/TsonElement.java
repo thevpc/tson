@@ -41,8 +41,6 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     TsonCustom toCustom();
 
-    TsonFunction toFunction();
-
     TsonName toName();
 
     TsonAlias toAlias();
@@ -71,7 +69,7 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     TsonPair toPair();
 
-    TsonBinOp toBinOp();
+    TsonOp toOp();
 
     TsonBigInt toBigInt();
 
@@ -160,8 +158,6 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     boolean isName();
 
-    boolean isFunction();
-
     boolean isArray();
 
     boolean isNamedArray();
@@ -169,6 +165,10 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
     boolean isObject();
 
     boolean isNamedObject();
+
+    boolean isNamedUplet();
+
+    boolean isUnNamedUplet();
 
     boolean isUplet();
 

@@ -1,7 +1,7 @@
 package net.thevpc.tson;
 
 public interface TsonArray extends TsonContainer, Iterable<TsonElement> {
-    TsonElementHeader header();
+    boolean isWithArgs();
 
     boolean isEmpty();
 

@@ -225,11 +225,6 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     }
 
     @Override
-    public TsonFunction toFunction() {
-        throw new ClassCastException("Cannot cast Null to Non Null type");
-    }
-
-    @Override
     public TsonName toName() {
         throw new ClassCastException("Cannot cast Null to Non Null type");
     }
@@ -310,7 +305,7 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     }
 
     @Override
-    public TsonBinOp toBinOp() {
+    public TsonOp toOp() {
         throw new ClassCastException("Cannot cast Null to Bin Op type");
     }
 

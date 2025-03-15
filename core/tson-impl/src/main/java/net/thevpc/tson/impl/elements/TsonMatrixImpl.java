@@ -1,7 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonArrayBuilderImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.impl.util.UnmodifiableArrayList;
@@ -10,17 +9,14 @@ import java.util.*;
 
 public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements TsonMatrix {
     private final UnmodifiableArrayList<TsonArray> rows;
-    private final TsonElementHeader header;
+    private final String name;
+    private TsonElementList args;
 
-    public TsonMatrixImpl(TsonElementHeader header, UnmodifiableArrayList<TsonArray> rows) {
+    public TsonMatrixImpl(String name, TsonElementList args, UnmodifiableArrayList<TsonArray> rows) {
         super(TsonElementType.MATRIX);
-        this.header = header;
+        this.name = name;
+        this.args = args;
         this.rows = rows;
-    }
-
-    @Override
-    public TsonElementHeader getHeader() {
-        return header;
     }
 
     @Override
@@ -99,12 +95,14 @@ public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements T
         if (!super.equals(o)) return false;
         TsonMatrixImpl that = (TsonMatrixImpl) o;
         return Objects.equals(rows, that.rows) &&
-                Objects.equals(header, that.header);
+                Objects.equals(name, that.name()) &&
+                Objects.equals(args, that.args())
+                ;
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(super.hashCode(), header);
+        int result = Objects.hash(super.hashCode(), name, args, rows);
         result = 31 * result + Objects.hashCode(rows);
         return result;
     }
@@ -116,9 +114,11 @@ public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements T
 
     @Override
     public boolean visit(TsonDocumentVisitor visitor) {
-        if (header != null) {
-            if (!visitor.visit(header, this)) {
-                return false;
+        if (args != null) {
+            for (TsonElement element : args) {
+                if (!visitor.visit(element)) {
+                    return false;
+                }
             }
         }
         for (TsonElement element : rows) {
@@ -132,7 +132,11 @@ public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements T
     @Override
     protected int compareCore(TsonElement o) {
         TsonMatrix na = o.toMatrix();
-        int i = TsonUtils.compareHeaders(header, na.getHeader());
+        int i = this.name().compareTo(na.name());
+        if (i != 0) {
+            return i;
+        }
+        i = TsonUtils.compareElementsArray(this.args(), na.args());
         if (i != 0) {
             return i;
         }
@@ -142,8 +146,17 @@ public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements T
     @Override
     public void visit(TsonParserVisitor visitor) {
         visitor.visitElementStart();
-        if (header != null) {
-            header.visit(visitor);
+        if (name != null) {
+            visitor.visitNamedStart(this.name());
+        }
+        if (args != null) {
+            visitor.visitParamsStart();
+            for (TsonElement param : this.args()) {
+                visitor.visitParamElementStart();
+                param.visit(visitor);
+                visitor.visitParamElementEnd();
+            }
+            visitor.visitParamsEnd();
         }
         visitor.visitNamedArrayStart();
         for (TsonArray element : getRows()) {
@@ -154,4 +167,18 @@ public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements T
         visitor.visitArrayEnd();
     }
 
+    @Override
+    public String name() {
+        return name;
+    }
+
+    @Override
+    public boolean isWithArgs() {
+        return args != null;
+    }
+
+    @Override
+    public TsonElementList args() {
+        return args;
+    }
 }

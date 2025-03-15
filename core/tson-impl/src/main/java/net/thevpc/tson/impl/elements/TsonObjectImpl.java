@@ -10,24 +10,35 @@ import java.util.stream.Collectors;
 
 public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements TsonObject {
     private TsonElementList elements;
-    private TsonElementHeader header;
+    private String name;
+    private TsonElementList args;
 
-    public TsonObjectImpl(TsonElementHeader header, UnmodifiableArrayList<TsonElement> elements) {
+    public TsonObjectImpl(String name, TsonElementList args, UnmodifiableArrayList<TsonElement> elements) {
         super(TsonElementType.OBJECT);
-        this.elements = new TsonElementListImpl(elements.stream().map(x->x).collect(Collectors.toList()));
-        this.header = header;
+        this.elements = new TsonElementListImpl(elements.stream().map(x -> x).collect(Collectors.toList()));
+        this.name = name;
+        this.args = args;
     }
 
     @Override
-    public TsonElementHeader header() {
-        return header;
+    public boolean isNamed() {
+        return name != null;
     }
-
 
     @Override
     public TsonElementList args() {
-        return header==null ? null:header.args();
+        return args;
     }
+
+    public boolean isWithArgs() {
+        return args != null;
+    }
+
+    @Override
+    public int argsCount() {
+        return args == null ? 0 : args.size();
+    }
+
     @Override
     public TsonContainer toContainer() {
         return this;
@@ -35,7 +46,7 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
 
     @Override
     public String name() {
-        return header==null?null:header.name();
+        return name;
     }
 
     @Override
@@ -51,18 +62,18 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
             if (element instanceof TsonPair) {
                 TsonPair element1 = (TsonPair) element;
                 TsonElement key = element1.key();
-                if(eqKey(key, tsonElementAsName)) {
+                if (eqKey(key, tsonElementAsName)) {
                     return element1.value();
                 }
-                if(eqKey(key, tsonElementAsString)) {
+                if (eqKey(key, tsonElementAsString)) {
                     return element1.value();
                 }
             } else {
                 //check self
-                if(eqKey(element, tsonElementAsName)) {
+                if (eqKey(element, tsonElementAsName)) {
                     return element;
                 }
-                if(eqKey(element, tsonElementAsString)) {
+                if (eqKey(element, tsonElementAsString)) {
                     return element;
                 }
             }
@@ -82,12 +93,12 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
             if (element2 instanceof TsonPair) {
                 TsonPair element1 = (TsonPair) element2;
                 TsonElement key = element1.key();
-                if(eqKey(key, element)) {
+                if (eqKey(key, element)) {
                     return element1.value();
                 }
             } else {
                 //check self
-                if(eqKey(element2, element)) {
+                if (eqKey(element2, element)) {
                     return element2;
                 }
             }
@@ -95,7 +106,7 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
         return null;
     }
 
-    private boolean eqKey(TsonElement a,TsonElement b) {
+    private boolean eqKey(TsonElement a, TsonElement b) {
         return Objects.equals(a, b);
     }
 
@@ -115,13 +126,15 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         TsonObjectImpl that = (TsonObjectImpl) o;
-        return Objects.equals(elements, that.elements) &&
-                Objects.equals(header, that.header);
+        return Objects.equals(elements, that.elements)
+                && Objects.equals(name, that.name)
+                && Objects.equals(args, that.args)
+                ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), elements, header);
+        return Objects.hash(super.hashCode(), elements, name, args);
     }
 
     @Override
@@ -131,9 +144,11 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
 
     @Override
     public boolean visit(TsonDocumentVisitor visitor) {
-        if (header != null) {
-            if (!visitor.visit(header, this)) {
-                return false;
+        if (args != null) {
+            for (TsonElement element : args) {
+                if (!visitor.visit(element)) {
+                    return false;
+                }
             }
         }
         for (TsonElement element : elements) {
@@ -147,7 +162,11 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
     @Override
     protected int compareCore(TsonElement o) {
         TsonObject no = o.toObject();
-        int i = TsonUtils.compareHeaders(header, no.header());
+        int i = this.name().compareTo(no.name());
+        if (i != 0) {
+            return i;
+        }
+        i = TsonUtils.compareElementsArray(this.args(), no.args());
         if (i != 0) {
             return i;
         }
@@ -157,9 +176,20 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
     @Override
     public void visit(TsonParserVisitor visitor) {
         visitor.visitElementStart();
-        if (header != null) {
-            header.visit(visitor);
+
+        if (name != null) {
+            visitor.visitNamedStart(this.name());
         }
+        if (args != null) {
+            visitor.visitParamsStart();
+            for (TsonElement param : this.args()) {
+                visitor.visitParamElementStart();
+                param.visit(visitor);
+                visitor.visitParamElementEnd();
+            }
+            visitor.visitParamsEnd();
+        }
+
         visitor.visitNamedObjectStart();
         for (TsonElement element : body()) {
             visitor.visitObjectElementStart();

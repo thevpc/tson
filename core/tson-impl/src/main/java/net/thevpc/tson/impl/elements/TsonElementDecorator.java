@@ -102,8 +102,6 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 return new AsMatrix((TsonMatrix) base, comments, annotations);
             case UPLET:
                 return new AsUplet((TsonUplet) base, comments, annotations);
-            case FUNCTION:
-                return new AsFunction((TsonFunction) base, comments, annotations);
             case PAIR:
                 return new AsPair((TsonPair) base, comments, annotations);
             case BIG_INT:
@@ -120,10 +118,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 return new AsDoubleComplex((TsonDoubleComplex) base, comments, annotations);
             case FLOAT_COMPLEX:
                 return new AsFloatComplex((TsonFloatComplex) base, comments, annotations);
-            case BINOP:
-                return new AsBinOp((TsonBinOp) base, comments, annotations);
+            case OP:
+                return new AsOp((TsonOp) base, comments, annotations);
             case CUSTOM:
-                return new AsCustom((TsonBinOp) base, comments, annotations);
+                return new AsCustom((TsonOp) base, comments, annotations);
         }
         throw new IllegalArgumentException("Unsupported " + base.type());
     }
@@ -186,8 +184,6 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 return new AsArray((TsonArray) base, comments, annotations);
             case UPLET:
                 return new AsUplet((TsonUplet) base, comments, annotations);
-            case FUNCTION:
-                return new AsFunction((TsonFunction) base, comments, annotations);
             case PAIR:
                 return new AsPair((TsonPair) base, comments, annotations);
         }
@@ -308,10 +304,6 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         return base.toBoolean();
     }
 
-    @Override
-    public TsonFunction toFunction() {
-        return base.toFunction();
-    }
 
     @Override
     public TsonName toName() {
@@ -439,8 +431,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
-    public TsonBinOp toBinOp() {
-        return base.toBinOp();
+    public TsonOp toOp() {
+        return base.toOp();
     }
 
     @Override
@@ -810,20 +802,25 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
     }
 
-    public static class AsBinOp extends TsonElementDecorator implements TsonBinOp {
+    public static class AsOp extends TsonElementDecorator implements TsonOp {
 
-        public AsBinOp(TsonBinOp base, TsonComments comments, TsonAnnotation[] annotations) {
+        public AsOp(TsonOp base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
         @Override
-        public TsonBinOp toBinOp() {
+        public TsonOp toOp() {
             return this;
         }
 
         @Override
-        public TsonBinOp getBase() {
-            return (TsonBinOp) super.getBase();
+        public TsonOpType opType() {
+            return getBase().opType();
+        }
+
+        @Override
+        public TsonOp getBase() {
+            return (TsonOp) super.getBase();
         }
 
         @Override
@@ -837,8 +834,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public String op() {
-            return getBase().op();
+        public String opName() {
+            return getBase().opName();
         }
 
 
@@ -847,14 +844,14 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
             visitor.visitElementStart();
             processCommentsAndAnnotations(visitor);
             first().visit(visitor);
-            visitor.visitBinOpEnd(op());
+            visitor.visitBinOpEnd(opName());
             second().visit(visitor);
         }
     }
 
     public static class AsCustom extends TsonElementDecorator implements TsonCustom {
 
-        public AsCustom(TsonBinOp base, TsonComments comments, TsonAnnotation[] annotations) {
+        public AsCustom(TsonOp base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
@@ -1231,6 +1228,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public boolean isNamed() {
+            return name() != null;
+        }
+
+        @Override
         public TsonObject toObject() {
             return this;
         }
@@ -1258,11 +1260,6 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         @Override
         public TsonElement get(String name) {
             return getBase().get(name);
-        }
-
-        @Override
-        public TsonElementHeader header() {
-            return getBase().header();
         }
 
         @Override
@@ -1294,20 +1291,17 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public void visit(TsonParserVisitor visitor) {
             visitor.visitElementStart();
             processCommentsAndAnnotations(visitor);
-            if (header() != null) {
-                TsonElementHeader h = header();
-                if (h != null) {
-                    if (!h.name().isEmpty()) {
-                        visitor.visitNamedStart(h.name());
-                    }
-                    visitor.visitParamsStart();
-                    for (TsonElement param : h.args()) {
-                        visitor.visitParamElementStart();
-                        param.visit(visitor);
-                        visitor.visitParamElementEnd();
-                    }
-                    visitor.visitParamsEnd();
+            if (name() != null) {
+                visitor.visitNamedStart(name());
+            }
+            if (isWithArgs()) {
+                visitor.visitParamsStart();
+                for (TsonElement param : args()) {
+                    visitor.visitParamElementStart();
+                    param.visit(visitor);
+                    visitor.visitParamElementEnd();
                 }
+                visitor.visitParamsEnd();
             }
             visitor.visitNamedObjectStart();
             for (TsonElement element : body()) {
@@ -1316,6 +1310,16 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 visitor.visitObjectElementEnd();
             }
             visitor.visitObjectEnd();
+        }
+
+        @Override
+        public boolean isWithArgs() {
+            return getBase().isWithArgs();
+        }
+
+        @Override
+        public int argsCount() {
+            return getBase().argsCount();
         }
     }
 
@@ -1333,6 +1337,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         @Override
         public TsonContainer toContainer() {
             return this;
+        }
+
+        @Override
+        public boolean isNamed() {
+            return getBase().isNamed();
         }
 
         @Override
@@ -1361,8 +1370,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public boolean isEmpty() {
-            return getBase().isEmpty();
+        public boolean isBlank() {
+            return getBase().isBlank();
         }
 
         @Override
@@ -1379,6 +1388,9 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public void visit(TsonParserVisitor visitor) {
             visitor.visitElementStart();
             processCommentsAndAnnotations(visitor);
+            if (isNamed()) {
+                visitor.visitNamedStart(this.name());
+            }
             visitor.visitParamsStart();
             for (TsonElement param : this.args()) {
                 visitor.visitParamElementStart();
@@ -1388,67 +1400,10 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
             visitor.visitParamsEnd();
             visitor.visitUpletEnd();
         }
-    }
-
-    public static class AsFunction extends TsonElementDecorator implements TsonFunction {
-
-        public AsFunction(TsonFunction base, TsonComments comments, TsonAnnotation[] annotations) {
-            super(base, comments, annotations);
-        }
 
         @Override
-        public TsonFunction toFunction() {
-            return this;
-        }
-
-        @Override
-        public TsonElementList body() {
-            return null;
-        }
-
-        @Override
-        public TsonContainer toContainer() {
-            return this;
-        }
-
-        @Override
-        public TsonElementList args() {
-            return getBase().args();
-        }
-
-        @Override
-        public int size() {
-            return getBase().size();
-        }
-
-        @Override
-        public TsonFunction getBase() {
-            return (TsonFunction) super.getBase();
-        }
-
-        @Override
-        public String name() {
-            return getBase().name();
-        }
-
-        @Override
-        public TsonFunctionBuilder builder() {
-            return new TsonFunctionBuilderImpl().merge(this);
-        }
-
-        @Override
-        public void visit(TsonParserVisitor visitor) {
-            visitor.visitElementStart();
-            processCommentsAndAnnotations(visitor);
-            visitor.visitNamedStart(this.name());
-            visitor.visitParamsStart();
-            for (TsonElement param : this.args()) {
-                visitor.visitParamElementStart();
-                param.visit(visitor);
-                visitor.visitParamElementEnd();
-            }
-            visitor.visitParamsEnd();
-            visitor.visitFunctionEnd();
+        public int argsCount() {
+            return getBase().argsCount();
         }
     }
 
@@ -1462,6 +1417,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public TsonPair toPair() {
             return this;
         }
+
         @Override
         public TsonPair getBase() {
             return (TsonPair) super.getBase();
@@ -1496,6 +1452,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         public AsArray(TsonArray base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
+        }
+
+        @Override
+        public boolean isNamed() {
+            return getBase().isNamed();
         }
 
         @Override
@@ -1539,11 +1500,6 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonElementHeader header() {
-            return getBase().header();
-        }
-
-        @Override
         public int size() {
             return getBase().size();
         }
@@ -1562,20 +1518,17 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public void visit(TsonParserVisitor visitor) {
             visitor.visitElementStart();
             processCommentsAndAnnotations(visitor);
-            if (header() != null) {
-                TsonElementHeader h = header();
-                if (h != null) {
-                    if (!h.name().isEmpty()) {
-                        visitor.visitNamedStart(h.name());
-                    }
-                    visitor.visitParamsStart();
-                    for (TsonElement param : h.args()) {
-                        visitor.visitParamElementStart();
-                        param.visit(visitor);
-                        visitor.visitParamElementEnd();
-                    }
-                    visitor.visitParamsEnd();
+            if (name() != null) {
+                visitor.visitNamedStart(name());
+            }
+            if (isWithArgs()) {
+                visitor.visitParamsStart();
+                for (TsonElement param : args()) {
+                    visitor.visitParamElementStart();
+                    param.visit(visitor);
+                    visitor.visitParamElementEnd();
                 }
+                visitor.visitParamsEnd();
             }
             visitor.visitNamedArrayStart();
             for (TsonElement element : this.body()) {
@@ -1584,6 +1537,16 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 visitor.visitArrayElementEnd();
             }
             visitor.visitArrayEnd();
+        }
+
+        @Override
+        public boolean isWithArgs() {
+            return getBase().isWithArgs();
+        }
+
+        @Override
+        public int argsCount() {
+            return getBase().argsCount();
         }
     }
 
@@ -1644,11 +1607,6 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonElementHeader getHeader() {
-            return getBase().getHeader();
-        }
-
-        @Override
         public Iterator<TsonArray> iterator() {
             return getBase().iterator();
         }
@@ -1662,20 +1620,17 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         public void visit(TsonParserVisitor visitor) {
             visitor.visitElementStart();
             processCommentsAndAnnotations(visitor);
-            if (getHeader() != null) {
-                TsonElementHeader h = getHeader();
-                if (h != null) {
-                    if (!h.name().isEmpty()) {
-                        visitor.visitNamedStart(h.name());
-                    }
-                    visitor.visitParamsStart();
-                    for (TsonElement param : h.args()) {
-                        visitor.visitParamElementStart();
-                        param.visit(visitor);
-                        visitor.visitParamElementEnd();
-                    }
-                    visitor.visitParamsEnd();
+            if (name() != null) {
+                visitor.visitNamedStart(name());
+            }
+            if (isWithArgs()) {
+                visitor.visitParamsStart();
+                for (TsonElement param : args()) {
+                    visitor.visitParamElementStart();
+                    param.visit(visitor);
+                    visitor.visitParamElementEnd();
                 }
+                visitor.visitParamsEnd();
             }
             visitor.visitNamedArrayStart();
             for (TsonElement element : getRows()) {
@@ -1684,6 +1639,21 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 visitor.visitArrayElementEnd();
             }
             visitor.visitArrayEnd();
+        }
+
+        @Override
+        public String name() {
+            return getBase().name();
+        }
+
+        @Override
+        public boolean isWithArgs() {
+            return getBase().isWithArgs();
+        }
+
+        @Override
+        public TsonElementList args() {
+            return getBase().args();
         }
     }
 

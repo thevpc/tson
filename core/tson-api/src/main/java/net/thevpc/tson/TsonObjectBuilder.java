@@ -8,9 +8,33 @@ public interface TsonObjectBuilder extends Iterable<TsonElement>, TsonElementBui
 
     TsonElementBaseListBuilder content();
 
-    TsonElementHeaderBuilder<TsonObjectBuilder> header();
+    boolean isWithArgs();
 
-    TsonElementHeaderBuilder<TsonObjectBuilder> getHeader();
+    TsonObjectBuilder setWithArgs(boolean hasArgs);
+
+    List<TsonElement> args();
+
+    int argsCount();
+
+    TsonObjectBuilder clearArgs();
+
+    String name();
+
+    TsonObjectBuilder name(String name);
+
+    TsonObjectBuilder addArg(TsonElementBase element);
+
+    TsonObjectBuilder removeArg(TsonElementBase element);
+
+    TsonObjectBuilder addArg(TsonElementBase element, int index);
+
+    TsonObjectBuilder removeArgAt(int index);
+
+    TsonObjectBuilder addArgs(TsonElement[] element);
+
+    TsonObjectBuilder addArgs(TsonElementBase[] element);
+
+    TsonObjectBuilder addArgs(Iterable<? extends TsonElementBase> element);
 
     TsonObjectBuilder merge(TsonElementBase element);
 

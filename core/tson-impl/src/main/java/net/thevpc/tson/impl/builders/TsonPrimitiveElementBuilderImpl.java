@@ -39,8 +39,7 @@ public class TsonPrimitiveElementBuilderImpl extends AbstractTsonElementBuilder<
                 case PAIR:
                 case OBJECT:
                 case UPLET:
-                case ARRAY:
-                case FUNCTION:{
+                case ARRAY:{
                     throw new ClassCastException("Not a primitive type " + element.type());
                 }
             }

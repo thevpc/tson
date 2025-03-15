@@ -195,7 +195,7 @@ public class Base64DecoderAdapter extends InputStream {
     }
 
     @Override
-    public int read(byte[] cbuf, int off, int len) throws IOException {
+    public int read(byte[] cbuf, int off, int len)  {
         if (len > 0) {
             int r = dataReady();
             if (r > 0) {
@@ -212,7 +212,11 @@ public class Base64DecoderAdapter extends InputStream {
 
 
     @Override
-    public void close() throws IOException {
-        in.close();
+    public void close()  {
+        try {
+            in.close();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }

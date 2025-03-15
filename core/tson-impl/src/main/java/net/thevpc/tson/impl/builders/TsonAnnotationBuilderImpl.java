@@ -117,21 +117,17 @@ public class TsonAnnotationBuilderImpl implements TsonAnnotationBuilder {
         TsonElement element = Tson.of(element0);
         switch (element.type()) {
             case ARRAY: {
-                TsonElementHeader h = element.toArray().header();
+                TsonArray h = element.toArray();
                 if (h != null) {
                     addAll(h.args());
                 }
                 return this;
             }
             case OBJECT: {
-                TsonElementHeader h = element.toObject().header();
+                TsonObject h = element.toObject();
                 if (h != null) {
                     addAll(h.args());
                 }
-                return this;
-            }
-            case FUNCTION: {
-                addAll(element.toFunction().args());
                 return this;
             }
             case UPLET: {

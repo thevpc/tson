@@ -203,19 +203,13 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
     @Override
     public void visitObjectEnd() {
         PartialElemNode a = peek();
-        repushDecorated(new TsonObjectImpl(null, TsonUtils.unmodifiableElements(a.object())), a);
-    }
-
-    @Override
-    public void visitFunctionEnd() {
-        PartialElemNode a = peek();
-        repushDecorated(new TsonFunctionImpl(a.name, TsonUtils.unmodifiableElements(a.params())), a);
+        repushDecorated(new TsonObjectImpl(null, null, TsonUtils.unmodifiableElements(a.object())), a);
     }
 
     @Override
     public void visitUpletEnd() {
         PartialElemNode a = peek();
-        repushDecorated(new TsonUpletImpl(TsonUtils.unmodifiableElements(a.params())), a);
+        repushDecorated(new TsonUpletImpl(a.name, TsonUtils.unmodifiableElements(a.params())), a);
     }
 
     @Override
@@ -227,21 +221,18 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
     @Override
     public void visitNamedObjectEnd() {
         PartialElemNode a = peek();
-        TsonElementHeader h = null;
-        if (a.name != null || !a.paramsEmpty()) {
-            h = new TsonElementHeaderImpl(a.name, a.hasParams,TsonUtils.unmodifiableElements(a.params()));
-        }
-        repushDecorated(new TsonObjectImpl(h, TsonUtils.unmodifiableElements(a.object())), a);
+        repushDecorated(new TsonObjectImpl(a.name,
+                a.hasParams ? TsonUtils.elementsListOrNull(a.params()) : null,
+                TsonUtils.unmodifiableElements(a.object())), a);
     }
 
     @Override
     public void visitNamedArrayEnd() {
         PartialElemNode a = peek();
-        TsonElementHeader h = null;
-        if (a.name != null || !a.params.isEmpty()) {
-            h = new TsonElementHeaderImpl(a.name, a.hasParams,TsonUtils.unmodifiableElements(a.params()));
-        }
-        repushDecorated(TsonUtils.toArray(h, a.array()), a);
+        repushDecorated(new TsonArrayImpl(
+                a.name,
+                a.hasParams ? TsonUtils.elementsListOrNull(a.params()) : null
+                , TsonUtils.unmodifiableElements(a.array())), a);
     }
 
     @Override

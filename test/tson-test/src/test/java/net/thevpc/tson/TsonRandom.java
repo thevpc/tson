@@ -89,22 +89,14 @@ public class TsonRandom {
                 return Tson.ofBoolean(randomBoolean());
             case NULL:
                 return Tson.ofNull();
-            case FUNCTION: {
-                TsonFunctionBuilder f = Tson.ofFunction();
-                f.setName(randomId());
-                int max = randomInt(3);
-                for (int i = 0; i < max; i++) {
-                    f.add(randomElement());
-                }
-                return f.build();
-            }
+
             case PAIR: {
                 return Tson.ofPair(
                         randomElement(t -> t != TsonElementType.PAIR),
                         randomElement(t -> t != TsonElementType.PAIR)
                 );
             }
-            case BINOP: {
+            case OP: {
                 return Tson.binOp(
                         randomOp(),
                         randomElement(t -> t != TsonElementType.PAIR),
@@ -114,12 +106,12 @@ public class TsonRandom {
             case ARRAY: {
                 TsonArrayBuilder f = Tson.ofArray();
                 if (randomBoolean()) {
-                    f.getHeader().setName(randomId());
+                    f.name(randomId());
                 }
                 if (randomBoolean()) {
                     int max = randomInt(3);
                     for (int i = 0; i < max; i++) {
-                        f.getHeader().add(randomElement());
+                        f.addArg(randomElement());
                     }
                 }
                 int max = randomInt(3);
@@ -131,12 +123,12 @@ public class TsonRandom {
             case OBJECT: {
                 TsonObjectBuilder f = Tson.ofObj();
                 if (randomBoolean()) {
-                    f.getHeader().setName(randomId());
+                    f.name(randomId());
                 }
                 if (randomBoolean()) {
                     int max = randomInt(3);
                     for (int i = 0; i < max; i++) {
-                        f.getHeader().add(randomElement());
+                        f.addArg(randomElement());
                     }
                 }
                 int max = randomInt(3);
@@ -147,6 +139,9 @@ public class TsonRandom {
             }
             case UPLET: {
                 TsonUpletBuilder f = Tson.ofUplet();
+                if(randomBoolean()) {
+                    f.name(randomId());
+                }
                 int max = randomInt(3);
                 max = randomInt(3);
                 for (int i = 0; i < max; i++) {

@@ -46,17 +46,17 @@ public interface TsonWriter {
 
     void write(OutputStream stream, String encoding, TsonElement any);
 
-    void write(Writer writer, TsonElement any) throws IOException;
+    void write(Writer writer, TsonElement any) ;
 
-    void writeDocument(Appendable sb, TsonDocument any) throws IOException;
+    void writeDocument(Appendable sb, TsonDocument any) ;
 
-    void writeDocument(Path file, TsonDocument any) throws IOException;
+    void writeDocument(Path file, TsonDocument any) ;
 
-    void writeDocument(File file, TsonDocument any) throws IOException;
+    void writeDocument(File file, TsonDocument any) ;
 
-    void writeDocument(OutputStream stream, TsonDocument any) throws IOException;
+    void writeDocument(OutputStream stream, TsonDocument any) ;
 
-    void writeDocument(OutputStream stream, String encoding, TsonDocument any) throws IOException;
+    void writeDocument(OutputStream stream, String encoding, TsonDocument any) ;
 
-    void writeDocument(Writer writer, TsonDocument any) throws IOException;
+    void writeDocument(Writer writer, TsonDocument any) ;
 }

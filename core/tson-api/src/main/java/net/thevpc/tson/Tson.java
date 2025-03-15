@@ -305,7 +305,7 @@ public class Tson {
         return factory.ofPair(of(key), of(value));
     }
 
-    public static TsonBinOp binOp(String op, TsonElementBase key, TsonElementBase value) {
+    public static TsonOp binOp(String op, TsonElementBase key, TsonElementBase value) {
         return factory.ofBinOp(op, of(key), of(value));
     }
 
@@ -719,15 +719,15 @@ public class Tson {
     }
 
     public static TsonArrayBuilder ofArray(String name) {
-        return ofArray().getHeader().setName(name).then();
+        return ofArray().name(name);
     }
 
     public static TsonArrayBuilder ofArray(String name, TsonElementBase[] params, TsonElementBase... elems) {
-        return ofArray().getHeader().setName(name).addAll(params).then().addAll(elems);
+        return ofArray().name(name).addArgs(params).addAll(elems);
     }
 
     public static TsonArrayBuilder ofArray(String name, TsonElementBase... elems) {
-        return ofArray().getHeader().setName(name).then().addAll(elems);
+        return ofArray().name(name).addAll(elems);
     }
 
     public static TsonMatrixBuilder ofMatrix() {
@@ -735,21 +735,14 @@ public class Tson {
     }
 
     public static TsonMatrixBuilder ofMatrix(String name) {
-        return ofMatrix().getHeader().setName(name).then();
+        return ofMatrix().name(name);
     }
 
 
     public static TsonMatrixBuilder ofMatrix(String name, TsonElementBase[] params) {
-        return ofMatrix().getHeader().setName(name).addAll(params).then();
+        return ofMatrix().name(name).addArgs(params);
     }
 
-    public static TsonFunctionBuilder ofFunction(String name, TsonElementBase... elems) {
-        return factory.ofFunction().name(name).addAll(elems);
-    }
-
-    public static TsonFunctionBuilder ofFunction() {
-        return factory.ofFunction();
-    }
 
     public static TsonElementBuilder ofPair() {
         return factory.ofPair();
@@ -765,19 +758,19 @@ public class Tson {
 
     public static TsonObjectBuilder ofObj(String name) {
         TsonObjectBuilder e = ofObj();
-        e.getHeader().name(name);
+        e.name(name);
         return e;
     }
 
     public static TsonObjectBuilder ofObj(String name, TsonElementBase[] params, TsonElementBase... elems) {
         TsonObjectBuilder o = ofObj();
-        o.getHeader().name(name).addAll(params);
+        o.name(name).addArgs(params);
         return o.addAll(elems);
     }
 
     public static TsonObjectBuilder ofObj(String name, TsonElementBase... elems) {
         TsonObjectBuilder o = ofObj();
-        o.getHeader().name(name);
+        o.name(name);
         return o.addAll(elems);
     }
 
@@ -787,6 +780,10 @@ public class Tson {
 
     public static TsonUpletBuilder ofUplet(TsonElementBase... elements) {
         return factory.ofUplet().addAll(elements);
+    }
+
+    public static TsonUpletBuilder ofUplet(String name, TsonElementBase... elems) {
+        return factory.ofUplet().name(name).addAll(elems);
     }
 
     public static TsonAnnotationBuilder ofAnnotation() {

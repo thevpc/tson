@@ -73,7 +73,7 @@ public class TestMulti {
         TsonElement x = Tson.reader().readElement(
                 "import(\"a/**/*\")"
                 );
-        Assertions.assertEquals(TsonElementType.FUNCTION,x.type());
+        Assertions.assertEquals(TsonElementType.UPLET,x.type());
     }
     @Test
     public void test4() {

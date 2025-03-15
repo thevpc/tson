@@ -324,8 +324,13 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
     }
 
     @Override
-    public TsonBinOp ofBinOp(String op, TsonElementBase key, TsonElementBase value) {
-        return new TsonBinOpImpl(op, of(key), of(value));
+    public TsonOp ofBinOp(String op, TsonElementBase key, TsonElementBase value) {
+        return ofOp(op, TsonOpType.BINARY, of(key), of(value));
+    }
+
+    @Override
+    public TsonOp ofOp(String op, TsonOpType opType, TsonElementBase key, TsonElementBase value) {
+        return new TsonOpImpl(op, opType, of(key), of(value));
     }
 
     @Override
@@ -681,12 +686,12 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
 
     @Override
     public TsonArrayBuilder ofArray(String name) {
-        return ofArray().getHeader().setName(name).then();
+        return ofArray().name(name);
     }
 
     @Override
     public TsonArrayBuilder ofArray(String name, TsonElementBase[] params, TsonElementBase... elems) {
-        return ofArray().getHeader().setName(name).addAll(params).then().addAll(elems);
+        return ofArray().name(name).addArgs(params).addAll(elems);
     }
 
     @Override
@@ -696,23 +701,13 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
 
     @Override
     public TsonMatrixBuilder ofMatrix(String name) {
-        return ofMatrix().getHeader().setName(name).then();
+        return ofMatrix().name(name);
     }
 
 
     @Override
     public TsonMatrixBuilder ofMatrix(String name, TsonElementBase[] params) {
-        return ofMatrix().getHeader().setName(name).addAll(params).then();
-    }
-
-    @Override
-    public TsonFunctionBuilder ofFunction(String name, TsonElementBase... elems) {
-        return new TsonFunctionBuilderImpl().name(name).addAll(elems);
-    }
-
-    @Override
-    public TsonFunctionBuilder ofFunction() {
-        return new TsonFunctionBuilderImpl();
+        return ofMatrix().name(name).addArgs(params);
     }
 
     @Override
@@ -733,14 +728,14 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
     @Override
     public TsonObjectBuilder ofObj(String name) {
         TsonObjectBuilder e = ofObj();
-        e.getHeader().name(name);
+        e.name(name);
         return e;
     }
 
     @Override
     public TsonObjectBuilder ofObj(String name, TsonElementBase[] params, TsonElementBase... elems) {
         TsonObjectBuilder o = ofObj();
-        o.getHeader().name(name).addAll(params);
+        o.name(name).addArgs(params);
         return o.addAll(elems);
     }
 
@@ -1712,7 +1707,7 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
         TsonNumberHelper parse;
         try {
             parse = TsonNumberHelper.parse(s);
-        }catch (RuntimeException ex){
+        } catch (RuntimeException ex) {
             throw ex;
         }
         return parse.toTson();

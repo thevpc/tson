@@ -9,7 +9,28 @@ import java.util.Iterator;
 
 public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBuilder> implements TsonUpletBuilder {
 
+    private String name;
     private ArrayList<TsonElement> elements = new ArrayList<>();
+
+    @Override
+    public String name() {
+        return name;
+    }
+
+    @Override
+    public boolean isNamed() {
+        return name != null;
+    }
+
+    @Override
+    public boolean isBlank() {
+        return name == null && elements.isEmpty();
+    }
+
+    @Override
+    public TsonUpletBuilder name(String name) {
+        return null;
+    }
 
     @Override
     public TsonElementType type() {
@@ -88,7 +109,7 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
 
     @Override
     public TsonUplet build() {
-        TsonUpletImpl built = new TsonUpletImpl(TsonUtils.unmodifiableElements(elements));
+        TsonUpletImpl built = new TsonUpletImpl(name,TsonUtils.unmodifiableElements(elements));
         return (TsonUplet) TsonUtils.decorate(
                 built,
                 getComments(), getAnnotations());
@@ -100,25 +121,25 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
         addAnnotations(element.annotations());
         switch (element.type()) {
             case ARRAY: {
-                TsonElementHeader h = element.toArray().header();
+                TsonArray h = element.toArray();
                 if (h != null) {
                     addAll(h.args());
                 }
                 return this;
             }
             case OBJECT: {
-                TsonElementHeader h = element.toObject().header();
+                TsonObject h = element.toObject();
                 if (h != null) {
                     addAll(h.args());
                 }
                 return this;
             }
-            case FUNCTION: {
-                addAll(element.toFunction().args());
-                return this;
-            }
             case UPLET: {
-                addAll(element.toUplet().args());
+                TsonUplet uplet = element.toUplet();
+                if(uplet.isNamed()) {
+                    name(uplet.name());
+                }
+                addAll(uplet.args());
                 return this;
             }
         }

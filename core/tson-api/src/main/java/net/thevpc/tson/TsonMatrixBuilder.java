@@ -6,10 +6,6 @@ import java.util.List;
 public interface TsonMatrixBuilder extends Iterable<TsonArray>, TsonElementBuilder {
     TsonMatrixBuilder reset();
 
-    TsonElementHeaderBuilder<TsonMatrixBuilder> header();
-
-    TsonElementHeaderBuilder<TsonMatrixBuilder> getHeader();
-
     TsonMatrixBuilder merge(TsonElementBase element);
 
     TsonMatrixBuilder addRows(TsonArray... element);
@@ -69,4 +65,36 @@ public interface TsonMatrixBuilder extends Iterable<TsonArray>, TsonElementBuild
     TsonMatrixBuilder removeAllAnnotations();
 
     TsonMatrixBuilder ensureCapacity(int columns,int rows);
+
+    /// ///////////////////////////////////////////////
+
+
+    boolean isWithArgs();
+
+    TsonMatrixBuilder setWithArgs(boolean hasArgs);
+
+    List<TsonElement> args();
+
+    int argsCount();
+
+    TsonMatrixBuilder clearArgs();
+
+    String name();
+
+    TsonMatrixBuilder name(String name);
+
+    TsonMatrixBuilder addArg(TsonElementBase element);
+
+    TsonMatrixBuilder removeArg(TsonElementBase element);
+
+    TsonMatrixBuilder addArg(TsonElementBase element, int index);
+
+    TsonMatrixBuilder removeArgAt(int index);
+
+    TsonMatrixBuilder addArgs(TsonElement[] element);
+
+    TsonMatrixBuilder addArgs(TsonElementBase[] element);
+
+    TsonMatrixBuilder addArgs(Iterable<? extends TsonElementBase> element);
+
 }
