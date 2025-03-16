@@ -25,11 +25,17 @@ public interface TsonUpletBuilder extends Iterable<TsonElement>, TsonElementBuil
 
     TsonUpletBuilder remove(TsonElementBase element);
 
-    TsonUpletBuilder add(TsonElementBase element, int index);
+    TsonUpletBuilder addAt(int index, TsonElementBase element);
+
+    TsonUpletBuilder setAt(int index, TsonElementBase element);
 
     TsonUpletBuilder removeAt(int index);
 
-    TsonElement[] getParams();
+    TsonElement[] params();
+
+    TsonElement param(int index);
+
+    int size();
 
     TsonUpletBuilder removeAll();
 

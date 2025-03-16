@@ -105,13 +105,7 @@ public interface TsonElementsFactory {
 
     TsonElement ofAlias(String value);
 
-    TsonPair ofPair(TsonElementBase key, TsonElementBase value);
-
-    TsonOp ofOp(String op, TsonOpType opType, TsonElementBase key, TsonElementBase value);
-
-    TsonOp ofBinOp(String op, TsonElementBase key, TsonElementBase value);
-
-    TsonPair ofPair(String key, TsonElementBase value);
+    TsonOpBuilder ofOpBuilder();
 
     TsonElement of(boolean value);
 
@@ -209,37 +203,18 @@ public interface TsonElementsFactory {
 
     TsonPrimitiveBuilder of();
 
-    TsonArrayBuilder ofArray(TsonElementBase... elements);
 
-    TsonArrayBuilder ofArray();
+    TsonArrayBuilder ofArrayBuilder();
 
-    TsonArrayBuilder ofArray(String name);
+    TsonMatrixBuilder ofMatrixBuilder();
 
-    TsonArrayBuilder ofArray(String name, TsonElementBase[] params, TsonElementBase... elems);
+    TsonPairBuilder ofPairBuilder();
 
-    TsonMatrixBuilder ofMatrix();
+    TsonObjectBuilder ofObjBuilder();
 
-    TsonMatrixBuilder ofMatrix(String name);
+    TsonUpletBuilder ofUpletBuilder();
 
-    TsonMatrixBuilder ofMatrix(String name, TsonElementBase[] params);
-
-    TsonElementBuilder ofPair();
-
-    TsonObjectBuilder ofObj();
-
-    TsonObjectBuilder ofObj(TsonElementBase... elems);
-
-    TsonObjectBuilder ofObj(String name);
-
-    TsonObjectBuilder ofObj(String name, TsonElementBase[] params, TsonElementBase... elems);
-
-    TsonUpletBuilder ofUplet();
-
-    TsonUpletBuilder ofUplet(TsonElementBase... elements);
-
-    TsonAnnotationBuilder ofAnnotation();
-
-    TsonAnnotation ofAnnotation(String name, TsonElementBase... elements);
+    TsonAnnotationBuilder ofAnnotationBuilder();
 
     TsonFormatBuilder format();
 
@@ -255,7 +230,7 @@ public interface TsonElementsFactory {
 
     TsonProcessor processor();
 
-    TsonBinaryStreamBuilder ofBinStream();
+    TsonBinaryStreamBuilder ofBinStreamBuilder();
 
 
     TsonElement parseDateTimeElem(String s);

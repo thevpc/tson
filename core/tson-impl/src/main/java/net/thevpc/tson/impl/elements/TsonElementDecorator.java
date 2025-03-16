@@ -809,6 +809,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonOpBuilder builder() {
+            return new TsonOpBuilderImpl().merge(this);
+        }
+
+        @Override
         public TsonOp toOp() {
             return this;
         }
@@ -1330,6 +1335,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
+        public TsonElement param(int index) {
+            return getBase().param(index);
+        }
+
+        @Override
         public TsonUplet toUplet() {
             return this;
         }
@@ -1434,8 +1444,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonKeyValueBuilder builder() {
-            return new TsonKeyValueBuilderImpl().merge(this);
+        public TsonPairBuilder builder() {
+            return new TsonPairBuilderImpl().merge(this);
         }
 
         @Override

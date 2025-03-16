@@ -1,7 +1,7 @@
 package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.impl.builders.TsonKeyValueBuilderImpl;
+import net.thevpc.tson.impl.builders.TsonPairBuilderImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.util.Objects;
@@ -64,8 +64,8 @@ public class TsonPairImpl extends AbstractNonPrimitiveTsonElement implements Tso
     }
 
     @Override
-    public TsonKeyValueBuilder builder() {
-        return new TsonKeyValueBuilderImpl().setKey(key()).setValue(value());
+    public TsonPairBuilder builder() {
+        return new TsonPairBuilderImpl().key(key()).value(value());
     }
 
     @Override

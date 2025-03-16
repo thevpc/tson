@@ -153,7 +153,7 @@ public class TsonDocumentHeaderBuilderImpl implements TsonDocumentHeaderBuilder 
 
     @Override
     public TsonAnnotation toAnnotation() {
-        TsonAnnotationBuilder b = Tson.ofAnnotation().setName("tson");
+        TsonAnnotationBuilder b = Tson.ofAnnotationBuilder().setName("tson");
         if (version == null && encoding == null && params.isEmpty()) {
             b.add(Tson.ofString("v"+Tson.getVersion()));
         } else {

@@ -18,7 +18,7 @@ public class TsonWriterImpl implements TsonWriter {
 
     @Override
     public TsonWriter setOptionCompact(boolean configValue) {
-        formatBuilder.setCompact(configValue);
+        formatBuilder.compact(configValue);
         format = formatBuilder.build();
         return this;
     }

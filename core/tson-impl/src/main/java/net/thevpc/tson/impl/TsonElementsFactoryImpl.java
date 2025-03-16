@@ -318,24 +318,23 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
         return new TsonAliasImpl(value);
     }
 
-    @Override
-    public TsonPair ofPair(TsonElementBase key, TsonElementBase value) {
-        return new TsonPairImpl(of(key), of(value));
-    }
+//    @Override
+//    public TsonPair ofPair(TsonElementBase key, TsonElementBase value) {
+//        return new TsonPairImpl(of(key), of(value));
+//    }
 
-    @Override
-    public TsonOp ofBinOp(String op, TsonElementBase key, TsonElementBase value) {
-        return ofOp(op, TsonOpType.BINARY, of(key), of(value));
-    }
+//    @Override
+//    public TsonOp ofBinOp(String op, TsonElementBase key, TsonElementBase value) {
+//        return ofOp(op, TsonOpType.BINARY, of(key), of(value));
+//    }
+//
+//    @Override
+//    public TsonOp ofOp(String op, TsonOpType opType, TsonElementBase key, TsonElementBase value) {
+//        return new TsonOpImpl(op, opType, of(key), of(value));
+//    }
 
-    @Override
-    public TsonOp ofOp(String op, TsonOpType opType, TsonElementBase key, TsonElementBase value) {
-        return new TsonOpImpl(op, opType, of(key), of(value));
-    }
-
-    @Override
-    public TsonPair ofPair(String key, TsonElementBase value) {
-        return new TsonPairImpl(ofName(key), of(value));
+    public TsonOpBuilder ofOpBuilder() {
+        return new TsonOpBuilderImpl();
     }
 
     @Override
@@ -675,88 +674,33 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
     }
 
     @Override
-    public TsonArrayBuilder ofArray(TsonElementBase... elements) {
-        return ofArray().addAll(elements);
-    }
-
-    @Override
-    public TsonArrayBuilder ofArray() {
+    public TsonArrayBuilder ofArrayBuilder() {
         return new TsonArrayBuilderImpl();
     }
 
     @Override
-    public TsonArrayBuilder ofArray(String name) {
-        return ofArray().name(name);
-    }
-
-    @Override
-    public TsonArrayBuilder ofArray(String name, TsonElementBase[] params, TsonElementBase... elems) {
-        return ofArray().name(name).addArgs(params).addAll(elems);
-    }
-
-    @Override
-    public TsonMatrixBuilder ofMatrix() {
+    public TsonMatrixBuilder ofMatrixBuilder() {
         return new TsonMatrixBuilderImpl();
     }
 
     @Override
-    public TsonMatrixBuilder ofMatrix(String name) {
-        return ofMatrix().name(name);
-    }
-
-
-    @Override
-    public TsonMatrixBuilder ofMatrix(String name, TsonElementBase[] params) {
-        return ofMatrix().name(name).addArgs(params);
+    public TsonPairBuilder ofPairBuilder() {
+        return new TsonPairBuilderImpl();
     }
 
     @Override
-    public TsonElementBuilder ofPair() {
-        return new TsonPrimitiveElementBuilderImpl();
-    }
-
-    @Override
-    public TsonObjectBuilder ofObj() {
+    public TsonObjectBuilder ofObjBuilder() {
         return new TsonObjectBuilderImpl();
     }
 
     @Override
-    public TsonObjectBuilder ofObj(TsonElementBase... elems) {
-        return ofObj().addAll(elems);
-    }
-
-    @Override
-    public TsonObjectBuilder ofObj(String name) {
-        TsonObjectBuilder e = ofObj();
-        e.name(name);
-        return e;
-    }
-
-    @Override
-    public TsonObjectBuilder ofObj(String name, TsonElementBase[] params, TsonElementBase... elems) {
-        TsonObjectBuilder o = ofObj();
-        o.name(name).addArgs(params);
-        return o.addAll(elems);
-    }
-
-    @Override
-    public TsonUpletBuilder ofUplet() {
+    public TsonUpletBuilder ofUpletBuilder() {
         return new TsonUpletBuilderImpl();
     }
 
     @Override
-    public TsonUpletBuilder ofUplet(TsonElementBase... elements) {
-        return new TsonUpletBuilderImpl().addAll(elements);
-    }
-
-    @Override
-    public TsonAnnotationBuilder ofAnnotation() {
+    public TsonAnnotationBuilder ofAnnotationBuilder() {
         return new TsonAnnotationBuilderImpl();
-    }
-
-    @Override
-    public TsonAnnotation ofAnnotation(String name, TsonElementBase... elements) {
-        return ofAnnotation().name(name).addAll(elements).build();
     }
 
     @Override
@@ -810,7 +754,7 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
     }
 
     @Override
-    public TsonBinaryStreamBuilder ofBinStream() {
+    public TsonBinaryStreamBuilder ofBinStreamBuilder() {
         return new TsonBinaryStreamBuilder() {
             InputStreamTsonBinaryStreamSource s = new InputStreamTsonBinaryStreamSource();
 

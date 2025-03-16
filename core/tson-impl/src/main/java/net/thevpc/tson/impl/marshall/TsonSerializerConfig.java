@@ -25,7 +25,7 @@ public class TsonSerializerConfig {
     private final TsonObjectToElement objToElem_arr = new TsonObjectToElement() {
         @Override
         public TsonElement toElement(Object object, TsonObjectContext context) {
-            TsonArrayBuilder a = Tson.ofArray();
+            TsonArrayBuilder a = Tson.ofArrayBuilder();
             int len = Array.getLength(object);
             for (int i = 0; i < len; i++) {
                 a.add(context.elem(Array.get(object, i)));
@@ -107,7 +107,7 @@ public class TsonSerializerConfig {
         registerObjToElemConverter(Boolean.class, (object, context) -> Tson.of((Boolean) object));
         registerObjToElemConverter(Boolean.TYPE, (object, context) -> Tson.of((Boolean) object));
         registerObjToElemConverter(Collection.class, (object, context) -> {
-            TsonArrayBuilder a = Tson.ofArray();
+            TsonArrayBuilder a = Tson.ofArrayBuilder();
             for (Object o : object) {
                 a.add(context.elem(o));
             }

@@ -33,7 +33,7 @@ public class Tson {
         serializer = factory.serializer();
     }
 
-    public static final TsonFormat COMPACT_FORMAT = format().setCompact(true).build();
+    public static final TsonFormat COMPACT_FORMAT = format().compact(true).build();
     public static final TsonFormat DEFAULT_FORMAT = format().build();
 
 
@@ -302,15 +302,22 @@ public class Tson {
     }
 
     public static TsonPair ofPair(TsonElementBase key, TsonElementBase value) {
-        return factory.ofPair(of(key), of(value));
+        return factory.ofPairBuilder().key(
+                of(key)
+        ).value(of(value)).build();
     }
 
     public static TsonOp binOp(String op, TsonElementBase key, TsonElementBase value) {
-        return factory.ofBinOp(op, of(key), of(value));
+        return factory.ofOpBuilder()
+                .opName(op)
+                .opType(TsonOpType.BINARY)
+                .first(of(key))
+                .second(of(value))
+                .build();
     }
 
     public static TsonPair ofPair(String key, TsonElementBase value) {
-        return factory.ofPair(ofName(key), of(value));
+        return factory.ofPairBuilder().key(ofName(key)).value(of(value)).build();
     }
 
     public static TsonElement of(boolean value) {
@@ -399,7 +406,7 @@ public class Tson {
     }
 
     public static TsonBinaryStreamBuilder ofBinStream() {
-        return factory.ofBinStream();
+        return factory.ofBinStreamBuilder();
     }
 
     public static TsonElement ofBinStream(byte[] value) {
@@ -640,7 +647,7 @@ public class Tson {
         if (value == null) {
             return ofNull();
         }
-        TsonArrayBuilder a = ofArray();
+        TsonArrayBuilder a = ofArrayBuilder();
         for (boolean b : value) {
             a.add(of(b));
         }
@@ -651,7 +658,7 @@ public class Tson {
         if (value == null) {
             return ofNull();
         }
-        TsonArrayBuilder a = ofArray();
+        TsonArrayBuilder a = ofArrayBuilder();
         for (short b : value) {
             a.add(of(b));
         }
@@ -662,7 +669,7 @@ public class Tson {
         if (value == null) {
             return ofNull();
         }
-        TsonArrayBuilder a = ofArray();
+        TsonArrayBuilder a = ofArrayBuilder();
         for (float b : value) {
             a.add(of(b));
         }
@@ -710,46 +717,46 @@ public class Tson {
         return factory.of();
     }
 
-    public static TsonArrayBuilder ofArray(TsonElementBase... elements) {
-        return ofArray().addAll(elements);
+    public static TsonArray ofArray(TsonElementBase... elements) {
+        return ofArrayBuilder().addAll(elements).build();
     }
 
-    public static TsonArrayBuilder ofArray() {
-        return factory.ofArray();
+    public static TsonArrayBuilder ofArrayBuilder() {
+        return factory.ofArrayBuilder();
     }
 
-    public static TsonArrayBuilder ofArray(String name) {
-        return ofArray().name(name);
+    public static TsonArrayBuilder ofArrayBuilder(String name) {
+        return ofArrayBuilder().name(name);
     }
 
-    public static TsonArrayBuilder ofArray(String name, TsonElementBase[] params, TsonElementBase... elems) {
-        return ofArray().name(name).addArgs(params).addAll(elems);
+    public static TsonArray ofArray(String name, TsonElementBase[] params, TsonElementBase... elems) {
+        return ofArrayBuilder().name(name).addArgs(params).addAll(elems).build();
     }
 
-    public static TsonArrayBuilder ofArray(String name, TsonElementBase... elems) {
-        return ofArray().name(name).addAll(elems);
+    public static TsonArray ofArray(String name, TsonElementBase... elems) {
+        return ofArrayBuilder().name(name).addAll(elems).build();
     }
 
-    public static TsonMatrixBuilder ofMatrix() {
-        return factory.ofMatrix();
+    public static TsonMatrixBuilder ofMatrixBuilder() {
+        return factory.ofMatrixBuilder();
     }
 
-    public static TsonMatrixBuilder ofMatrix(String name) {
-        return ofMatrix().name(name);
+    public static TsonMatrixBuilder ofMatrixBuilder(String name) {
+        return ofMatrixBuilder().name(name);
     }
 
 
-    public static TsonMatrixBuilder ofMatrix(String name, TsonElementBase[] params) {
-        return ofMatrix().name(name).addArgs(params);
+    public static TsonMatrixBuilder ofMatrixBuilder(String name, TsonElementBase[] params) {
+        return ofMatrixBuilder().name(name).addArgs(params);
     }
 
 
     public static TsonElementBuilder ofPair() {
-        return factory.ofPair();
+        return factory.ofPairBuilder();
     }
 
     public static TsonObjectBuilder ofObj() {
-        return factory.ofObj();
+        return factory.ofObjBuilder();
     }
 
     public static TsonObjectBuilder ofObj(TsonElementBase... elems) {
@@ -774,24 +781,24 @@ public class Tson {
         return o.addAll(elems);
     }
 
-    public static TsonUpletBuilder ofUplet() {
-        return factory.ofUplet();
+    public static TsonUpletBuilder ofUpletBuilder() {
+        return factory.ofUpletBuilder();
     }
 
-    public static TsonUpletBuilder ofUplet(TsonElementBase... elements) {
-        return factory.ofUplet().addAll(elements);
+    public static TsonUplet ofUplet(TsonElementBase... elements) {
+        return factory.ofUpletBuilder().addAll(elements).build();
     }
 
-    public static TsonUpletBuilder ofUplet(String name, TsonElementBase... elems) {
-        return factory.ofUplet().name(name).addAll(elems);
+    public static TsonUplet ofUplet(String name, TsonElementBase... elems) {
+        return factory.ofUpletBuilder().name(name).addAll(elems).build();
     }
 
-    public static TsonAnnotationBuilder ofAnnotation() {
-        return factory.ofAnnotation();
+    public static TsonAnnotationBuilder ofAnnotationBuilder() {
+        return factory.ofAnnotationBuilder();
     }
 
     public static TsonAnnotation ofAnnotation(String name, TsonElementBase... elements) {
-        return ofAnnotation().name(name).addAll(elements).build();
+        return ofAnnotationBuilder().name(name).addAll(elements).build();
     }
 
     public static TsonFormatBuilder format() {

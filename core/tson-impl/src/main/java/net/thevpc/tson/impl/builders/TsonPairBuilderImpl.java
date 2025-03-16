@@ -5,7 +5,7 @@ import net.thevpc.tson.impl.elements.TsonNullImpl;
 import net.thevpc.tson.impl.elements.TsonPairImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 
-public class TsonKeyValueBuilderImpl extends AbstractTsonElementBuilder<TsonKeyValueBuilder> implements TsonKeyValueBuilder {
+public class TsonPairBuilderImpl extends AbstractTsonElementBuilder<TsonPairBuilder> implements TsonPairBuilder {
     private TsonElement key;
     private TsonElement value;
 
@@ -15,14 +15,14 @@ public class TsonKeyValueBuilderImpl extends AbstractTsonElementBuilder<TsonKeyV
     }
 
     @Override
-    public TsonKeyValueBuilder merge(TsonPair other) {
+    public TsonPairBuilder merge(TsonPair other) {
         key = other.key();
         value = other.value();
         return this;
     }
 
     @Override
-    public TsonKeyValueBuilder reset() {
+    public TsonPairBuilder reset() {
         key = null;
         value = null;
         return this;
@@ -34,7 +34,7 @@ public class TsonKeyValueBuilderImpl extends AbstractTsonElementBuilder<TsonKeyV
     }
 
     @Override
-    public TsonKeyValueBuilder setKey(TsonElementBase key) {
+    public TsonPairBuilder key(TsonElementBase key) {
         this.key = Tson.of(key);
         return this;
     }
@@ -46,15 +46,15 @@ public class TsonKeyValueBuilderImpl extends AbstractTsonElementBuilder<TsonKeyV
     }
 
     @Override
-    public TsonKeyValueBuilder setValue(TsonElementBase value) {
+    public TsonPairBuilder value(TsonElementBase value) {
         this.value = Tson.of(value);
         return this;
     }
 
 
     @Override
-    public TsonElement build() {
-        return TsonUtils.decorate(
+    public TsonPair build() {
+        return (TsonPair) TsonUtils.decorate(
                 new TsonPairImpl(
                         key == null ? TsonNullImpl.INSTANCE : key,
                         value == null ? TsonNullImpl.INSTANCE : value

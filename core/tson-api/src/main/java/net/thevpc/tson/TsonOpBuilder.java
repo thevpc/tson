@@ -18,11 +18,11 @@ public interface TsonOpBuilder extends TsonElementBuilder {
 
     TsonElement first();
 
-    TsonOpBuilder setFirst(TsonElementBase key);
+    TsonOpBuilder first(TsonElementBase key);
 
     TsonElement second();
 
-    TsonOpBuilder setSecond(TsonElementBase value);
+    TsonOpBuilder second(TsonElementBase value);
 
     /// /////////////////////////////////////////////
 
@@ -45,4 +45,6 @@ public interface TsonOpBuilder extends TsonElementBuilder {
     TsonOpBuilder removeAnnotationAt(int index);
 
     TsonOpBuilder removeAllAnnotations();
+
+    TsonOp build();
 }

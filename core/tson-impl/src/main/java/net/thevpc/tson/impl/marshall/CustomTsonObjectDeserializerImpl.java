@@ -326,7 +326,7 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
                         if (tField.isContainerIsCollection()) {
                             if (value.isContainer()) {
                                 TsonContainer container = value.toContainer();
-                                TsonArrayBuilder tsonElements = Tson.ofArray();
+                                TsonArrayBuilder tsonElements = Tson.ofArrayBuilder();
                                 if (container.args() != null) {
                                     tsonElements.addAll(container.args().toList());
                                 }

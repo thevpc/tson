@@ -19,6 +19,11 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
     }
 
     @Override
+    public TsonElement param(int index) {
+        return elements.getAt(index);
+    }
+
+    @Override
     public boolean isNamed() {
         return name != null;
     }

@@ -721,7 +721,7 @@ public final class TsonFlex implements TsonLexicalAnalyzer {
      * Returns the character at position pos from the
      * matched text.
      * <p>
-     * It is equivalent to yytext().charAt(pos), but faster
+     * It's equivalent to yytext().charAt(pos), but faster
      *
      * @param pos the position of the character to fetch.
      *            A value from 0 to yylength()-1.

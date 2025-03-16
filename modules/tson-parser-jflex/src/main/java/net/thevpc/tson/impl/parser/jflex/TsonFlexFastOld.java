@@ -637,7 +637,7 @@ public final class TsonFlexFastOld {
     /**
      * Returns the character at position pos from the matched text.
      *
-     * It is equivalent to yytext().charAt(pos), but faster
+     * It's equivalent to yytext().charAt(pos), but faster
      *
      * @param pos the position of the character to fetch. A value from 0 to
      * yylength()-1.
@@ -758,7 +758,7 @@ public final class TsonFlexFastOld {
             }
 
             if (zzR) {
-                // peek one character ahead if it is \n (if we have counted one line too much)
+                // peek one character ahead if It's \n (if we have counted one line too much)
                 boolean zzPeek;
                 if (zzMarkedPosL < zzEndReadL) {
                     zzPeek = zzBufferL[zzMarkedPosL] == '\n';

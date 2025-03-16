@@ -1,7 +1,7 @@
 package net.thevpc.tson;
 
 public interface TsonFormatBuilder {
-    TsonFormatBuilder setCompact(boolean compact);
+    TsonFormatBuilder compact(boolean compact);
 
     boolean isCompact();
 

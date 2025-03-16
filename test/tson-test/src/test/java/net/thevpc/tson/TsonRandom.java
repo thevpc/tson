@@ -104,7 +104,7 @@ public class TsonRandom {
                 );
             }
             case ARRAY: {
-                TsonArrayBuilder f = Tson.ofArray();
+                TsonArrayBuilder f = Tson.ofArrayBuilder();
                 if (randomBoolean()) {
                     f.name(randomId());
                 }
@@ -138,7 +138,7 @@ public class TsonRandom {
                 return f.build();
             }
             case UPLET: {
-                TsonUpletBuilder f = Tson.ofUplet();
+                TsonUpletBuilder f = Tson.ofUpletBuilder();
                 if(randomBoolean()) {
                     f.name(randomId());
                 }

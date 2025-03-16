@@ -5,6 +5,8 @@ public interface TsonUplet extends TsonContainer, Iterable<TsonElement> {
 
     boolean isBlank();
 
+    TsonElement param(int index);
+
     int size();
 
     TsonUpletBuilder builder();

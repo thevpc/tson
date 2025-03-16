@@ -58,7 +58,7 @@ public class TsonOpBuilderImpl extends AbstractTsonElementBuilder<TsonOpBuilder>
     }
 
     @Override
-    public TsonOpBuilder setFirst(TsonElementBase key) {
+    public TsonOpBuilder first(TsonElementBase key) {
         this.first = Tson.of(key);
         return this;
     }
@@ -70,15 +70,15 @@ public class TsonOpBuilderImpl extends AbstractTsonElementBuilder<TsonOpBuilder>
     }
 
     @Override
-    public TsonOpBuilder setSecond(TsonElementBase value) {
+    public TsonOpBuilder second(TsonElementBase value) {
         this.second = Tson.of(value);
         return this;
     }
 
 
     @Override
-    public TsonElement build() {
-        return TsonUtils.decorate(
+    public TsonOp build() {
+        return (TsonOp) TsonUtils.decorate(
                 new TsonOpImpl(
                         opName,
                         opType == null ? TsonOpType.BINARY : opType,

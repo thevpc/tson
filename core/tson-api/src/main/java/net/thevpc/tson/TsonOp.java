@@ -8,4 +8,6 @@ public interface TsonOp extends TsonElement {
     TsonElement first();
 
     String opName();
+
+    TsonOpBuilder builder();
 }

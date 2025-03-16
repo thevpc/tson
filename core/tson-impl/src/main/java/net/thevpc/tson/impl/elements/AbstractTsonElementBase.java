@@ -171,9 +171,9 @@ public abstract class AbstractTsonElementBase implements TsonElement {
             return (TsonArray) this;
         }
         if (isContainer()) {
-            return Tson.ofArray(toContainer().body().toList().toArray(new TsonElement[0])).build();
+            return Tson.ofArray(toContainer().body().toList().toArray(new TsonElement[0]));
         }
-        return Tson.ofArray(this).build();
+        return Tson.ofArray(this);
     }
 
     @Override
@@ -193,8 +193,8 @@ public abstract class AbstractTsonElementBase implements TsonElement {
             return (TsonUplet) this;
         }
         if (isContainer()) {
-            return Tson.ofUplet(toContainer().body().toList().toArray(new TsonElement[0])).build();
+            return Tson.ofUplet(toContainer().body().toList().toArray(new TsonElement[0]));
         }
-        return Tson.ofUplet(this).build();
+        return Tson.ofUplet(this);
     }
 }

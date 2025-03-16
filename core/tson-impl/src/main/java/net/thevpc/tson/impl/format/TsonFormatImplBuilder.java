@@ -23,7 +23,7 @@ public class TsonFormatImplBuilder implements TsonFormatBuilder {
     }
 
     @Override
-    public TsonFormatBuilder setCompact(boolean compact) {
+    public TsonFormatBuilder compact(boolean compact) {
         config.setCompact(compact);
         return this;
     }

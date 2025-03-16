@@ -85,8 +85,18 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
     }
 
     @Override
-    public TsonElement[] getParams() {
+    public TsonElement[] params() {
         return elements.toArray(new TsonElement[0]);
+    }
+
+    @Override
+    public TsonElement param(int index) {
+        return elements.get(index);
+    }
+
+    @Override
+    public int size() {
+        return elements.size();
     }
 
     @Override
@@ -96,8 +106,14 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
     }
 
     @Override
-    public TsonUpletBuilder add(TsonElementBase element, int index) {
-        elements.add(index, Tson.of(element).build());
+    public TsonUpletBuilder addAt(int index, TsonElementBase element) {
+        elements.add(index, Tson.of(element));
+        return this;
+    }
+
+    @Override
+    public TsonUpletBuilder setAt(int index, TsonElementBase element) {
+        elements.set(index, Tson.of(element));
         return this;
     }
 

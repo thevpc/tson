@@ -82,7 +82,7 @@ public class TsonOpImpl extends AbstractNonPrimitiveTsonElement implements TsonO
 
     @Override
     public TsonOpBuilder builder() {
-        return new TsonOpBuilderImpl().setFirst(first()).setSecond(second());
+        return new TsonOpBuilderImpl().first(first()).second(second());
     }
 
     @Override

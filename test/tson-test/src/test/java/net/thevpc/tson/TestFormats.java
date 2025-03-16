@@ -20,8 +20,8 @@ public class TestFormats {
                 System.out.println(name + "  ==============================================================");
                 TsonElement t = Tson.reader().readElement(TestFormats.class.getResource(name));
 
-                System.out.println(Tson.format().setCompact(true).build().format(t));
-                System.out.println(Tson.format().setCompact(false).build().format(t));
+                System.out.println(Tson.format().compact(true).build().format(t));
+                System.out.println(Tson.format().compact(false).build().format(t));
             }
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
