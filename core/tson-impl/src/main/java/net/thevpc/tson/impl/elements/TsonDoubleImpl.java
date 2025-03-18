@@ -144,7 +144,7 @@ public class TsonDoubleImpl extends AbstractNumberTsonElement implements TsonDou
             switch (o.type()) {
                 case BYTE:
                 case SHORT:
-                case INT:
+                case INTEGER:
                 case LONG:
                 case FLOAT:
                 case DOUBLE: {

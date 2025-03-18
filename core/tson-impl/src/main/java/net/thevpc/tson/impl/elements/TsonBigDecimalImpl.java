@@ -160,9 +160,9 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
             switch (o.type()) {
                 case BYTE:
                 case SHORT:
-                case INT:
+                case INTEGER:
                 case LONG:
-                case BIG_INT:
+                case BIG_INTEGER:
                 case FLOAT:
                 case DOUBLE:
                 case BIG_DECIMAL:

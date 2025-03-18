@@ -544,7 +544,7 @@ public class TsonParserUtils {
     public static TsonDocument elementsToDocument(TsonElement[] roots) {
         TsonElement c = null;
         if (roots.length == 0) {
-            return Tson.ofDocument().header(null).content(Tson.ofObj().build()).build();
+            return Tson.ofDocument().header(null).content(Tson.ofObjectBuilder().build()).build();
         } else if (roots.length == 1) {
             return elementToDocument(roots[0]);
         } else {
@@ -558,7 +558,7 @@ public class TsonParserUtils {
                 newList.set(0, c0);
                 roots = newList.toArray(new TsonElement[0]);
             }
-            return Tson.ofDocument().content(Tson.ofObj(roots).build()).build();
+            return Tson.ofDocument().content(Tson.ofObjectBuilder(roots).build()).build();
         }
     }
 

@@ -149,7 +149,7 @@ public class TsonByteImpl extends AbstractNumberTsonElement implements TsonByte 
                     int i= Short.compare(value(), o.shortValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }
-                case INT: {
+                case INTEGER: {
                     int i= Integer.compare(value(), o.intValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }

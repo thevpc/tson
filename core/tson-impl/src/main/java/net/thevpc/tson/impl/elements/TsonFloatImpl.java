@@ -147,7 +147,7 @@ public class TsonFloatImpl extends AbstractNumberTsonElement implements TsonFloa
             switch (o.type()) {
                 case BYTE:
                 case SHORT:
-                case INT:
+                case INTEGER:
                 case LONG:
                 case FLOAT: {
                     int i= Float.compare(value(), o.floatValue());

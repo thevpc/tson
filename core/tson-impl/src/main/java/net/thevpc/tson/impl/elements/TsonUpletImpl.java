@@ -13,9 +13,17 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
     private TsonElementList elements;
 
     public TsonUpletImpl(String name, UnmodifiableArrayList<TsonElement> elements) {
-        super(TsonElementType.UPLET);
+        super(
+                name == null ? TsonElementType.UPLET
+                        : TsonElementType.NAMED_UPLET
+        );
         this.name = name;
         this.elements = new TsonElementListImpl(elements.stream().map(x -> x).collect(Collectors.toList()));
+    }
+
+    @Override
+    public boolean isParametrized() {
+        return true;
     }
 
     @Override
@@ -29,17 +37,17 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
     }
 
     @Override
-    public int argsCount() {
+    public int paramsCount() {
         return elements.size();
     }
 
     @Override
     public TsonElementList body() {
-        return null;
+        return elements;
     }
 
     @Override
-    public TsonElementList args() {
+    public TsonElementList params() {
         return elements;
     }
 
@@ -65,7 +73,7 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
 
     @Override
     public Iterator<TsonElement> iterator() {
-        return this.args().iterator();
+        return this.params().iterator();
     }
 
     @Override
@@ -85,7 +93,7 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
     }
 
     @Override
-    public TsonContainer toContainer() {
+    public TsonListContainer toContainer() {
         return this;
     }
 
@@ -109,7 +117,7 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
 
     @Override
     protected int compareCore(TsonElement o) {
-        return TsonUtils.compareElementsArray(this.args(), o.toUplet().args());
+        return TsonUtils.compareElementsArray(this.params(), o.toUplet().params());
     }
 
     @Override
@@ -119,7 +127,7 @@ public class TsonUpletImpl extends AbstractNonPrimitiveTsonElement implements Ts
             visitor.visitNamedStart(this.name());
         }
         visitor.visitParamsStart();
-        for (TsonElement param : this.args()) {
+        for (TsonElement param : this.params()) {
             visitor.visitParamElementStart();
             param.visit(visitor);
             visitor.visitParamElementEnd();

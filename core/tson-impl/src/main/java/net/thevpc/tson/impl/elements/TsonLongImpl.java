@@ -143,7 +143,7 @@ public class TsonLongImpl extends AbstractNumberTsonElement implements TsonLong 
             switch (o.type()) {
                 case BYTE:
                 case SHORT:
-                case INT:
+                case INTEGER:
                 case LONG: {
                     int i = Long.compare(value(), o.longValue());
                     return i == 0 ? type().compareTo(o.type()):i;

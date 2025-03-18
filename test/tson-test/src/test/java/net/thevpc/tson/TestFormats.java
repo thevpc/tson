@@ -36,17 +36,17 @@ public class TestFormats {
         Assertions.assertEquals("[\n a\n]", e.toString(false));
         Assertions.assertEquals("[a]", e.toString(true));
 
-        e = ofObj(ofPair(ofName("a"), of(16))).build();
+        e = ofObjectBuilder(ofPair(ofName("a"), of(16))).build();
         Assertions.assertEquals("{\n a : 16\n}", e.toString(false));
         Assertions.assertEquals("{a:16}", e.toString(true));
 
-        e = ofObj("hello", new TsonElementBase[]{ofPair(ofName("a"), of(16))}, of('p')).build();
+        e = ofObjectBuilder("hello", new TsonElementBase[]{ofPair(ofName("a"), of(16))}, of('p')).build();
         Assertions.assertEquals("hello(a:16){'p'}", e.toString(true));
 
-        e = ofObj("hello", of('p')).build();
+        e = ofObjectBuilder("hello", of('p')).build();
         Assertions.assertEquals("hello{'p'}", e.toString(true));
 
-        e = ofObj(of('p')).build();
+        e = ofObjectBuilder(of('p')).build();
         Assertions.assertEquals("{'p'}", e.toString(true));
 //        Assertions.assertEquals("(){'p'}", e.toString(true));
 
@@ -114,7 +114,7 @@ public class TestFormats {
 
     @Test
     public void test3() {
-        TsonElement h = ofObj()
+        TsonElement h = ofObjectBuilder()
                 .add("lastName", of(8).builder()
                         .comments(TsonComments.ofMultiLine("Hello\nworld"))
                         .annotation("an1", of(15.0)))

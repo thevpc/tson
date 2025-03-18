@@ -8,33 +8,33 @@ public interface TsonObjectBuilder extends Iterable<TsonElement>, TsonElementBui
 
     TsonElementBaseListBuilder content();
 
-    boolean isWithArgs();
+    boolean iParametrized();
 
-    TsonObjectBuilder setWithArgs(boolean hasArgs);
+    TsonObjectBuilder setParametrized(boolean parametrized);
 
-    List<TsonElement> args();
+    List<TsonElement> params();
 
-    int argsCount();
+    int paramsCount();
 
-    TsonObjectBuilder clearArgs();
+    TsonObjectBuilder clearParams();
 
     String name();
 
     TsonObjectBuilder name(String name);
 
-    TsonObjectBuilder addArg(TsonElementBase element);
+    TsonObjectBuilder addParam(TsonElementBase element);
 
-    TsonObjectBuilder removeArg(TsonElementBase element);
+    TsonObjectBuilder removeParam(TsonElementBase element);
 
-    TsonObjectBuilder addArg(TsonElementBase element, int index);
+    TsonObjectBuilder addParam(TsonElementBase element, int index);
 
-    TsonObjectBuilder removeArgAt(int index);
+    TsonObjectBuilder removeParamAt(int index);
 
-    TsonObjectBuilder addArgs(TsonElement[] element);
+    TsonObjectBuilder addParams(TsonElement[] element);
 
-    TsonObjectBuilder addArgs(TsonElementBase[] element);
+    TsonObjectBuilder addParams(TsonElementBase[] element);
 
-    TsonObjectBuilder addArgs(Iterable<? extends TsonElementBase> element);
+    TsonObjectBuilder addParams(Iterable<? extends TsonElementBase> element);
 
     TsonObjectBuilder merge(TsonElementBase element);
 
@@ -127,7 +127,7 @@ public interface TsonObjectBuilder extends Iterable<TsonElement>, TsonElementBui
 
     TsonObjectBuilder removeAnnotationAt(int index);
 
-    TsonObjectBuilder removeAllAnnotations();
+    TsonObjectBuilder clearAnnotations();
 
     TsonObjectBuilder remove(String name);
 

@@ -252,4 +252,6 @@ public interface TsonElementsFactory {
     TsonComment parseComments(String c);
 
     CharStreamCodeSupport charStreamCodeSupportOf(String language);
+
+    TsonElement ofCustom(Object o);
 }

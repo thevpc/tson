@@ -324,11 +324,11 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
                 if (tField.isCollectionType() && tField.isWrapCollections()) {
                     if (!value.isArray()) {
                         if (tField.isContainerIsCollection()) {
-                            if (value.isContainer()) {
-                                TsonContainer container = value.toContainer();
+                            if (value.isListContainer()) {
+                                TsonListContainer container = value.toContainer();
                                 TsonArrayBuilder tsonElements = Tson.ofArrayBuilder();
-                                if (container.args() != null) {
-                                    tsonElements.addAll(container.args().toList());
+                                if (container.params() != null) {
+                                    tsonElements.addAll(container.params().toList());
                                 }
                                 if (container.body() != null) {
                                     tsonElements.addAll(container.body().toList());
@@ -365,8 +365,8 @@ public class CustomTsonObjectDeserializerImpl<T> implements TsonCustomDeserializ
     @Override
     public T toObject(TsonElement element, Class<T> to, TsonObjectContext context) {
         build();
-        TsonContainer container = element.toContainer();
-        TsonElementList args = container.args();
+        TsonListContainer container = element.toContainer();
+        TsonElementList args = container.params();
         T instance = null;
         if (onNewInstance != null) {
             instance = onNewInstance.newInstance(new FactoryConfigurerContext<T>() {

@@ -32,8 +32,8 @@
 //
 //    TsonElementHeaderBuilder<T> clearArgs();
 //
-//    boolean isWithArgs() ;
+//    boolean isParametrized() ;
 //
-//    TsonElementHeaderBuilder<T> setWithArgs(boolean hasArgs);
+//    TsonElementHeaderBuilder<T> setParametrized(boolean hasArgs);
 //    T then();
 //}

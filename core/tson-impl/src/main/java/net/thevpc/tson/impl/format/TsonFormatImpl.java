@@ -199,9 +199,9 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     return;
                 case BYTE:
                 case SHORT:
-                case INT:
+                case INTEGER:
                 case LONG:
-                case BIG_INT:
+                case BIG_INTEGER:
                 case FLOAT:
                 case DOUBLE:
                 case BIG_DECIMAL:
@@ -272,15 +272,21 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     }
                     return;
                 }
-                case UPLET: {
+                case UPLET:
+                case NAMED_UPLET:
+                {
                     TsonUplet list = element.toUplet();
                     if (list.isNamed()) {
                         writer.append(list.name());
                     }
-                    listToString(config.indentList, list.args(), '(', ')', writer, ListType.PARAMS);
+                    listToString(config.indentList, list.params(), '(', ')', writer, ListType.PARAMS);
                     return;
                 }
-                case ARRAY: {
+                case ARRAY:
+                case NAMED_PARAMETRIZED_ARRAY:
+                case PARAMETRIZED_ARRAY:
+                case NAMED_ARRAY:
+                {
                     TsonArray list = element.toArray();
                     String n = TsonUtils.nullIfBlank(list.name());
                     boolean hasName = false;
@@ -288,7 +294,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                         writer.append(n);
                         hasName = n.length() > 0;
                     }
-                    TsonElementList params = list.args();
+                    TsonElementList params = list.params();
                     if(params!=null) {
                         if (!hasName || params.size() > 0) {
                             listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
@@ -297,7 +303,11 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     listToString(config.indentBrackets, list, '[', ']', writer, ListType.PARAMS);
                     return;
                 }
-                case MATRIX: {
+                case MATRIX:
+                case NAMED_MATRIX:
+                case PARAMETRIZED_MATRIX:
+                case NAMED_PARAMETRIZED_MATRIX:
+                {
                     TsonMatrix list = element.toMatrix();
                     String n = TsonUtils.nullIfBlank(list.name());
                     boolean hasName = false;
@@ -305,7 +315,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                         writer.append(n);
                         hasName = n.length() > 0;
                     }
-                    TsonElementList params = list.args();
+                    TsonElementList params = list.params();
                     if(params!=null) {
                         if (!hasName || params.size() > 0) {
                             listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
@@ -314,7 +324,11 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     listToString(config.indentBrackets, (Iterable) list.rows(), '[', ']', writer, ListType.MATRIX);
                     return;
                 }
-                case OBJECT: {
+                case OBJECT:
+                case NAMED_PARAMETRIZED_OBJECT:
+                case NAMED_OBJECT:
+                case PARAMETRIZED_OBJECT:
+                {
                     TsonObject list = element.toObject();
                     String n = TsonUtils.nullIfBlank(list.name());
                     boolean hasName = false;
@@ -322,7 +336,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                         writer.append(n);
                         hasName = n.length() > 0;
                     }
-                    TsonElementList params = list.args();
+                    TsonElementList params = list.params();
                     if(params!=null){
                         if (!hasName || params.size() > 0) {
                             listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
@@ -495,7 +509,8 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     }
                     break;
                 }
-                case ARRAY: {
+                case ARRAY:
+                {
                     for (TsonElement tsonElement : a) {
                         if (acceptArrayElement(tsonElement)) {
                             if (i > 0) {
@@ -586,7 +601,8 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 }
                 break;
             }
-            case ARRAY: {
+            case ARRAY:
+            {
                 for (TsonElement tsonElement : it) {
                     if (acceptArrayElement(tsonElement)) {
                         if (i > 0) {

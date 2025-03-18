@@ -62,39 +62,39 @@ public interface TsonMatrixBuilder extends Iterable<TsonArray>, TsonElementBuild
 
     TsonMatrixBuilder removeAnnotationAt(int index);
 
-    TsonMatrixBuilder removeAllAnnotations();
+    TsonMatrixBuilder clearAnnotations();
 
     TsonMatrixBuilder ensureCapacity(int columns,int rows);
 
     /// ///////////////////////////////////////////////
 
 
-    boolean isWithArgs();
+    boolean isParametrized();
 
-    TsonMatrixBuilder setWithArgs(boolean hasArgs);
+    TsonMatrixBuilder setParametrized(boolean parametrized);
 
-    List<TsonElement> args();
+    List<TsonElement> params();
 
-    int argsCount();
+    int paramsCount();
 
-    TsonMatrixBuilder clearArgs();
+    TsonMatrixBuilder clearParams();
 
     String name();
 
     TsonMatrixBuilder name(String name);
 
-    TsonMatrixBuilder addArg(TsonElementBase element);
+    TsonMatrixBuilder addParam(TsonElementBase element);
 
-    TsonMatrixBuilder removeArg(TsonElementBase element);
+    TsonMatrixBuilder removeParam(TsonElementBase element);
 
-    TsonMatrixBuilder addArg(TsonElementBase element, int index);
+    TsonMatrixBuilder addParam(TsonElementBase element, int index);
 
-    TsonMatrixBuilder removeArgAt(int index);
+    TsonMatrixBuilder removeParamAt(int index);
 
-    TsonMatrixBuilder addArgs(TsonElement[] element);
+    TsonMatrixBuilder addParams(TsonElement[] element);
 
-    TsonMatrixBuilder addArgs(TsonElementBase[] element);
+    TsonMatrixBuilder addParams(TsonElementBase[] element);
 
-    TsonMatrixBuilder addArgs(Iterable<? extends TsonElementBase> element);
+    TsonMatrixBuilder addParams(Iterable<? extends TsonElementBase> element);
 
 }

@@ -1,68 +1,371 @@
 package net.thevpc.tson;
 
 public enum TsonElementType {
-    NULL(true, false, false, false),
-    BINARY_STREAM(true, false, false, false),
-    CHAR_STREAM(true, false, false, false),
-    STRING(true, false, false, false),
-    CHAR(true, false, false, false),
-    BYTE(true, true, false, false),
-    SHORT(true, true, false, false),
-    INT(true, true, false, false),
-    LONG(true, true, false, false),
-    FLOAT(true, true, false, false),
-    DOUBLE(true, true, false, false),
-    DOUBLE_COMPLEX(true, true, false, false),
-    FLOAT_COMPLEX(true, true, false, false),
-    BIG_INT(true, true, false, false),
-    BIG_COMPLEX(true, true, false, false),
-    BIG_DECIMAL(true, true, false, false),
-    BOOLEAN(true, false, false, false),
-    NAME(true, false, false, false),
-    ALIAS(true, false, false, false),
-    DATETIME(true, false, true, false),
-    DATE(true, false, true, false),
-    TIME(true, false, true, false),
-    REGEX(true, false, false, false),
-    MATRIX(false, false, false, false),
-    PAIR(false, false, false, false),
-    OP(false, false, false, false),
-    ARRAY(false, false, false, true),
-    OBJECT(false, false, false, true),
-    UPLET(false, false, false, true),
-    CUSTOM(false, false, false, false),
+    NULL,
+    BINARY_STREAM,
+    CHAR_STREAM,
+    STRING,
+    CHAR,
+    BYTE,
+    SHORT,
+    INTEGER,
+    LONG,
+    FLOAT,
+    DOUBLE,
+    DOUBLE_COMPLEX,
+    FLOAT_COMPLEX,
+    BIG_INTEGER,
+    BIG_COMPLEX,
+    BIG_DECIMAL,
+    BOOLEAN,
+    NAME,
+    ALIAS,
+    DATETIME,
+    DATE,
+    TIME,
+    REGEX,
+
+    OP,
+    PAIR,
+    CUSTOM,
+
+    MATRIX,
+    NAMED_MATRIX,
+    PARAMETRIZED_MATRIX,
+    NAMED_PARAMETRIZED_MATRIX,
+
+    ARRAY,
+    NAMED_ARRAY,
+    PARAMETRIZED_ARRAY,
+    NAMED_PARAMETRIZED_ARRAY,
+
+    OBJECT,
+    NAMED_OBJECT,
+    PARAMETRIZED_OBJECT,
+    NAMED_PARAMETRIZED_OBJECT,
+
+    UPLET,
+    NAMED_UPLET,
+
     ;
 
-    private boolean primitiveType;
-    private boolean number;
-    private boolean temporal;
-    private boolean container;
-
-    TsonElementType(boolean primitiveType, boolean number, boolean temporal, boolean container) {
-        this.primitiveType = primitiveType;
-        this.number = number;
-        this.temporal = temporal;
-        this.container = container;
+    TsonElementType() {
     }
 
-    public boolean isContainer() {
-        return container;
+    public boolean isNamed() {
+        switch (this) {
+            case NAMED_ARRAY:
+            case NAMED_PARAMETRIZED_ARRAY:
+            case NAMED_OBJECT:
+            case NAMED_PARAMETRIZED_OBJECT:
+            case NAMED_UPLET:
+            case NAMED_MATRIX:
+            case NAMED_PARAMETRIZED_MATRIX:
+                return true;
+
+            case PARAMETRIZED_MATRIX:
+            case ARRAY:
+            case OBJECT:
+            case UPLET:
+            case PARAMETRIZED_OBJECT:
+            case DATETIME:
+            case DATE:
+            case TIME:
+            case REGEX:
+            case BYTE:
+            case SHORT:
+            case INTEGER:
+            case LONG:
+            case FLOAT:
+            case DOUBLE:
+            case DOUBLE_COMPLEX:
+            case FLOAT_COMPLEX:
+            case BIG_INTEGER:
+            case BIG_COMPLEX:
+            case BIG_DECIMAL:
+            case NULL:
+            case BINARY_STREAM:
+            case CHAR_STREAM:
+            case STRING:
+            case CHAR:
+            case BOOLEAN:
+            case NAME:
+            case ALIAS:
+            case MATRIX:
+            case PAIR:
+            case OP:
+            case CUSTOM:
+                return false;
+        }
+        return false;
+    }
+
+    public boolean isParametrized() {
+        switch (this) {
+            case NAMED_PARAMETRIZED_ARRAY:
+            case NAMED_PARAMETRIZED_OBJECT:
+            case NAMED_PARAMETRIZED_MATRIX:
+            case PARAMETRIZED_MATRIX:
+            case PARAMETRIZED_OBJECT:
+            case NAMED_UPLET:
+            case UPLET:
+                return true;
+
+            case NAMED_ARRAY:
+            case NAMED_OBJECT:
+            case NAMED_MATRIX:
+            case ARRAY:
+            case OBJECT:
+            case DATETIME:
+            case DATE:
+            case TIME:
+            case REGEX:
+            case BYTE:
+            case SHORT:
+            case INTEGER:
+            case LONG:
+            case FLOAT:
+            case DOUBLE:
+            case DOUBLE_COMPLEX:
+            case FLOAT_COMPLEX:
+            case BIG_INTEGER:
+            case BIG_COMPLEX:
+            case BIG_DECIMAL:
+            case NULL:
+            case BINARY_STREAM:
+            case CHAR_STREAM:
+            case STRING:
+            case CHAR:
+            case BOOLEAN:
+            case NAME:
+            case ALIAS:
+            case MATRIX:
+            case PAIR:
+            case OP:
+            case CUSTOM:
+                return false;
+        }
+        return false;
+    }
+
+    public boolean isListContainer() {
+        switch (this) {
+            case ARRAY:
+            case OBJECT:
+            case UPLET:
+            case NAMED_ARRAY:
+            case NAMED_PARAMETRIZED_ARRAY:
+            case NAMED_OBJECT:
+            case NAMED_PARAMETRIZED_OBJECT:
+            case PARAMETRIZED_OBJECT:
+            case NAMED_UPLET:
+                return true;
+
+            case NAMED_MATRIX:
+            case NAMED_PARAMETRIZED_MATRIX:
+            case PARAMETRIZED_MATRIX:
+
+            case DATETIME:
+            case DATE:
+            case TIME:
+            case REGEX:
+            case BYTE:
+            case SHORT:
+            case INTEGER:
+            case LONG:
+            case FLOAT:
+            case DOUBLE:
+            case DOUBLE_COMPLEX:
+            case FLOAT_COMPLEX:
+            case BIG_INTEGER:
+            case BIG_COMPLEX:
+            case BIG_DECIMAL:
+            case NULL:
+            case BINARY_STREAM:
+            case CHAR_STREAM:
+            case STRING:
+            case CHAR:
+            case BOOLEAN:
+            case NAME:
+            case ALIAS:
+            case MATRIX:
+            case PAIR:
+            case OP:
+            case CUSTOM:
+                return false;
+        }
+        return false;
     }
 
     public boolean isTemporal() {
-        return temporal;
+        switch (this) {
+            case DATETIME:
+            case DATE:
+            case TIME:
+            case REGEX:
+                return true;
+            case BYTE:
+            case SHORT:
+            case INTEGER:
+            case LONG:
+            case FLOAT:
+            case DOUBLE:
+            case DOUBLE_COMPLEX:
+            case FLOAT_COMPLEX:
+            case BIG_INTEGER:
+            case BIG_COMPLEX:
+            case BIG_DECIMAL:
+            case NULL:
+            case BINARY_STREAM:
+            case CHAR_STREAM:
+            case STRING:
+            case CHAR:
+            case BOOLEAN:
+            case NAME:
+            case ALIAS:
+            case MATRIX:
+            case PAIR:
+            case OP:
+            case ARRAY:
+            case OBJECT:
+            case UPLET:
+            case CUSTOM:
+            case NAMED_ARRAY:
+            case NAMED_PARAMETRIZED_ARRAY:
+            case NAMED_OBJECT:
+            case NAMED_PARAMETRIZED_OBJECT:
+            case NAMED_UPLET:
+            case NAMED_MATRIX:
+            case NAMED_PARAMETRIZED_MATRIX:
+            case PARAMETRIZED_MATRIX:
+            case PARAMETRIZED_ARRAY:
+            case PARAMETRIZED_OBJECT:
+                return false;
+        }
+        return false;
     }
 
     public boolean isPrimitive() {
-        return primitiveType;
+        switch (this) {
+            case BYTE:
+            case SHORT:
+            case INTEGER:
+            case LONG:
+            case FLOAT:
+            case DOUBLE:
+            case DOUBLE_COMPLEX:
+            case FLOAT_COMPLEX:
+            case BIG_INTEGER:
+            case BIG_COMPLEX:
+            case BIG_DECIMAL:
+            case NULL:
+            case BINARY_STREAM:
+            case CHAR_STREAM:
+            case STRING:
+            case CHAR:
+            case BOOLEAN:
+            case NAME:
+            case ALIAS:
+            case DATETIME:
+            case DATE:
+            case TIME:
+            case REGEX:
+                return true;
+            case MATRIX:
+            case PAIR:
+            case OP:
+            case ARRAY:
+            case OBJECT:
+            case UPLET:
+            case CUSTOM:
+            case NAMED_ARRAY:
+            case NAMED_PARAMETRIZED_ARRAY:
+            case NAMED_OBJECT:
+            case NAMED_PARAMETRIZED_OBJECT:
+            case NAMED_UPLET:
+            case NAMED_MATRIX:
+            case NAMED_PARAMETRIZED_MATRIX:
+            case PARAMETRIZED_MATRIX:
+            case PARAMETRIZED_ARRAY:
+            case PARAMETRIZED_OBJECT:
+                return false;
+        }
+        return false;
     }
 
     public boolean isNumber() {
-        return number;
+        switch (this) {
+            case BYTE:
+            case SHORT:
+            case INTEGER:
+            case LONG:
+            case FLOAT:
+            case DOUBLE:
+            case DOUBLE_COMPLEX:
+            case FLOAT_COMPLEX:
+            case BIG_INTEGER:
+            case BIG_COMPLEX:
+            case BIG_DECIMAL:
+                return true;
+            case NULL:
+            case BINARY_STREAM:
+            case CHAR_STREAM:
+            case STRING:
+            case CHAR:
+            case BOOLEAN:
+            case NAME:
+            case ALIAS:
+            case DATETIME:
+            case DATE:
+            case TIME:
+            case REGEX:
+            case MATRIX:
+            case PAIR:
+            case OP:
+            case ARRAY:
+            case OBJECT:
+            case UPLET:
+            case CUSTOM:
+            case NAMED_ARRAY:
+            case NAMED_PARAMETRIZED_ARRAY:
+            case NAMED_OBJECT:
+            case NAMED_PARAMETRIZED_OBJECT:
+            case NAMED_UPLET:
+            case NAMED_MATRIX:
+            case NAMED_PARAMETRIZED_MATRIX:
+            case PARAMETRIZED_MATRIX:
+            case PARAMETRIZED_ARRAY:
+            case PARAMETRIZED_OBJECT:
+                return false;
+        }
+        return false;
     }
 
     public boolean isSimple() {
         switch (this) {
+            case BYTE:
+            case SHORT:
+            case INTEGER:
+            case LONG:
+            case FLOAT:
+            case DOUBLE:
+            case DOUBLE_COMPLEX:
+            case FLOAT_COMPLEX:
+            case BIG_INTEGER:
+            case BIG_COMPLEX:
+            case BIG_DECIMAL:
+            case NULL:
+            case STRING:
+            case CHAR:
+            case BOOLEAN:
+            case NAME:
+            case DATETIME:
+            case DATE:
+            case TIME:
+            case REGEX:
+            case CUSTOM:
+                return true;
+
             case CHAR_STREAM:
             case BINARY_STREAM:
             case OBJECT:
@@ -72,6 +375,16 @@ public enum TsonElementType {
             case MATRIX:
             case UPLET:
             case PAIR:
+            case NAMED_ARRAY:
+            case NAMED_PARAMETRIZED_ARRAY:
+            case NAMED_OBJECT:
+            case NAMED_PARAMETRIZED_OBJECT:
+            case NAMED_UPLET:
+            case NAMED_MATRIX:
+            case NAMED_PARAMETRIZED_MATRIX:
+            case PARAMETRIZED_MATRIX:
+            case PARAMETRIZED_ARRAY:
+            case PARAMETRIZED_OBJECT:
                 return false;
         }
         return true;

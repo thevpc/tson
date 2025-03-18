@@ -31,17 +31,15 @@ public class TsonPrimitiveElementBuilderImpl extends AbstractTsonElementBuilder<
         }
         if (element instanceof TsonElementDecorator) {
             TsonElementDecorator d = (TsonElementDecorator) element;
+            if(!d.getBase().isPrimitive()){
+                throw new ClassCastException("Not a primitive type " + element.type());
+            }
             this.value = d.getBase();
             setComments(d.comments());
             setAnnotations(d.annotations());
         } else {
-            switch (element.type()) {
-                case PAIR:
-                case OBJECT:
-                case UPLET:
-                case ARRAY:{
-                    throw new ClassCastException("Not a primitive type " + element.type());
-                }
+            if(!element.isPrimitive()){
+                throw new ClassCastException("Not a primitive type " + element.type());
             }
             this.value = element;
         }

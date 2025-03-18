@@ -13,10 +13,16 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
     private TsonElementList args;
     private TsonElementList elements;
 
-    public TsonArrayImpl(String name, TsonElementList args, UnmodifiableArrayList<TsonElement> elements) {
-        super(TsonElementType.ARRAY);
+    public TsonArrayImpl(String name, TsonElementList params, UnmodifiableArrayList<TsonElement> elements) {
+        super(
+                name == null && params == null ? TsonElementType.ARRAY
+                        : name == null && params != null ? TsonElementType.PARAMETRIZED_ARRAY
+                        : name != null && params == null ? TsonElementType.NAMED_ARRAY
+                        : TsonElementType.NAMED_PARAMETRIZED_ARRAY
+
+        );
         this.name = name;
-        this.args = args;
+        this.args = params;
         this.elements = new TsonElementListImpl(elements.stream().map(x -> x).collect(Collectors.toList()));
     }
 
@@ -31,7 +37,7 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
     }
 
     @Override
-    public TsonElementList args() {
+    public TsonElementList params() {
         return args;
     }
 
@@ -46,12 +52,12 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
     }
 
     @Override
-    public boolean isWithArgs() {
+    public boolean isParametrized() {
         return args != null;
     }
 
     @Override
-    public int argsCount() {
+    public int paramsCount() {
         return args == null ? 0 : args.size();
     }
 
@@ -61,7 +67,7 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
     }
 
     @Override
-    public TsonContainer toContainer() {
+    public TsonListContainer toContainer() {
         return this;
     }
 
@@ -128,7 +134,7 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
         if (i != 0) {
             return i;
         }
-        i = TsonUtils.compareElementsArray(this.args(), na.args());
+        i = TsonUtils.compareElementsArray(this.params(), na.params());
         if (i != 0) {
             return i;
         }
@@ -144,7 +150,7 @@ public class TsonArrayImpl extends AbstractNonPrimitiveTsonElement implements Ts
         }
         if (args != null) {
             visitor.visitParamsStart();
-            for (TsonElement param : this.args()) {
+            for (TsonElement param : this.params()) {
                 visitor.visitParamElementStart();
                 param.visit(visitor);
                 visitor.visitParamElementEnd();

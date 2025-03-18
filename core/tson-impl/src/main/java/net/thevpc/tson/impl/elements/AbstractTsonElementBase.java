@@ -2,8 +2,6 @@ package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
 
-import java.time.temporal.Temporal;
-
 public abstract class AbstractTsonElementBase implements TsonElement {
 
     @Override
@@ -22,8 +20,8 @@ public abstract class AbstractTsonElementBase implements TsonElement {
     }
 
     @Override
-    public boolean isContainer() {
-        return type().isContainer();
+    public boolean isListContainer() {
+        return type().isListContainer();
     }
 
     @Override
@@ -60,9 +58,9 @@ public abstract class AbstractTsonElementBase implements TsonElement {
         switch (type()) {
             case BYTE:
             case SHORT:
-            case INT:
+            case INTEGER:
             case LONG:
-            case BIG_INT: {
+            case BIG_INTEGER: {
                 return true;
             }
         }
@@ -158,9 +156,9 @@ public abstract class AbstractTsonElementBase implements TsonElement {
     }
 
     @Override
-    public TsonContainer toContainer() {
-        if (isContainer()) {
-            return (TsonContainer) this;
+    public TsonListContainer toContainer() {
+        if (isListContainer()) {
+            return (TsonListContainer) this;
         }
         return toArray();
     }
@@ -170,7 +168,7 @@ public abstract class AbstractTsonElementBase implements TsonElement {
         if (isArray()) {
             return (TsonArray) this;
         }
-        if (isContainer()) {
+        if (isListContainer()) {
             return Tson.ofArray(toContainer().body().toList().toArray(new TsonElement[0]));
         }
         return Tson.ofArray(this);
@@ -181,10 +179,10 @@ public abstract class AbstractTsonElementBase implements TsonElement {
         if (isObject()) {
             return (TsonObject) this;
         }
-        if (isContainer()) {
-            return Tson.ofObj(toContainer().body().toList().toArray(new TsonElement[0])).build();
+        if (isListContainer()) {
+            return Tson.ofObjectBuilder(toContainer().body().toList().toArray(new TsonElement[0])).build();
         }
-        return Tson.ofObj(this).build();
+        return Tson.ofObjectBuilder(this).build();
     }
 
     @Override
@@ -192,7 +190,7 @@ public abstract class AbstractTsonElementBase implements TsonElement {
         if (isUplet()) {
             return (TsonUplet) this;
         }
-        if (isContainer()) {
+        if (isListContainer()) {
             return Tson.ofUplet(toContainer().body().toList().toArray(new TsonElement[0]));
         }
         return Tson.ofUplet(this);

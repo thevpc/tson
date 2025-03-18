@@ -154,5 +154,5 @@ public interface TsonPrimitiveBuilder extends TsonElementBuilder {
 
     TsonPrimitiveBuilder removeAnnotationAt(int index);
 
-    TsonPrimitiveBuilder removeAllAnnotations();
+    TsonPrimitiveBuilder clearAnnotations();
 }

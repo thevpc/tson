@@ -2,28 +2,22 @@ package net.thevpc.tson;
 
 import java.util.List;
 
-public interface TsonMatrix extends TsonElement, Iterable<TsonArray> {
-    String name();
-
-    boolean isWithArgs();
-
-    TsonElementList args();
-
+public interface TsonMatrix extends TsonElement, Iterable<TsonArray>, TsonParametrizedElement, TsonNamedElement {
     boolean isEmpty();
 
     int rowSize();
 
+    int columnSize();
+
     List<TsonArray> rows();
 
-    TsonElement get(int col, int row);
+    TsonElement cell(int col, int row);
 
-    TsonArray getRow(int row);
+    TsonArray row(int row);
 
-    List<TsonArray> getRows();
+    TsonArray column(int column);
 
-    TsonArray getColumn(int column);
-
-    List<TsonArray> getColumns();
+    List<TsonArray> columns();
 
     TsonArrayBuilder builder();
 }

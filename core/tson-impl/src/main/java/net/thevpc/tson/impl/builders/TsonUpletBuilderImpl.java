@@ -29,12 +29,14 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
 
     @Override
     public TsonUpletBuilder name(String name) {
-        return null;
+        this.name = name;
+        return this;
     }
 
     @Override
     public TsonElementType type() {
-        return TsonElementType.UPLET;
+        return name == null ? TsonElementType.UPLET
+                : TsonElementType.NAMED_UPLET;
     }
 
     @Override
@@ -125,7 +127,7 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
 
     @Override
     public TsonUplet build() {
-        TsonUpletImpl built = new TsonUpletImpl(name,TsonUtils.unmodifiableElements(elements));
+        TsonUpletImpl built = new TsonUpletImpl(name, TsonUtils.unmodifiableElements(elements));
         return (TsonUplet) TsonUtils.decorate(
                 built,
                 getComments(), getAnnotations());
@@ -136,26 +138,36 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
         TsonElement element = element0.build();
         addAnnotations(element.annotations());
         switch (element.type()) {
-            case ARRAY: {
+            case ARRAY:
+            case NAMED_PARAMETRIZED_ARRAY:
+            case PARAMETRIZED_ARRAY:
+            case NAMED_ARRAY:
+            {
                 TsonArray h = element.toArray();
                 if (h != null) {
-                    addAll(h.args());
+                    addAll(h.params());
                 }
                 return this;
             }
-            case OBJECT: {
+            case OBJECT:
+            case NAMED_PARAMETRIZED_OBJECT:
+            case NAMED_OBJECT:
+            case PARAMETRIZED_OBJECT:
+            {
                 TsonObject h = element.toObject();
                 if (h != null) {
-                    addAll(h.args());
+                    addAll(h.params());
                 }
                 return this;
             }
-            case UPLET: {
+            case UPLET:
+            case NAMED_UPLET:
+            {
                 TsonUplet uplet = element.toUplet();
-                if(uplet.isNamed()) {
+                if (uplet.isNamed()) {
                     name(uplet.name());
                 }
-                addAll(uplet.args());
+                addAll(uplet.params());
                 return this;
             }
         }

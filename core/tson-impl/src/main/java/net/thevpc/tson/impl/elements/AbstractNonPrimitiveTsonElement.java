@@ -33,7 +33,7 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
 
     @Override
     public TsonInt toInt() {
-        return throwPrimitive(TsonElementType.INT);
+        return throwPrimitive(TsonElementType.INTEGER);
     }
 
     @Override
@@ -123,7 +123,7 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
 
     @Override
     public Integer intObject() {
-        return throwPrimitive(TsonElementType.INT);
+        return throwPrimitive(TsonElementType.INTEGER);
     }
 
     @Override
@@ -168,7 +168,7 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
 
     @Override
     public int intValue() {
-        return throwPrimitive(TsonElementType.INT);
+        return throwPrimitive(TsonElementType.INTEGER);
     }
 
     @Override

@@ -4,8 +4,6 @@ package net.thevpc.tson;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
-import java.io.IOException;
-
 public class TestMulti {
     @Test
     public void test1() {
@@ -73,13 +71,13 @@ public class TestMulti {
         TsonElement x = Tson.reader().readElement(
                 "import(\"a/**/*\")"
                 );
-        Assertions.assertEquals(TsonElementType.UPLET,x.type());
+        Assertions.assertEquals(TsonElementType.NAMED_UPLET,x.type());
     }
     @Test
     public void test4() {
         TsonElement x = Tson.reader().readElement(
                 "1_λ"
                 );
-        Assertions.assertEquals(TsonElementType.INT,x.type());
+        Assertions.assertEquals(TsonElementType.INTEGER,x.type());
     }
 }

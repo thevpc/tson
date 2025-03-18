@@ -15,7 +15,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
     private int rowsCount;
     private int columnsCount;
     private String name;
-    private List<TsonElement> args = new ArrayList<>();
+    private List<TsonElement> params;
 
     public TsonMatrixBuilder ensureCapacity(int columns0, int rows0) {
         int oldColumnsCount = columnsCount;
@@ -48,7 +48,11 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
 
     @Override
     public TsonElementType type() {
-        return TsonElementType.MATRIX;
+        return                 name == null && params == null ? TsonElementType.MATRIX
+                : name == null && params != null ? TsonElementType.PARAMETRIZED_MATRIX
+                : name != null && params == null ? TsonElementType.NAMED_MATRIX
+                : TsonElementType.NAMED_PARAMETRIZED_MATRIX
+                ;
     }
 
     @Override
@@ -217,7 +221,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
     public TsonMatrixBuilder reset() {
         rows.clear();
         name = null;
-        args = null;
+        params = null;
         rowsCount = 0;
         columnsCount = 0;
         return this;
@@ -231,7 +235,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
             arrays.add(TsonUtils.toArray(row));
         }
         TsonMatrixImpl built = new TsonMatrixImpl(name,
-                args == null ? null : new TsonElementListImpl((List) args),
+                params == null ? null : new TsonElementListImpl((List) params),
                 TsonUtils.unmodifiableArrays(arrays)
         );
         return (TsonMatrix) TsonUtils.decorate(
@@ -245,36 +249,50 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
     public TsonMatrixBuilder merge(TsonElementBase element) {
         TsonElement e = Tson.of(element);
         switch (e.type()) {
-            case UPLET: {
+            case UPLET:
+            case NAMED_UPLET:
+            {
                 TsonUplet uplet = e.toUplet();
                 if (uplet.isNamed()) {
                     name(uplet.name());
                 }
-                addArgs(uplet);
+                addParams(uplet);
                 break;
             }
             case NAME: {
                 name(e.toName().value());
                 break;
             }
-            case OBJECT: {
+            case OBJECT:
+            case NAMED_PARAMETRIZED_OBJECT:
+            case NAMED_OBJECT:
+            case PARAMETRIZED_OBJECT:
+            {
                 TsonObject h = e.toObject();
                 name(h.name());
-                addArgs(h.args());
+                addParams(h.params());
                 addRow(TsonUtils.toArray(e.toObject().body()));
                 break;
             }
-            case ARRAY: {
+            case ARRAY:
+            case NAMED_PARAMETRIZED_ARRAY:
+            case PARAMETRIZED_ARRAY:
+            case NAMED_ARRAY:
+            {
                 TsonArray h = e.toArray();
                 name(h.name());
-                addArgs(h.args());
+                addParams(h.params());
                 addRow(TsonUtils.toArray(e.toArray().body()));
                 break;
             }
-            case MATRIX: {
+            case MATRIX:
+            case NAMED_MATRIX:
+            case PARAMETRIZED_MATRIX:
+            case NAMED_PARAMETRIZED_MATRIX:
+            {
                 TsonMatrix h = e.toMatrix();
                 name(h.name());
-                addArgs(h.args());
+                addParams(h.params());
                 for (TsonArray m : e.toMatrix()) {
                     addRow(m);
                 }
@@ -289,35 +307,37 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
     /// args
 
     @Override
-    public boolean isWithArgs() {
-        return args != null;
+    public boolean isParametrized() {
+        return params != null;
     }
 
     @Override
-    public TsonMatrixBuilder setWithArgs(boolean hasArgs) {
-        if (hasArgs) {
-            if (args == null) {
-                args = new ArrayList<>();
+    public TsonMatrixBuilder setParametrized(boolean parametrized) {
+        if (parametrized) {
+            if (params == null) {
+                params = new ArrayList<>();
             }
         } else {
-            args = null;
+            params = null;
         }
         return this;
     }
 
     @Override
-    public List<TsonElement> args() {
-        return args;
+    public List<TsonElement> params() {
+        return params;
     }
 
     @Override
-    public int argsCount() {
-        return args == null ? 0 : args.size();
+    public int paramsCount() {
+        return params == null ? 0 : params.size();
     }
 
     @Override
-    public TsonMatrixBuilder clearArgs() {
-        args.clear();
+    public TsonMatrixBuilder clearParams() {
+        if(params!=null) {
+            params.clear();
+        }
         return this;
     }
 
@@ -334,68 +354,68 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
     }
 
     @Override
-    public TsonMatrixBuilder addArg(TsonElementBase element) {
+    public TsonMatrixBuilder addParam(TsonElementBase element) {
         if (element != null) {
-            if (args == null) {
-                args = new ArrayList<>();
+            if (params == null) {
+                params = new ArrayList<>();
             }
-            args.add(Tson.of(element).build());
+            params.add(Tson.of(element).build());
         }
         return this;
     }
 
     @Override
-    public TsonMatrixBuilder removeArg(TsonElementBase element) {
-        if (element != null && args != null) {
-            args.remove(Tson.of(element).build());
+    public TsonMatrixBuilder removeParam(TsonElementBase element) {
+        if (element != null && params != null) {
+            params.remove(Tson.of(element).build());
         }
         return this;
     }
 
     @Override
-    public TsonMatrixBuilder addArg(TsonElementBase element, int index) {
+    public TsonMatrixBuilder addParam(TsonElementBase element, int index) {
         if (element != null) {
-            if (args == null) {
-                args = new ArrayList<>();
+            if (params == null) {
+                params = new ArrayList<>();
             }
-            args.add(index, Tson.of(element).build());
+            params.add(index, Tson.of(element).build());
         }
         return this;
     }
 
     @Override
-    public TsonMatrixBuilder removeArgAt(int index) {
-        if (args != null) {
-            args.remove(index);
+    public TsonMatrixBuilder removeParamAt(int index) {
+        if (params != null) {
+            params.remove(index);
         }
         return this;
     }
 
     @Override
-    public TsonMatrixBuilder addArgs(TsonElement[] element) {
+    public TsonMatrixBuilder addParams(TsonElement[] element) {
         if (element != null) {
             for (TsonElement tsonElement : element) {
-                addArg(tsonElement);
+                addParam(tsonElement);
             }
         }
         return this;
     }
 
     @Override
-    public TsonMatrixBuilder addArgs(TsonElementBase[] element) {
+    public TsonMatrixBuilder addParams(TsonElementBase[] element) {
         if (element != null) {
             for (TsonElementBase tsonElement : element) {
-                addArg(tsonElement);
+                addParam(tsonElement);
             }
         }
         return this;
     }
 
     @Override
-    public TsonMatrixBuilder addArgs(Iterable<? extends TsonElementBase> element) {
+    public TsonMatrixBuilder addParams(Iterable<? extends TsonElementBase> element) {
         if (element != null) {
             for (TsonElementBase tsonElement : element) {
-                addArg(tsonElement);
+                addParam(tsonElement);
             }
         }
         return this;

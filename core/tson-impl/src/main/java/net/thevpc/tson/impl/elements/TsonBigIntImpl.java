@@ -11,7 +11,7 @@ public class TsonBigIntImpl extends AbstractNumberTsonElement implements TsonBig
     private BigInteger value;
 
     public TsonBigIntImpl(BigInteger value,TsonNumberLayout layout,String unit) {
-        super(TsonElementType.BIG_INT,layout,unit);
+        super(TsonElementType.BIG_INTEGER,layout,unit);
         this.value = value;
     }
 
@@ -159,9 +159,9 @@ public class TsonBigIntImpl extends AbstractNumberTsonElement implements TsonBig
             switch (o.type()) {
                 case BYTE:
                 case SHORT:
-                case INT:
+                case INTEGER:
                 case LONG:
-                case BIG_INT:{
+                case BIG_INTEGER:{
                     int i= value().compareTo(o.bigIntegerValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }

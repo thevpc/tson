@@ -9,7 +9,7 @@ public class TsonIntImpl extends AbstractNumberTsonElement implements TsonInt {
     private int value;
 
     public TsonIntImpl(int value,TsonNumberLayout layout,String unit) {
-        super(TsonElementType.INT,layout,unit);
+        super(TsonElementType.INTEGER,layout,unit);
         this.value = value;
     }
 
@@ -144,7 +144,7 @@ public class TsonIntImpl extends AbstractNumberTsonElement implements TsonInt {
             switch (o.type()) {
                 case BYTE:
                 case SHORT:
-                case INT: {
+                case INTEGER: {
                     int i= Integer.compare(value(), o.intValue());
                     return i == 0 ? type().compareTo(o.type()):i;
                 }

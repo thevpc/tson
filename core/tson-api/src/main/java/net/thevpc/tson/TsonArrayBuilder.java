@@ -50,35 +50,35 @@ public interface TsonArrayBuilder extends Iterable<TsonElement>, TsonElementBuil
 
     TsonArrayBuilder removeAnnotationAt(int index);
 
-    TsonArrayBuilder removeAllAnnotations();
+    TsonArrayBuilder clearAnnotations();
 
     TsonArrayBuilder ensureCapacity(int length);
 
-    boolean isWithArgs();
+    boolean isParametrized();
 
-    TsonArrayBuilder setWithArgs(boolean hasArgs);
+    TsonArrayBuilder setParametrized(boolean parametrized);
 
-    List<TsonElement> args();
+    List<TsonElement> params();
 
-    int argsCount();
+    int paramsCount();
 
-    TsonArrayBuilder clearArgs();
+    TsonArrayBuilder clearParams();
 
     String name();
 
     TsonArrayBuilder name(String name);
 
-    TsonArrayBuilder addArg(TsonElementBase element);
+    TsonArrayBuilder addParam(TsonElementBase element);
 
-    TsonArrayBuilder removeArg(TsonElementBase element);
+    TsonArrayBuilder removeParam(TsonElementBase element);
 
-    TsonArrayBuilder addArg(TsonElementBase element, int index);
+    TsonArrayBuilder addParam(TsonElementBase element, int index);
 
-    TsonArrayBuilder removeArgAt(int index);
+    TsonArrayBuilder removeParamAt(int index);
 
-    TsonArrayBuilder addArgs(TsonElement[] element);
+    TsonArrayBuilder addParams(TsonElement[] element);
 
-    TsonArrayBuilder addArgs(TsonElementBase[] element);
+    TsonArrayBuilder addParams(TsonElementBase[] element);
 
-    TsonArrayBuilder addArgs(Iterable<? extends TsonElementBase> element);
+    TsonArrayBuilder addParams(Iterable<? extends TsonElementBase> element);
 }

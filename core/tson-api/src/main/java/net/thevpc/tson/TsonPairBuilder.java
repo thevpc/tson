@@ -35,6 +35,6 @@ public interface TsonPairBuilder extends TsonElementBuilder{
 
     TsonPairBuilder removeAnnotationAt(int index);
 
-    TsonPairBuilder removeAllAnnotations();
+    TsonPairBuilder clearAnnotations();
     TsonPair build();
 }

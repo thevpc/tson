@@ -310,7 +310,7 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     }
 
     @Override
-    public TsonContainer toContainer() {
+    public TsonListContainer toContainer() {
         throw new ClassCastException("Cannot cast Null to Container type");
     }
 

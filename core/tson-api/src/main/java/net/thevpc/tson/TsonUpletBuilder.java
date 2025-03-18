@@ -60,7 +60,7 @@ public interface TsonUpletBuilder extends Iterable<TsonElement>, TsonElementBuil
 
     TsonUpletBuilder removeAnnotationAt(int index);
 
-    TsonUpletBuilder removeAllAnnotations();
+    TsonUpletBuilder clearAnnotations();
 
     TsonUpletBuilder ensureCapacity(int length);
 

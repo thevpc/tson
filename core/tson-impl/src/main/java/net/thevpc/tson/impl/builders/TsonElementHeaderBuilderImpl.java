@@ -17,7 +17,7 @@
 //        this.then = then;
 //    }
 //
-//    public boolean isWithArgs() {
+//    public boolean isParametrized() {
 //        return args != null;
 //    }
 //

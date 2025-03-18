@@ -13,11 +13,17 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
     private String name;
     private TsonElementList args;
 
-    public TsonObjectImpl(String name, TsonElementList args, UnmodifiableArrayList<TsonElement> elements) {
-        super(TsonElementType.OBJECT);
+    public TsonObjectImpl(String name, TsonElementList params, UnmodifiableArrayList<TsonElement> elements) {
+        super(
+                name == null && params == null ? TsonElementType.OBJECT
+                        : name == null && params != null ? TsonElementType.PARAMETRIZED_OBJECT
+                        : name != null && params == null ? TsonElementType.NAMED_OBJECT
+                        : TsonElementType.NAMED_PARAMETRIZED_OBJECT
+
+        );
         this.elements = new TsonElementListImpl(elements.stream().map(x -> x).collect(Collectors.toList()));
         this.name = name;
-        this.args = args;
+        this.args = params;
     }
 
     @Override
@@ -26,21 +32,21 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
     }
 
     @Override
-    public TsonElementList args() {
+    public TsonElementList params() {
         return args;
     }
 
-    public boolean isWithArgs() {
+    public boolean isParametrized() {
         return args != null;
     }
 
     @Override
-    public int argsCount() {
+    public int paramsCount() {
         return args == null ? 0 : args.size();
     }
 
     @Override
-    public TsonContainer toContainer() {
+    public TsonListContainer toContainer() {
         return this;
     }
 
@@ -166,7 +172,7 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
         if (i != 0) {
             return i;
         }
-        i = TsonUtils.compareElementsArray(this.args(), no.args());
+        i = TsonUtils.compareElementsArray(this.params(), no.params());
         if (i != 0) {
             return i;
         }
@@ -182,7 +188,7 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
         }
         if (args != null) {
             visitor.visitParamsStart();
-            for (TsonElement param : this.args()) {
+            for (TsonElement param : this.params()) {
                 visitor.visitParamElementStart();
                 param.visit(visitor);
                 visitor.visitParamElementEnd();

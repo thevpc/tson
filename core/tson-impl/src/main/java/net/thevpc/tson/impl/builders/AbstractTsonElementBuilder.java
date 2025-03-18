@@ -99,7 +99,7 @@ public abstract class AbstractTsonElementBuilder<T extends TsonElementBuilder> i
     }
 
     @Override
-    public T removeAllAnnotations() {
+    public T clearAnnotations() {
         annotations.clear();
         return (T) this;
     }

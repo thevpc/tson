@@ -61,7 +61,7 @@ public class TsonNumberHelper {
                 this.type = NumberType.SHORT;
                 break;
             }
-            case INT: {
+            case INTEGER: {
                 this.real = te.intValue();
                 this.type = NumberType.INT;
                 break;
@@ -81,7 +81,7 @@ public class TsonNumberHelper {
                 this.type = NumberType.DOUBLE;
                 break;
             }
-            case BIG_INT: {
+            case BIG_INTEGER: {
                 this.real = te.bigIntegerValue();
                 this.type = NumberType.BIG_INTEGER;
                 break;

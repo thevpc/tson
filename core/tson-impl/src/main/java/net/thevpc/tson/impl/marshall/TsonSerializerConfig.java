@@ -114,7 +114,7 @@ public class TsonSerializerConfig {
             return a.build();
         });
         registerObjToElemConverter(Map.class, (object, context) -> {
-            TsonObjectBuilder a = Tson.ofObj();
+            TsonObjectBuilder a = Tson.ofObjectBuilder();
             for (Map.Entry<?, ?> o : ((Map<?, ?>) object).entrySet()) {
                 a.add(
                         context.elem(o.getKey()),
@@ -133,7 +133,7 @@ public class TsonSerializerConfig {
         });
 
         registerObjToElemConverter(Object.class, (object, context) -> {
-            TsonObjectBuilder a = Tson.ofObj();
+            TsonObjectBuilder a = Tson.ofObjectBuilder();
             ClassPropertiesRegistry.ClassInfo ci = classPropertiesRegistry.getClassInfo(object.getClass());
             for (ClassPropertiesRegistry.TypeProperty o : ci.getProperties(true)) {
                 a.add(
@@ -147,7 +147,7 @@ public class TsonSerializerConfig {
         registerElemToObjConverter(TsonElementType.NULL, null, null, (element, to, context) -> null);
         registerElemToObjConverter(TsonElementType.STRING, null, null, (element, to, context) -> element.stringValue());
         registerElemToObjConverter(TsonElementType.NAME, null, null, (element, to, context) -> element.stringValue());
-        registerElemToObjConverter(TsonElementType.INT, null, null, (element, to, context) -> element.intValue());
+        registerElemToObjConverter(TsonElementType.INTEGER, null, null, (element, to, context) -> element.intValue());
         registerElemToObjConverter(TsonElementType.LONG, null, null, (element, to, context) -> element.longValue());
         registerElemToObjConverter(TsonElementType.SHORT, null, null, (element, to, context) -> element.shortValue());
         registerElemToObjConverter(TsonElementType.BYTE, null, null, (element, to, context) -> element.byteValue());
@@ -172,28 +172,44 @@ public class TsonSerializerConfig {
         registerElemToObjConverter(TsonElementType.REGEX, null, null, (element, to, context) -> element.regexValue());
 
         registerElemToObjConverter(TsonElementType.PAIR, null, null, (element1, to, context1) -> keyValueToMapEntry(element1, to, context1));
-        registerElemToObjConverter(TsonElementType.UPLET, null, null, (element, to, context) -> {
-            return upletElementToObject(element, to, context);
-        });
         registerElemToObjConverter(TsonElementType.ARRAY, null, null, (element, to, context) -> {
-            if (to == null || to.equals(Map.class)) {
-                TsonArray ee = element.toArray();
-                Map<String, Object> namedArray = new LinkedHashMap<>();
-                if(ee.isNamed()) {
-                    namedArray.put("name", ee.name());
-                }
-                if(ee.isWithArgs()) {
-                    namedArray.put("args", arrayElementToObject(ee.args(), to, context));
-                }
-                namedArray.put("values", arrayElementToObject(ee.body(), to, context));
-                return namedArray;
-            }
-            TsonArray ee = element.toArray();
-            return arrayElementToObject(ee.body(), to, context);
+            return convertDefaultArray(element, to, context);
+        });
+        registerElemToObjConverter(TsonElementType.NAMED_ARRAY, null, null, (element, to, context) -> {
+            return convertDefaultArray(element, to, context);
+        });
+        registerElemToObjConverter(TsonElementType.NAMED_PARAMETRIZED_ARRAY, null, null, (element, to, context) -> {
+            return convertDefaultArray(element, to, context);
+        });
+        registerElemToObjConverter(TsonElementType.PARAMETRIZED_ARRAY, null, null, (element, to, context) -> {
+            return convertDefaultArray(element, to, context);
         });
         registerElemToObjConverter(TsonElementType.OBJECT, null, null, (element, to, context) -> {
+            return convertDefaultObject(element, to, context);
+        });
+        registerElemToObjConverter(TsonElementType.NAMED_OBJECT, null, null, (element, to, context) -> {
+            return convertDefaultObject(element, to, context);
+        });
+        registerElemToObjConverter(TsonElementType.PARAMETRIZED_OBJECT, null, null, (element, to, context) -> {
+            return convertDefaultObject(element, to, context);
+        });
+        registerElemToObjConverter(TsonElementType.NAMED_PARAMETRIZED_OBJECT, null, null, (element, to, context) -> {
+            return convertDefaultObject(element, to, context);
+        });
+
+        registerElemToObjConverter(TsonElementType.UPLET, null, null, (element, to, context) -> {
             if (to == null || to.equals(Map.class)) {
-                TsonObject ee = element.toObject();
+                TsonUplet ee = element.toUplet();
+                return arrayElementToObject(ee.params().toList(), null, context);
+            }
+            return customDeserializer(to)
+                    .configureLenient()
+                    .setInstanceFactory(context12 -> classPropertiesRegistry.getClassInfo(to).newInstance())
+                    .toObject(element, to, context);
+        });
+        registerElemToObjConverter(TsonElementType.NAMED_UPLET, null, null, (element, to, context) -> {
+            if (to == null || to.equals(Map.class)) {
+                TsonUplet ee = element.toUplet();
                 Map<Object, Object> mmap = new LinkedHashMap<>();
                 Class keyType = null;
                 Class valType = null;
@@ -218,35 +234,52 @@ public class TsonSerializerConfig {
                     .setInstanceFactory(context12 -> classPropertiesRegistry.getClassInfo(to).newInstance())
                     .toObject(element, to, context);
         });
-        registerElemToObjConverter(TsonElementType.UPLET, null, null, (element, to, context) -> {
-            if (to == null || to.equals(Map.class)) {
-                TsonUplet ee = element.toUplet();
-                if(ee.isNamed()) {
-                    Map<String, Object> namedArray = new LinkedHashMap<>();
-                    namedArray.put("name", ee.name());
-                    namedArray.put("params", arrayElementToObject(ee.args().toList(), null, context));
-                    return namedArray;
-                }
-                return arrayElementToObject(ee.args().toList(), null, context);
-            }
-            return customDeserializer(to)
-                    .configureLenient()
-                    .setInstanceFactory(context12 -> classPropertiesRegistry.getClassInfo(to).newInstance())
-                    .toObject(element, to, context);
-        });
 
     }
 
-    private Object upletElementToObject(TsonElement element, Class<?> to, TsonObjectContext context) {
-        if (to == null) {
-            TsonUplet ee = element.toUplet();
-            Map<String, Object> namedArray = new LinkedHashMap<>();
-            namedArray.put("uplet", true);
-            namedArray.put("params", arrayElementToObject(ee.args(), null, context));
-            return namedArray;
-        } else {
-            return arrayElementToObject(element.toUplet().args(), to, context);
+    private Object convertDefaultObject(TsonElement element, Class<Object> to, TsonObjectContext context) {
+        if (to == null || to.equals(Map.class)) {
+            TsonObject ee = element.toObject();
+            Map<Object, Object> mmap = new LinkedHashMap<>();
+            Class keyType = null;
+            Class valType = null;
+            for (TsonElement entry : ee.body()) {
+                if (entry.isPair()) {
+                    TsonPair pair = entry.toPair();
+                    mmap.put(
+                            context.obj(pair.key(), keyType),
+                            context.obj(pair.value(), valType)
+                    );
+                } else {
+                    mmap.put(
+                            context.obj(entry, keyType),
+                            null
+                    );
+                }
+            }
+            return mmap;
         }
+        return customDeserializer(to)
+                .configureLenient()
+                .setInstanceFactory(context12 -> classPropertiesRegistry.getClassInfo(to).newInstance())
+                .toObject(element, to, context);
+    }
+
+    private Object convertDefaultArray(TsonElement element, Class<Object> to, TsonObjectContext context) {
+        if (to == null || to.equals(Map.class)) {
+            TsonArray ee = element.toArray();
+            Map<String, Object> namedArray = new LinkedHashMap<>();
+            if(ee.isNamed()) {
+                namedArray.put("name", ee.name());
+            }
+            if(ee.isParametrized()) {
+                namedArray.put("args", arrayElementToObject(ee.params(), to, context));
+            }
+            namedArray.put("values", arrayElementToObject(ee.body(), to, context));
+            return namedArray;
+        }
+        TsonArray ee = element.toArray();
+        return arrayElementToObject(ee.body(), to, context);
     }
 
     private Object arrayElementToObject(TsonElement element, Class<?> to, TsonObjectContext context) {
@@ -429,8 +462,17 @@ public class TsonSerializerConfig {
     public final <T> void registerElemToObjConverter(TsonElementType type, String name, Class to, TsonElementToObject<T> converter) {
         switch (type) {
             case ARRAY:
+            case NAMED_PARAMETRIZED_ARRAY:
+            case PARAMETRIZED_ARRAY:
+            case NAMED_ARRAY:
+
             case OBJECT:
-            case UPLET: {
+            case NAMED_PARAMETRIZED_OBJECT:
+            case NAMED_OBJECT:
+            case PARAMETRIZED_OBJECT:
+            case UPLET:
+            case NAMED_UPLET:
+            {
                 break;
             }
             default: {
@@ -480,7 +522,11 @@ public class TsonSerializerConfig {
     private TypeElementSignature[] sig(TsonElement e, Class to) {
         final TsonElementType etype = e.type();
         switch (etype) {
-            case ARRAY: {
+            case ARRAY:
+            case NAMED_PARAMETRIZED_ARRAY:
+            case PARAMETRIZED_ARRAY:
+            case NAMED_ARRAY:
+            {
                 TsonArray h = e.toArray();
                 String name = h == null ? null : h.name();
                 LinkedHashSet<TypeElementSignature> all = new LinkedHashSet<>();
@@ -490,7 +536,11 @@ public class TsonSerializerConfig {
                 all.add(new TypeElementSignature(etype, null, null));
                 return all.toArray(new TypeElementSignature[0]);
             }
-            case OBJECT: {
+            case OBJECT:
+            case NAMED_PARAMETRIZED_OBJECT:
+            case NAMED_OBJECT:
+            case PARAMETRIZED_OBJECT:
+            {
                 TsonObject h = e.toObject();
                 String name = h == null ? null : h.name();
                 LinkedHashSet<TypeElementSignature> all = new LinkedHashSet<>();
@@ -500,7 +550,9 @@ public class TsonSerializerConfig {
                 all.add(new TypeElementSignature(etype, null, null));
                 return all.toArray(new TypeElementSignature[0]);
             }
-            case UPLET: {
+            case UPLET:
+            case NAMED_UPLET:
+            {
                 TsonUplet h = e.toUplet();
                 if (h.isNamed()) {
                     String name = h == null ? null : h.name();

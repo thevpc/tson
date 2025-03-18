@@ -44,7 +44,7 @@ public interface TsonOpBuilder extends TsonElementBuilder {
 
     TsonOpBuilder removeAnnotationAt(int index);
 
-    TsonOpBuilder removeAllAnnotations();
+    TsonOpBuilder clearAnnotations();
 
     TsonOp build();
 }

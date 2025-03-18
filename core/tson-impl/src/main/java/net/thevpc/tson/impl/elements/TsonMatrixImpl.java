@@ -10,12 +10,17 @@ import java.util.*;
 public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements TsonMatrix {
     private final UnmodifiableArrayList<TsonArray> rows;
     private final String name;
-    private TsonElementList args;
+    private TsonElementList params;
 
-    public TsonMatrixImpl(String name, TsonElementList args, UnmodifiableArrayList<TsonArray> rows) {
-        super(TsonElementType.MATRIX);
+    public TsonMatrixImpl(String name, TsonElementList params, UnmodifiableArrayList<TsonArray> rows) {
+        super(
+                name == null && params == null ? TsonElementType.MATRIX
+                        : name == null && params != null ? TsonElementType.PARAMETRIZED_MATRIX
+                        : name != null && params == null ? TsonElementType.NAMED_MATRIX
+                        : TsonElementType.NAMED_PARAMETRIZED_MATRIX
+        );
         this.name = name;
-        this.args = args;
+        this.params = params;
         this.rows = rows;
     }
 
@@ -40,40 +45,35 @@ public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements T
 
     @Override
     public List<TsonArray> rows() {
-        return getRows();
+        return this.rows();
     }
 
     @Override
-    public TsonElement get(int col, int row) {
+    public TsonElement cell(int col, int row) {
         TsonArray a = rows.get(row);
         return a.get(col);
     }
 
     @Override
-    public TsonArray getRow(int row) {
+    public TsonArray row(int row) {
         return rows.get(row);
     }
 
     @Override
-    public List<TsonArray> getRows() {
-        return rows;
-    }
-
-    @Override
-    public TsonArray getColumn(int column) {
+    public TsonArray column(int column) {
         List<TsonElement> c = new ArrayList<>(rowSize());
         for (int row = 0; row < rowSize(); row++) {
-            c.add(TsonMatrixImpl.this.get(column, row));
+            c.add(TsonMatrixImpl.this.cell(column, row));
         }
         return TsonUtils.toArray(c);
     }
 
     @Override
-    public List<TsonArray> getColumns() {
+    public List<TsonArray> columns() {
         return new AbstractList<TsonArray>() {
             @Override
             public TsonArray get(int column) {
-                return getColumn(column);
+                return column(column);
             }
 
             @Override
@@ -85,7 +85,7 @@ public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements T
 
     @Override
     public Iterator<TsonArray> iterator() {
-        return getRows().iterator();
+        return this.rows().iterator();
     }
 
     @Override
@@ -96,13 +96,13 @@ public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements T
         TsonMatrixImpl that = (TsonMatrixImpl) o;
         return Objects.equals(rows, that.rows) &&
                 Objects.equals(name, that.name()) &&
-                Objects.equals(args, that.args())
+                Objects.equals(params, that.params())
                 ;
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(super.hashCode(), name, args, rows);
+        int result = Objects.hash(super.hashCode(), name, params, rows);
         result = 31 * result + Objects.hashCode(rows);
         return result;
     }
@@ -114,8 +114,8 @@ public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements T
 
     @Override
     public boolean visit(TsonDocumentVisitor visitor) {
-        if (args != null) {
-            for (TsonElement element : args) {
+        if (params != null) {
+            for (TsonElement element : params) {
                 if (!visitor.visit(element)) {
                     return false;
                 }
@@ -136,11 +136,11 @@ public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements T
         if (i != 0) {
             return i;
         }
-        i = TsonUtils.compareElementsArray(this.args(), na.args());
+        i = TsonUtils.compareElementsArray(this.params(), na.params());
         if (i != 0) {
             return i;
         }
-        return TsonUtils.compareElementsArray((List) getRows(), (List) na.getRows());
+        return TsonUtils.compareElementsArray((List) this.rows(), (List) na.rows());
     }
 
     @Override
@@ -149,9 +149,9 @@ public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements T
         if (name != null) {
             visitor.visitNamedStart(this.name());
         }
-        if (args != null) {
+        if (params != null) {
             visitor.visitParamsStart();
-            for (TsonElement param : this.args()) {
+            for (TsonElement param : this.params()) {
                 visitor.visitParamElementStart();
                 param.visit(visitor);
                 visitor.visitParamElementEnd();
@@ -159,7 +159,7 @@ public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements T
             visitor.visitParamsEnd();
         }
         visitor.visitNamedArrayStart();
-        for (TsonArray element : getRows()) {
+        for (TsonArray element : this.rows()) {
             visitor.visitArrayElementStart();
             element.visit(visitor);
             visitor.visitArrayElementEnd();
@@ -173,12 +173,22 @@ public class TsonMatrixImpl extends AbstractNonPrimitiveTsonElement implements T
     }
 
     @Override
-    public boolean isWithArgs() {
-        return args != null;
+    public boolean isParametrized() {
+        return params != null;
     }
 
     @Override
-    public TsonElementList args() {
-        return args;
+    public TsonElementList params() {
+        return params;
+    }
+
+    @Override
+    public boolean isNamed() {
+        return name != null;
+    }
+
+    @Override
+    public int paramsCount() {
+        return params == null ? 0 : params.size();
     }
 }

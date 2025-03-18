@@ -116,22 +116,32 @@ public class TsonAnnotationBuilderImpl implements TsonAnnotationBuilder {
     public TsonAnnotationBuilder merge(TsonElementBase element0) {
         TsonElement element = Tson.of(element0);
         switch (element.type()) {
-            case ARRAY: {
+            case ARRAY:
+            case NAMED_PARAMETRIZED_ARRAY:
+            case PARAMETRIZED_ARRAY:
+            case NAMED_ARRAY:
+            {
                 TsonArray h = element.toArray();
                 if (h != null) {
-                    addAll(h.args());
+                    addAll(h.params());
                 }
                 return this;
             }
-            case OBJECT: {
+            case OBJECT:
+            case NAMED_PARAMETRIZED_OBJECT:
+            case NAMED_OBJECT:
+            case PARAMETRIZED_OBJECT:
+            {
                 TsonObject h = element.toObject();
                 if (h != null) {
-                    addAll(h.args());
+                    addAll(h.params());
                 }
                 return this;
             }
-            case UPLET: {
-                addAll(element.toUplet().args());
+            case UPLET:
+            case NAMED_UPLET:
+            {
+                addAll(element.toUplet().params());
                 return this;
             }
         }

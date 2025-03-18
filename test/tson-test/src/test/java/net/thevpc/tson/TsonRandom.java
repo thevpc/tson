@@ -11,6 +11,7 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 public class TsonRandom {
     public static TsonElement randomElement(Predicate<TsonElementType> t) {
@@ -61,7 +62,7 @@ public class TsonRandom {
         switch (type) {
             case LONG:
                 return Tson.ofLong(Double.doubleToLongBits(Math.random()));
-            case INT:
+            case INTEGER:
                 return Tson.ofInt((int) Double.doubleToLongBits(Math.random()));
             case SHORT:
                 return Tson.ofShort((short) Double.doubleToLongBits(Math.random()));
@@ -103,45 +104,94 @@ public class TsonRandom {
                         randomElement(t -> t != TsonElementType.PAIR)
                 );
             }
+            case NAMED_PARAMETRIZED_ARRAY: {
+                TsonArrayBuilder f = Tson.ofArrayBuilder();
+                f.name(randomId());
+                int max = randomInt(3);
+                for (int i = 0; i < max; i++) {
+                    f.addParam(randomElement());
+                }
+                max = randomInt(3);
+                for (int i = 0; i < max; i++) {
+                    f.add(randomElement());
+                }
+                return f.build();
+            }
+            case NAMED_ARRAY: {
+                TsonArrayBuilder f = Tson.ofArrayBuilder();
+                f.name(randomId());
+                int max = randomInt(3);
+                for (int i = 0; i < max; i++) {
+                    f.add(randomElement());
+                }
+                return f.build();
+            }
+            case PARAMETRIZED_ARRAY: {
+                TsonArrayBuilder f = Tson.ofArrayBuilder();
+                int max = randomInt(3);
+                for (int i = 0; i < max; i++) {
+                    f.addParam(randomElement());
+                }
+                max = randomInt(3);
+                for (int i = 0; i < max; i++) {
+                    f.add(randomElement());
+                }
+                return f.build();
+            }
             case ARRAY: {
                 TsonArrayBuilder f = Tson.ofArrayBuilder();
-                if (randomBoolean()) {
-                    f.name(randomId());
-                }
-                if (randomBoolean()) {
-                    int max = randomInt(3);
-                    for (int i = 0; i < max; i++) {
-                        f.addArg(randomElement());
-                    }
-                }
                 int max = randomInt(3);
                 for (int i = 0; i < max; i++) {
                     f.add(randomElement());
                 }
                 return f.build();
             }
-            case OBJECT: {
-                TsonObjectBuilder f = Tson.ofObj();
-                if (randomBoolean()) {
-                    f.name(randomId());
-                }
-                if (randomBoolean()) {
-                    int max = randomInt(3);
-                    for (int i = 0; i < max; i++) {
-                        f.addArg(randomElement());
-                    }
-                }
+            case OBJECT:
+            {
+                TsonObjectBuilder f = Tson.ofObjectBuilder();
                 int max = randomInt(3);
                 for (int i = 0; i < max; i++) {
                     f.add(randomElement());
                 }
                 return f.build();
             }
+            case NAMED_PARAMETRIZED_OBJECT: {
+                TsonObjectBuilder f = Tson.ofObjectBuilder();
+                f.name(randomId());
+                int max = randomInt(3);
+                for (int i = 0; i < max; i++) {
+                    f.addParam(randomElement());
+                }
+                max = randomInt(3);
+                for (int i = 0; i < max; i++) {
+                    f.add(randomElement());
+                }
+                return f.build();
+            }
+            case PARAMETRIZED_OBJECT: {
+                TsonObjectBuilder f = Tson.ofObjectBuilder();
+                int max = randomInt(3);
+                for (int i = 0; i < max; i++) {
+                    f.addParam(randomElement());
+                }
+                max = randomInt(3);
+                for (int i = 0; i < max; i++) {
+                    f.add(randomElement());
+                }
+                return f.build();
+            }
+            case NAMED_OBJECT: {
+                TsonObjectBuilder f = Tson.ofObjectBuilder();
+                f.name(randomId());
+                int max = randomInt(3);
+                for (int i = 0; i < max; i++) {
+                    f.add(randomElement());
+                }
+                return f.build();
+            }
+
             case UPLET: {
                 TsonUpletBuilder f = Tson.ofUpletBuilder();
-                if(randomBoolean()) {
-                    f.name(randomId());
-                }
                 int max = randomInt(3);
                 max = randomInt(3);
                 for (int i = 0; i < max; i++) {
@@ -149,7 +199,17 @@ public class TsonRandom {
                 }
                 return f.build();
             }
-            case BIG_INT: {
+            case NAMED_UPLET: {
+                TsonUpletBuilder f = Tson.ofUpletBuilder();
+                f.name(randomId());
+                int max = randomInt(3);
+                max = randomInt(3);
+                for (int i = 0; i < max; i++) {
+                    f.add(randomElement());
+                }
+                return f.build();
+            }
+            case BIG_INTEGER: {
                 return Tson.ofBigInt(randomBigInteger());
             }
             case BIG_DECIMAL: {
@@ -172,6 +232,63 @@ public class TsonRandom {
             }
             case ALIAS: {
                 return Tson.ofAlias("customAlias");
+            }
+            case NAMED_PARAMETRIZED_MATRIX: {
+                TsonMatrixBuilder f = Tson.ofMatrixBuilder();
+                f.name(randomId());
+                int max = randomInt(3);
+                for (int i = 0; i < max; i++) {
+                    f.addParam(randomElement());
+                }
+                int maxRows = randomInt(3) + 1;
+                int maxColumns = randomInt(3) + 1;
+                for (int i = 0; i < maxRows; i++) {
+                    f.addRow(Tson.ofArray(
+                            IntStream.range(0, maxColumns).mapToObj(x -> randomElement()).toArray(TsonElement[]::new)
+                    ));
+                }
+                return f.build();
+            }
+            case PARAMETRIZED_MATRIX: {
+                TsonMatrixBuilder f = Tson.ofMatrixBuilder();
+                int max = randomInt(3);
+                for (int i = 0; i < max; i++) {
+                    f.addParam(randomElement());
+                }
+                int maxRows = randomInt(3) + 1;
+                int maxColumns = randomInt(3) + 1;
+                for (int i = 0; i < maxRows; i++) {
+                    f.addRow(Tson.ofArray(
+                            IntStream.range(0, maxColumns).mapToObj(x -> randomElement()).toArray(TsonElement[]::new)
+                    ));
+                }
+                return f.build();
+            }
+            case NAMED_MATRIX: {
+                TsonMatrixBuilder f = Tson.ofMatrixBuilder();
+                f.name(randomId());
+                int maxRows = randomInt(3) + 1;
+                int maxColumns = randomInt(3) + 1;
+                for (int i = 0; i < maxRows; i++) {
+                    f.addRow(Tson.ofArray(
+                            IntStream.range(0, maxColumns).mapToObj(x -> randomElement()).toArray(TsonElement[]::new)
+                    ));
+                }
+                return f.build();
+            }
+            case MATRIX: {
+                TsonMatrixBuilder f = Tson.ofMatrixBuilder();
+                int maxRows = randomInt(3) + 1;
+                int maxColumns = randomInt(3) + 1;
+                for (int i = 0; i < maxRows; i++) {
+                    f.addRow(Tson.ofArray(
+                            IntStream.range(0, maxColumns).mapToObj(x -> randomElement()).toArray(TsonElement[]::new)
+                    ));
+                }
+                return f.build();
+            }
+            case CUSTOM:{
+                return Tson.ofCustom(new Object());
             }
         }
         throw new IllegalArgumentException("Unsupported Random for " + type);

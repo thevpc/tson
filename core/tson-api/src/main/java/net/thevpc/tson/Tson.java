@@ -730,7 +730,7 @@ public class Tson {
     }
 
     public static TsonArray ofArray(String name, TsonElementBase[] params, TsonElementBase... elems) {
-        return ofArrayBuilder().name(name).addArgs(params).addAll(elems).build();
+        return ofArrayBuilder().name(name).addParams(params).addAll(elems).build();
     }
 
     public static TsonArray ofArray(String name, TsonElementBase... elems) {
@@ -747,7 +747,7 @@ public class Tson {
 
 
     public static TsonMatrixBuilder ofMatrixBuilder(String name, TsonElementBase[] params) {
-        return ofMatrixBuilder().name(name).addArgs(params);
+        return ofMatrixBuilder().name(name).addParams(params);
     }
 
 
@@ -755,28 +755,28 @@ public class Tson {
         return factory.ofPairBuilder();
     }
 
-    public static TsonObjectBuilder ofObj() {
+    public static TsonObjectBuilder ofObjectBuilder() {
         return factory.ofObjBuilder();
     }
 
-    public static TsonObjectBuilder ofObj(TsonElementBase... elems) {
-        return ofObj().addAll(elems);
+    public static TsonObjectBuilder ofObjectBuilder(TsonElementBase... elems) {
+        return ofObjectBuilder().addAll(elems);
     }
 
-    public static TsonObjectBuilder ofObj(String name) {
-        TsonObjectBuilder e = ofObj();
+    public static TsonObjectBuilder ofObjectBuilder(String name) {
+        TsonObjectBuilder e = ofObjectBuilder();
         e.name(name);
         return e;
     }
 
-    public static TsonObjectBuilder ofObj(String name, TsonElementBase[] params, TsonElementBase... elems) {
-        TsonObjectBuilder o = ofObj();
-        o.name(name).addArgs(params);
+    public static TsonObjectBuilder ofObjectBuilder(String name, TsonElementBase[] params, TsonElementBase... elems) {
+        TsonObjectBuilder o = ofObjectBuilder();
+        o.name(name).addParams(params);
         return o.addAll(elems);
     }
 
-    public static TsonObjectBuilder ofObj(String name, TsonElementBase... elems) {
-        TsonObjectBuilder o = ofObj();
+    public static TsonObjectBuilder ofObjectBuilder(String name, TsonElementBase... elems) {
+        TsonObjectBuilder o = ofObjectBuilder();
         o.name(name);
         return o.addAll(elems);
     }
@@ -878,5 +878,9 @@ public class Tson {
 
     public static CharStreamCodeSupport charStreamCodeSupportOf(String language) {
         return factory.charStreamCodeSupportOf(language);
+    }
+
+    public static TsonElement ofCustom(Object o) {
+        return factory.ofCustom(o);
     }
 }

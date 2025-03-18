@@ -38,5 +38,5 @@ public interface TsonCustomBuilder extends TsonElementBuilder {
 
     TsonCustomBuilder removeAnnotationAt(int index);
 
-    TsonCustomBuilder removeAllAnnotations();
+    TsonCustomBuilder clearAnnotations();
 }

@@ -57,7 +57,7 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     TsonArray toArray();
 
-    TsonContainer toContainer();
+    TsonListContainer toContainer();
 
     TsonBinaryStream toBinaryStream();
 
@@ -144,7 +144,7 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     boolean isNull();
 
-    boolean isContainer();
+    boolean isListContainer();
 
     boolean isNumber();
 

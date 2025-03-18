@@ -13,16 +13,19 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
 
     private TsonElementBaseListBuilder elementsSupport = new TsonElementBaseListBuilderImpl();
     private String name;
-    private List<TsonElement> args = new ArrayList<>();
+    private List<TsonElement> params;
 
     @Override
     public TsonElementType type() {
-        return TsonElementType.OBJECT;
+        return name == null && params == null ? TsonElementType.OBJECT
+                : name == null && params != null ? TsonElementType.PARAMETRIZED_OBJECT
+                : name != null && params == null ? TsonElementType.NAMED_OBJECT
+                : TsonElementType.NAMED_PARAMETRIZED_OBJECT;
     }
 
     @Override
     public TsonObjectBuilder clear() {
-        setWithArgs(false);
+        setParametrized(false);
         elementsSupport.clear();
         return this;
     }
@@ -208,7 +211,7 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
     @Override
     public TsonObject build() {
         TsonObjectImpl built = new TsonObjectImpl(name,
-                args==null?null: new TsonElementListImpl((List) args),
+                params == null ? null : new TsonElementListImpl((List) params),
                 TsonUtils.unmodifiableElements(elementsSupport.toList()));
         return (TsonObject) TsonUtils.decorate(
                 built,
@@ -237,35 +240,37 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
     /// args
 
     @Override
-    public boolean isWithArgs() {
-        return args != null;
+    public boolean iParametrized() {
+        return params != null;
     }
 
     @Override
-    public TsonObjectBuilder setWithArgs(boolean hasArgs) {
-        if (hasArgs) {
-            if (args == null) {
-                args = new ArrayList<>();
+    public TsonObjectBuilder setParametrized(boolean parametrized) {
+        if (parametrized) {
+            if (params == null) {
+                params = new ArrayList<>();
             }
         } else {
-            args = null;
+            params = null;
         }
         return this;
     }
 
     @Override
-    public List<TsonElement> args() {
-        return args;
+    public List<TsonElement> params() {
+        return params;
     }
 
     @Override
-    public int argsCount() {
-        return args == null ? 0 : args.size();
+    public int paramsCount() {
+        return params == null ? 0 : params.size();
     }
 
     @Override
-    public TsonObjectBuilder clearArgs() {
-        args.clear();
+    public TsonObjectBuilder clearParams() {
+        if (params != null) {
+            params.clear();
+        }
         return this;
     }
 
@@ -277,73 +282,73 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
 
     @Override
     public TsonObjectBuilder name(String name) {
-        this.name=name;
+        this.name = name;
         return this;
     }
 
     @Override
-    public TsonObjectBuilder addArg(TsonElementBase element) {
+    public TsonObjectBuilder addParam(TsonElementBase element) {
         if (element != null) {
-            if (args == null) {
-                args = new ArrayList<>();
+            if (params == null) {
+                params = new ArrayList<>();
             }
-            args.add(Tson.of(element).build());
+            params.add(Tson.of(element).build());
         }
         return this;
     }
 
     @Override
-    public TsonObjectBuilder removeArg(TsonElementBase element) {
-        if (element != null && args != null) {
-            args.remove(Tson.of(element).build());
+    public TsonObjectBuilder removeParam(TsonElementBase element) {
+        if (element != null && params != null) {
+            params.remove(Tson.of(element).build());
         }
         return this;
     }
 
     @Override
-    public TsonObjectBuilder addArg(TsonElementBase element, int index) {
+    public TsonObjectBuilder addParam(TsonElementBase element, int index) {
         if (element != null) {
-            if (args == null) {
-                args = new ArrayList<>();
+            if (params == null) {
+                params = new ArrayList<>();
             }
-            args.add(index, Tson.of(element).build());
+            params.add(index, Tson.of(element).build());
         }
         return this;
     }
 
     @Override
-    public TsonObjectBuilder removeArgAt(int index) {
-        if (args != null) {
-            args.remove(index);
+    public TsonObjectBuilder removeParamAt(int index) {
+        if (params != null) {
+            params.remove(index);
         }
         return this;
     }
 
     @Override
-    public TsonObjectBuilder addArgs(TsonElement[] element) {
+    public TsonObjectBuilder addParams(TsonElement[] element) {
         if (element != null) {
             for (TsonElement tsonElement : element) {
-                addArg(tsonElement);
+                addParam(tsonElement);
             }
         }
         return this;
     }
 
     @Override
-    public TsonObjectBuilder addArgs(TsonElementBase[] element) {
+    public TsonObjectBuilder addParams(TsonElementBase[] element) {
         if (element != null) {
             for (TsonElementBase tsonElement : element) {
-                addArg(tsonElement);
+                addParam(tsonElement);
             }
         }
         return this;
     }
 
     @Override
-    public TsonObjectBuilder addArgs(Iterable<? extends TsonElementBase> element) {
+    public TsonObjectBuilder addParams(Iterable<? extends TsonElementBase> element) {
         if (element != null) {
             for (TsonElementBase tsonElement : element) {
-                addArg(tsonElement);
+                addParam(tsonElement);
             }
         }
         return this;
@@ -357,29 +362,39 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
         TsonElement e = Tson.of(element);
         addAnnotations(e.annotations());
         switch (e.type()) {
-            case UPLET: {
+            case UPLET:
+            case NAMED_UPLET:
+            {
                 TsonUplet uplet = e.toUplet();
                 if (uplet.isNamed()) {
                     name(uplet.name());
                 }
-                addArgs(uplet);
+                addParams(uplet);
                 break;
             }
             case NAME: {
                 name(e.toName().value());
                 break;
             }
-            case OBJECT: {
+            case OBJECT:
+            case NAMED_PARAMETRIZED_OBJECT:
+            case NAMED_OBJECT:
+            case PARAMETRIZED_OBJECT:
+            {
                 TsonObject h = e.toObject();
                 name(h.name());
-                addArgs(h.args());
+                addParams(h.params());
                 addAll(e.toObject().body());
                 break;
             }
-            case ARRAY: {
+            case ARRAY:
+            case NAMED_PARAMETRIZED_ARRAY:
+            case PARAMETRIZED_ARRAY:
+            case NAMED_ARRAY:
+            {
                 TsonArray h = e.toArray();
                 name(h.name());
-                addArgs(h.args());
+                addParams(h.params());
                 addAll(e.toArray().body());
                 break;
             }

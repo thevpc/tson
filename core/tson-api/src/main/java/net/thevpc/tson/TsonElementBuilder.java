@@ -24,7 +24,7 @@ public interface TsonElementBuilder extends TsonElementBase{
 
     TsonElementBuilder removeAnnotationAt(int index);
 
-    TsonElementBuilder removeAllAnnotations();
+    TsonElementBuilder clearAnnotations();
 
     TsonElement build();
 

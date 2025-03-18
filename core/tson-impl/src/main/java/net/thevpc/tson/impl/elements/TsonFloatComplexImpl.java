@@ -189,9 +189,9 @@ public class TsonFloatComplexImpl extends AbstractNumberTsonElement implements T
             switch (o.type()) {
                 case BYTE:
                 case SHORT:
-                case INT:
+                case INTEGER:
                 case LONG:
-                case BIG_INT:
+                case BIG_INTEGER:
                 case FLOAT:
                 case DOUBLE: {
                     int i = this.toDoubleComplex().compareTo(o.toDoubleComplex());

@@ -1,8 +1,9 @@
 package net.thevpc.tson;
 
-public interface TsonObject extends TsonContainer, Iterable<TsonElement> {
+public interface TsonObject extends TsonListContainer, Iterable<TsonElement> {
     boolean isNamed();
-    boolean isWithArgs();
+
+    boolean isParametrized();
 
     TsonElement get(String name);
 

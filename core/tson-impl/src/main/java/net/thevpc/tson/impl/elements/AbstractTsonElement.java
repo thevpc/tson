@@ -56,7 +56,7 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
 
     @Override
     public TsonInt toInt() {
-        return throwPrimitive(TsonElementType.INT);
+        return throwPrimitive(TsonElementType.INTEGER);
     }
 
     @Override
@@ -181,7 +181,7 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
 
     @Override
     public Integer intObject() {
-        return throwPrimitive(TsonElementType.INT);
+        return throwPrimitive(TsonElementType.INTEGER);
     }
 
     @Override
@@ -226,7 +226,7 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
 
     @Override
     public int intValue() {
-        return throwPrimitive(TsonElementType.INT);
+        return throwPrimitive(TsonElementType.INTEGER);
     }
 
     @Override
@@ -307,7 +307,7 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
 
     @Override
     public TsonBigInt toBigInt() {
-        return throwPrimitive(TsonElementType.BIG_INT);
+        return throwPrimitive(TsonElementType.BIG_INTEGER);
     }
 
     @Override
@@ -332,7 +332,7 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
 
     @Override
     public BigInteger bigIntegerValue() {
-        return throwPrimitive(TsonElementType.BIG_INT);
+        return throwPrimitive(TsonElementType.BIG_INTEGER);
     }
 
     @Override
