@@ -762,6 +762,9 @@ public class Tson {
     public static TsonObjectBuilder ofObjectBuilder(TsonElementBase... elems) {
         return ofObjectBuilder().addAll(elems);
     }
+    public static TsonObject ofObject(TsonElementBase... elems) {
+        return ofObjectBuilder().addAll(elems).build();
+    }
 
     public static TsonObjectBuilder ofObjectBuilder(String name) {
         TsonObjectBuilder e = ofObjectBuilder();

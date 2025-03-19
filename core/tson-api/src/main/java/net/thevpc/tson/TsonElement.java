@@ -57,7 +57,7 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     TsonArray toArray();
 
-    TsonListContainer toContainer();
+    TsonListContainer toListContainer();
 
     TsonBinaryStream toBinaryStream();
 
@@ -168,7 +168,6 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     boolean isNamedUplet();
 
-    boolean isUnNamedUplet();
 
     boolean isUplet();
 

@@ -81,4 +81,8 @@ public interface TsonArrayBuilder extends Iterable<TsonElement>, TsonElementBuil
     TsonArrayBuilder addParams(TsonElementBase[] element);
 
     TsonArrayBuilder addParams(Iterable<? extends TsonElementBase> element);
+
+    List<TsonElement> body();
+
+    TsonArrayBuilder clearBody();
 }

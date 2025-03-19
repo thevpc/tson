@@ -7,6 +7,7 @@ import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.impl.util.UnmodifiableArrayList;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -117,8 +118,7 @@ public class TsonArrayBuilderImpl extends AbstractTsonElementBuilder<TsonArrayBu
         addAnnotations(e.annotations());
         switch (e.type()) {
             case UPLET:
-            case NAMED_UPLET:
-            {
+            case NAMED_UPLET: {
                 TsonUplet uplet = e.toUplet();
                 if (uplet.isNamed()) {
                     name(uplet.name());
@@ -133,8 +133,7 @@ public class TsonArrayBuilderImpl extends AbstractTsonElementBuilder<TsonArrayBu
             case OBJECT:
             case NAMED_PARAMETRIZED_OBJECT:
             case NAMED_OBJECT:
-            case PARAMETRIZED_OBJECT:
-            {
+            case PARAMETRIZED_OBJECT: {
                 TsonObject h = e.toObject();
                 name(h.name());
                 addParams(h.params());
@@ -144,8 +143,7 @@ public class TsonArrayBuilderImpl extends AbstractTsonElementBuilder<TsonArrayBu
             case ARRAY:
             case NAMED_PARAMETRIZED_ARRAY:
             case PARAMETRIZED_ARRAY:
-            case NAMED_ARRAY:
-            {
+            case NAMED_ARRAY: {
                 TsonArray h = e.toArray();
                 name(h.name());
                 addParams(h.params());
@@ -271,6 +269,17 @@ public class TsonArrayBuilderImpl extends AbstractTsonElementBuilder<TsonArrayBu
                 addParam(tsonElement);
             }
         }
+        return this;
+    }
+
+    @Override
+    public List<TsonElement> body() {
+        return elementsSupport.buildElements();
+    }
+
+    @Override
+    public TsonArrayBuilder clearBody() {
+        elementsSupport.reset();
         return this;
     }
 

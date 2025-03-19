@@ -6,6 +6,7 @@ import net.thevpc.tson.impl.elements.TsonObjectImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -43,6 +44,17 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
     @Override
     public TsonObjectBuilder add(TsonElementBase key, TsonElementBase value) {
         elementsSupport.add(key, value);
+        return this;
+    }
+
+    @Override
+    public List<TsonElement> body() {
+        return elementsSupport.toList();
+    }
+
+    @Override
+    public TsonObjectBuilder clearBody() {
+        elementsSupport.clear();
         return this;
     }
 

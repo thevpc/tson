@@ -222,7 +222,7 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
     public void visitNamedObjectEnd() {
         PartialElemNode a = peek();
         repushDecorated(new TsonObjectImpl(a.name,
-                a.hasParams ? TsonUtils.elementsListOrNull(a.params()) : null,
+                a.params==null? null : TsonUtils.elementsListOrNull(a.params),
                 TsonUtils.unmodifiableElements(a.object())), a);
     }
 
@@ -231,8 +231,8 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
         PartialElemNode a = peek();
         repushDecorated(new TsonArrayImpl(
                 a.name,
-                a.hasParams ? TsonUtils.elementsListOrNull(a.params()) : null
-                , TsonUtils.unmodifiableElements(a.array())), a);
+                a.params==null? null : TsonUtils.elementsListOrNull(a.params),
+                TsonUtils.unmodifiableElements(a.array())), a);
     }
 
     @Override

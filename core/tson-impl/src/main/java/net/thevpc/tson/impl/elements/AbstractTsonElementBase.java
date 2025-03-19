@@ -111,22 +111,17 @@ public abstract class AbstractTsonElementBase implements TsonElement {
 
     @Override
     public boolean isNamedObject() {
-        return type() == TsonElementType.OBJECT && toObject().name() != null;
+        return type() == TsonElementType.NAMED_OBJECT;
     }
 
     @Override
     public boolean isNamedUplet() {
-        return type() == TsonElementType.UPLET && toUplet().isNamed();
-    }
-
-    @Override
-    public boolean isUnNamedUplet() {
-        return type() == TsonElementType.UPLET && !toUplet().isNamed();
+        return type() == TsonElementType.NAMED_UPLET;
     }
 
     @Override
     public boolean isNamedArray() {
-        return type() == TsonElementType.ARRAY && toArray().name() != null;
+        return type() == TsonElementType.NAMED_ARRAY;
     }
 
     @Override
@@ -156,7 +151,7 @@ public abstract class AbstractTsonElementBase implements TsonElement {
     }
 
     @Override
-    public TsonListContainer toContainer() {
+    public TsonListContainer toListContainer() {
         if (isListContainer()) {
             return (TsonListContainer) this;
         }
@@ -169,7 +164,7 @@ public abstract class AbstractTsonElementBase implements TsonElement {
             return (TsonArray) this;
         }
         if (isListContainer()) {
-            return Tson.ofArray(toContainer().body().toList().toArray(new TsonElement[0]));
+            return Tson.ofArray(toListContainer().body().toList().toArray(new TsonElement[0]));
         }
         return Tson.ofArray(this);
     }
@@ -180,7 +175,7 @@ public abstract class AbstractTsonElementBase implements TsonElement {
             return (TsonObject) this;
         }
         if (isListContainer()) {
-            return Tson.ofObjectBuilder(toContainer().body().toList().toArray(new TsonElement[0])).build();
+            return Tson.ofObjectBuilder(toListContainer().body().toList().toArray(new TsonElement[0])).build();
         }
         return Tson.ofObjectBuilder(this).build();
     }
@@ -191,7 +186,7 @@ public abstract class AbstractTsonElementBase implements TsonElement {
             return (TsonUplet) this;
         }
         if (isListContainer()) {
-            return Tson.ofUplet(toContainer().body().toList().toArray(new TsonElement[0]));
+            return Tson.ofUplet(toListContainer().body().toList().toArray(new TsonElement[0]));
         }
         return Tson.ofUplet(this);
     }

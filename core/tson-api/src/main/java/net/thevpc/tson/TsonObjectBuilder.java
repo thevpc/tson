@@ -6,6 +6,10 @@ import java.util.List;
 public interface TsonObjectBuilder extends Iterable<TsonElement>, TsonElementBuilder {
     TsonObjectBuilder clear();
 
+    List<TsonElement> body();
+
+    TsonObjectBuilder clearBody();
+
     TsonElementBaseListBuilder content();
 
     boolean iParametrized();
@@ -107,7 +111,7 @@ public interface TsonObjectBuilder extends Iterable<TsonElement>, TsonElementBui
     List<TsonElement> all();
 
 
-    ////////////////////////////////////////////////
+    /// /////////////////////////////////////////////
 
     TsonObjectBuilder comments(TsonComments comments);
 

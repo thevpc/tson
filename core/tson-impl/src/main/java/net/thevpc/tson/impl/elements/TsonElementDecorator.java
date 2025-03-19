@@ -343,8 +343,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
-    public TsonListContainer toContainer() {
-        return base.toContainer();
+    public TsonListContainer toListContainer() {
+        return base.toListContainer();
     }
 
     @Override
@@ -1265,7 +1265,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonListContainer toContainer() {
+        public TsonListContainer toListContainer() {
             return this;
         }
 
@@ -1367,7 +1367,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonListContainer toContainer() {
+        public TsonListContainer toListContainer() {
             return this;
         }
 
@@ -1512,7 +1512,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonListContainer toContainer() {
+        public TsonListContainer toListContainer() {
             return this;
         }
 

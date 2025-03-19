@@ -46,7 +46,7 @@ public class TsonObjectImpl extends AbstractNonPrimitiveTsonElement implements T
     }
 
     @Override
-    public TsonListContainer toContainer() {
+    public TsonListContainer toListContainer() {
         return this;
     }
 
