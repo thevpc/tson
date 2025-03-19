@@ -266,7 +266,13 @@ void annotationParamList() :
 {
 }
 {
+    {
+            visitor.visitAnnotationParamStart();
+    }
     (annotationParam() | commaSeparator())*
+    {
+            visitor.visitAnnotationParamEnd();
+    }
 }
 
 

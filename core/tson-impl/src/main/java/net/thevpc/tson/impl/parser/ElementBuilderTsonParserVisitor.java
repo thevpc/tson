@@ -38,7 +38,7 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
     private static class AnnotationNode {
 
         String id;
-        List<TsonElement> elements = new ArrayList<>();
+        List<TsonElement> elements;
 
         public AnnotationNode(String id) {
             this.id = id;
@@ -222,7 +222,7 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
     public void visitNamedObjectEnd() {
         PartialElemNode a = peek();
         repushDecorated(new TsonObjectImpl(a.name,
-                a.params==null? null : TsonUtils.elementsListOrNull(a.params),
+                a.params == null ? null : TsonUtils.elementsListOrNull(a.params),
                 TsonUtils.unmodifiableElements(a.object())), a);
     }
 
@@ -231,7 +231,7 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
         PartialElemNode a = peek();
         repushDecorated(new TsonArrayImpl(
                 a.name,
-                a.params==null? null : TsonUtils.elementsListOrNull(a.params),
+                a.params == null ? null : TsonUtils.elementsListOrNull(a.params),
                 TsonUtils.unmodifiableElements(a.array())), a);
     }
 
@@ -267,7 +267,13 @@ public final class ElementBuilderTsonParserVisitor implements TsonParserVisitor 
             n.annotations = new ArrayList<>();
             n.decorated = true;
         }
-        n.annotations.add(new TsonAnnotationImpl(a.id, TsonUtils.unmodifiableElements(a.elements)));
+        n.annotations.add(new TsonAnnotationImpl(a.id, a.elements == null ? null : TsonUtils.unmodifiableElements(a.elements)));
+    }
+
+    @Override
+    public void visitAnnotationParamsStart() {
+        AnnotationNode n = peek();
+        n.elements = new ArrayList<>();
     }
 
     @Override

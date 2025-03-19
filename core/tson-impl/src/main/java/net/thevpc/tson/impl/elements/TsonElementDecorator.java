@@ -222,7 +222,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
         for (TsonAnnotation annotation : annotations()) {
             visitor.visitAnnotationStart(annotation.name());
-            for (TsonElement param : annotation.args()) {
+            for (TsonElement param : annotation.params()) {
                 visitor.visitAnnotationParamStart();
                 param.visit(visitor);
                 visitor.visitAnnotationParamEnd();

@@ -64,6 +64,10 @@ public interface TsonParserVisitor {
     }
 
 
+    default void visitAnnotationParamsStart() {
+    }
+    default void visitAnnotationParamsEnd() {
+    }
     default void visitAnnotationParamStart() {
     }
 

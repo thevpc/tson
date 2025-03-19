@@ -62,24 +62,26 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
     }
 
     public void formatAnnotation(TsonAnnotation a, boolean showComments, boolean showAnnotations, Writer sb) {
-        final TsonElementList params = a.args();
+        final TsonElementList params = a.params();
         try {
             sb.append('@');
             if (a.name() != null) {
                 sb.append(a.name());
             }
-            sb.append('(');
-            int i = 0;
-            for (TsonElement p : params) {
-                if (i > 0) {
-                    sb.append(',');
-                    sb.append(config.afterComma);
+            if (params != null) {
+                sb.append('(');
+                int i = 0;
+                for (TsonElement p : params) {
+                    if (i > 0) {
+                        sb.append(',');
+                        sb.append(config.afterComma);
+                    }
+                    //cannot have embedded annotations
+                    formatElement(p, showComments, showAnnotations, sb);
+                    i++;
                 }
-                //cannot have embedded annotations
-                formatElement(p, showComments, showAnnotations, sb);
-                i++;
+                sb.append(')');
             }
-            sb.append(')');
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
@@ -128,7 +130,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                         if (showAnnotations) {
                             if (!config.showFormatNumber) {
                                 TsonAnnotationBuilder ab = a.builder();
-                                List<TsonElement> params = ab.getAll();
+                                List<TsonElement> params = ab.params();
                                 for (int i = params.size() - 1; i >= 0; i--) {
                                     TsonElement o = params.get(i);
                                     if (o.type() == TsonElementType.NAME || o.type() == TsonElementType.STRING && FORMAT_NUMBER_TYPES.contains(o.stringValue())) {
@@ -273,8 +275,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     return;
                 }
                 case UPLET:
-                case NAMED_UPLET:
-                {
+                case NAMED_UPLET: {
                     TsonUplet list = element.toUplet();
                     if (list.isNamed()) {
                         writer.append(list.name());
@@ -285,8 +286,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 case ARRAY:
                 case NAMED_PARAMETRIZED_ARRAY:
                 case PARAMETRIZED_ARRAY:
-                case NAMED_ARRAY:
-                {
+                case NAMED_ARRAY: {
                     TsonArray list = element.toArray();
                     String n = TsonUtils.nullIfBlank(list.name());
                     boolean hasName = false;
@@ -295,7 +295,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                         hasName = n.length() > 0;
                     }
                     TsonElementList params = list.params();
-                    if(params!=null) {
+                    if (params != null) {
                         if (!hasName || params.size() > 0) {
                             listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
                         }
@@ -306,8 +306,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 case MATRIX:
                 case NAMED_MATRIX:
                 case PARAMETRIZED_MATRIX:
-                case NAMED_PARAMETRIZED_MATRIX:
-                {
+                case NAMED_PARAMETRIZED_MATRIX: {
                     TsonMatrix list = element.toMatrix();
                     String n = TsonUtils.nullIfBlank(list.name());
                     boolean hasName = false;
@@ -316,7 +315,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                         hasName = n.length() > 0;
                     }
                     TsonElementList params = list.params();
-                    if(params!=null) {
+                    if (params != null) {
                         if (!hasName || params.size() > 0) {
                             listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
                         }
@@ -327,8 +326,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 case OBJECT:
                 case NAMED_PARAMETRIZED_OBJECT:
                 case NAMED_OBJECT:
-                case PARAMETRIZED_OBJECT:
-                {
+                case PARAMETRIZED_OBJECT: {
                     TsonObject list = element.toObject();
                     String n = TsonUtils.nullIfBlank(list.name());
                     boolean hasName = false;
@@ -337,7 +335,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                         hasName = n.length() > 0;
                     }
                     TsonElementList params = list.params();
-                    if(params!=null){
+                    if (params != null) {
                         if (!hasName || params.size() > 0) {
                             listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
                         }
@@ -509,8 +507,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     }
                     break;
                 }
-                case ARRAY:
-                {
+                case ARRAY: {
                     for (TsonElement tsonElement : a) {
                         if (acceptArrayElement(tsonElement)) {
                             if (i > 0) {
@@ -601,8 +598,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 }
                 break;
             }
-            case ARRAY:
-            {
+            case ARRAY: {
                 for (TsonElement tsonElement : it) {
                     if (acceptArrayElement(tsonElement)) {
                         if (i > 0) {

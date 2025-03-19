@@ -9,6 +9,8 @@ import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.impl.util.UnmodifiableArrayList;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class TsonAnnotationImpl implements TsonAnnotation {
@@ -18,7 +20,17 @@ public class TsonAnnotationImpl implements TsonAnnotation {
 
     public TsonAnnotationImpl(String name, UnmodifiableArrayList<TsonElement> params) {
         this.name = name;
-        this.params = new TsonElementListImpl(new ArrayList<>(params));
+        this.params = params == null ? null : new TsonElementListImpl(new ArrayList<>(params));
+    }
+
+    @Override
+    public boolean isParametrized() {
+        return params != null;
+    }
+
+    @Override
+    public boolean isNamed() {
+        return name != null;
     }
 
     @Override
@@ -32,7 +44,7 @@ public class TsonAnnotationImpl implements TsonAnnotation {
     }
 
     @Override
-    public TsonElementList args() {
+    public TsonElementList params() {
         return params;
     }
 
@@ -42,8 +54,13 @@ public class TsonAnnotationImpl implements TsonAnnotation {
     }
 
     @Override
-    public TsonElement arg(int index) {
+    public TsonElement param(int index) {
         return params.getAt(index);
+    }
+
+    @Override
+    public List<TsonElement> children() {
+        return params==null?Collections.emptyList():params.toList();
     }
 
     @Override
@@ -72,6 +89,6 @@ public class TsonAnnotationImpl implements TsonAnnotation {
         if (i != 0) {
             return i;
         }
-        return TsonUtils.compareElementsArray(params.toArray(), o.args().toArray());
+        return TsonUtils.compareElementsArray(params.toArray(), o.params().toArray());
     }
 }

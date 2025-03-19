@@ -13,7 +13,6 @@ public interface TsonAnnotationBuilder {
 
     TsonAnnotationBuilder name(String name);
 
-    TsonAnnotationBuilder setName(String name);
 
     TsonAnnotationBuilder addAll(TsonElement... element);
 
@@ -21,11 +20,14 @@ public interface TsonAnnotationBuilder {
 
     TsonAnnotationBuilder addAll(Iterable<? extends TsonElementBase> element);
 
+    TsonAnnotationBuilder setParametrized(boolean parametrized);
+
+    boolean isParametrized();
+
     TsonAnnotationBuilder with(TsonElementBase... element);
 
     TsonAnnotationBuilder add(TsonElementBase element);
 
-    TsonAnnotationBuilder param(TsonElementBase element);
 
     TsonAnnotationBuilder remove(TsonElementBase element);
 
@@ -35,7 +37,7 @@ public interface TsonAnnotationBuilder {
 
     List<TsonElement> all();
 
-    List<TsonElement> getAll();
+    List<TsonElement> params();
 
     TsonElement get(int index);
 

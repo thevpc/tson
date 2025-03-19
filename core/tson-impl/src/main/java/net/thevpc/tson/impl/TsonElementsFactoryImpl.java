@@ -1126,7 +1126,7 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
             // will remove it
             TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];
             System.arraycopy(annotations, 1, annotations2, 0, annotations.length - 1);
-            return Tson.ofDocument().header(Tson.ofDocumentHeader().addParams(annotations[0].args()).build())
+            return Tson.ofDocument().header(Tson.ofDocumentHeader().addParams(annotations[0].params()).build())
                     .content(root.builder().setAnnotations(annotations2).build()).build();
         }
         return Tson.ofDocument().header(null).content(root).build();

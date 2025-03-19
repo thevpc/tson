@@ -8,9 +8,19 @@ public interface TsonAnnotation extends Comparable<TsonAnnotation> {
 
     int size();
 
-    TsonElement arg(int index);
+    TsonElement param(int index);
 
-    TsonElementList args();
+    TsonElementList params();
+
+    /**
+     * like params but never null
+     * @return
+     */
+    List<TsonElement> children();
 
     TsonAnnotationBuilder builder();
+
+    boolean isParametrized();
+
+    boolean isNamed();
 }

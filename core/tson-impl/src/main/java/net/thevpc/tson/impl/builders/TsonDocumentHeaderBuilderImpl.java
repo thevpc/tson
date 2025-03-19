@@ -26,7 +26,7 @@ public class TsonDocumentHeaderBuilderImpl implements TsonDocumentHeaderBuilder 
     @Override
     public TsonDocumentHeaderBuilderImpl parse(TsonAnnotation a) {
         if (a.name().equals("tson")) {
-            TsonElementList params = a.args();
+            TsonElementList params = a.params();
             boolean acceptStr=true;
             for (TsonElement param : params) {
                 switch (param.type()) {
@@ -113,7 +113,9 @@ public class TsonDocumentHeaderBuilderImpl implements TsonDocumentHeaderBuilder 
 
     @Override
     public TsonDocumentHeaderBuilder addParam(TsonElementBase element) {
-        params.add(Tson.of(element));
+        if(element!=null) {
+            params.add(Tson.of(element));
+        }
         return this;
     }
 
@@ -144,16 +146,18 @@ public class TsonDocumentHeaderBuilderImpl implements TsonDocumentHeaderBuilder 
     }
 
     @Override
-    public TsonDocumentHeaderBuilder addParams(Iterable<? extends TsonElementBase> element) {
-        for (TsonElementBase tsonElement : element) {
-            addParam(tsonElement);
+    public TsonDocumentHeaderBuilder addParams(Iterable<? extends TsonElementBase> elements) {
+        if(elements!=null) {
+            for (TsonElementBase tsonElement : elements) {
+                addParam(tsonElement);
+            }
         }
         return this;
     }
 
     @Override
     public TsonAnnotation toAnnotation() {
-        TsonAnnotationBuilder b = Tson.ofAnnotationBuilder().setName("tson");
+        TsonAnnotationBuilder b = Tson.ofAnnotationBuilder().name("tson");
         if (version == null && encoding == null && params.isEmpty()) {
             b.add(Tson.ofString("v"+Tson.getVersion()));
         } else {

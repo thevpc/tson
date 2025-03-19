@@ -649,6 +649,7 @@ Token t ;
   }
 
   final public void annotationParamList() throws ParseException {
+        visitor.visitAnnotationParamsStart();
     label_6:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -711,6 +712,7 @@ Token t ;
         throw new ParseException();
       }
     }
+      visitor.visitAnnotationParamsEnd();
   }
 
   final public void annotation() throws ParseException {
