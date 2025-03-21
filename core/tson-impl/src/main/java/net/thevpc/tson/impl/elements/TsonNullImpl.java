@@ -2,14 +2,15 @@ package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
-import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.Temporal;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
@@ -89,22 +90,22 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     }
 
     @Override
-    public LocalDate dateValue() {
+    public LocalDate localDateValue() {
         return null;
     }
 
     @Override
-    public TsonDateTime toDateTime() {
+    public TsonLocalDateTime toLocalDateTime() {
         throw new ClassCastException("Cannot cast Null to Non Null type");
     }
 
     @Override
-    public Instant dateTimeValue() {
+    public LocalDateTime localDateTimeValue() {
         return null;
     }
 
     @Override
-    public LocalTime time() {
+    public LocalTime localTimeValue() {
         return null;
     }
 
@@ -154,8 +155,8 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     }
 
     @Override
-    public TsonAnnotation[] annotations() {
-        return TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY;
+    public List<TsonAnnotation> annotations() {
+        return Collections.emptyList();
     }
 
     @Override
@@ -235,12 +236,12 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
     }
 
     @Override
-    public TsonDate toDate() {
+    public TsonLocalDate toLocalDate() {
         throw new ClassCastException("Cannot cast Null to Non Null type");
     }
 
     @Override
-    public TsonTime toTime() {
+    public TsonLocalTime toLocalTime() {
         throw new ClassCastException("Cannot cast Null to Non Null type");
     }
 

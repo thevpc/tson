@@ -2,7 +2,7 @@ package net.thevpc.tson;
 
 import java.time.LocalTime;
 
-public interface TsonTime extends TsonTemporal {
+public interface TsonLocalTime extends TsonTemporal {
     LocalTime value();
 
     TsonPrimitiveBuilder builder();

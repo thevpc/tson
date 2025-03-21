@@ -84,7 +84,7 @@ public class TsonOpBuilderImpl extends AbstractTsonElementBuilder<TsonOpBuilder>
                         opType == null ? TsonOpType.BINARY : opType,
                         first == null ? TsonNullImpl.INSTANCE : first,
                         second == null ? TsonNullImpl.INSTANCE : second
-                ), getComments(), getAnnotations());
+                ), comments(), annotations());
     }
 
 

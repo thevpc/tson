@@ -11,10 +11,7 @@ import net.thevpc.tson.impl.elements.TsonElementListImpl;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.io.Writer;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.*;
 
 public class TsonUtils {
@@ -41,14 +38,30 @@ public class TsonUtils {
         return 0;
     }
 
-    public static TsonElement decorate(TsonElement element, TsonComments comments, TsonAnnotation[] annotations) {
+    public static <T extends Comparable<T>> int compareLists(List<T> a1, List<T> a2) {
+        for (int j = 0; j < Math.max(a1.size(), a2.size()); j++) {
+            if (j >= a1.size()) {
+                return -1;
+            }
+            if (j >= a2.size()) {
+                return 1;
+            }
+            int i = a1.get(j).compareTo(a2.get(j));
+            if (i != 0) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    public static TsonElement decorate(TsonElement element, TsonComments comments, List<TsonAnnotation> annotations) {
         TsonComments c2 = comments;
-        TsonAnnotation[] a2 = annotations == null ? new TsonAnnotation[0] : annotations;
+        List<TsonAnnotation> a2 = annotations == null ? new ArrayList<>() : annotations;
 
         TsonComments c = element.comments();
-        TsonAnnotation[] a = element.annotations();
+        List<TsonAnnotation> a = element.annotations();
 
-        if (!Objects.equals(c, c2) || !Arrays.equals(a, a2)) {
+        if (!Objects.equals(c, c2) || !a.equals(a2)) {
             return TsonElementDecorator.of(element, c2, a2);
         }
         return element;
@@ -67,8 +80,8 @@ public class TsonUtils {
     }
 
     public static TsonElement setAnnotations(TsonElement e, TsonAnnotation[] annotations) {
-        TsonAnnotation[] c = e.annotations();
-        if (Arrays.equals(c, annotations)) {
+        List<TsonAnnotation> c = e.annotations();
+        if (c.equals(annotations)) {
             return e;
         }
         return TsonElementDecorator.of(
@@ -614,6 +627,15 @@ public class TsonUtils {
     }
 
     public static int compareElementsArray(TsonElement[] a1, TsonElement[] a2) {
+        if(a1==null && a2==null) {
+            return 0;
+        }
+        if(a1==null) {
+            return -1;
+        }
+        if(a2==null) {
+            return 1;
+        }
         int i = 0;
         final int max = Math.max(a1.length, a2.length);
         for (int j = 0; j < max; j++) {
@@ -632,6 +654,15 @@ public class TsonUtils {
     }
 
     public static int compareElementsArray(TsonArray[] a1, TsonArray[] a2) {
+        if(a1==null && a2==null) {
+            return 0;
+        }
+        if(a1==null) {
+            return -1;
+        }
+        if(a2==null) {
+            return 1;
+        }
         int i = 0;
         final int max = Math.max(a1.length, a2.length);
         for (int j = 0; j < max; j++) {
@@ -723,6 +754,10 @@ public class TsonUtils {
 
     public static java.sql.Time convertToSqlTime(LocalTime dateToConvert) {
         return java.sql.Time.valueOf(dateToConvert);
+    }
+
+    public static Date convertToDate(LocalDateTime dateToConvert) {
+        return Date.from(dateToConvert.atZone(ZoneId.systemDefault()).toInstant());
     }
 
     public static Date convertToDate(Instant dateToConvert) {

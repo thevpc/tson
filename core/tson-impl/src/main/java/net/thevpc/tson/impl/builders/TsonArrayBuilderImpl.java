@@ -7,7 +7,6 @@ import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.impl.util.UnmodifiableArrayList;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -84,7 +83,7 @@ public class TsonArrayBuilderImpl extends AbstractTsonElementBuilder<TsonArrayBu
                 UnmodifiableArrayList.ofCopy(elementsSupport.getRows().toArray(new TsonElement[0])));
         return (TsonArray) TsonUtils.decorate(
                 built
-                , getComments(), getAnnotations())
+                , comments(), annotations())
                 ;
     }
 

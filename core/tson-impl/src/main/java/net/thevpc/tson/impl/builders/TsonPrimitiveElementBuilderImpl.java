@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.sql.Time;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -36,7 +37,7 @@ public class TsonPrimitiveElementBuilderImpl extends AbstractTsonElementBuilder<
             }
             this.value = d.getBase();
             setComments(d.comments());
-            setAnnotations(d.annotations());
+            setAnnotations(d.annotations().toArray(new TsonAnnotation[0]));
         } else {
             if(!element.isPrimitive()){
                 throw new ClassCastException("Not a primitive type " + element.type());
@@ -336,18 +337,18 @@ public class TsonPrimitiveElementBuilderImpl extends AbstractTsonElementBuilder<
     }
 
     @Override
-    public LocalDate getDate() {
-        return value().dateValue();
+    public LocalDate getLocalDate() {
+        return value().localDateValue();
     }
 
     @Override
-    public Instant getDateTime() {
-        return value().dateTimeValue();
+    public LocalDateTime getLocalDateTime() {
+        return value().localDateTimeValue();
     }
 
     @Override
-    public LocalTime getTime() {
-        return value().time();
+    public LocalTime getLocalTime() {
+        return value().localTimeValue();
     }
 
     @Override
@@ -377,7 +378,7 @@ public class TsonPrimitiveElementBuilderImpl extends AbstractTsonElementBuilder<
     public TsonElement build() {
         return TsonUtils.decorate(
                 value
-                , getComments(), getAnnotations())
+                , comments(), annotations())
                 ;
     }
 }

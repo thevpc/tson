@@ -5,10 +5,12 @@ import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.Temporal;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -30,8 +32,8 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
 
 
     @Override
-    public TsonAnnotation[] annotations() {
-        return TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY;
+    public List<TsonAnnotation> annotations() {
+        return Collections.emptyList();
     }
 
     @Override
@@ -131,18 +133,18 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
     }
 
     @Override
-    public TsonDate toDate() {
-        return throwPrimitive(TsonElementType.DATE);
+    public TsonLocalDate toLocalDate() {
+        return throwPrimitive(TsonElementType.LOCAL_DATE);
     }
 
     @Override
-    public TsonDateTime toDateTime() {
-        return throwPrimitive(TsonElementType.DATETIME);
+    public TsonLocalDateTime toLocalDateTime() {
+        return throwPrimitive(TsonElementType.LOCAL_DATETIME);
     }
 
     @Override
-    public TsonTime toTime() {
-        return throwPrimitive(TsonElementType.TIME);
+    public TsonLocalTime toLocalTime() {
+        return throwPrimitive(TsonElementType.LOCAL_TIME);
     }
 
     @Override
@@ -171,7 +173,7 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
 
     @Override
     public Temporal temporalValue() {
-        return throwPrimitive(TsonElementType.DATETIME);
+        return throwPrimitive(TsonElementType.LOCAL_DATETIME);
     }
 
     @Override
@@ -240,18 +242,18 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
     }
 
     @Override
-    public LocalDate dateValue() {
-        return throwPrimitive(TsonElementType.DATE);
+    public LocalDate localDateValue() {
+        return throwPrimitive(TsonElementType.LOCAL_DATE);
     }
 
     @Override
-    public Instant dateTimeValue() {
-        return throwPrimitive(TsonElementType.DATETIME);
+    public LocalDateTime localDateTimeValue() {
+        return throwPrimitive(TsonElementType.LOCAL_DATETIME);
     }
 
     @Override
-    public LocalTime time() {
-        return throwPrimitive(TsonElementType.TIME);
+    public LocalTime localTimeValue() {
+        return throwPrimitive(TsonElementType.LOCAL_TIME);
     }
 
     @Override
@@ -374,7 +376,7 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
         if (i != 0) {
             return i;
         }
-        i = TsonUtils.compareArrays(annotations(), o.annotations());
+        i = TsonUtils.compareLists(annotations(), o.annotations());
         if (i != 0) {
             return i;
         }

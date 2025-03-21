@@ -2,8 +2,8 @@ package net.thevpc.tson.impl.elements;
 
 import net.thevpc.tson.*;
 
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.regex.Pattern;
 
@@ -82,18 +82,18 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
     }
 
     @Override
-    public TsonDate toDate() {
-        return throwPrimitive(TsonElementType.DATE);
+    public TsonLocalDate toLocalDate() {
+        return throwPrimitive(TsonElementType.LOCAL_DATE);
     }
 
     @Override
-    public TsonDateTime toDateTime() {
-        return throwPrimitive(TsonElementType.DATETIME);
+    public TsonLocalDateTime toLocalDateTime() {
+        return throwPrimitive(TsonElementType.LOCAL_DATETIME);
     }
 
     @Override
-    public TsonTime toTime() {
-        return throwPrimitive(TsonElementType.TIME);
+    public TsonLocalTime toLocalTime() {
+        return throwPrimitive(TsonElementType.LOCAL_TIME);
     }
 
     @Override
@@ -182,18 +182,18 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
     }
 
     @Override
-    public LocalDate dateValue() {
-        return throwPrimitive(TsonElementType.DATE);
+    public LocalDate localDateValue() {
+        return throwPrimitive(TsonElementType.LOCAL_DATE);
     }
 
     @Override
-    public Instant dateTimeValue() {
-        return throwPrimitive(TsonElementType.DATETIME);
+    public LocalDateTime localDateTimeValue() {
+        return throwPrimitive(TsonElementType.LOCAL_DATETIME);
     }
 
     @Override
-    public LocalTime time() {
-        return throwPrimitive(TsonElementType.TIME);
+    public LocalTime localTimeValue() {
+        return throwPrimitive(TsonElementType.LOCAL_TIME);
     }
 
     @Override

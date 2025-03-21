@@ -15,7 +15,7 @@ public class TsonRegexImpl extends AbstractPrimitiveTsonElement implements TsonR
     }
 
     public TsonRegexImpl(String value) {
-        super(TsonElementType.DATE);
+        super(TsonElementType.LOCAL_DATE);
         this.value = Pattern.compile(value);
     }
 

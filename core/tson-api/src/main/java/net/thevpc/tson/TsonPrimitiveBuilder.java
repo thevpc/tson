@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.sql.Time;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.Date;
@@ -123,11 +124,11 @@ public interface TsonPrimitiveBuilder extends TsonElementBuilder {
 
     String getString();
 
-    LocalDate getDate();
+    LocalDate getLocalDate();
 
-    Instant getDateTime();
+    LocalDateTime getLocalDateTime();
 
-    LocalTime getTime();
+    LocalTime getLocalTime();
 
     Pattern getRegex();
 

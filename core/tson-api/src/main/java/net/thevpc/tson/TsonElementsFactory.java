@@ -8,6 +8,7 @@ import java.math.BigInteger;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -29,17 +30,19 @@ public interface TsonElementsFactory {
 
     TsonElement ofString(String value);
 
-    TsonElement ofDatetime(Instant value);
+    TsonElement ofLocalDatetime(Instant value);
 
-    TsonElement ofDatetime(Date value);
+    TsonElement ofLocalDatetime(LocalDateTime value);
 
-    TsonElement ofDate(LocalDate value);
+    TsonElement ofLocalDatetime(Date value);
 
-    TsonElement ofTime(LocalTime value);
+    TsonElement ofLocalDate(LocalDate value);
 
-    TsonElement ofTime(java.sql.Time value);
+    TsonElement ofLocalTime(LocalTime value);
 
-    TsonElement ofDate(java.sql.Date value);
+    TsonElement ofLocalTime(java.sql.Time value);
+
+    TsonElement ofLocalDate(java.sql.Date value);
 
     TsonElement ofRegex(Pattern value);
 
@@ -233,13 +236,13 @@ public interface TsonElementsFactory {
     TsonBinaryStreamBuilder ofBinStreamBuilder();
 
 
-    TsonElement parseDateTimeElem(String s);
+    TsonElement parseLocalDateTime(String s);
 
-    TsonElement parseDateElem(String s);
+    TsonElement parseLocalDate(String s);
 
-    TsonElement parseTimeElem(String s);
+    TsonElement parseLocalTime(String s);
 
-    TsonElement parseRegexElem(String s);
+    TsonElement parseRegex(String s);
 
     TsonElement parseNumber(String s);
 
@@ -247,11 +250,13 @@ public interface TsonElementsFactory {
 
     TsonElement parseString(String s);
 
-    TsonElement parseAliasElem(String s);
+    TsonElement parseAlias(String s);
 
     TsonComment parseComments(String c);
 
     CharStreamCodeSupport charStreamCodeSupportOf(String language);
 
     TsonElement ofCustom(Object o);
+
+    TsonPrimitiveBuilder ofPrimitiveBuilder();
 }

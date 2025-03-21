@@ -58,7 +58,7 @@ public class TsonPairBuilderImpl extends AbstractTsonElementBuilder<TsonPairBuil
                 new TsonPairImpl(
                         key == null ? TsonNullImpl.INSTANCE : key,
                         value == null ? TsonNullImpl.INSTANCE : value
-                ), getComments(), getAnnotations());
+                ), comments(), annotations());
     }
 
 

@@ -240,7 +240,7 @@ public class TsonMatrixBuilderImpl extends AbstractTsonElementBuilder<TsonMatrix
         );
         return (TsonMatrix) TsonUtils.decorate(
                 built
-                , getComments(), getAnnotations())
+                , comments(), annotations())
                 ;
     }
 

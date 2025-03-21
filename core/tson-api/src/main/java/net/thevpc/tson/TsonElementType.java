@@ -20,9 +20,9 @@ public enum TsonElementType {
     BOOLEAN,
     NAME,
     ALIAS,
-    DATETIME,
-    DATE,
-    TIME,
+    LOCAL_DATETIME,
+    LOCAL_DATE,
+    LOCAL_TIME,
     REGEX,
 
     OP,
@@ -68,9 +68,9 @@ public enum TsonElementType {
             case OBJECT:
             case UPLET:
             case PARAMETRIZED_OBJECT:
-            case DATETIME:
-            case DATE:
-            case TIME:
+            case LOCAL_DATETIME:
+            case LOCAL_DATE:
+            case LOCAL_TIME:
             case REGEX:
             case BYTE:
             case SHORT:
@@ -116,9 +116,9 @@ public enum TsonElementType {
             case NAMED_MATRIX:
             case ARRAY:
             case OBJECT:
-            case DATETIME:
-            case DATE:
-            case TIME:
+            case LOCAL_DATETIME:
+            case LOCAL_DATE:
+            case LOCAL_TIME:
             case REGEX:
             case BYTE:
             case SHORT:
@@ -165,9 +165,9 @@ public enum TsonElementType {
             case NAMED_PARAMETRIZED_MATRIX:
             case PARAMETRIZED_MATRIX:
 
-            case DATETIME:
-            case DATE:
-            case TIME:
+            case LOCAL_DATETIME:
+            case LOCAL_DATE:
+            case LOCAL_TIME:
             case REGEX:
             case BYTE:
             case SHORT:
@@ -199,9 +199,9 @@ public enum TsonElementType {
 
     public boolean isTemporal() {
         switch (this) {
-            case DATETIME:
-            case DATE:
-            case TIME:
+            case LOCAL_DATETIME:
+            case LOCAL_DATE:
+            case LOCAL_TIME:
             case REGEX:
                 return true;
             case BYTE:
@@ -266,9 +266,9 @@ public enum TsonElementType {
             case BOOLEAN:
             case NAME:
             case ALIAS:
-            case DATETIME:
-            case DATE:
-            case TIME:
+            case LOCAL_DATETIME:
+            case LOCAL_DATE:
+            case LOCAL_TIME:
             case REGEX:
                 return true;
             case MATRIX:
@@ -315,9 +315,9 @@ public enum TsonElementType {
             case BOOLEAN:
             case NAME:
             case ALIAS:
-            case DATETIME:
-            case DATE:
-            case TIME:
+            case LOCAL_DATETIME:
+            case LOCAL_DATE:
+            case LOCAL_TIME:
             case REGEX:
             case MATRIX:
             case PAIR:
@@ -359,9 +359,9 @@ public enum TsonElementType {
             case CHAR:
             case BOOLEAN:
             case NAME:
-            case DATETIME:
-            case DATE:
-            case TIME:
+            case LOCAL_DATETIME:
+            case LOCAL_DATE:
+            case LOCAL_TIME:
             case REGEX:
             case CUSTOM:
                 return true;

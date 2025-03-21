@@ -18,9 +18,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.file.Path;
 import java.sql.Time;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -73,51 +71,56 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
     }
 
     @Override
-    public TsonElement ofDatetime(Instant value) {
+    public TsonElement ofLocalDatetime(Instant value) {
         if (value == null) {
             return ofNull();
         }
-        return new TsonDateTimeImpl(value);
+        return new TsonLocalDateTimeImpl(value.atZone(ZoneId.systemDefault()).toLocalDateTime());
     }
 
     @Override
-    public TsonElement ofDatetime(Date value) {
-        if (value == null) {
-            return ofNull();
-        }
-        return ofDatetime(Instant.ofEpochMilli(value.getTime()));
+    public TsonElement ofLocalDatetime(LocalDateTime value) {
+        return new TsonLocalDateTimeImpl(value);
     }
 
     @Override
-    public TsonElement ofDate(LocalDate value) {
+    public TsonElement ofLocalDatetime(Date value) {
         if (value == null) {
             return ofNull();
         }
-        return new TsonDateImpl(value);
+        return ofLocalDatetime(Instant.ofEpochMilli(value.getTime()));
     }
 
     @Override
-    public TsonElement ofTime(LocalTime value) {
+    public TsonElement ofLocalDate(LocalDate value) {
         if (value == null) {
             return ofNull();
         }
-        return new TsonTimeImpl(value);
+        return new TsonLocalDateImpl(value);
     }
 
     @Override
-    public TsonElement ofTime(java.sql.Time value) {
+    public TsonElement ofLocalTime(LocalTime value) {
         if (value == null) {
             return ofNull();
         }
-        return new TsonTimeImpl(value.toLocalTime());
+        return new TsonLocalTimeImpl(value);
     }
 
     @Override
-    public TsonElement ofDate(java.sql.Date value) {
+    public TsonElement ofLocalTime(java.sql.Time value) {
         if (value == null) {
             return ofNull();
         }
-        return new TsonDateImpl(value.toLocalDate());
+        return new TsonLocalTimeImpl(value.toLocalTime());
+    }
+
+    @Override
+    public TsonElement ofLocalDate(java.sql.Date value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return new TsonLocalDateImpl(value.toLocalDate());
     }
 
     @Override
@@ -625,37 +628,37 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
             return ofNull();
         }
         if (value instanceof java.sql.Time) {
-            return ofTime((Time) value);
+            return ofLocalTime((Time) value);
         }
         if (value instanceof java.sql.Date) {
-            return ofDate(((java.sql.Date) value).toLocalDate());
+            return ofLocalDate(((java.sql.Date) value).toLocalDate());
         }
-        return ofDatetime(Instant.ofEpochMilli(value.getTime()));
+        return ofLocalDatetime(Instant.ofEpochMilli(value.getTime()));
     }
 
     @Override
     public TsonElement of(Instant value) {
-        return ofDatetime(value);
+        return ofLocalDatetime(value);
     }
 
     @Override
     public TsonElement of(LocalDate value) {
-        return ofDate(value);
+        return ofLocalDate(value);
     }
 
     @Override
     public TsonElement of(java.sql.Date value) {
-        return ofDate(value);
+        return ofLocalDate(value);
     }
 
     @Override
     public TsonElement of(java.sql.Time value) {
-        return ofTime(value);
+        return ofLocalTime(value);
     }
 
     @Override
     public TsonElement of(LocalTime value) {
-        return ofTime(value);
+        return ofLocalTime(value);
     }
 
     @Override
@@ -772,22 +775,22 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
 
 
     @Override
-    public TsonElement parseDateTimeElem(String s) {
-        return new TsonDateTimeImpl(Instant.parse(s));
+    public TsonElement parseLocalDateTime(String s) {
+        return new TsonLocalDateTimeImpl(Instant.parse(s).atZone(ZoneId.systemDefault()).toLocalDateTime());
     }
 
     @Override
-    public TsonElement parseDateElem(String s) {
-        return new TsonDateImpl(LocalDate.parse(s));
+    public TsonElement parseLocalDate(String s) {
+        return new TsonLocalDateImpl(LocalDate.parse(s));
     }
 
     @Override
-    public TsonElement parseTimeElem(String s) {
-        return new TsonTimeImpl(LocalTime.parse(s));
+    public TsonElement parseLocalTime(String s) {
+        return new TsonLocalTimeImpl(LocalTime.parse(s));
     }
 
     @Override
-    public TsonElement parseRegexElem(String s) {
+    public TsonElement parseRegex(String s) {
         final String p = s.substring(1, s.length() - 1);
         //should unescape
         return new TsonRegexImpl(Pattern.compile(p));
@@ -806,7 +809,7 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
         return LocalTime.parse(s);
     }
 
-    public Pattern parseRegex(String s) {
+    public Pattern parseRegexPattern(String s) {
         return Pattern.compile(s.substring(1, s.length() - 1));
     }
 
@@ -863,7 +866,7 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
 
 
     @Override
-    public TsonElement parseAliasElem(String s) {
+    public TsonElement parseAlias(String s) {
         return new TsonAliasImpl(s.substring(1));
     }
 
@@ -1106,13 +1109,14 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
         } else if (roots.length == 1) {
             return elementToDocument(roots[0]);
         } else {
-            TsonAnnotation[] annotations = roots[0].annotations();
-            if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].name())) {
+            List<TsonAnnotation> annotations = roots[0].annotations();
+            if (annotations != null && annotations.size() > 0 && "tson".equals(annotations.get(0).name())) {
                 // will remove it
-                TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];
-                System.arraycopy(annotations, 1, annotations2, 0, annotations.length - 1);
+                ArrayList<TsonAnnotation> newAnn = new ArrayList<>(annotations);
+                newAnn.remove(0);
+
                 List<TsonElement> newList = new ArrayList<>(Arrays.asList(roots));
-                TsonElement c0 = roots[0].builder().setAnnotations(annotations2).build();
+                TsonElement c0 = roots[0].builder().setAnnotations(newAnn.toArray(new TsonAnnotation[0])).build();
                 newList.set(0, c0);
                 roots = newList.toArray(new TsonElement[0]);
             }
@@ -1121,13 +1125,13 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
     }
 
     public TsonDocument elementToDocument(TsonElement root) {
-        TsonAnnotation[] annotations = root.annotations();
-        if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].name())) {
+        List<TsonAnnotation> annotations = root.annotations();
+        if (annotations != null && annotations.size() > 0 && "tson".equals(annotations.get(0).name())) {
             // will remove it
-            TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];
-            System.arraycopy(annotations, 1, annotations2, 0, annotations.length - 1);
-            return Tson.ofDocument().header(Tson.ofDocumentHeader().addParams(annotations[0].params()).build())
-                    .content(root.builder().setAnnotations(annotations2).build()).build();
+            ArrayList<TsonAnnotation> newAnn = new ArrayList<>(annotations);
+            newAnn.remove(0);
+            return Tson.ofDocument().header(Tson.ofDocumentHeader().addParams(annotations.get(0).params()).build())
+                    .content(root.builder().setAnnotations(newAnn.toArray(new TsonAnnotation[0])).build()).build();
         }
         return Tson.ofDocument().header(null).content(root).build();
     }
@@ -1141,6 +1145,12 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
     public TsonElement ofCustom(Object o) {
         return TsonCustomImpl.valueOf(o);
     }
+
+    @Override
+    public TsonPrimitiveBuilder ofPrimitiveBuilder() {
+        return new TsonPrimitiveElementBuilderImpl();
+    }
+
 
     @Override
     public TsonComment parseComments(String c) {

@@ -1,9 +1,6 @@
 package net.thevpc.tson.impl.elements;
 
-import net.thevpc.tson.TsonAnnotation;
-import net.thevpc.tson.TsonAnnotationBuilder;
-import net.thevpc.tson.TsonElement;
-import net.thevpc.tson.TsonElementList;
+import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonAnnotationBuilderImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 import net.thevpc.tson.impl.util.UnmodifiableArrayList;
@@ -60,7 +57,7 @@ public class TsonAnnotationImpl implements TsonAnnotation {
 
     @Override
     public List<TsonElement> children() {
-        return params==null?Collections.emptyList():params.toList();
+        return params == null ? Collections.emptyList() : params.toList();
     }
 
     @Override
@@ -89,6 +86,11 @@ public class TsonAnnotationImpl implements TsonAnnotation {
         if (i != 0) {
             return i;
         }
-        return TsonUtils.compareElementsArray(params.toArray(), o.params().toArray());
+        return TsonUtils.compareElementsArray(params == null ? null : params.toArray(), o.params() == null ? null : o.params().toArray());
+    }
+
+    @Override
+    public String toString(boolean compact) {
+        return "@" + Tson.ofUplet(name, params.toArray()).toString(compact);
     }
 }

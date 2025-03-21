@@ -156,18 +156,18 @@ public class TsonSerializerConfig {
         registerElemToObjConverter(TsonElementType.FLOAT, null, null, (element, to, context) -> element.floatValue());
         registerElemToObjConverter(TsonElementType.DOUBLE, null, null, (element, to, context) -> element.doubleValue());
 
-        registerElemToObjConverter(TsonElementType.DATETIME, null, null, (element, to, context) -> element.dateTimeValue());
-        registerElemToObjConverter(TsonElementType.DATETIME, null, Instant.class, (element, to, context) -> element.dateTimeValue());
-        registerElemToObjConverter(TsonElementType.DATETIME, null, Date.class, (element, to, context) -> TsonUtils.convertToDate(element.dateTimeValue()));
+        registerElemToObjConverter(TsonElementType.LOCAL_DATETIME, null, null, (element, to, context) -> element.localDateTimeValue());
+        registerElemToObjConverter(TsonElementType.LOCAL_DATETIME, null, Instant.class, (element, to, context) -> element.localDateTimeValue());
+        registerElemToObjConverter(TsonElementType.LOCAL_DATETIME, null, Date.class, (element, to, context) -> TsonUtils.convertToDate(element.localDateTimeValue()));
 
-        registerElemToObjConverter(TsonElementType.DATE, null, null, (element, to, context) -> element.dateValue());
-        registerElemToObjConverter(TsonElementType.DATE, null, LocalDate.class, (element, to, context) -> element.dateValue());
-        registerElemToObjConverter(TsonElementType.DATE, null, Date.class, (element, to, context) -> TsonUtils.convertToDate(element.dateValue()));
-        registerElemToObjConverter(TsonElementType.DATE, null, java.sql.Date.class, (element, to, context) -> TsonUtils.convertToSqlDate(element.dateValue()));
+        registerElemToObjConverter(TsonElementType.LOCAL_DATE, null, null, (element, to, context) -> element.localDateValue());
+        registerElemToObjConverter(TsonElementType.LOCAL_DATE, null, LocalDate.class, (element, to, context) -> element.localDateValue());
+        registerElemToObjConverter(TsonElementType.LOCAL_DATE, null, Date.class, (element, to, context) -> TsonUtils.convertToDate(element.localDateValue()));
+        registerElemToObjConverter(TsonElementType.LOCAL_DATE, null, java.sql.Date.class, (element, to, context) -> TsonUtils.convertToSqlDate(element.localDateValue()));
 
-        registerElemToObjConverter(TsonElementType.TIME, null, null, (element, to, context) -> element.time());
-        registerElemToObjConverter(TsonElementType.TIME, null, LocalTime.class, (element, to, context) -> element.time());
-        registerElemToObjConverter(TsonElementType.TIME, null, Time.class, (element, to, context) -> TsonUtils.convertToSqlTime(element.time()));
+        registerElemToObjConverter(TsonElementType.LOCAL_TIME, null, null, (element, to, context) -> element.localTimeValue());
+        registerElemToObjConverter(TsonElementType.LOCAL_TIME, null, LocalTime.class, (element, to, context) -> element.localTimeValue());
+        registerElemToObjConverter(TsonElementType.LOCAL_TIME, null, Time.class, (element, to, context) -> TsonUtils.convertToSqlTime(element.localTimeValue()));
 
         registerElemToObjConverter(TsonElementType.REGEX, null, null, (element, to, context) -> element.regexValue());
 

@@ -224,9 +224,9 @@ public interface TsonParserTokens {
      */
     String[] tokenImage = {
             "<EOF>",
-            "<DATETIME>",
-            "<DATE>",
-            "<TIME>",
+            "<LOCAL_DATETIME>",
+            "<LOCAL_DATE>",
+            "<LOCAL_TIME>",
             "<REGEX>",
             "\"{\"",
             "\"}\"",

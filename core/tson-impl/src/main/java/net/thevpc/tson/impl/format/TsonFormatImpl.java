@@ -91,8 +91,8 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
         try {
             if (showComments) {
                 TsonComments c = element.comments();
-                if (c != null && !c.isBlank()) {
-                    TsonComment[] leadingComments = c.getLeadingComments();
+                if (c != null && !c.isEmpty()) {
+                    TsonComment[] leadingComments = c.leadingComments();
                     if (leadingComments.length > 0) {
                         boolean wasSLC = false;
                         for (TsonComment lc : leadingComments) {
@@ -120,10 +120,10 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     }
                 }
             }
-            TsonAnnotation[] ann = element.annotations();
+            List<TsonAnnotation> ann = element.annotations();
             TsonAnnotation formatAnnotation = null;
 
-            if (ann != null && ann.length > 0) {
+            if (ann != null && !ann.isEmpty()) {
                 for (TsonAnnotation a : ann) {
                     if ("format".equals(a.name())) {
                         formatAnnotation = a;
@@ -158,8 +158,8 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
             formatElementCore(element, formatAnnotation, sb);
             if (showComments) {
                 TsonComments c = element.comments();
-                if (c != null && !c.isBlank()) {
-                    TsonComment[] trailingComments = c.getTrailingComments();
+                if (c != null && !c.isEmpty()) {
+                    TsonComment[] trailingComments = c.trailingComments();
                     if (trailingComments.length > 0) {
                         boolean wasSLC = false;
                         for (TsonComment lc : trailingComments) {
@@ -216,14 +216,14 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                 case BOOLEAN:
                     writer.append(String.valueOf(element.booleanValue()));
                     return;
-                case DATETIME:
-                    writer.append(String.valueOf(element.dateTimeValue()));
+                case LOCAL_DATETIME:
+                    writer.append(String.valueOf(element.localDateTimeValue()));
                     return;
-                case DATE:
-                    writer.append(String.valueOf(element.dateValue()));
+                case LOCAL_DATE:
+                    writer.append(String.valueOf(element.localDateValue()));
                     return;
-                case TIME:
-                    writer.append(String.valueOf(element.time()));
+                case LOCAL_TIME:
+                    writer.append(String.valueOf(element.localTimeValue()));
                     return;
                 case REGEX: {
                     writer.append(TsonUtils.toRegex(element.regexValue().toString()));

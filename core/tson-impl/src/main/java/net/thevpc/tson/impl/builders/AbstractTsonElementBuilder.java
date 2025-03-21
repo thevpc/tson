@@ -1,10 +1,10 @@
 package net.thevpc.tson.impl.builders;
 
 import net.thevpc.tson.*;
-import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractTsonElementBuilder<T extends TsonElementBuilder> implements TsonElementBuilder {
@@ -12,18 +12,18 @@ public abstract class AbstractTsonElementBuilder<T extends TsonElementBuilder> i
     private final List<TsonAnnotation> annotations = new ArrayList<>();
 
     @Override
-    public TsonComments getComments() {
+    public TsonComments comments() {
         return comments;
     }
 
     @Override
-    public TsonAnnotation[] getAnnotations() {
-        return annotations.toArray(TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY);
+    public List<TsonAnnotation> annotations() {
+        return Collections.unmodifiableList(annotations);
     }
 
     @Override
     public T setComments(TsonComments comments) {
-        if (comments != null && comments.isBlank()) {
+        if (comments != null && comments.isEmpty()) {
             comments = null;
         }
         this.comments = comments;

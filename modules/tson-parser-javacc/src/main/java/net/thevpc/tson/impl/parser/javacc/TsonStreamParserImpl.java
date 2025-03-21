@@ -349,15 +349,15 @@ Token t ;
       break;
     case DATETIME:
       jj_consume_token(DATETIME);
-                   visitor.visitPrimitiveEnd(Tson.parseDateTime(token.image));
+                   visitor.visitPrimitiveEnd(Tson.parseLocalDateTime(token.image));
       break;
     case DATE:
       jj_consume_token(DATE);
-               visitor.visitPrimitiveEnd(Tson.parseDate(token.image));
+               visitor.visitPrimitiveEnd(Tson.parseLocalDate(token.image));
       break;
     case TIME:
       jj_consume_token(TIME);
-               visitor.visitPrimitiveEnd(Tson.parseTime(token.image));
+               visitor.visitPrimitiveEnd(Tson.parseLocalTime(token.image));
       break;
     case REGEX:
       jj_consume_token(REGEX);

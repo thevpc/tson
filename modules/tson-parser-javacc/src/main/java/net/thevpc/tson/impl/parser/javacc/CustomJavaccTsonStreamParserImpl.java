@@ -157,15 +157,15 @@ public class CustomJavaccTsonStreamParserImpl implements TsonStreamParser {
                 break;
             }
             case TsonStreamParserImplConstants.DATETIME: {
-                visitor.visitPrimitiveEnd(Tson.parseDateTime(token.image));
+                visitor.visitPrimitiveEnd(Tson.parseLocalDateTime(token.image));
                 break;
             }
             case TsonStreamParserImplConstants.DATE: {
-                visitor.visitPrimitiveEnd(Tson.parseDate(token.image));
+                visitor.visitPrimitiveEnd(Tson.parseLocalDate(token.image));
                 break;
             }
             case TsonStreamParserImplConstants.TIME: {
-                visitor.visitPrimitiveEnd(Tson.parseTime(token.image));
+                visitor.visitPrimitiveEnd(Tson.parseLocalTime(token.image));
                 break;
             }
             case TsonStreamParserImplConstants.REGEX: {

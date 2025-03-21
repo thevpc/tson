@@ -6,7 +6,6 @@ import net.thevpc.tson.impl.elements.TsonObjectImpl;
 import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -227,7 +226,7 @@ public class TsonObjectBuilderImpl extends AbstractTsonElementBuilder<TsonObject
                 TsonUtils.unmodifiableElements(elementsSupport.toList()));
         return (TsonObject) TsonUtils.decorate(
                 built,
-                getComments(), getAnnotations());
+                comments(), annotations());
     }
 
     @Override

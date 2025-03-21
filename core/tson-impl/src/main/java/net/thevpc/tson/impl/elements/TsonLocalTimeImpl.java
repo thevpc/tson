@@ -3,24 +3,23 @@ package net.thevpc.tson.impl.elements;
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.temporal.Temporal;
 import java.util.Objects;
 
-public class TsonDateTimeImpl extends AbstractTemporalTsonElement implements TsonDateTime {
-    private Instant value;
+public class TsonLocalTimeImpl extends AbstractTemporalTsonElement implements TsonLocalTime {
+    private LocalTime value;
 
-    public TsonDateTimeImpl(Instant value) {
-        super(TsonElementType.DATETIME);
+    public TsonLocalTimeImpl(LocalTime value) {
+        super(TsonElementType.LOCAL_TIME);
         this.value = value;
     }
 
-    public TsonDateTimeImpl(String value) {
-        super(TsonElementType.DATE);
-        this.value = Instant.parse(value);
+    public TsonLocalTimeImpl(String value) {
+        super(TsonElementType.LOCAL_DATE);
+        this.value = LocalTime.parse(value);
     }
     @Override
     public TsonString toStr() {
@@ -32,54 +31,54 @@ public class TsonDateTimeImpl extends AbstractTemporalTsonElement implements Tso
     }
 
     @Override
-    public TsonDateTime toDateTime() {
-        return this;
+    public TsonLocalDate toLocalDate() {
+        return throwPrimitive(TsonElementType.LOCAL_DATE);
     }
 
     @Override
-    public Instant dateTimeValue() {
+    public TsonLocalTime toLocalTime() {
+        return this;
+    }
+
+    @Override public LocalTime value() {
+        return value;
+    }
+
+    @Override
+    public LocalDateTime localDateTimeValue() {
+        return LocalDateTime.from(this.localTimeValue());
+    }
+
+    @Override
+    public LocalDate localDateValue() {
+        return LocalDate.from(this.localTimeValue());
+    }
+
+    @Override
+    public LocalTime localTimeValue() {
         return value();
     }
 
     @Override
-    public TsonTime toTime() {
-        return (TsonTime) Tson.ofTime(time());
+    public TsonLocalDateTime toLocalDateTime() {
+        return (TsonLocalDateTime) Tson.of(this.localDateTimeValue());
     }
 
-    @Override
-    public LocalDate dateValue() {
-        return value().atZone(ZoneId.systemDefault()).toLocalDate();
-    }
 
-    @Override
-    public LocalTime time() {
-        return LocalTime.from(value());
-    }
-
-    @Override
-    public TsonDate toDate() {
-        return (TsonDate) Tson.ofDate(dateValue());
-    }
-
-    @Override
-    public Instant value() {
-        return value;
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        TsonDateTimeImpl tsonDate = (TsonDateTimeImpl) o;
-        return Objects.equals(value, tsonDate.value);
+        TsonLocalTimeImpl tsonTime = (TsonLocalTimeImpl) o;
+        return Objects.equals(value, tsonTime.value);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), value);
     }
-
     @Override
     public TsonPrimitiveBuilder builder() {
         return new TsonPrimitiveElementBuilderImpl().set(this);
@@ -87,23 +86,23 @@ public class TsonDateTimeImpl extends AbstractTemporalTsonElement implements Tso
 
     @Override
     protected int compareCore(TsonElement o) {
-        return value.compareTo(o.toDateTime().value());
+        return value.compareTo(o.toLocalTime().value());
     }
 
     @Override
     public int compareTo(TsonElement o) {
         if (o.type().isTemporal()) {
             switch (o.type()) {
-                case DATETIME: {
-                    int i = value().compareTo(o.dateTimeValue());
+                case LOCAL_DATETIME: {
+                    int i = this.localDateTimeValue().compareTo(o.localDateTimeValue());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
-                case DATE: {
-                    int i = value().compareTo(o.dateTimeValue());
+                case LOCAL_DATE: {
+                    int i = this.localDateValue().compareTo(o.localDateValue());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
-                case TIME: {
-                    int i = value().compareTo(o.dateTimeValue());
+                case LOCAL_TIME: {
+                    int i = value().compareTo(o.localTimeValue());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }
             }

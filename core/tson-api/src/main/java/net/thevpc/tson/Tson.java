@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.sql.Time;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Date;
@@ -93,46 +94,53 @@ public class Tson {
         return ofString(value, TsonStringLayout.DOUBLE_QUOTE);
     }
 
-    public static TsonElement ofDatetime(Instant value) {
+    public static TsonElement ofLocalDatetime(Instant value) {
         if (value == null) {
             return ofNull();
         }
-        return factory.ofDatetime(value);
+        return factory.ofLocalDatetime(value);
     }
 
-    public static TsonElement ofDatetime(Date value) {
+    public static TsonElement ofLocalDatetime(Date value) {
         if (value == null) {
             return ofNull();
         }
-        return ofDatetime(Instant.ofEpochMilli(value.getTime()));
+        return ofLocalDatetime(Instant.ofEpochMilli(value.getTime()));
     }
 
-    public static TsonElement ofDate(LocalDate value) {
+    public static TsonElement ofLocalDatetime(LocalDateTime value) {
         if (value == null) {
             return ofNull();
         }
-        return factory.ofDate(value);
+        return factory.ofLocalDatetime(value);
     }
 
-    public static TsonElement ofTime(LocalTime value) {
+    public static TsonElement ofLocalDate(LocalDate value) {
         if (value == null) {
             return ofNull();
         }
-        return factory.ofTime(value);
+        return factory.ofLocalDate(value);
     }
 
-    public static TsonElement ofTime(java.sql.Time value) {
+    public static TsonElement ofLocalTime(LocalTime value) {
         if (value == null) {
             return ofNull();
         }
-        return factory.ofTime(value.toLocalTime());
+        return factory.ofLocalTime(value);
     }
 
-    public static TsonElement ofDate(java.sql.Date value) {
+    public static TsonElement ofLocalTime(java.sql.Time value) {
         if (value == null) {
             return ofNull();
         }
-        return factory.ofDate(value.toLocalDate());
+        return factory.ofLocalTime(value.toLocalTime());
+    }
+
+    public static TsonElement ofLocalDate(java.sql.Date value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return factory.ofLocalDate(value.toLocalDate());
     }
 
     public static TsonElement ofRegex(Pattern value) {
@@ -147,6 +155,10 @@ public class Tson {
             return ofNull();
         }
         return ofRegex(Pattern.compile(value));
+    }
+
+    public static TsonPrimitiveBuilder ofPrimitiveBuilder() {
+        return factory.ofPrimitiveBuilder();
     }
 
     public static TsonElement ofChar(char value) {
@@ -603,32 +615,36 @@ public class Tson {
             return ofNull();
         }
         if (value instanceof java.sql.Time) {
-            return ofTime((Time) value);
+            return ofLocalTime((Time) value);
         }
         if (value instanceof java.sql.Date) {
-            return ofDate(((java.sql.Date) value).toLocalDate());
+            return ofLocalDate(((java.sql.Date) value).toLocalDate());
         }
-        return ofDatetime(Instant.ofEpochMilli(value.getTime()));
+        return ofLocalDatetime(Instant.ofEpochMilli(value.getTime()));
     }
 
     public static TsonElement of(Instant value) {
-        return ofDatetime(value);
+        return ofLocalDatetime(value);
     }
 
     public static TsonElement of(LocalDate value) {
-        return ofDate(value);
+        return ofLocalDate(value);
+    }
+
+    public static TsonElement of(LocalDateTime value) {
+        return ofLocalDatetime(value);
     }
 
     public static TsonElement of(java.sql.Date value) {
-        return ofDate(value);
+        return ofLocalDate(value);
     }
 
     public static TsonElement of(java.sql.Time value) {
-        return ofTime(value);
+        return ofLocalTime(value);
     }
 
     public static TsonElement of(LocalTime value) {
-        return ofTime(value);
+        return ofLocalTime(value);
     }
 
     public static TsonElement of(Pattern value) {
@@ -843,15 +859,15 @@ public class Tson {
         return b == null ? ofNull() : b.build();
     }
 
-    public static TsonElement parseDateTime(String image) {
-        return factory.parseDateTimeElem(image);
+    public static TsonElement parseLocalDateTime(String image) {
+        return factory.parseLocalDateTime(image);
     }
 
     public static TsonElement parseNumber(String image) {
         return factory.parseNumber(image);
     }
 
-    public static TsonElement parseCharElem(String image) {
+    public static TsonElement parseChar(String image) {
         return factory.parseChar(image);
     }
 
@@ -860,19 +876,19 @@ public class Tson {
     }
 
     public static TsonElement parseAlias(String image) {
-        return factory.parseAliasElem(image);
+        return factory.parseAlias(image);
     }
 
-    public static TsonElement parseDate(String image) {
-        return factory.parseDateElem(image);
+    public static TsonElement parseLocalDate(String image) {
+        return factory.parseLocalDate(image);
     }
 
-    public static TsonElement parseTime(String image) {
-        return factory.parseTimeElem(image);
+    public static TsonElement parseLocalTime(String image) {
+        return factory.parseLocalTime(image);
     }
 
     public static TsonElement parseRegex(String image) {
-        return factory.parseRegexElem(image);
+        return factory.parseRegex(image);
     }
 
     public static TsonComment parseComments(String image) {

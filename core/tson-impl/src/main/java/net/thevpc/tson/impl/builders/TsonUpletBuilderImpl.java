@@ -130,7 +130,7 @@ public class TsonUpletBuilderImpl extends AbstractTsonElementBuilder<TsonUpletBu
         TsonUpletImpl built = new TsonUpletImpl(name, TsonUtils.unmodifiableElements(elements));
         return (TsonUplet) TsonUtils.decorate(
                 built,
-                getComments(), getAnnotations());
+                comments(), annotations());
     }
 
     @Override

@@ -2,10 +2,11 @@ package net.thevpc.tson;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.Temporal;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
@@ -15,7 +16,9 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     int annotationsCount();
 
-    TsonAnnotation[] annotations();
+    List<TsonAnnotation> annotations();
+
+    String toString(boolean compact);
 
     TsonComments comments();
 
@@ -45,11 +48,11 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     TsonAlias toAlias();
 
-    TsonDate toDate();
+    TsonLocalDate toLocalDate();
 
-    TsonDateTime toDateTime();
+    TsonLocalDateTime toLocalDateTime();
 
-    TsonTime toTime();
+    TsonLocalTime toLocalTime();
 
     TsonRegex toRegex();
 
@@ -123,11 +126,11 @@ public interface TsonElement extends TsonElementBase, Comparable<TsonElement> {
 
     Double doubleObject();
 
-    Instant dateTimeValue();
+    LocalDateTime localDateTimeValue();
 
-    LocalDate dateValue();
+    LocalDate localDateValue();
 
-    LocalTime time();
+    LocalTime localTimeValue();
 
     Pattern regexValue();
 

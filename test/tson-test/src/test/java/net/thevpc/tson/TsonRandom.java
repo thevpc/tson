@@ -72,12 +72,12 @@ public class TsonRandom {
                 return Tson.ofFloat((float) Math.random());
             case DOUBLE:
                 return Tson.ofDouble(Math.random());
-            case DATETIME:
-                return Tson.ofDatetime(Instant.now());
-            case DATE:
-                return Tson.ofDate(LocalDate.now());
-            case TIME:
-                return Tson.ofTime(LocalTime.now());
+            case LOCAL_DATETIME:
+                return Tson.ofLocalDatetime(Instant.now());
+            case LOCAL_DATE:
+                return Tson.ofLocalDate(LocalDate.now());
+            case LOCAL_TIME:
+                return Tson.ofLocalTime(LocalTime.now());
             case REGEX:
                 return Tson.ofRegex(Pattern.compile(randomRegex()));
             case NAME:

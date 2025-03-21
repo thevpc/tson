@@ -8,12 +8,13 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.Temporal;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
@@ -52,12 +53,13 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         if (annotations == null) {
             annotations = TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY;
         }
+        List<TsonAnnotation> annList = Arrays.asList(annotations);
         if (decorated) {
             TsonComments oldComments = base.comments();
-            TsonAnnotation[] oldAnnotations = base.annotations();
+            List<TsonAnnotation> oldAnnotations = base.annotations();
             if (
                     Objects.equals(comments, oldComments)
-                            && Arrays.equals(annotations, oldAnnotations)) {
+                            && annList.equals(oldAnnotations)) {
                 return base;
             }
         }
@@ -86,12 +88,12 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 return new AsAlias((TsonAlias) base, comments, annotations);
             case REGEX:
                 return new AsRegex((TsonRegex) base, comments, annotations);
-            case DATE:
-                return new AsDate((TsonDate) base, comments, annotations);
-            case DATETIME:
-                return new AsDateTime((TsonDateTime) base, comments, annotations);
-            case TIME:
-                return new AsTime((TsonTime) base, comments, annotations);
+            case LOCAL_DATE:
+                return new AsLocalLocalDate((TsonLocalDate) base, comments, annotations);
+            case LOCAL_DATETIME:
+                return new AsLocalDateTime((TsonLocalDateTime) base, comments, annotations);
+            case LOCAL_TIME:
+                return new AsLocalTime((TsonLocalTime) base, comments, annotations);
             case CHAR:
                 return new AsChar((TsonChar) base, comments, annotations);
             case OBJECT:
@@ -145,64 +147,65 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
                 return ((TsonElementDecorator) base).base;
             }
         }
-        TsonAnnotation[] annotations = annotationsList == null ? TsonUtils.TSON_ANNOTATIONS_EMPTY_ARRAY : annotationsList.stream().filter(Objects::nonNull).toArray(TsonAnnotation[]::new);
+        List<TsonAnnotation> annotations = annotationsList == null ? new ArrayList<>() : annotationsList.stream().filter(Objects::nonNull).collect(Collectors.toList());
         if (decorated) {
             TsonComments oldComments = base.comments();
-            TsonAnnotation[] oldAnnotations = base.annotations();
+            List<TsonAnnotation> oldAnnotations = base.annotations();
             if (Objects.equals(comments, oldComments)
-                    && Arrays.equals(annotations, oldAnnotations)) {
+                    && annotations.equals(oldAnnotations)) {
                 return base;
             }
         }
-        if ((comments == null || comments.isBlank()) && annotations.length == 0) {
+        if ((comments == null || comments.isEmpty()) && annotations.size() == 0) {
             return base;
         }
+        TsonAnnotation[] annArr = annotations.toArray(new TsonAnnotation[0]);
         switch (base.type()) {
             case NULL:
-                return new AsNull((TsonNull) base, comments, annotations);
+                return new AsNull((TsonNull) base, comments, annArr);
             case STRING:
-                return new AsString((TsonString) base, comments, annotations);
+                return new AsString((TsonString) base, comments, annArr);
             case BOOLEAN:
-                return new AsBoolean((TsonBoolean) base, comments, annotations);
+                return new AsBoolean((TsonBoolean) base, comments, annArr);
             case BYTE:
-                return new AsByte((TsonByte) base, comments, annotations);
+                return new AsByte((TsonByte) base, comments, annArr);
             case SHORT:
-                return new AsShort((TsonShort) base, comments, annotations);
+                return new AsShort((TsonShort) base, comments, annArr);
             case INTEGER:
-                return new AsInt((TsonInt) base, comments, annotations);
+                return new AsInt((TsonInt) base, comments, annArr);
             case LONG:
-                return new AsLong((TsonLong) base, comments, annotations);
+                return new AsLong((TsonLong) base, comments, annArr);
             case FLOAT:
-                return new AsFloat((TsonFloat) base, comments, annotations);
+                return new AsFloat((TsonFloat) base, comments, annArr);
             case DOUBLE:
-                return new AsDouble((TsonDouble) base, comments, annotations);
+                return new AsDouble((TsonDouble) base, comments, annArr);
             case NAME:
-                return new AsName((TsonName) base, comments, annotations);
+                return new AsName((TsonName) base, comments, annArr);
             case REGEX:
-                return new AsRegex((TsonRegex) base, comments, annotations);
-            case DATE:
-                return new AsDate((TsonDate) base, comments, annotations);
-            case DATETIME:
-                return new AsDateTime((TsonDateTime) base, comments, annotations);
-            case TIME:
-                return new AsTime((TsonTime) base, comments, annotations);
+                return new AsRegex((TsonRegex) base, comments, annArr);
+            case LOCAL_DATE:
+                return new AsLocalLocalDate((TsonLocalDate) base, comments, annArr);
+            case LOCAL_DATETIME:
+                return new AsLocalDateTime((TsonLocalDateTime) base, comments, annArr);
+            case LOCAL_TIME:
+                return new AsLocalTime((TsonLocalTime) base, comments, annArr);
             case CHAR:
-                return new AsChar((TsonChar) base, comments, annotations);
+                return new AsChar((TsonChar) base, comments, annArr);
             case OBJECT:
             case NAMED_PARAMETRIZED_OBJECT:
             case NAMED_OBJECT:
             case PARAMETRIZED_OBJECT:
-                return new AsObject((TsonObject) base, comments, annotations);
+                return new AsObject((TsonObject) base, comments, annArr);
             case ARRAY:
             case NAMED_PARAMETRIZED_ARRAY:
             case PARAMETRIZED_ARRAY:
             case NAMED_ARRAY:
-                return new AsArray((TsonArray) base, comments, annotations);
+                return new AsArray((TsonArray) base, comments, annArr);
             case UPLET:
             case NAMED_UPLET:
-                return new AsUplet((TsonUplet) base, comments, annotations);
+                return new AsUplet((TsonUplet) base, comments, annArr);
             case PAIR:
-                return new AsPair((TsonPair) base, comments, annotations);
+                return new AsPair((TsonPair) base, comments, annArr);
         }
         throw new IllegalArgumentException("Unsupported " + base.type());
     }
@@ -217,7 +220,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     protected void processCommentsAndAnnotations(TsonParserVisitor visitor) {
-        for (TsonComment c : comments().getLeadingComments()) {
+        for (TsonComment c : comments().leadingComments()) {
             visitor.visitComments(c);
         }
         for (TsonAnnotation annotation : annotations()) {
@@ -257,8 +260,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         return comments;
     }
 
-    public TsonAnnotation[] annotations() {
-        return Arrays.copyOf(annotations, annotations.length);
+    public List<TsonAnnotation> annotations() {
+        return Arrays.asList(annotations);
     }
 
     @Override
@@ -393,18 +396,18 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
-    public TsonDate toDate() {
-        return base.toDate();
+    public TsonLocalDate toLocalDate() {
+        return base.toLocalDate();
     }
 
     @Override
-    public TsonDateTime toDateTime() {
-        return base.toDateTime();
+    public TsonLocalDateTime toLocalDateTime() {
+        return base.toLocalDateTime();
     }
 
     @Override
-    public TsonTime toTime() {
-        return base.toTime();
+    public TsonLocalTime toLocalTime() {
+        return base.toLocalTime();
     }
 
     @Override
@@ -413,18 +416,18 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     }
 
     @Override
-    public LocalDate dateValue() {
-        return base.dateValue();
+    public LocalDate localDateValue() {
+        return base.localDateValue();
     }
 
     @Override
-    public Instant dateTimeValue() {
-        return base.dateTimeValue();
+    public LocalDateTime localDateTimeValue() {
+        return base.localDateTimeValue();
     }
 
     @Override
-    public LocalTime time() {
-        return base.time();
+    public LocalTime localTimeValue() {
+        return base.localTimeValue();
     }
 
     @Override
@@ -988,14 +991,14 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
     }
 
-    public static class AsDate extends AsPrimitive<TsonDate> implements TsonDate {
+    public static class AsLocalLocalDate extends AsPrimitive<TsonLocalDate> implements TsonLocalDate {
 
-        public AsDate(TsonDate base, TsonComments comments, TsonAnnotation[] annotations) {
+        public AsLocalLocalDate(TsonLocalDate base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
         @Override
-        public TsonDate toDate() {
+        public TsonLocalDate toLocalDate() {
             return this;
         }
 
@@ -1005,31 +1008,31 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
     }
 
-    public static class AsDateTime extends AsPrimitive<TsonDateTime> implements TsonDateTime {
+    public static class AsLocalDateTime extends AsPrimitive<TsonLocalDateTime> implements TsonLocalDateTime {
 
-        public AsDateTime(TsonDateTime base, TsonComments comments, TsonAnnotation[] annotations) {
+        public AsLocalDateTime(TsonLocalDateTime base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
         @Override
-        public TsonDateTime toDateTime() {
+        public TsonLocalDateTime toLocalDateTime() {
             return this;
         }
 
         @Override
-        public Instant value() {
+        public LocalDateTime value() {
             return getBase().value();
         }
     }
 
-    public static class AsTime extends AsPrimitive<TsonTime> implements TsonTime {
+    public static class AsLocalTime extends AsPrimitive<TsonLocalTime> implements TsonLocalTime {
 
-        public AsTime(TsonTime base, TsonComments comments, TsonAnnotation[] annotations) {
+        public AsLocalTime(TsonLocalTime base, TsonComments comments, TsonAnnotation[] annotations) {
             super(base, comments, annotations);
         }
 
         @Override
-        public TsonTime toTime() {
+        public TsonLocalTime toLocalTime() {
             return this;
         }
 

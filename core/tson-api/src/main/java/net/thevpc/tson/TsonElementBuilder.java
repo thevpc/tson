@@ -1,6 +1,7 @@
 package net.thevpc.tson;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface TsonElementBuilder extends TsonElementBase{
 
@@ -36,8 +37,8 @@ public interface TsonElementBuilder extends TsonElementBase{
 
     TsonElementType type();
 
-    TsonComments getComments();
+    TsonComments comments();
 
-    TsonAnnotation[] getAnnotations();
+    List<TsonAnnotation> annotations();
 
 }

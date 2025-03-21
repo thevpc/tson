@@ -14,6 +14,7 @@ public interface TsonAnnotation extends Comparable<TsonAnnotation> {
 
     /**
      * like params but never null
+     *
      * @return
      */
     List<TsonElement> children();
@@ -23,4 +24,6 @@ public interface TsonAnnotation extends Comparable<TsonAnnotation> {
     boolean isParametrized();
 
     boolean isNamed();
+
+    String toString(boolean compact);
 }

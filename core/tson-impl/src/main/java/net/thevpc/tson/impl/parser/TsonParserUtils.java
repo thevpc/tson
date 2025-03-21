@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,15 +21,15 @@ public class TsonParserUtils {
 
 
     public static TsonElement parseDateTimeElem(String s) {
-        return new TsonDateTimeImpl(Instant.parse(s));
+        return new TsonLocalDateTimeImpl(Instant.parse(s).atZone(ZoneId.systemDefault()).toLocalDateTime());
     }
 
     public static TsonElement parseDateElem(String s) {
-        return new TsonDateImpl(LocalDate.parse(s));
+        return new TsonLocalDateImpl(LocalDate.parse(s));
     }
 
     public static TsonElement parseTimeElem(String s) {
-        return new TsonTimeImpl(LocalTime.parse(s));
+        return new TsonLocalTimeImpl(LocalTime.parse(s));
     }
 
     public static TsonElement parseRegexElem(String s) {
@@ -548,13 +549,13 @@ public class TsonParserUtils {
         } else if (roots.length == 1) {
             return elementToDocument(roots[0]);
         } else {
-            TsonAnnotation[] annotations = roots[0].annotations();
-            if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].name())) {
+            List<TsonAnnotation> annotations = roots[0].annotations();
+            if (annotations != null && annotations.size() > 0 && "tson".equals(annotations.get(0).name())) {
                 // will remove it
-                TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];
-                System.arraycopy(annotations, 1, annotations2, 0, annotations.length - 1);
+                ArrayList<TsonAnnotation> newAnn = new ArrayList<>(annotations);
+                newAnn.remove(0);
                 List<TsonElement> newList = new ArrayList<>(Arrays.asList(roots));
-                TsonElement c0 = roots[0].builder().setAnnotations(annotations2).build();
+                TsonElement c0 = roots[0].builder().setAnnotations(newAnn.toArray(new TsonAnnotation[0])).build();
                 newList.set(0, c0);
                 roots = newList.toArray(new TsonElement[0]);
             }
@@ -563,13 +564,13 @@ public class TsonParserUtils {
     }
 
     public static TsonDocument elementToDocument(TsonElement root) {
-        TsonAnnotation[] annotations = root.annotations();
-        if (annotations != null && annotations.length > 0 && "tson".equals(annotations[0].name())) {
+        List<TsonAnnotation> annotations = root.annotations();
+        if (annotations != null && annotations.size() > 0 && "tson".equals(annotations.get(0).name())) {
             // will remove it
-            TsonAnnotation[] annotations2 = new TsonAnnotation[annotations.length - 1];
-            System.arraycopy(annotations, 1, annotations2, 0, annotations.length - 1);
-            return Tson.ofDocument().header(Tson.ofDocumentHeader().addParams(annotations[0].params()).build())
-                    .content(root.builder().setAnnotations(annotations2).build()).build();
+            ArrayList<TsonAnnotation> newAnn = new ArrayList<>(annotations);
+            newAnn.remove(0);
+            return Tson.ofDocument().header(Tson.ofDocumentHeader().addParams(annotations.get(0).params()).build())
+                    .content(root.builder().setAnnotations(newAnn.toArray(new TsonAnnotation[0])).build()).build();
         }
         return Tson.ofDocument().header(null).content(root).build();
     }
