@@ -16,7 +16,7 @@ public interface TsonPrimitiveBuilder extends TsonElementBuilder {
     TsonElement value();
 
 
-    TsonPrimitiveBuilder set(TsonElementBase element);
+    TsonPrimitiveBuilder copyFrom(TsonElementBase element);
 
     TsonPrimitiveBuilder setNull();
 

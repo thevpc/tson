@@ -24,12 +24,12 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
 
     @Override
     public TsonBigDecimal toBigDecimal() {
-        return new TsonBigDecimalImpl(BigDecimal.valueOf(getReal()),unit());
+        return new TsonBigDecimalImpl(BigDecimal.valueOf(real()), numberSuffix());
     }
 
     @Override
     public TsonFloatComplex toFloatComplex() {
-        return new TsonFloatComplexImpl((float) getReal(),0,unit());
+        return new TsonFloatComplexImpl((float) real(),0, numberSuffix());
     }
 
     @Override
@@ -38,12 +38,12 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
     }
 
     @Override
-    public double getReal() {
+    public double real() {
         return real;
     }
 
     @Override
-    public double getImag() {
+    public double imag() {
         return imag;
     }
 
@@ -113,7 +113,7 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
 
     @Override
     public BigDecimal bigDecimalValue() {
-        return BigDecimal.valueOf(getReal());
+        return BigDecimal.valueOf(real());
     }
 
     @Override
@@ -123,7 +123,7 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
 
 
     public TsonBigInt toBigInt() {
-        return new TsonBigIntImpl(bigIntegerValue(),layout(),unit());
+        return new TsonBigIntImpl(bigIntegerValue(), numberLayout(), numberSuffix());
     }
 
     @Override
@@ -163,7 +163,7 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
 
     @Override
     public TsonPrimitiveBuilder builder() {
-        return new TsonPrimitiveElementBuilderImpl().set(this);
+        return new TsonPrimitiveElementBuilderImpl().copyFrom(this);
     }
 
     @Override
@@ -172,11 +172,11 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
     }
 
     public static int compare(TsonDoubleComplex a, TsonDoubleComplex oc) {
-        int c = Double.compare(a.getReal(), oc.getReal());
+        int c = Double.compare(a.real(), oc.real());
         if (c != 0) {
             return c;
         }
-        c = Double.compare(a.getImag(), oc.getImag());
+        c = Double.compare(a.imag(), oc.imag());
         if (c != 0) {
             return c;
         }

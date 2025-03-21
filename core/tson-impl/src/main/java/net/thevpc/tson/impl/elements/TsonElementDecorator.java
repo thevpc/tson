@@ -612,7 +612,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
         @Override
         public TsonPrimitiveBuilder builder() {
-            return new TsonPrimitiveElementBuilderImpl().set(this);
+            return new TsonPrimitiveElementBuilderImpl().copyFrom(this);
         }
 
         @Override
@@ -635,8 +635,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonNumberLayout layout() {
-            return getBase().layout();
+        public TsonNumberLayout numberLayout() {
+            return getBase().numberLayout();
         }
 
         @Override
@@ -645,8 +645,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public String unit() {
-            return getBase().unit();
+        public String numberSuffix() {
+            return getBase().numberSuffix();
         }
     }
 
@@ -662,8 +662,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonNumberLayout layout() {
-            return getBase().layout();
+        public TsonNumberLayout numberLayout() {
+            return getBase().numberLayout();
         }
 
         @Override
@@ -672,8 +672,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public String unit() {
-            return getBase().unit();
+        public String numberSuffix() {
+            return getBase().numberSuffix();
         }
     }
 
@@ -689,23 +689,23 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonNumberLayout layout() {
-            return getBase().layout();
+        public TsonNumberLayout numberLayout() {
+            return getBase().numberLayout();
         }
 
         @Override
-        public BigDecimal getReal() {
-            return getBase().getReal();
+        public BigDecimal real() {
+            return getBase().real();
         }
 
         @Override
-        public BigDecimal getImag() {
-            return getBase().getImag();
+        public BigDecimal imag() {
+            return getBase().imag();
         }
 
         @Override
-        public String unit() {
-            return getBase().unit();
+        public String numberSuffix() {
+            return getBase().numberSuffix();
         }
     }
 
@@ -770,23 +770,23 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonNumberLayout layout() {
-            return getBase().layout();
+        public TsonNumberLayout numberLayout() {
+            return getBase().numberLayout();
         }
 
         @Override
-        public double getReal() {
-            return getBase().getReal();
+        public double real() {
+            return getBase().real();
         }
 
         @Override
-        public double getImag() {
-            return getBase().getImag();
+        public double imag() {
+            return getBase().imag();
         }
 
         @Override
-        public String unit() {
-            return getBase().unit();
+        public String numberSuffix() {
+            return getBase().numberSuffix();
         }
     }
 
@@ -802,23 +802,23 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonNumberLayout layout() {
-            return getBase().layout();
+        public TsonNumberLayout numberLayout() {
+            return getBase().numberLayout();
         }
 
         @Override
-        public float getReal() {
-            return getBase().getReal();
+        public float real() {
+            return getBase().real();
         }
 
         @Override
-        public float getImag() {
-            return getBase().getImag();
+        public float imag() {
+            return getBase().imag();
         }
 
         @Override
-        public String unit() {
-            return getBase().unit();
+        public String numberSuffix() {
+            return getBase().numberSuffix();
         }
     }
 
@@ -1096,8 +1096,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonNumberLayout layout() {
-            return getBase().layout();
+        public TsonNumberLayout numberLayout() {
+            return getBase().numberLayout();
         }
 
         @Override
@@ -1106,8 +1106,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public String unit() {
-            return getBase().unit();
+        public String numberSuffix() {
+            return getBase().numberSuffix();
         }
     }
 
@@ -1123,8 +1123,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonNumberLayout layout() {
-            return getBase().layout();
+        public TsonNumberLayout numberLayout() {
+            return getBase().numberLayout();
         }
 
         @Override
@@ -1133,8 +1133,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public String unit() {
-            return getBase().unit();
+        public String numberSuffix() {
+            return getBase().numberSuffix();
         }
     }
 
@@ -1150,8 +1150,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonNumberLayout layout() {
-            return getBase().layout();
+        public TsonNumberLayout numberLayout() {
+            return getBase().numberLayout();
         }
 
         @Override
@@ -1160,8 +1160,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public String unit() {
-            return getBase().unit();
+        public String numberSuffix() {
+            return getBase().numberSuffix();
         }
     }
 
@@ -1177,8 +1177,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonNumberLayout layout() {
-            return getBase().layout();
+        public TsonNumberLayout numberLayout() {
+            return getBase().numberLayout();
         }
 
         @Override
@@ -1187,8 +1187,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public String unit() {
-            return getBase().unit();
+        public String numberSuffix() {
+            return getBase().numberSuffix();
         }
     }
 
@@ -1204,8 +1204,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonNumberLayout layout() {
-            return getBase().layout();
+        public TsonNumberLayout numberLayout() {
+            return getBase().numberLayout();
         }
 
         @Override
@@ -1214,8 +1214,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public String unit() {
-            return getBase().unit();
+        public String numberSuffix() {
+            return getBase().numberSuffix();
         }
     }
 
@@ -1231,8 +1231,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonNumberLayout layout() {
-            return getBase().layout();
+        public TsonNumberLayout numberLayout() {
+            return getBase().numberLayout();
         }
 
         @Override
@@ -1241,8 +1241,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public String unit() {
-            return getBase().unit();
+        public String numberSuffix() {
+            return getBase().numberSuffix();
         }
     }
 

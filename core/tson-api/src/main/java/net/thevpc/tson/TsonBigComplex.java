@@ -3,9 +3,9 @@ package net.thevpc.tson;
 import java.math.BigDecimal;
 
 public interface TsonBigComplex extends TsonNumber {
-    BigDecimal getReal();
+    BigDecimal real();
 
-    BigDecimal getImag();
+    BigDecimal imag();
 
     TsonPrimitiveBuilder builder();
 }

@@ -20,6 +20,7 @@ public enum TsonElementType {
     BOOLEAN,
     NAME,
     ALIAS,
+    INSTANT,
     LOCAL_DATETIME,
     LOCAL_DATE,
     LOCAL_TIME,

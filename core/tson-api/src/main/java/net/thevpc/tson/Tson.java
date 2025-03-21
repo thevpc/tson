@@ -165,6 +165,10 @@ public class Tson {
         return factory.ofChar(value);
     }
 
+    public static TsonElement ofNumber(Number value, TsonNumberLayout layout, String unit){
+        return factory.ofNumber(value, layout, unit);
+    }
+
     public static TsonElement ofInt(int value) {
         return ofInt(value, TsonNumberLayout.DECIMAL);
     }

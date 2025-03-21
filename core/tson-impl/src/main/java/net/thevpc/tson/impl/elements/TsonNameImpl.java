@@ -46,7 +46,7 @@ public class TsonNameImpl extends AbstractPrimitiveTsonElement implements TsonNa
     }
     @Override
     public TsonPrimitiveBuilder builder() {
-        return new TsonPrimitiveElementBuilderImpl().set(this);
+        return new TsonPrimitiveElementBuilderImpl().copyFrom(this);
     }
 
     @Override

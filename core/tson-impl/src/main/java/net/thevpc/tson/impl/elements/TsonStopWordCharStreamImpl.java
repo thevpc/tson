@@ -77,7 +77,7 @@ public class TsonStopWordCharStreamImpl extends AbstractPrimitiveTsonElement imp
 
     @Override
     public TsonPrimitiveBuilder builder() {
-        return new TsonPrimitiveElementBuilderImpl().set(this);
+        return new TsonPrimitiveElementBuilderImpl().copyFrom(this);
     }
 
     @Override

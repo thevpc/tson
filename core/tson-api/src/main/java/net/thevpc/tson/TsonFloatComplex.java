@@ -1,9 +1,9 @@
 package net.thevpc.tson;
 
 public interface TsonFloatComplex extends TsonNumber {
-    float getReal();
+    float real();
 
-    float getImag();
+    float imag();
 
     TsonPrimitiveBuilder builder();
 }

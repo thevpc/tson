@@ -44,7 +44,7 @@ public class TsonFloatImpl extends AbstractNumberTsonElement implements TsonFloa
 
     @Override
     public TsonPrimitiveBuilder builder() {
-        return new TsonPrimitiveElementBuilderImpl().set(this);
+        return new TsonPrimitiveElementBuilderImpl().copyFrom(this);
     }
 
     @Override

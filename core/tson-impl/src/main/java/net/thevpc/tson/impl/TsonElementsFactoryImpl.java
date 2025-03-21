@@ -160,6 +160,40 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
     }
 
     @Override
+    public TsonElement ofNumber(Number value, TsonNumberLayout layout, String unit) {
+        if (value == null) {
+            return ofNull();
+        }
+        switch (resolveType(value)) {
+            case BYTE:
+                return ofByte(value.byteValue(), layout, unit);
+            case SHORT:
+                return ofShort(value.shortValue(), layout, unit);
+            case INTEGER:
+                return ofInt(value.intValue(), layout, unit);
+            case LONG:
+                return ofLong(value.longValue(), layout, unit);
+            case FLOAT:
+                return ofFloat(value.floatValue(), unit);
+            case DOUBLE:
+                return ofDouble(value.doubleValue(), unit);
+            case FLOAT_COMPLEX: {
+                TsonFloatComplex fc = (TsonFloatComplex) value;
+                return ofFloatComplex(fc.real(), fc.imag(), unit);
+            }
+            case DOUBLE_COMPLEX: {
+                TsonDoubleComplex fc = (TsonDoubleComplex) value;
+                return ofDoubleComplex(fc.real(), fc.imag(), unit);
+            }
+            case BIG_COMPLEX: {
+                TsonBigComplex fc = (TsonBigComplex) value;
+                return ofBigComplex(fc.real(), fc.imag(), unit);
+            }
+        }
+        throw new IllegalArgumentException("unsupported number type: " + value.getClass().getName());
+    }
+
+    @Override
     public TsonElement ofLong(long value) {
         return ofLong(value, TsonNumberLayout.DECIMAL);
     }
@@ -1671,4 +1705,67 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
         }
         return parse.toTson();
     }
+
+    private static TsonElementType resolveType(Object value) {
+        if (value == null) {
+            return TsonElementType.NULL;
+        } else {
+            switch (value.getClass().getName()) {
+                case "java.lang.Byte":
+                    return TsonElementType.BYTE;
+                case "java.lang.Short":
+                    return TsonElementType.SHORT;
+                case "java.lang.Integer":
+                    return TsonElementType.INTEGER;
+                case "java.lang.Long":
+                    return TsonElementType.LONG;
+                case "java.math.BigInteger":
+                    return TsonElementType.BIG_INTEGER;
+                case "java.lang.Float":
+                    return TsonElementType.FLOAT;
+                case "java.lang.Double":
+                    return TsonElementType.DOUBLE;
+                case "java.math.BigDecimal":
+                    return TsonElementType.BIG_DECIMAL;
+                case "java.lang.String":
+                case "java.lang.StringBuilder":
+                case "java.lang.StringBuffer":
+                    return TsonElementType.STRING;
+                case "java.util.Date":
+                case "java.time.Instant":
+                    return TsonElementType.INSTANT;
+                case "java.time.LocalDateTime":
+                    return TsonElementType.LOCAL_DATETIME;
+                case "java.time.LocalDate":
+                    return TsonElementType.LOCAL_DATE;
+                case "java.time.LocalTime":
+                    return TsonElementType.LOCAL_TIME;
+                case "java.lang.Boolean":
+                    return TsonElementType.BOOLEAN;
+            }
+            if (value instanceof TsonDoubleComplex) {
+                return TsonElementType.DOUBLE_COMPLEX;
+            }
+            if (value instanceof TsonFloatComplex) {
+                return TsonElementType.FLOAT_COMPLEX;
+            }
+            if (value instanceof TsonBigComplex) {
+                return TsonElementType.BIG_COMPLEX;
+            }
+            if (value instanceof Number) {
+                return TsonElementType.DOUBLE;
+            }
+//            if (value instanceof NInputStreamProvider) {
+//                return TsonElementType.BINARY_STREAM;
+//            }
+//            if (value instanceof NReaderProvider) {
+//                return TsonElementType.CHAR_STREAM;
+//            }
+            if (value instanceof CharSequence) {
+                return TsonElementType.STRING;
+            }
+            return TsonElementType.OBJECT;
+        }
+    }
+
 }

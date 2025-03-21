@@ -24,16 +24,16 @@ public class TsonBigComplexImpl extends AbstractNumberTsonElement implements Tso
 
     @Override
     public TsonBigDecimal toBigDecimal() {
-        return new TsonBigDecimalImpl(getReal(),unit());
+        return new TsonBigDecimalImpl(real(), numberSuffix());
     }
 
     @Override
-    public BigDecimal getReal() {
+    public BigDecimal real() {
         return real;
     }
 
     @Override
-    public BigDecimal getImag() {
+    public BigDecimal imag() {
         return imag;
     }
 
@@ -103,17 +103,17 @@ public class TsonBigComplexImpl extends AbstractNumberTsonElement implements Tso
 
     @Override
     public BigDecimal bigDecimalValue() {
-        return getReal();
+        return real();
     }
 
     @Override
     public BigInteger bigIntegerValue() {
-        return getReal().toBigInteger();
+        return real().toBigInteger();
     }
 
 
     public TsonBigInt toBigInt() {
-        return new TsonBigIntImpl(this.bigIntegerValue(),layout(),unit());
+        return new TsonBigIntImpl(this.bigIntegerValue(), numberLayout(), numberSuffix());
     }
 
     @Override
@@ -153,7 +153,7 @@ public class TsonBigComplexImpl extends AbstractNumberTsonElement implements Tso
 
     @Override
     public TsonPrimitiveBuilder builder() {
-        return new TsonPrimitiveElementBuilderImpl().set(this);
+        return new TsonPrimitiveElementBuilderImpl().copyFrom(this);
     }
 
     @Override
@@ -162,11 +162,11 @@ public class TsonBigComplexImpl extends AbstractNumberTsonElement implements Tso
     }
 
     public static int compare(TsonBigComplex a, TsonBigComplex oc) {
-        int c = a.getReal().compareTo(oc.getReal());
+        int c = a.real().compareTo(oc.real());
         if (c != 0) {
             return c;
         }
-        c = a.getImag().compareTo(oc.getImag());
+        c = a.imag().compareTo(oc.imag());
         if (c != 0) {
             return c;
         }

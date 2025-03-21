@@ -1,9 +1,9 @@
 package net.thevpc.tson;
 
 public interface TsonDoubleComplex extends TsonNumber {
-    double getReal();
+    double real();
 
-    double getImag();
+    double imag();
 
     TsonPrimitiveBuilder builder();
 }

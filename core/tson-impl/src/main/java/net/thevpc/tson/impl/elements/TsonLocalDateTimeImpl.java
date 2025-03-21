@@ -75,7 +75,7 @@ public class TsonLocalDateTimeImpl extends AbstractTemporalTsonElement implement
 
     @Override
     public TsonPrimitiveBuilder builder() {
-        return new TsonPrimitiveElementBuilderImpl().set(this);
+        return new TsonPrimitiveElementBuilderImpl().copyFrom(this);
     }
 
     @Override

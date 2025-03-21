@@ -25,7 +25,7 @@ public class TsonPrimitiveElementBuilderImpl extends AbstractTsonElementBuilder<
     }
 
     @Override
-    public TsonPrimitiveBuilder set(TsonElementBase element0) {
+    public TsonPrimitiveBuilder copyFrom(TsonElementBase element0) {
         TsonElement element= Tson.of(element0);
         if (element == null) {
             element = TsonNullImpl.INSTANCE;

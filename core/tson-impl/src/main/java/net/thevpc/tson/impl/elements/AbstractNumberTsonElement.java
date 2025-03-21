@@ -43,12 +43,12 @@ public abstract class AbstractNumberTsonElement extends AbstractPrimitiveTsonEle
         return this;
     }
 
-    public TsonNumberLayout layout() {
+    public TsonNumberLayout numberLayout() {
         return layout;
     }
 
     @Override
-    public String unit() {
+    public String numberSuffix() {
         return unit;
     }
 }

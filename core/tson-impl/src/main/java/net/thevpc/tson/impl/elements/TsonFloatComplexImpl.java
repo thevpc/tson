@@ -29,21 +29,21 @@ public class TsonFloatComplexImpl extends AbstractNumberTsonElement implements T
 
     @Override
     public TsonDoubleComplex toDoubleComplex() {
-        return new TsonDoubleComplexImpl(getReal(), getImag(), unit());
+        return new TsonDoubleComplexImpl(real(), imag(), numberSuffix());
     }
 
     @Override
     public TsonBigDecimal toBigDecimal() {
-        return new TsonBigDecimalImpl(BigDecimal.valueOf(getReal()), unit());
+        return new TsonBigDecimalImpl(BigDecimal.valueOf(real()), numberSuffix());
     }
 
     @Override
-    public float getReal() {
+    public float real() {
         return real;
     }
 
     @Override
-    public float getImag() {
+    public float imag() {
         return imag;
     }
 
@@ -113,7 +113,7 @@ public class TsonFloatComplexImpl extends AbstractNumberTsonElement implements T
 
     @Override
     public BigDecimal bigDecimalValue() {
-        return BigDecimal.valueOf(getReal());
+        return BigDecimal.valueOf(real());
     }
 
     @Override
@@ -123,7 +123,7 @@ public class TsonFloatComplexImpl extends AbstractNumberTsonElement implements T
 
 
     public TsonBigInt toBigInt() {
-        return new TsonBigIntImpl(bigIntegerValue(), layout(), unit());
+        return new TsonBigIntImpl(bigIntegerValue(), numberLayout(), numberSuffix());
     }
 
     @Override
@@ -163,7 +163,7 @@ public class TsonFloatComplexImpl extends AbstractNumberTsonElement implements T
 
     @Override
     public TsonPrimitiveBuilder builder() {
-        return new TsonPrimitiveElementBuilderImpl().set(this);
+        return new TsonPrimitiveElementBuilderImpl().copyFrom(this);
     }
 
     @Override
@@ -172,11 +172,11 @@ public class TsonFloatComplexImpl extends AbstractNumberTsonElement implements T
     }
 
     public static int compare(TsonFloatComplex a, TsonFloatComplex oc) {
-        int c = Float.compare(a.getReal(), oc.getReal());
+        int c = Float.compare(a.real(), oc.real());
         if (c != 0) {
             return c;
         }
-        c = Float.compare(a.getImag(), oc.getImag());
+        c = Float.compare(a.imag(), oc.imag());
         if (c != 0) {
             return c;
         }

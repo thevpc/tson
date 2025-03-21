@@ -414,7 +414,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
 
     private void formatAppendUnit(String ll, TsonNumber element, Writer writer) throws IOException {
         writer.append(ll);
-        String unit = TsonUtils.trimToNull(element.unit());
+        String unit = TsonUtils.trimToNull(element.numberSuffix());
         if (unit != null) {
             if (unit.charAt(0) != '%' && unit.charAt(0) != '_') {
                 writer.append('_');

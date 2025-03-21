@@ -24,30 +24,30 @@ public class TsonNumberHelper {
     }
 
     public TsonNumberHelper(TsonNumber te) {
-        this.unit = te.unit();
-        this.layout = te.layout();
+        this.unit = te.numberSuffix();
+        this.layout = te.numberLayout();
         switch (te.type()) {
             case BIG_COMPLEX: {
                 this.complex = true;
                 TsonBigComplex bigComplex = te.toBigComplex();
-                this.real = bigComplex.getReal();
-                this.imag = bigComplex.getImag();
+                this.real = bigComplex.real();
+                this.imag = bigComplex.imag();
                 this.type = NumberType.BIG_INTEGER;
                 break;
             }
             case DOUBLE_COMPLEX: {
                 this.complex = true;
                 TsonDoubleComplex bigComplex = te.toDoubleComplex();
-                this.real = bigComplex.getReal();
-                this.imag = bigComplex.getImag();
+                this.real = bigComplex.real();
+                this.imag = bigComplex.imag();
                 this.type = NumberType.DOUBLE;
                 break;
             }
             case FLOAT_COMPLEX: {
                 this.complex = true;
                 TsonFloatComplex bigComplex = te.toFloatComplex();
-                this.real = bigComplex.getReal();
-                this.imag = bigComplex.getImag();
+                this.real = bigComplex.real();
+                this.imag = bigComplex.imag();
                 this.type = NumberType.FLOAT;
                 break;
             }

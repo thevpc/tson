@@ -130,7 +130,7 @@ public class TsonIntImpl extends AbstractNumberTsonElement implements TsonInt {
 
     @Override
     public TsonPrimitiveBuilder builder() {
-        return new TsonPrimitiveElementBuilderImpl().set(this);
+        return new TsonPrimitiveElementBuilderImpl().copyFrom(this);
     }
 
     @Override

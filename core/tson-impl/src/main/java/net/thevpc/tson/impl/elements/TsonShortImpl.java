@@ -129,7 +129,7 @@ public class TsonShortImpl extends AbstractNumberTsonElement implements TsonShor
 
     @Override
     public TsonPrimitiveBuilder builder() {
-        return new TsonPrimitiveElementBuilderImpl().set(this);
+        return new TsonPrimitiveElementBuilderImpl().copyFrom(this);
     }
 
     @Override

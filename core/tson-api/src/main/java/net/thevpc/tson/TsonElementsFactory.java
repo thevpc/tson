@@ -55,6 +55,7 @@ public interface TsonElementsFactory {
     TsonElement ofInt(int value, TsonNumberLayout layout);
 
     TsonElement ofInt(int value, TsonNumberLayout layout, String unit);
+    TsonElement ofNumber(Number value, TsonNumberLayout layout, String unit);
 
     TsonElement ofLong(long value);
 

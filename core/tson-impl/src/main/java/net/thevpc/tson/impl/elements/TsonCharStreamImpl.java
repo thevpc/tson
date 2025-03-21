@@ -57,7 +57,7 @@ public class TsonCharStreamImpl extends AbstractPrimitiveTsonElement implements 
 
     @Override
     public TsonPrimitiveBuilder builder() {
-        return new TsonPrimitiveElementBuilderImpl().set(this);
+        return new TsonPrimitiveElementBuilderImpl().copyFrom(this);
     }
 
     @Override

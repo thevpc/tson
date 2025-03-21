@@ -106,7 +106,7 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
 
 
     public TsonBigInt toBigInt(){
-        return new TsonBigIntImpl(this.bigIntegerValue(),layout(),unit());
+        return new TsonBigIntImpl(this.bigIntegerValue(), numberLayout(), numberSuffix());
     }
 
     @Override
@@ -146,7 +146,7 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
 
     @Override
     public TsonPrimitiveBuilder builder() {
-        return new TsonPrimitiveElementBuilderImpl().set(this);
+        return new TsonPrimitiveElementBuilderImpl().copyFrom(this);
     }
 
     @Override
