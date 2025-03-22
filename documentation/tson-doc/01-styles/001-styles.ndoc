@@ -1,0 +1,4 @@
+import(
+    "/home/vpc/xprojects/productivity/ndoc-templates/main/default/v1.0/dist"
+    "github://thevpc/ndoc-templates/main/default/v1.0/dist"
+)

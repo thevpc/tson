@@ -28,7 +28,7 @@ public class TestParse2 {
                     + "//    )\n"
                     + "//    source(tson,file:\"0020-example.tson\")\n"
                     + "}";
-            String str2=new String(Files.readAllBytes(Paths.get("/home/vpc/xprojects/nuts/nuts-enterprise/halfa/documentation/tson-doc/02-pages/0030-general-form/0020-example.hd")));
+            String str2=new String(Files.readAllBytes(Paths.get("/home/vpc/xprojects/nuts/nuts-enterprise/halfa/documentation/tson-doc/02-pages/0030-general-form/0020-example.ndoc")));
             TsonDocument s = Tson.reader().readDocument(str2);
             System.out.println(s);
         } catch (IOException ex) {
