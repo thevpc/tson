@@ -7,4 +7,5 @@ public enum TsonStringLayout {
     TRIPLE_DOUBLE_QUOTE,
     TRIPLE_SINGLE_QUOTE,
     TRIPLE_ANTI_QUOTE,
+    SINGLE_LINE,
 }

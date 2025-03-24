@@ -318,6 +318,20 @@ public class TsonParserUtils {
         int len = chars.length;
         int prefixLen = 1;
         int suffixLen = 1;
+        if (len < 1) {
+            if(chars[0]=='#'){
+                for (int i = 0; i < chars[i]; i++) {
+                    if(chars[i]=='\n' || chars[i]=='\r'){
+                        throw new IllegalArgumentException("invalid raw string " + s);
+                    }
+                }
+                return new TsonStringImpl(
+                        new String(Arrays.copyOfRange(chars,1,chars.length)).trim(),
+                        new String(Arrays.copyOfRange(chars,1,chars.length)),
+                        TsonStringLayout.SINGLE_LINE
+                );
+            }
+        }
         if (len < 2) {
             throw new IllegalArgumentException("invalid raw string " + s);
         }

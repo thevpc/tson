@@ -158,6 +158,7 @@ void elementLevel1() :
 
     |<NUMBER>{ visitor.visitPrimitiveEnd(Tson.parseNumber(token.image));}
 
+    |<LINE_STR> {  visitor.visitPrimitiveEnd(Tson.parseString(token.image));}
     |<SINGLE_QUOTE_STR> {  visitor.visitPrimitiveEnd(Tson.parseString(token.image));}
     |<DOUBLE_QUOTE_STR> {  visitor.visitPrimitiveEnd(Tson.parseString(token.image));}
     |<ANTI_QUOTE_STR> {  visitor.visitPrimitiveEnd(Tson.parseString(token.image));}
@@ -560,6 +561,7 @@ void annotationParam() :
 |    < #EXPONENT: ["e","E"] (["+","-"])? (<DIGIT>)+ >
 |    < DOUBLE_QUOTE_STR: "\""  (~["\""] | "\\\"")*  "\"">
 |    < SINGLE_QUOTE_STR: "'"  (~["'"] | "\\'")*  "'">
+|    < LINE_STR: "#"  (~["\n"])*>
 |    < ANTI_QUOTE_STR : "`"  (~["`"] | "\\`")*  "`" >
 |    < TRIPLE_DOUBLE_QUOTE_STR : "\"\"\""  ("\\\"\"\"" | ~["\""] | ~["\""] | ("\"" ~["\""]) | ("\"\"" ~["\""]))*  "\"\"\"" >
 |    < TRIPLE_SINGLE_QUOTE_STR : "'''"  ("\\'''" | ~["'"] | ("'" ~["'"]) | ("''" ~["'"]))*  "'''" >
