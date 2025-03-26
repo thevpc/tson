@@ -5,6 +5,7 @@ import net.thevpc.tson.impl.builders.TsonPrimitiveElementBuilderImpl;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -56,6 +57,11 @@ public class TsonNullImpl extends AbstractTsonElementBase implements TsonNull {
 
     @Override
     public Integer intObject() {
+        return null;
+    }
+
+    @Override
+    public Instant instantValue() {
         return null;
     }
 

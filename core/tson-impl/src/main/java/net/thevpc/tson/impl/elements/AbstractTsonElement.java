@@ -5,6 +5,7 @@ import net.thevpc.tson.impl.util.TsonUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -244,6 +245,11 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
     @Override
     public LocalDate localDateValue() {
         return throwPrimitive(TsonElementType.LOCAL_DATE);
+    }
+
+    @Override
+    public Instant instantValue() {
+        return throwPrimitive(TsonElementType.INSTANT);
     }
 
     @Override

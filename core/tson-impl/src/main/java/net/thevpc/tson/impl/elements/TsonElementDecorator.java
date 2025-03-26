@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -418,6 +419,11 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
     @Override
     public LocalDate localDateValue() {
         return base.localDateValue();
+    }
+
+    @Override
+    public Instant instantValue() {
+        return base.instantValue();
     }
 
     @Override

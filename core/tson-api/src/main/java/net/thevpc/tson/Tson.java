@@ -627,6 +627,10 @@ public class Tson {
         return ofLocalDatetime(Instant.ofEpochMilli(value.getTime()));
     }
 
+    public static TsonElement ofInstant(Instant value) {
+        return ofLocalDatetime(value);
+    }
+
     public static TsonElement of(Instant value) {
         return ofLocalDatetime(value);
     }
