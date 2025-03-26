@@ -27,7 +27,7 @@ public abstract class AbstractTsonElement extends AbstractTsonElementBase {
 
     @Override
     public TsonComments comments() {
-        return null;
+        return TsonComments.BLANK;
     }
 
 

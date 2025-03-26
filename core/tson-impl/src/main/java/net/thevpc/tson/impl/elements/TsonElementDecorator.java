@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public abstract class TsonElementDecorator extends AbstractTsonElementBase {
 
     private TsonElement base;
-    private TsonComments comments;
+    private TsonComments comments=TsonComments.BLANK;
     private TsonAnnotation[] annotations;
 
     private static TsonComment[] trimToNull(TsonComment[] comments) {
@@ -215,7 +215,7 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
             base = ((TsonElementDecorator) base).base;
         }
         this.base = base;
-        this.comments = comments;
+        this.comments = comments==null?TsonComments.BLANK : comments;
         this.annotations = Arrays.copyOf(annotations, annotations.length);
     }
 
