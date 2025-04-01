@@ -7,15 +7,13 @@ import java.util.Objects;
 
 public class TsonStringImpl extends AbstractPrimitiveTsonElement implements TsonString {
 
-    private TsonStringLayout layout;
     private String rawValue;
     private String value;
 
-    public TsonStringImpl(String value, String rawValue, TsonStringLayout layout) {
-        super(TsonElementType.STRING);
+    public TsonStringImpl(TsonElementType elementType,String value, String rawValue) {
+        super(elementType);
         this.value = value;
         this.rawValue = rawValue;
-        this.layout = layout;
     }
 
     @Override
@@ -33,20 +31,22 @@ public class TsonStringImpl extends AbstractPrimitiveTsonElement implements Tson
     }
 
     @Override
-    public String quoted() {
-        switch (layout()) {
-            case DOUBLE_QUOTE:
+    public String literalString() {
+        switch (type()) {
+            case DOUBLE_QUOTED_STRING:
                 return quoted("\"");
-            case SINGLE_QUOTE:
+            case SINGLE_QUOTED_STRING:
                 return quoted("'");
-            case ANTI_QUOTE:
+            case ANTI_QUOTED_STRING:
                 return quoted("`");
-            case TRIPLE_DOUBLE_QUOTE:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
                 return quoted("\"\"\"");
-            case TRIPLE_SINGLE_QUOTE:
+            case TRIPLE_SINGLE_QUOTED_STRING:
                 return quoted("'''");
-            case TRIPLE_ANTI_QUOTE:
+            case TRIPLE_ANTI_QUOTED_STRING:
                 return quoted("```");
+            case LINE_STRING:
+                return "¶" + raw() + "\n";
         }
         throw new IllegalArgumentException("unexpected");
     }
@@ -92,10 +92,6 @@ public class TsonStringImpl extends AbstractPrimitiveTsonElement implements Tson
         sb.insert(0, quotes);
         sb.append(quotes);
         return sb.toString();
-    }
-
-    public TsonStringLayout layout() {
-        return layout;
     }
 
     @Override

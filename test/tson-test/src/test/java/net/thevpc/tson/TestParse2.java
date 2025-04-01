@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import net.thevpc.tson.test.util.TsonTestUtils;
 import org.junit.Test;
 
 public class TestParse2 {
@@ -36,4 +38,9 @@ public class TestParse2 {
         }
     }
 
+    @Test
+    public void test07() {
+        TsonDocument s = Tson.reader().readDocument(TsonTestUtils.loadTsonTestAsString("test07"));
+        System.out.println(s);
+    }
 }

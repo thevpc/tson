@@ -4,7 +4,13 @@ public enum TsonElementType {
     NULL,
     BINARY_STREAM,
     CHAR_STREAM,
-    STRING,
+    DOUBLE_QUOTED_STRING,
+    SINGLE_QUOTED_STRING,
+    ANTI_QUOTED_STRING,
+    TRIPLE_DOUBLE_QUOTED_STRING,
+    TRIPLE_SINGLE_QUOTED_STRING,
+    TRIPLE_ANTI_QUOTED_STRING,
+    LINE_STRING,
     CHAR,
     BYTE,
     SHORT,
@@ -87,7 +93,13 @@ public enum TsonElementType {
             case NULL:
             case BINARY_STREAM:
             case CHAR_STREAM:
-            case STRING:
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING:
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case LINE_STRING:
             case CHAR:
             case BOOLEAN:
             case NAME:
@@ -97,6 +109,36 @@ public enum TsonElementType {
             case OP:
             case CUSTOM:
                 return false;
+        }
+        return false;
+    }
+
+    public boolean isAnyString() {
+        switch (this) {
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING:
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case LINE_STRING:
+            case CHAR:
+            case NAME:
+                return true;
+        }
+        return false;
+    }
+    public boolean isString() {
+        switch (this) {
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING:
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case LINE_STRING:
+            case CHAR:
+                return true;
         }
         return false;
     }
@@ -135,7 +177,13 @@ public enum TsonElementType {
             case NULL:
             case BINARY_STREAM:
             case CHAR_STREAM:
-            case STRING:
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING:
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case LINE_STRING:
             case CHAR:
             case BOOLEAN:
             case NAME:
@@ -184,7 +232,13 @@ public enum TsonElementType {
             case NULL:
             case BINARY_STREAM:
             case CHAR_STREAM:
-            case STRING:
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING:
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case LINE_STRING:
             case CHAR:
             case BOOLEAN:
             case NAME:
@@ -219,7 +273,13 @@ public enum TsonElementType {
             case NULL:
             case BINARY_STREAM:
             case CHAR_STREAM:
-            case STRING:
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING:
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case LINE_STRING:
             case CHAR:
             case BOOLEAN:
             case NAME:
@@ -262,7 +322,13 @@ public enum TsonElementType {
             case NULL:
             case BINARY_STREAM:
             case CHAR_STREAM:
-            case STRING:
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING:
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case LINE_STRING:
             case CHAR:
             case BOOLEAN:
             case NAME:
@@ -311,7 +377,13 @@ public enum TsonElementType {
             case NULL:
             case BINARY_STREAM:
             case CHAR_STREAM:
-            case STRING:
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING:
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case LINE_STRING:
             case CHAR:
             case BOOLEAN:
             case NAME:
@@ -356,7 +428,13 @@ public enum TsonElementType {
             case BIG_COMPLEX:
             case BIG_DECIMAL:
             case NULL:
-            case STRING:
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING:
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case LINE_STRING:
             case CHAR:
             case BOOLEAN:
             case NAME:

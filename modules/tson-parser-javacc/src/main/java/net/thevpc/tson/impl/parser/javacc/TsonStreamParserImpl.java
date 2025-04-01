@@ -33,6 +33,7 @@ public class TsonStreamParserImpl implements TsonStreamParserImplConstants {
       case NUMBER:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
+      case LINE_STR:
       case ANTI_QUOTE_STR:
       case TRIPLE_DOUBLE_QUOTE_STR:
       case TRIPLE_SINGLE_QUOTE_STR:
@@ -367,6 +368,10 @@ Token t ;
       jj_consume_token(NUMBER);
                visitor.visitPrimitiveEnd(Tson.parseNumber(token.image));
       break;
+    case LINE_STR:
+      jj_consume_token(LINE_STR);
+                   visitor.visitPrimitiveEnd(Tson.parseString(token.image));
+      break;
     case SINGLE_QUOTE_STR:
       jj_consume_token(SINGLE_QUOTE_STR);
                            visitor.visitPrimitiveEnd(Tson.parseString(token.image));
@@ -461,6 +466,7 @@ Token t ;
       case NUMBER:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
+      case LINE_STR:
       case ANTI_QUOTE_STR:
       case TRIPLE_DOUBLE_QUOTE_STR:
       case TRIPLE_SINGLE_QUOTE_STR:
@@ -489,6 +495,7 @@ Token t ;
       case NUMBER:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
+      case LINE_STR:
       case ANTI_QUOTE_STR:
       case TRIPLE_DOUBLE_QUOTE_STR:
       case TRIPLE_SINGLE_QUOTE_STR:
@@ -526,6 +533,7 @@ Token t ;
       case NUMBER:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
+      case LINE_STR:
       case ANTI_QUOTE_STR:
       case TRIPLE_DOUBLE_QUOTE_STR:
       case TRIPLE_SINGLE_QUOTE_STR:
@@ -554,6 +562,7 @@ Token t ;
       case NUMBER:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
+      case LINE_STR:
       case ANTI_QUOTE_STR:
       case TRIPLE_DOUBLE_QUOTE_STR:
       case TRIPLE_SINGLE_QUOTE_STR:
@@ -591,6 +600,7 @@ Token t ;
       case NUMBER:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
+      case LINE_STR:
       case ANTI_QUOTE_STR:
       case TRIPLE_DOUBLE_QUOTE_STR:
       case TRIPLE_SINGLE_QUOTE_STR:
@@ -620,6 +630,7 @@ Token t ;
       case NUMBER:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
+      case LINE_STR:
       case ANTI_QUOTE_STR:
       case TRIPLE_DOUBLE_QUOTE_STR:
       case TRIPLE_SINGLE_QUOTE_STR:
@@ -649,7 +660,7 @@ Token t ;
   }
 
   final public void annotationParamList() throws ParseException {
-        visitor.visitAnnotationParamsStart();
+            visitor.visitAnnotationParamStart();
     label_6:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -661,6 +672,7 @@ Token t ;
       case NUMBER:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
+      case LINE_STR:
       case ANTI_QUOTE_STR:
       case TRIPLE_DOUBLE_QUOTE_STR:
       case TRIPLE_SINGLE_QUOTE_STR:
@@ -689,6 +701,7 @@ Token t ;
       case NUMBER:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
+      case LINE_STR:
       case ANTI_QUOTE_STR:
       case TRIPLE_DOUBLE_QUOTE_STR:
       case TRIPLE_SINGLE_QUOTE_STR:
@@ -712,7 +725,7 @@ Token t ;
         throw new ParseException();
       }
     }
-      visitor.visitAnnotationParamsEnd();
+            visitor.visitAnnotationParamEnd();
   }
 
   final public void annotation() throws ParseException {
@@ -742,6 +755,7 @@ Token t ;
       case NUMBER:
       case DOUBLE_QUOTE_STR:
       case SINGLE_QUOTE_STR:
+      case LINE_STR:
       case ANTI_QUOTE_STR:
       case TRIPLE_DOUBLE_QUOTE_STR:
       case TRIPLE_SINGLE_QUOTE_STR:
@@ -864,6 +878,7 @@ Token t ;
     case NUMBER:
     case DOUBLE_QUOTE_STR:
     case SINGLE_QUOTE_STR:
+    case LINE_STR:
     case ANTI_QUOTE_STR:
     case TRIPLE_DOUBLE_QUOTE_STR:
     case TRIPLE_SINGLE_QUOTE_STR:
@@ -907,6 +922,7 @@ Token t ;
     case NUMBER:
     case DOUBLE_QUOTE_STR:
     case SINGLE_QUOTE_STR:
+    case LINE_STR:
     case ANTI_QUOTE_STR:
     case TRIPLE_DOUBLE_QUOTE_STR:
     case TRIPLE_SINGLE_QUOTE_STR:
@@ -954,6 +970,7 @@ Token t ;
     case NUMBER:
     case DOUBLE_QUOTE_STR:
     case SINGLE_QUOTE_STR:
+    case LINE_STR:
     case ANTI_QUOTE_STR:
     case TRIPLE_DOUBLE_QUOTE_STR:
     case TRIPLE_SINGLE_QUOTE_STR:
@@ -1008,13 +1025,13 @@ Token t ;
       jj_la1_init_2();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x17febe,0xffc00000,0xffc00000,0x0,0x17febe,0x17febe,0x17febe,0x17febe,0x17febe,0x17febe,0x17febe,0x17febe,0x17febe,0x0,0x1ffebe,0x40000,0x100020,0x100020,0x40000,0x100020,0x100020,0x1ffebe,0x17fefe,0x37febe,};
+      jj_la1_0 = new int[] {0x2ffebe,0xff800000,0xff800000,0x0,0x2ffebe,0x2ffebe,0x2ffebe,0x2ffebe,0x2ffebe,0x2ffebe,0x2ffebe,0x2ffebe,0x2ffebe,0x0,0x3ffebe,0x80000,0x200020,0x200020,0x80000,0x200020,0x200020,0x3ffebe,0x2ffefe,0x6ffebe,};
    }
    private static void jj_la1_init_1() {
       jj_la1_1 = new int[] {0x0,0xffffffff,0xffffffff,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
    }
    private static void jj_la1_init_2() {
-      jj_la1_2 = new int[] {0x2a0000,0x43fff,0x43fff,0x20000,0x280000,0x2b0000,0x2b0000,0x2b0000,0x2b0000,0x2b4000,0x2b4000,0x2b0000,0x2b0000,0x200000,0x2b0000,0x0,0x0,0x0,0x0,0x0,0x0,0x2b0000,0x2b0000,0x2b4000,};
+      jj_la1_2 = new int[] {0x540000,0x87fff,0x87fff,0x40000,0x500000,0x560000,0x560000,0x560000,0x560000,0x568000,0x568000,0x560000,0x560000,0x400000,0x560000,0x0,0x0,0x0,0x0,0x0,0x0,0x560000,0x560000,0x568000,};
    }
 
   /** Constructor with InputStream. */
@@ -1131,7 +1148,7 @@ Token t ;
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[93];
+    boolean[] la1tokens = new boolean[94];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -1151,7 +1168,7 @@ Token t ;
         }
       }
     }
-    for (int i = 0; i < 93; i++) {
+    for (int i = 0; i < 94; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

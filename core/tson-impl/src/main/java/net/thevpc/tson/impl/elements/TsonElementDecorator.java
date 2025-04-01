@@ -67,7 +67,13 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         switch (base.type()) {
             case NULL:
                 return new AsNull((TsonNull) base, comments, annotations);
-            case STRING:
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING:
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case LINE_STRING:
                 return new AsString((TsonString) base, comments, annotations);
             case BOOLEAN:
                 return new AsBoolean((TsonBoolean) base, comments, annotations);
@@ -164,7 +170,13 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         switch (base.type()) {
             case NULL:
                 return new AsNull((TsonNull) base, comments, annArr);
-            case STRING:
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING:
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case LINE_STRING:
                 return new AsString((TsonString) base, comments, annArr);
             case BOOLEAN:
                 return new AsBoolean((TsonBoolean) base, comments, annArr);
@@ -926,11 +938,6 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public TsonStringLayout layout() {
-            return getBase().layout();
-        }
-
-        @Override
         public String raw() {
             return getBase().raw();
         }
@@ -941,8 +948,8 @@ public abstract class TsonElementDecorator extends AbstractTsonElementBase {
         }
 
         @Override
-        public String quoted() {
-            return getBase().quoted();
+        public String literalString() {
+            return getBase().literalString();
         }
     }
 

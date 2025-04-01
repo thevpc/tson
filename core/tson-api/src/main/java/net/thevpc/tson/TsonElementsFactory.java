@@ -22,13 +22,23 @@ public interface TsonElementsFactory {
 
     TsonElement ofBoolean(boolean val);
 
-    TsonElement ofString(String value, TsonStringLayout layout);
+    TsonElement ofDoubleQuotedString(String value);
+
+    TsonElement ofSingleQuotedString(String value);
+
+    TsonElement ofAntiQuotedString(String value);
+
+    TsonElement ofTripleDoubleQuotedString(String value);
+
+    TsonElement ofTripleSingleQuotedString(String value);
+
+    TsonElement ofTripleAntiQuotedString(String value);
+
+    TsonElement ofLineString(String value);
 
     TsonElement ofElement(TsonElementBase value);
 
     TsonElementBase ofElementBase(TsonElementBase value);
-
-    TsonElement ofString(String value);
 
     TsonElement ofLocalDatetime(Instant value);
 
@@ -55,6 +65,7 @@ public interface TsonElementsFactory {
     TsonElement ofInt(int value, TsonNumberLayout layout);
 
     TsonElement ofInt(int value, TsonNumberLayout layout, String unit);
+
     TsonElement ofNumber(Number value, TsonNumberLayout layout, String unit);
 
     TsonElement ofLong(long value);
@@ -203,10 +214,7 @@ public interface TsonElementsFactory {
 
     TsonElement of(Pattern value);
 
-    TsonElement of(String value);
-
     TsonPrimitiveBuilder of();
-
 
     TsonArrayBuilder ofArrayBuilder();
 

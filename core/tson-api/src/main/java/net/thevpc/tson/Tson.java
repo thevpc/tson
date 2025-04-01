@@ -66,11 +66,90 @@ public class Tson {
         return factory.ofBoolean(val);
     }
 
-    public static TsonElement ofString(String value, TsonStringLayout layout) {
+    public static TsonElement ofString(TsonElementType stringType, String value) {
+        switch (stringType == null ? TsonElementType.DOUBLE_QUOTED_STRING : stringType) {
+            case DOUBLE_QUOTED_STRING:
+                return ofDoubleQuotedString(value);
+            case SINGLE_QUOTED_STRING:
+                return ofSingleQuotedString(value);
+            case ANTI_QUOTED_STRING:
+                return ofAntiQuotedString(value);
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+                return ofTripleDoubleQuotedString(value);
+            case TRIPLE_SINGLE_QUOTED_STRING:
+                return ofTripleSingleQuotedString(value);
+            case TRIPLE_ANTI_QUOTED_STRING:
+                return ofTripleAntiQuotedString(value);
+            case LINE_STRING:
+                return ofLineString(value);
+            case CHAR: {
+                if (value == null) {
+                    return ofNull();
+                }
+                if (value.length() == 1) {
+                    return ofChar(value.charAt(0));
+                }
+                throw new IllegalArgumentException("Unsupported String TsonElementType: " + stringType);
+            }
+            default:
+                throw new IllegalArgumentException("Unsupported String TsonElementType: " + stringType);
+        }
+    }
+
+    public static TsonElement ofString(String value) {
         if (value == null) {
             return ofNull();
         }
-        return factory.ofString(value, layout == null ? TsonStringLayout.DOUBLE_QUOTE : layout);
+        return factory.ofDoubleQuotedString(value);
+    }
+
+    public static TsonElement ofDoubleQuotedString(String value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return factory.ofDoubleQuotedString(value);
+    }
+
+    public static TsonElement ofSingleQuotedString(String value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return factory.ofSingleQuotedString(value);
+    }
+
+    public static TsonElement ofAntiQuotedString(String value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return factory.ofAntiQuotedString(value);
+    }
+
+    public static TsonElement ofTripleDoubleQuotedString(String value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return factory.ofTripleDoubleQuotedString(value);
+    }
+
+    public static TsonElement ofTripleSingleQuotedString(String value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return factory.ofTripleSingleQuotedString(value);
+    }
+
+    public static TsonElement ofTripleAntiQuotedString(String value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return factory.ofTripleAntiQuotedString(value);
+    }
+
+    public static TsonElement ofLineString(String value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return factory.ofLineString(value);
     }
 
     public static TsonElement ofElement(TsonElementBase value) {
@@ -87,12 +166,6 @@ public class Tson {
         return value;
     }
 
-    public static TsonElement ofString(String value) {
-        if (value == null) {
-            return ofNull();
-        }
-        return ofString(value, TsonStringLayout.DOUBLE_QUOTE);
-    }
 
     public static TsonElement ofLocalDatetime(Instant value) {
         if (value == null) {
@@ -165,7 +238,7 @@ public class Tson {
         return factory.ofChar(value);
     }
 
-    public static TsonElement ofNumber(Number value, TsonNumberLayout layout, String unit){
+    public static TsonElement ofNumber(Number value, TsonNumberLayout layout, String unit) {
         return factory.ofNumber(value, layout, unit);
     }
 
@@ -786,6 +859,7 @@ public class Tson {
     public static TsonObjectBuilder ofObjectBuilder(TsonElementBase... elems) {
         return ofObjectBuilder().addAll(elems);
     }
+
     public static TsonObject ofObject(TsonElementBase... elems) {
         return ofObjectBuilder().addAll(elems).build();
     }

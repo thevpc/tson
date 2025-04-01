@@ -69,7 +69,7 @@ public abstract class AbstractTsonElementBase implements TsonElement {
 
     @Override
     public boolean isString() {
-        return type() == TsonElementType.STRING;
+        return type().isString();
     }
 
     @Override
@@ -132,8 +132,17 @@ public abstract class AbstractTsonElementBase implements TsonElement {
     @Override
     public boolean isAnyString() {
         switch (type()) {
-            case STRING:
+            // isString
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING:
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case LINE_STRING:
             case CHAR:
+
+            // is special string
             case NAME:
                 return true;
         }

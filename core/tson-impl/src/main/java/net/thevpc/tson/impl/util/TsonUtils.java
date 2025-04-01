@@ -315,258 +315,258 @@ public class TsonUtils {
         }
     }
 
-    public static void toQuotedStr(String str, TsonStringLayout layout, StringBuilder sb) {
-        char[] chars = str.toCharArray();
-        int len = chars.length;
-//        int bestLen = len * 2 + 2;
-//        if (bestLen < 0) {
-//            bestLen = Integer.MAX_VALUE;
+//    public static void toQuotedStr(String str, TsonStringLayout layout, StringBuilder sb) {
+//        char[] chars = str.toCharArray();
+//        int len = chars.length;
+////        int bestLen = len * 2 + 2;
+////        if (bestLen < 0) {
+////            bestLen = Integer.MAX_VALUE;
+////        }
+////        sb.ensureNext(sb.length()+bestLen + 2);
+////        sb.ensureCapacity(sb.length()+bestLen + 2);
+//        switch (layout) {
+//            case DOUBLE_QUOTE: {
+//                sb.append('\"');
+//                for (int x = 0; x < len; x++) {
+//                    char c = chars[x];
+//                    switch (c) {
+//                        case '\t':
+//                            sb.append('\\').append('t');
+//                            break;
+//                        case '\n':
+//                            sb.append('\\').append('n');
+//                            break;
+//                        case '\r':
+//                            sb.append('\\').append('r');
+//                            break;
+//                        case '\f':
+//                            sb.append('\\').append('f');
+//                            break;
+//                        case '"':
+//                            sb.append('\\').append(c);
+//                            break;
+//                        case '\\':
+//                            sb.append('\\');
+//                            sb.append('\\');
+//                            break;
+//                        default:
+//                            if (((c < 0x0020) || (c > 0x007e))) {
+//                                sb.append('\\');
+//                                sb.append('u');
+//                                sb.append(hexDigit[((c >> 12) & 0xF)]);
+//                                sb.append(hexDigit[((c >> 8) & 0xF)]);
+//                                sb.append(hexDigit[((c >> 4) & 0xF)]);
+//                                sb.append(hexDigit[(c & 0xF)]);
+//                            } else {
+//                                sb.append(c);
+//                            }
+//                    }
+//                }
+//                sb.append('\"');
+//                break;
+//            }
+//            case SINGLE_QUOTE: {
+//                sb.append('\'');
+//                for (int x = 0; x < len; x++) {
+//                    char c = chars[x];
+//                    switch (c) {
+//                        case '\t':
+//                            sb.append('\\').append('t');
+//                            break;
+//                        case '\n':
+//                            sb.append('\\').append('n');
+//                            break;
+//                        case '\r':
+//                            sb.append('\\').append('r');
+//                            break;
+//                        case '\f':
+//                            sb.append('\\').append('f');
+//                            break;
+//                        case '"':
+//                            sb.append('\\').append(c);
+//                            break;
+//                        case '\\':
+//                            sb.append('\\');
+//                            sb.append('\\');
+//                            break;
+//                        default:
+//                            if (((c < 0x0020) || (c > 0x007e))) {
+//                                sb.append('\\');
+//                                sb.append('u');
+//                                sb.append(hexDigit[((c >> 12) & 0xF)]);
+//                                sb.append(hexDigit[((c >> 8) & 0xF)]);
+//                                sb.append(hexDigit[((c >> 4) & 0xF)]);
+//                                sb.append(hexDigit[(c & 0xF)]);
+//                            } else {
+//                                sb.append(c);
+//                            }
+//                    }
+//                }
+//                sb.append('\'');
+//                break;
+//            }
+//            case ANTI_QUOTE: {
+//                sb.append('`');
+//                for (int x = 0; x < len; x++) {
+//                    char c = chars[x];
+//                    switch (c) {
+//                        case '\t':
+//                            sb.append('\\').append('t');
+//                            break;
+//                        case '\n':
+//                            sb.append('\\').append('n');
+//                            break;
+//                        case '\r':
+//                            sb.append('\\').append('r');
+//                            break;
+//                        case '\f':
+//                            sb.append('\\').append('f');
+//                            break;
+//                        case '"':
+//                            sb.append('\\').append(c);
+//                            break;
+//                        case '\\':
+//                            sb.append('\\');
+//                            sb.append('\\');
+//                            break;
+//                        default:
+//                            if (((c < 0x0020) || (c > 0x007e))) {
+//                                sb.append('\\');
+//                                sb.append('u');
+//                                sb.append(hexDigit[((c >> 12) & 0xF)]);
+//                                sb.append(hexDigit[((c >> 8) & 0xF)]);
+//                                sb.append(hexDigit[((c >> 4) & 0xF)]);
+//                                sb.append(hexDigit[(c & 0xF)]);
+//                            } else {
+//                                sb.append(c);
+//                            }
+//                    }
+//                }
+//                sb.append('`');
+//                break;
+//            }
+//            case TRIPLE_DOUBLE_QUOTE: {
+//                sb.append("\"\"\"");
+//                for (int x = 0; x < len; x++) {
+//                    char c = chars[x];
+//                    switch (c) {
+//                        case '\t':
+//                            sb.append('\\').append('t');
+//                            break;
+//                        case '\n':
+//                            sb.append('\\').append('n');
+//                            break;
+//                        case '\r':
+//                            sb.append('\\').append('r');
+//                            break;
+//                        case '\f':
+//                            sb.append('\\').append('f');
+//                            break;
+//                        case '"':
+//                            sb.append('\\').append(c);
+//                            break;
+//                        case '\\':
+//                            sb.append('\\');
+//                            sb.append('\\');
+//                            break;
+//                        default:
+//                            if (((c < 0x0020) || (c > 0x007e))) {
+//                                sb.append('\\');
+//                                sb.append('u');
+//                                sb.append(hexDigit[((c >> 12) & 0xF)]);
+//                                sb.append(hexDigit[((c >> 8) & 0xF)]);
+//                                sb.append(hexDigit[((c >> 4) & 0xF)]);
+//                                sb.append(hexDigit[(c & 0xF)]);
+//                            } else {
+//                                sb.append(c);
+//                            }
+//                    }
+//                }
+//                sb.append("\"\"\"");
+//                break;
+//            }
+//            case TRIPLE_SINGLE_QUOTE: {
+//                sb.append("'''");
+//                for (int x = 0; x < len; x++) {
+//                    char c = chars[x];
+//                    switch (c) {
+//                        case '\t':
+//                            sb.append('\\').append('t');
+//                            break;
+//                        case '\n':
+//                            sb.append('\\').append('n');
+//                            break;
+//                        case '\r':
+//                            sb.append('\\').append('r');
+//                            break;
+//                        case '\f':
+//                            sb.append('\\').append('f');
+//                            break;
+//                        case '"':
+//                            sb.append('\\').append(c);
+//                            break;
+//                        case '\\':
+//                            sb.append('\\');
+//                            sb.append('\\');
+//                            break;
+//                        default:
+//                            if (((c < 0x0020) || (c > 0x007e))) {
+//                                sb.append('\\');
+//                                sb.append('u');
+//                                sb.append(hexDigit[((c >> 12) & 0xF)]);
+//                                sb.append(hexDigit[((c >> 8) & 0xF)]);
+//                                sb.append(hexDigit[((c >> 4) & 0xF)]);
+//                                sb.append(hexDigit[(c & 0xF)]);
+//                            } else {
+//                                sb.append(c);
+//                            }
+//                    }
+//                }
+//                sb.append("'''");
+//                break;
+//            }
+//            case TRIPLE_ANTI_QUOTE: {
+//                sb.append("```");
+//                for (int x = 0; x < len; x++) {
+//                    char c = chars[x];
+//                    switch (c) {
+//                        case '\t':
+//                            sb.append('\\').append('t');
+//                            break;
+//                        case '\n':
+//                            sb.append('\\').append('n');
+//                            break;
+//                        case '\r':
+//                            sb.append('\\').append('r');
+//                            break;
+//                        case '\f':
+//                            sb.append('\\').append('f');
+//                            break;
+//                        case '"':
+//                            sb.append('\\').append(c);
+//                            break;
+//                        case '\\':
+//                            sb.append('\\');
+//                            sb.append('\\');
+//                            break;
+//                        default:
+//                            if (((c < 0x0020) || (c > 0x007e))) {
+//                                sb.append('\\');
+//                                sb.append('u');
+//                                sb.append(hexDigit[((c >> 12) & 0xF)]);
+//                                sb.append(hexDigit[((c >> 8) & 0xF)]);
+//                                sb.append(hexDigit[((c >> 4) & 0xF)]);
+//                                sb.append(hexDigit[(c & 0xF)]);
+//                            } else {
+//                                sb.append(c);
+//                            }
+//                    }
+//                }
+//                sb.append("```");
+//                break;
+//            }
 //        }
-//        sb.ensureNext(sb.length()+bestLen + 2);
-//        sb.ensureCapacity(sb.length()+bestLen + 2);
-        switch (layout) {
-            case DOUBLE_QUOTE: {
-                sb.append('\"');
-                for (int x = 0; x < len; x++) {
-                    char c = chars[x];
-                    switch (c) {
-                        case '\t':
-                            sb.append('\\').append('t');
-                            break;
-                        case '\n':
-                            sb.append('\\').append('n');
-                            break;
-                        case '\r':
-                            sb.append('\\').append('r');
-                            break;
-                        case '\f':
-                            sb.append('\\').append('f');
-                            break;
-                        case '"':
-                            sb.append('\\').append(c);
-                            break;
-                        case '\\':
-                            sb.append('\\');
-                            sb.append('\\');
-                            break;
-                        default:
-                            if (((c < 0x0020) || (c > 0x007e))) {
-                                sb.append('\\');
-                                sb.append('u');
-                                sb.append(hexDigit[((c >> 12) & 0xF)]);
-                                sb.append(hexDigit[((c >> 8) & 0xF)]);
-                                sb.append(hexDigit[((c >> 4) & 0xF)]);
-                                sb.append(hexDigit[(c & 0xF)]);
-                            } else {
-                                sb.append(c);
-                            }
-                    }
-                }
-                sb.append('\"');
-                break;
-            }
-            case SINGLE_QUOTE: {
-                sb.append('\'');
-                for (int x = 0; x < len; x++) {
-                    char c = chars[x];
-                    switch (c) {
-                        case '\t':
-                            sb.append('\\').append('t');
-                            break;
-                        case '\n':
-                            sb.append('\\').append('n');
-                            break;
-                        case '\r':
-                            sb.append('\\').append('r');
-                            break;
-                        case '\f':
-                            sb.append('\\').append('f');
-                            break;
-                        case '"':
-                            sb.append('\\').append(c);
-                            break;
-                        case '\\':
-                            sb.append('\\');
-                            sb.append('\\');
-                            break;
-                        default:
-                            if (((c < 0x0020) || (c > 0x007e))) {
-                                sb.append('\\');
-                                sb.append('u');
-                                sb.append(hexDigit[((c >> 12) & 0xF)]);
-                                sb.append(hexDigit[((c >> 8) & 0xF)]);
-                                sb.append(hexDigit[((c >> 4) & 0xF)]);
-                                sb.append(hexDigit[(c & 0xF)]);
-                            } else {
-                                sb.append(c);
-                            }
-                    }
-                }
-                sb.append('\'');
-                break;
-            }
-            case ANTI_QUOTE: {
-                sb.append('`');
-                for (int x = 0; x < len; x++) {
-                    char c = chars[x];
-                    switch (c) {
-                        case '\t':
-                            sb.append('\\').append('t');
-                            break;
-                        case '\n':
-                            sb.append('\\').append('n');
-                            break;
-                        case '\r':
-                            sb.append('\\').append('r');
-                            break;
-                        case '\f':
-                            sb.append('\\').append('f');
-                            break;
-                        case '"':
-                            sb.append('\\').append(c);
-                            break;
-                        case '\\':
-                            sb.append('\\');
-                            sb.append('\\');
-                            break;
-                        default:
-                            if (((c < 0x0020) || (c > 0x007e))) {
-                                sb.append('\\');
-                                sb.append('u');
-                                sb.append(hexDigit[((c >> 12) & 0xF)]);
-                                sb.append(hexDigit[((c >> 8) & 0xF)]);
-                                sb.append(hexDigit[((c >> 4) & 0xF)]);
-                                sb.append(hexDigit[(c & 0xF)]);
-                            } else {
-                                sb.append(c);
-                            }
-                    }
-                }
-                sb.append('`');
-                break;
-            }
-            case TRIPLE_DOUBLE_QUOTE: {
-                sb.append("\"\"\"");
-                for (int x = 0; x < len; x++) {
-                    char c = chars[x];
-                    switch (c) {
-                        case '\t':
-                            sb.append('\\').append('t');
-                            break;
-                        case '\n':
-                            sb.append('\\').append('n');
-                            break;
-                        case '\r':
-                            sb.append('\\').append('r');
-                            break;
-                        case '\f':
-                            sb.append('\\').append('f');
-                            break;
-                        case '"':
-                            sb.append('\\').append(c);
-                            break;
-                        case '\\':
-                            sb.append('\\');
-                            sb.append('\\');
-                            break;
-                        default:
-                            if (((c < 0x0020) || (c > 0x007e))) {
-                                sb.append('\\');
-                                sb.append('u');
-                                sb.append(hexDigit[((c >> 12) & 0xF)]);
-                                sb.append(hexDigit[((c >> 8) & 0xF)]);
-                                sb.append(hexDigit[((c >> 4) & 0xF)]);
-                                sb.append(hexDigit[(c & 0xF)]);
-                            } else {
-                                sb.append(c);
-                            }
-                    }
-                }
-                sb.append("\"\"\"");
-                break;
-            }
-            case TRIPLE_SINGLE_QUOTE: {
-                sb.append("'''");
-                for (int x = 0; x < len; x++) {
-                    char c = chars[x];
-                    switch (c) {
-                        case '\t':
-                            sb.append('\\').append('t');
-                            break;
-                        case '\n':
-                            sb.append('\\').append('n');
-                            break;
-                        case '\r':
-                            sb.append('\\').append('r');
-                            break;
-                        case '\f':
-                            sb.append('\\').append('f');
-                            break;
-                        case '"':
-                            sb.append('\\').append(c);
-                            break;
-                        case '\\':
-                            sb.append('\\');
-                            sb.append('\\');
-                            break;
-                        default:
-                            if (((c < 0x0020) || (c > 0x007e))) {
-                                sb.append('\\');
-                                sb.append('u');
-                                sb.append(hexDigit[((c >> 12) & 0xF)]);
-                                sb.append(hexDigit[((c >> 8) & 0xF)]);
-                                sb.append(hexDigit[((c >> 4) & 0xF)]);
-                                sb.append(hexDigit[(c & 0xF)]);
-                            } else {
-                                sb.append(c);
-                            }
-                    }
-                }
-                sb.append("'''");
-                break;
-            }
-            case TRIPLE_ANTI_QUOTE: {
-                sb.append("```");
-                for (int x = 0; x < len; x++) {
-                    char c = chars[x];
-                    switch (c) {
-                        case '\t':
-                            sb.append('\\').append('t');
-                            break;
-                        case '\n':
-                            sb.append('\\').append('n');
-                            break;
-                        case '\r':
-                            sb.append('\\').append('r');
-                            break;
-                        case '\f':
-                            sb.append('\\').append('f');
-                            break;
-                        case '"':
-                            sb.append('\\').append(c);
-                            break;
-                        case '\\':
-                            sb.append('\\');
-                            sb.append('\\');
-                            break;
-                        default:
-                            if (((c < 0x0020) || (c > 0x007e))) {
-                                sb.append('\\');
-                                sb.append('u');
-                                sb.append(hexDigit[((c >> 12) & 0xF)]);
-                                sb.append(hexDigit[((c >> 8) & 0xF)]);
-                                sb.append(hexDigit[((c >> 4) & 0xF)]);
-                                sb.append(hexDigit[(c & 0xF)]);
-                            } else {
-                                sb.append(c);
-                            }
-                    }
-                }
-                sb.append("```");
-                break;
-            }
-        }
-    }
+//    }
 
     public static boolean isValidIdentifier(String id) {
         if (id == null) {

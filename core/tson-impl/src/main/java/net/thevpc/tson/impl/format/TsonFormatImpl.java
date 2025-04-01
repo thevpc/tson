@@ -133,7 +133,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                                 List<TsonElement> params = ab.params();
                                 for (int i = params.size() - 1; i >= 0; i--) {
                                     TsonElement o = params.get(i);
-                                    if (o.type() == TsonElementType.NAME || o.type() == TsonElementType.STRING && FORMAT_NUMBER_TYPES.contains(o.stringValue())) {
+                                    if (o.type() == TsonElementType.NAME || o.type().isString() && FORMAT_NUMBER_TYPES.contains(o.stringValue())) {
                                         ab.removeAt(i);
                                     }
                                 }
@@ -233,12 +233,19 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                     writer.append(TsonUtils.toSmpStr(element.charValue()));
                     return;
                 }
-                case STRING: {
+                case DOUBLE_QUOTED_STRING:
+                case SINGLE_QUOTED_STRING:
+                case ANTI_QUOTED_STRING:
+                case TRIPLE_DOUBLE_QUOTED_STRING:
+                case TRIPLE_SINGLE_QUOTED_STRING:
+                case TRIPLE_ANTI_QUOTED_STRING:
+                case LINE_STRING:
+                {
 //                String s = element.getString();
 //                StringBuilder sb = new StringBuilder(s.length() * 2);
 //                TsonUtils.toQuotedStr(s, element.toStr().layout(), sb);
                     //TsonUtils.toDblStr(s, writer);
-                    writer.append(element.toStr().quoted());
+                    writer.append(element.toStr().literalString());
                     return;
                 }
                 case NAME: {

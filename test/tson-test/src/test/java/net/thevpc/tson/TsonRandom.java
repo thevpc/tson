@@ -82,8 +82,14 @@ public class TsonRandom {
                 return Tson.ofRegex(Pattern.compile(randomRegex()));
             case NAME:
                 return Tson.ofName(randomId());
-            case STRING:
-                return Tson.ofString(randomString());
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING:
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case LINE_STRING:
+                return Tson.ofString(type, randomString());
             case CHAR:
                 return Tson.ofChar(randomString().charAt(0));
             case BOOLEAN:

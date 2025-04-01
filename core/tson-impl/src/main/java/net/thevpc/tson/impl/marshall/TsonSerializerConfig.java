@@ -145,7 +145,15 @@ public class TsonSerializerConfig {
         });
 
         registerElemToObjConverter(TsonElementType.NULL, null, null, (element, to, context) -> null);
-        registerElemToObjConverter(TsonElementType.STRING, null, null, (element, to, context) -> element.stringValue());
+
+        registerElemToObjConverter(TsonElementType.DOUBLE_QUOTED_STRING, null, null, (element, to, context) -> element.stringValue());
+        registerElemToObjConverter(TsonElementType.SINGLE_QUOTED_STRING, null, null, (element, to, context) -> element.stringValue());
+        registerElemToObjConverter(TsonElementType.ANTI_QUOTED_STRING, null, null, (element, to, context) -> element.stringValue());
+        registerElemToObjConverter(TsonElementType.TRIPLE_DOUBLE_QUOTED_STRING, null, null, (element, to, context) -> element.stringValue());
+        registerElemToObjConverter(TsonElementType.TRIPLE_SINGLE_QUOTED_STRING, null, null, (element, to, context) -> element.stringValue());
+        registerElemToObjConverter(TsonElementType.TRIPLE_ANTI_QUOTED_STRING, null, null, (element, to, context) -> element.stringValue());
+        registerElemToObjConverter(TsonElementType.LINE_STRING, null, null, (element, to, context) -> element.stringValue());
+
         registerElemToObjConverter(TsonElementType.NAME, null, null, (element, to, context) -> element.stringValue());
         registerElemToObjConverter(TsonElementType.INTEGER, null, null, (element, to, context) -> element.intValue());
         registerElemToObjConverter(TsonElementType.LONG, null, null, (element, to, context) -> element.longValue());

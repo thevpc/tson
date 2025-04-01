@@ -23,7 +23,7 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
 
     @Override
     public TsonString toStr() {
-        return throwPrimitive(TsonElementType.STRING);
+        return throwPrimitive(TsonElementType.DOUBLE_QUOTED_STRING);
     }
 
 
@@ -209,7 +209,7 @@ public abstract class AbstractNonPrimitiveTsonElement extends AbstractTsonElemen
 
     @Override
     public String stringValue() {
-        return throwPrimitive(TsonElementType.STRING);
+        return throwPrimitive(TsonElementType.DOUBLE_QUOTED_STRING);
     }
 
     @Override

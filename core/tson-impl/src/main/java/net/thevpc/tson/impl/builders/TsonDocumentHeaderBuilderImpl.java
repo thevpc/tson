@@ -48,7 +48,14 @@ public class TsonDocumentHeaderBuilderImpl implements TsonDocumentHeaderBuilder 
                         }
                         break;
                     }
-                    case STRING:
+                    case DOUBLE_QUOTED_STRING:
+                    case SINGLE_QUOTED_STRING:
+                    case ANTI_QUOTED_STRING:
+                    case TRIPLE_DOUBLE_QUOTED_STRING:
+                    case TRIPLE_SINGLE_QUOTED_STRING:
+                    case TRIPLE_ANTI_QUOTED_STRING:
+                    case LINE_STRING:
+                    case CHAR:
                     case NAME: {
                         if(acceptStr) {
                             String v = param.stringValue();

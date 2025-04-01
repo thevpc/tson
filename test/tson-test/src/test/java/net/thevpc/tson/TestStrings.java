@@ -47,8 +47,8 @@ public class TestStrings {
 
     private void check(TsonElement elem, String ...str){
         System.out.println(str[0]);
-        System.out.println(elem.toStr().quoted());
-        Assertions.assertEquals(str[0], elem.toStr().quoted());
+        System.out.println(elem.toStr().literalString());
+        Assertions.assertEquals(str[0], elem.toStr().literalString());
         for (String s : str) {
             TsonElement u = Tson.parseString(s);
             Assertions.assertEquals(u, elem);

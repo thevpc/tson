@@ -102,7 +102,7 @@ public class TsonParserUtils {
     }
 
     public static char parseChar(String s) {
-        return parseRawString(s, TsonStringLayout.SINGLE_QUOTE).charAt(0);
+        return parseRawString(s, TsonElementType.SINGLE_QUOTED_STRING).charAt(0);
     }
 
 //    public static TsonElement parseCharElem(String s) {
@@ -153,78 +153,89 @@ public class TsonParserUtils {
 //    }
 
 
-    public static String extractRawString(String s, TsonStringLayout layout) {
+//    public static String extractRawString(String s, TsonStringLayout layout) {
+//        char[] chars = s.toCharArray();
+//        int len = chars.length;
+//        int borderLen;
+//        switch (layout) {
+//            case DOUBLE_QUOTE:
+//            case SINGLE_QUOTE:
+//            case ANTI_QUOTE: {
+//                borderLen = 1;
+//                break;
+//            }
+//            case TRIPLE_ANTI_QUOTE:
+//            case TRIPLE_DOUBLE_QUOTE:
+//            case TRIPLE_SINGLE_QUOTE: {
+//                borderLen = 3;
+//                break;
+//            }
+//            default: {
+//                throw new IllegalArgumentException("unsupported");
+//            }
+//        }
+//        return s.substring(borderLen, len - borderLen);
+//    }
+//
+//
+    public static String parseRawString(String s, TsonElementType layout) {
         char[] chars = s.toCharArray();
         int len = chars.length;
-        int borderLen;
+        int prefixLen = 0;
+        int suffixLen = 0;
+        String sborder = "";
+        String eborder = "";
         switch (layout) {
-            case DOUBLE_QUOTE:
-            case SINGLE_QUOTE:
-            case ANTI_QUOTE: {
-                borderLen = 1;
+            case DOUBLE_QUOTED_STRING: {
+                sborder = "\"";
+                eborder = "\"";
                 break;
             }
-            case TRIPLE_ANTI_QUOTE:
-            case TRIPLE_DOUBLE_QUOTE:
-            case TRIPLE_SINGLE_QUOTE: {
-                borderLen = 3;
+            case SINGLE_QUOTED_STRING: {
+                sborder = "'";
+                eborder = "'";
                 break;
             }
-            default: {
-                throw new IllegalArgumentException("unsupported");
+            case ANTI_QUOTED_STRING: {
+                sborder = "`";
+                eborder = "`";
+                break;
+            }
+            case TRIPLE_ANTI_QUOTED_STRING: {
+                sborder = "```";
+                eborder = "```";
+                break;
+            }
+            case TRIPLE_DOUBLE_QUOTED_STRING: {
+                sborder = "\"\"\"";
+                eborder = "\"\"\"";
+                break;
+            }
+            case TRIPLE_SINGLE_QUOTED_STRING: {
+                sborder = "'''";
+                eborder = "'''";
+                break;
+            }
+            case LINE_STRING:{
+                sborder = "¶";
+                eborder = "";
             }
         }
-        return s.substring(borderLen, len - borderLen);
-    }
-
-
-    public static String parseRawString(String s, TsonStringLayout layout) {
-        char[] chars = s.toCharArray();
-        int len = chars.length;
-        int prefixLen = 1;
-        int suffixLen = 1;
-        String border = "\"";
-        switch (layout) {
-            case DOUBLE_QUOTE: {
-                border = "\"";
-                break;
-            }
-            case SINGLE_QUOTE: {
-                border = "'";
-                break;
-            }
-            case ANTI_QUOTE: {
-                border = "`";
-                break;
-            }
-            case TRIPLE_ANTI_QUOTE: {
-                border = "```";
-                break;
-            }
-            case TRIPLE_DOUBLE_QUOTE: {
-                border = "\"\"\"";
-                break;
-            }
-            case TRIPLE_SINGLE_QUOTE: {
-                border = "'''";
-                break;
-            }
-        }
-        prefixLen = border.length();
-        suffixLen = prefixLen;
+        prefixLen = sborder.length();
+        suffixLen = eborder.length();
         if (s.length() < prefixLen + suffixLen) {
             throw new IllegalArgumentException("unsupported: " + s);
         }
         if (
-                !s.startsWith(border)
-                        || !s.endsWith(border)
+                !s.startsWith(sborder)
+                        || !s.endsWith(eborder)
         ) {
             throw new IllegalArgumentException("unsupported: " + s);
         }
         switch (layout) {
-            case DOUBLE_QUOTE:
-            case SINGLE_QUOTE:
-            case ANTI_QUOTE: {
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING: {
                 final int beforeLen = len - suffixLen;
                 StringBuilder sb = new StringBuilder();
                 for (int i = suffixLen; i < beforeLen; i++) {
@@ -279,9 +290,9 @@ public class TsonParserUtils {
                 }
                 return sb.toString();
             }
-            case TRIPLE_ANTI_QUOTE:
-            case TRIPLE_DOUBLE_QUOTE:
-            case TRIPLE_SINGLE_QUOTE: {
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING: {
                 final int beforeLen = len - prefixLen;
                 StringBuilder sb = new StringBuilder(s.length());
                 for (int i = prefixLen; i < beforeLen; i++) {
@@ -291,7 +302,7 @@ public class TsonParserUtils {
                             boolean processed = false;
                             if (i + 3 < len) {
                                 String substring = s.substring(i + 1, i + 1 + suffixLen);
-                                if (substring.equals(border)) {
+                                if (substring.equals(sborder)) {
                                     sb.append(substring);
                                     i += suffixLen;
                                     processed = true;
@@ -309,6 +320,9 @@ public class TsonParserUtils {
                 }
                 return sb.toString();
             }
+            case LINE_STRING:{
+                return s.substring(1).trim();
+            }
         }
         throw new IllegalArgumentException("unsupported: " + s);
     }
@@ -318,19 +332,17 @@ public class TsonParserUtils {
         int len = chars.length;
         int prefixLen = 1;
         int suffixLen = 1;
-        if (len < 1) {
-            if(chars[0]=='#'){
-                for (int i = 0; i < chars[i]; i++) {
-                    if(chars[i]=='\n' || chars[i]=='\r'){
-                        throw new IllegalArgumentException("invalid raw string " + s);
-                    }
+        if (len > 0 && chars[0] == '¶') {
+            for (int i = 0; i < chars.length; i++) {
+                if (chars[i] == '\n' || chars[i] == '\r') {
+                    throw new IllegalArgumentException("invalid raw line string " + s);
                 }
-                return new TsonStringImpl(
-                        new String(Arrays.copyOfRange(chars,1,chars.length)).trim(),
-                        new String(Arrays.copyOfRange(chars,1,chars.length)),
-                        TsonStringLayout.SINGLE_LINE
-                );
             }
+            return new TsonStringImpl(
+                    TsonElementType.LINE_STRING,
+                    new String(Arrays.copyOfRange(chars, 1, chars.length)).trim(),
+                    new String(Arrays.copyOfRange(chars, 1, chars.length))
+            );
         }
         if (len < 2) {
             throw new IllegalArgumentException("invalid raw string " + s);
@@ -340,21 +352,21 @@ public class TsonParserUtils {
         }
 
         String border = null;
-        TsonStringLayout layout = null;
+        TsonElementType layout = null;
         switch (chars[0]) {
             case '\"': {
                 border = "\"";
-                layout = TsonStringLayout.DOUBLE_QUOTE;
+                layout = TsonElementType.DOUBLE_QUOTED_STRING;
                 break;
             }
             case '\'': {
                 border = "'";
-                layout = TsonStringLayout.SINGLE_QUOTE;
+                layout = TsonElementType.SINGLE_QUOTED_STRING;
                 break;
             }
             case '`': {
                 border = "`";
-                layout = TsonStringLayout.ANTI_QUOTE;
+                layout = TsonElementType.ANTI_QUOTED_STRING;
                 break;
             }
             default: {
@@ -368,27 +380,27 @@ public class TsonParserUtils {
             prefixLen = 3;
             suffixLen = 3;
             switch (layout) {
-                case DOUBLE_QUOTE: {
+                case DOUBLE_QUOTED_STRING: {
                     border = "\"\"\"";
-                    layout = TsonStringLayout.TRIPLE_DOUBLE_QUOTE;
+                    layout = TsonElementType.TRIPLE_DOUBLE_QUOTED_STRING;
                     break;
                 }
-                case SINGLE_QUOTE: {
+                case SINGLE_QUOTED_STRING: {
                     border = "'''";
-                    layout = TsonStringLayout.TRIPLE_SINGLE_QUOTE;
+                    layout = TsonElementType.TRIPLE_SINGLE_QUOTED_STRING;
                     break;
                 }
-                case ANTI_QUOTE: {
+                case ANTI_QUOTED_STRING: {
                     border = "```";
-                    layout = TsonStringLayout.TRIPLE_ANTI_QUOTE;
+                    layout = TsonElementType.TRIPLE_ANTI_QUOTED_STRING;
                     break;
                 }
             }
         }
         switch (layout) {
-            case DOUBLE_QUOTE:
-            case SINGLE_QUOTE:
-            case ANTI_QUOTE: {
+            case DOUBLE_QUOTED_STRING:
+            case SINGLE_QUOTED_STRING:
+            case ANTI_QUOTED_STRING: {
                 final int beforeLen = len - suffixLen;
                 StringBuilder sb = new StringBuilder();
                 for (int i = suffixLen; i < beforeLen; i++) {
@@ -407,7 +419,7 @@ public class TsonParserUtils {
                                         break;
                                     }
                                     case '\'': {
-                                        if(layout==TsonStringLayout.SINGLE_QUOTE){
+                                        if (layout == TsonElementType.SINGLE_QUOTED_STRING) {
                                             sb.append(c2);
                                             i++;
                                             processed = true;
@@ -415,7 +427,7 @@ public class TsonParserUtils {
                                         break;
                                     }
                                     case '`': {
-                                        if(layout==TsonStringLayout.ANTI_QUOTE){
+                                        if (layout == TsonElementType.ANTI_QUOTED_STRING) {
                                             sb.append(c2);
                                             i++;
                                             processed = true;
@@ -423,7 +435,7 @@ public class TsonParserUtils {
                                         break;
                                     }
                                     case '\"': {
-                                        if(layout==TsonStringLayout.DOUBLE_QUOTE){
+                                        if (layout == TsonElementType.DOUBLE_QUOTED_STRING) {
                                             sb.append(c2);
                                             i++;
                                             processed = true;
@@ -438,16 +450,16 @@ public class TsonParserUtils {
                             break;
                         }
                         case '\'': {
-                            if(layout==TsonStringLayout.SINGLE_QUOTE){
+                            if (layout == TsonElementType.SINGLE_QUOTED_STRING) {
                                 sb.append('\\');
                                 sb.append(c);
-                            }else{
+                            } else {
                                 sb.append(c);
                             }
                             break;
                         }
                         case '`': {
-                            if(layout==TsonStringLayout.ANTI_QUOTE){
+                            if (layout == TsonElementType.ANTI_QUOTED_STRING) {
                                 sb.append('\\');
                                 sb.append(c);
                                 i++;
@@ -455,10 +467,10 @@ public class TsonParserUtils {
                             break;
                         }
                         case '\"': {
-                            if(layout==TsonStringLayout.DOUBLE_QUOTE){
+                            if (layout == TsonElementType.DOUBLE_QUOTED_STRING) {
                                 sb.append('\\');
                                 sb.append(c);
-                            }else{
+                            } else {
                                 sb.append(c);
                             }
                             break;
@@ -469,14 +481,14 @@ public class TsonParserUtils {
                     }
                 }
                 return new TsonStringImpl(
+                        layout,
                         sb.toString(),
-                        s.substring(prefixLen,len - prefixLen),
-                        layout
+                        s.substring(prefixLen, len - prefixLen)
                 );
             }
-            case TRIPLE_ANTI_QUOTE:
-            case TRIPLE_DOUBLE_QUOTE:
-            case TRIPLE_SINGLE_QUOTE: {
+            case TRIPLE_ANTI_QUOTED_STRING:
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+            case TRIPLE_SINGLE_QUOTED_STRING: {
                 final int beforeLen = len - prefixLen;
                 StringBuilder sb = new StringBuilder(s.length());
                 for (int i = prefixLen; i < beforeLen; i++) {
@@ -503,9 +515,9 @@ public class TsonParserUtils {
                     }
                 }
                 return new TsonStringImpl(
+                        layout,
                         sb.toString(),
-                        s.substring(prefixLen,len - prefixLen),
-                        layout
+                        s.substring(prefixLen, len - prefixLen)
                 );
             }
         }

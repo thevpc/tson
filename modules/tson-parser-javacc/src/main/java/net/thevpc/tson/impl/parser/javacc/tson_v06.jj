@@ -150,9 +150,9 @@ void elementLevel1() :
     <NULL> { visitor.visitPrimitiveEnd(Tson.ofNull());}
     | <TRUE>{ visitor.visitPrimitiveEnd(Tson.ofTrue());}
     |<FALSE>{  visitor.visitPrimitiveEnd(Tson.ofFalse());}
-    |<DATETIME> {  visitor.visitPrimitiveEnd(Tson.parseDateTime(token.image));}
-    |<DATE> {  visitor.visitPrimitiveEnd(Tson.parseDate(token.image));}
-    |<TIME> {  visitor.visitPrimitiveEnd(Tson.parseTime(token.image));}
+    |<DATETIME> {  visitor.visitPrimitiveEnd(Tson.parseLocalDateTime(token.image));}
+    |<DATE> {  visitor.visitPrimitiveEnd(Tson.parseLocalDate(token.image));}
+    |<TIME> {  visitor.visitPrimitiveEnd(Tson.parseLocalTime(token.image));}
     |<REGEX> {  visitor.visitPrimitiveEnd(Tson.parseRegex(token.image));}
 
 
@@ -343,7 +343,7 @@ void named() :
     {
         if(!hasArr && !hasObj){
             if(!hasPars){
-                visitor.visitPrimitiveEnd(Tson.name(id.image));
+                visitor.visitPrimitiveEnd(Tson.ofName(id.image));
             }else {
                 visitor.visitUpletEnd();
             }
@@ -561,7 +561,7 @@ void annotationParam() :
 |    < #EXPONENT: ["e","E"] (["+","-"])? (<DIGIT>)+ >
 |    < DOUBLE_QUOTE_STR: "\""  (~["\""] | "\\\"")*  "\"">
 |    < SINGLE_QUOTE_STR: "'"  (~["'"] | "\\'")*  "'">
-|    < LINE_STR: "#"  (~["\n"])*>
+|    < LINE_STR: "¶"  (~["\n"])*>
 |    < ANTI_QUOTE_STR : "`"  (~["`"] | "\\`")*  "`" >
 |    < TRIPLE_DOUBLE_QUOTE_STR : "\"\"\""  ("\\\"\"\"" | ~["\""] | ~["\""] | ("\"" ~["\""]) | ("\"\"" ~["\""]))*  "\"\"\"" >
 |    < TRIPLE_SINGLE_QUOTE_STR : "'''"  ("\\'''" | ~["'"] | ("'" ~["'"]) | ("''" ~["'"]))*  "'''" >

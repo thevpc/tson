@@ -39,11 +39,59 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
     }
 
     @Override
-    public TsonElement ofString(String value, TsonStringLayout layout) {
+    public TsonElement ofDoubleQuotedString(String value) {
         if (value == null) {
             return ofNull();
         }
-        return new TsonStringImpl(value, value, layout == null ? TsonStringLayout.DOUBLE_QUOTE : layout);
+        return new TsonStringImpl(TsonElementType.DOUBLE_QUOTED_STRING, value, value);
+    }
+
+    @Override
+    public TsonElement ofSingleQuotedString(String value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return new TsonStringImpl(TsonElementType.SINGLE_QUOTED_STRING, value, value);
+    }
+
+    @Override
+    public TsonElement ofAntiQuotedString(String value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return new TsonStringImpl(TsonElementType.ANTI_QUOTED_STRING, value, value);
+    }
+
+    @Override
+    public TsonElement ofTripleDoubleQuotedString(String value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return new TsonStringImpl(TsonElementType.TRIPLE_DOUBLE_QUOTED_STRING, value, value);
+    }
+
+    @Override
+    public TsonElement ofTripleSingleQuotedString(String value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return new TsonStringImpl(TsonElementType.TRIPLE_SINGLE_QUOTED_STRING, value, value);
+    }
+
+    @Override
+    public TsonElement ofTripleAntiQuotedString(String value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return new TsonStringImpl(TsonElementType.TRIPLE_ANTI_QUOTED_STRING, value, value);
+    }
+
+    @Override
+    public TsonElement ofLineString(String value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return new TsonStringImpl(TsonElementType.LINE_STRING, value, value);
     }
 
     @Override
@@ -60,14 +108,6 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
             return ofNull();
         }
         return value;
-    }
-
-    @Override
-    public TsonElement ofString(String value) {
-        if (value == null) {
-            return ofNull();
-        }
-        return ofString(value, TsonStringLayout.DOUBLE_QUOTE);
     }
 
     @Override
@@ -700,10 +740,6 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
         return ofRegex(value);
     }
 
-    @Override
-    public TsonElement of(String value) {
-        return ofString(value);
-    }
 
     @Override
     public TsonPrimitiveBuilder of() {
@@ -891,8 +927,8 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
 
     @Override
     public TsonElement parseChar(String s) {
-        TsonString e = (TsonString) parseString(s).toStr();
-        if (e.layout() == TsonStringLayout.SINGLE_QUOTE && e.value().length() == 1) {
+        TsonString e = parseString(s).toStr();
+        if (e.type() == TsonElementType.SINGLE_QUOTED_STRING && e.value().length() == 1) {
             return new TsonCharImpl(e.value().charAt(0));
         }
         throw new TsonParseException("invalid char " + s, null);
@@ -932,165 +968,165 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
 //    }
 
 
-    public String extractRawString(String s, TsonStringLayout layout) {
-        char[] chars = s.toCharArray();
-        int len = chars.length;
-        int borderLen;
-        switch (layout) {
-            case DOUBLE_QUOTE:
-            case SINGLE_QUOTE:
-            case ANTI_QUOTE: {
-                borderLen = 1;
-                break;
-            }
-            case TRIPLE_ANTI_QUOTE:
-            case TRIPLE_DOUBLE_QUOTE:
-            case TRIPLE_SINGLE_QUOTE: {
-                borderLen = 3;
-                break;
-            }
-            default: {
-                throw new IllegalArgumentException("unsupported");
-            }
-        }
-        return s.substring(borderLen, len - borderLen);
-    }
+//    public String extractRawString(String s, TsonStringLayout layout) {
+//        char[] chars = s.toCharArray();
+//        int len = chars.length;
+//        int borderLen;
+//        switch (layout) {
+//            case DOUBLE_QUOTE:
+//            case SINGLE_QUOTE:
+//            case ANTI_QUOTE: {
+//                borderLen = 1;
+//                break;
+//            }
+//            case TRIPLE_ANTI_QUOTE:
+//            case TRIPLE_DOUBLE_QUOTE:
+//            case TRIPLE_SINGLE_QUOTE: {
+//                borderLen = 3;
+//                break;
+//            }
+//            default: {
+//                throw new IllegalArgumentException("unsupported");
+//            }
+//        }
+//        return s.substring(borderLen, len - borderLen);
+//    }
 
 
-    public String parseRawString(String s, TsonStringLayout layout) {
-        char[] chars = s.toCharArray();
-        int len = chars.length;
-        int prefixLen = 1;
-        int suffixLen = 1;
-        String border = "\"";
-        switch (layout) {
-            case DOUBLE_QUOTE: {
-                border = "\"";
-                break;
-            }
-            case SINGLE_QUOTE: {
-                border = "'";
-                break;
-            }
-            case ANTI_QUOTE: {
-                border = "`";
-                break;
-            }
-            case TRIPLE_ANTI_QUOTE: {
-                border = "```";
-                break;
-            }
-            case TRIPLE_DOUBLE_QUOTE: {
-                border = "\"\"\"";
-                break;
-            }
-            case TRIPLE_SINGLE_QUOTE: {
-                border = "'''";
-                break;
-            }
-        }
-        prefixLen = border.length();
-        suffixLen = prefixLen;
-        if (s.length() < prefixLen + suffixLen) {
-            throw new IllegalArgumentException("unsupported: " + s);
-        }
-        if (
-                !s.startsWith(border)
-                        || !s.endsWith(border)
-        ) {
-            throw new IllegalArgumentException("unsupported: " + s);
-        }
-        switch (layout) {
-            case DOUBLE_QUOTE:
-            case SINGLE_QUOTE:
-            case ANTI_QUOTE: {
-                final int beforeLen = len - suffixLen;
-                StringBuilder sb = new StringBuilder();
-                for (int i = suffixLen; i < beforeLen; i++) {
-                    char c = s.charAt(i);
-                    switch (c) {
-                        case '\\': {
-                            int ip = i + 1;
-                            boolean processed = false;
-                            if (ip < beforeLen) {
-                                switch (s.charAt(ip)) {
-                                    case 'n': {
-                                        sb.append('\n');
-                                        i++;
-                                        processed = true;
-                                        break;
-                                    }
-                                    case 't': {
-                                        sb.append('\t');
-                                        i++;
-                                        processed = true;
-                                        break;
-                                    }
-                                    case 'f': {
-                                        sb.append('\f');
-                                        i++;
-                                        processed = true;
-                                        break;
-                                    }
-                                    case 'b': {
-                                        sb.append('\b');
-                                        i++;
-                                        processed = true;
-                                        break;
-                                    }
-                                    case '\\': {
-                                        sb.append('\\');
-                                        i++;
-                                        processed = true;
-                                        break;
-                                    }
-                                }
-                            }
-                            if (!processed) {
-                                sb.append(c);
-                            }
-                            break;
-                        }
-                        default: {
-                            sb.append(c);
-                        }
-                    }
-                }
-                return sb.toString();
-            }
-            case TRIPLE_ANTI_QUOTE:
-            case TRIPLE_DOUBLE_QUOTE:
-            case TRIPLE_SINGLE_QUOTE: {
-                final int beforeLen = len - prefixLen;
-                StringBuilder sb = new StringBuilder(s.length());
-                for (int i = prefixLen; i < beforeLen; i++) {
-                    char c = s.charAt(i);
-                    switch (c) {
-                        case '\\': {
-                            boolean processed = false;
-                            if (i + 3 < len) {
-                                String substring = s.substring(i + 1, i + 1 + suffixLen);
-                                if (substring.equals(border)) {
-                                    sb.append(substring);
-                                    i += suffixLen;
-                                    processed = true;
-                                }
-                            }
-                            if (!processed) {
-                                sb.append(c);
-                            }
-                            break;
-                        }
-                        default: {
-                            sb.append(c);
-                        }
-                    }
-                }
-                return sb.toString();
-            }
-        }
-        throw new IllegalArgumentException("unsupported: " + s);
-    }
+//    public String parseRawString(String s, TsonStringLayout layout) {
+//        char[] chars = s.toCharArray();
+//        int len = chars.length;
+//        int prefixLen = 1;
+//        int suffixLen = 1;
+//        String border = "\"";
+//        switch (layout) {
+//            case DOUBLE_QUOTE: {
+//                border = "\"";
+//                break;
+//            }
+//            case SINGLE_QUOTE: {
+//                border = "'";
+//                break;
+//            }
+//            case ANTI_QUOTE: {
+//                border = "`";
+//                break;
+//            }
+//            case TRIPLE_ANTI_QUOTE: {
+//                border = "```";
+//                break;
+//            }
+//            case TRIPLE_DOUBLE_QUOTE: {
+//                border = "\"\"\"";
+//                break;
+//            }
+//            case TRIPLE_SINGLE_QUOTE: {
+//                border = "'''";
+//                break;
+//            }
+//        }
+//        prefixLen = border.length();
+//        suffixLen = prefixLen;
+//        if (s.length() < prefixLen + suffixLen) {
+//            throw new IllegalArgumentException("unsupported: " + s);
+//        }
+//        if (
+//                !s.startsWith(border)
+//                        || !s.endsWith(border)
+//        ) {
+//            throw new IllegalArgumentException("unsupported: " + s);
+//        }
+//        switch (layout) {
+//            case DOUBLE_QUOTE:
+//            case SINGLE_QUOTE:
+//            case ANTI_QUOTE: {
+//                final int beforeLen = len - suffixLen;
+//                StringBuilder sb = new StringBuilder();
+//                for (int i = suffixLen; i < beforeLen; i++) {
+//                    char c = s.charAt(i);
+//                    switch (c) {
+//                        case '\\': {
+//                            int ip = i + 1;
+//                            boolean processed = false;
+//                            if (ip < beforeLen) {
+//                                switch (s.charAt(ip)) {
+//                                    case 'n': {
+//                                        sb.append('\n');
+//                                        i++;
+//                                        processed = true;
+//                                        break;
+//                                    }
+//                                    case 't': {
+//                                        sb.append('\t');
+//                                        i++;
+//                                        processed = true;
+//                                        break;
+//                                    }
+//                                    case 'f': {
+//                                        sb.append('\f');
+//                                        i++;
+//                                        processed = true;
+//                                        break;
+//                                    }
+//                                    case 'b': {
+//                                        sb.append('\b');
+//                                        i++;
+//                                        processed = true;
+//                                        break;
+//                                    }
+//                                    case '\\': {
+//                                        sb.append('\\');
+//                                        i++;
+//                                        processed = true;
+//                                        break;
+//                                    }
+//                                }
+//                            }
+//                            if (!processed) {
+//                                sb.append(c);
+//                            }
+//                            break;
+//                        }
+//                        default: {
+//                            sb.append(c);
+//                        }
+//                    }
+//                }
+//                return sb.toString();
+//            }
+//            case TRIPLE_ANTI_QUOTE:
+//            case TRIPLE_DOUBLE_QUOTE:
+//            case TRIPLE_SINGLE_QUOTE: {
+//                final int beforeLen = len - prefixLen;
+//                StringBuilder sb = new StringBuilder(s.length());
+//                for (int i = prefixLen; i < beforeLen; i++) {
+//                    char c = s.charAt(i);
+//                    switch (c) {
+//                        case '\\': {
+//                            boolean processed = false;
+//                            if (i + 3 < len) {
+//                                String substring = s.substring(i + 1, i + 1 + suffixLen);
+//                                if (substring.equals(border)) {
+//                                    sb.append(substring);
+//                                    i += suffixLen;
+//                                    processed = true;
+//                                }
+//                            }
+//                            if (!processed) {
+//                                sb.append(c);
+//                            }
+//                            break;
+//                        }
+//                        default: {
+//                            sb.append(c);
+//                        }
+//                    }
+//                }
+//                return sb.toString();
+//            }
+//        }
+//        throw new IllegalArgumentException("unsupported: " + s);
+//    }
 
     public String parseStringOld(String s) {
         char[] chars = s.toCharArray();
@@ -1730,7 +1766,7 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
                 case "java.lang.String":
                 case "java.lang.StringBuilder":
                 case "java.lang.StringBuffer":
-                    return TsonElementType.STRING;
+                    return TsonElementType.DOUBLE_QUOTED_STRING;
                 case "java.util.Date":
                 case "java.time.Instant":
                     return TsonElementType.INSTANT;
@@ -1762,7 +1798,7 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
 //                return TsonElementType.CHAR_STREAM;
 //            }
             if (value instanceof CharSequence) {
-                return TsonElementType.STRING;
+                return TsonElementType.DOUBLE_QUOTED_STRING;
             }
             return TsonElementType.OBJECT;
         }

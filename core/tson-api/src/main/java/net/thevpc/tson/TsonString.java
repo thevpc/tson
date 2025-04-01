@@ -5,9 +5,7 @@ public interface TsonString extends TsonElement {
 
     String raw();
 
-    String quoted();
-
-    TsonStringLayout layout();
+    String literalString();
 
     TsonPrimitiveBuilder builder();
 }
