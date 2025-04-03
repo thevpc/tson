@@ -98,11 +98,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                         for (TsonComment lc : leadingComments) {
                             switch (lc.type()) {
                                 case MULTI_LINE: {
-                                    if (config.isIndentBraces()) {
-                                        sb.append(TsonUtils.formatComments(lc.text()));
-                                    } else {
-                                        sb.append("/*").append(lc.text()).append("*/");
-                                    }
+                                    sb.append(TsonUtils.formatMultiLineComments(lc.text(),!config.isIndentBraces()));
                                     sb.append(config.afterMultiLineComments);
                                     wasSLC = false;
                                     break;
@@ -111,7 +107,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                                     if (!wasSLC) {
                                         sb.append("\n");
                                     }
-                                    sb.append("//").append(lc.text()).append("\n");
+                                    sb.append(TsonUtils.formatSingleLineComments(lc.text()));
                                     wasSLC = true;
                                     break;
                                 }
@@ -165,11 +161,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                         for (TsonComment lc : trailingComments) {
                             switch (lc.type()) {
                                 case MULTI_LINE: {
-                                    if (config.isIndentBraces()) {
-                                        sb.append(TsonUtils.formatComments(lc.text()));
-                                    } else {
-                                        sb.append("/*").append(lc.text()).append("*/");
-                                    }
+                                    sb.append(TsonUtils.formatMultiLineComments(lc.text(),false));
                                     sb.append(config.afterMultiLineComments);
                                     wasSLC = false;
                                     break;
@@ -178,7 +170,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                                     if (!wasSLC) {
                                         sb.append("\n");
                                     }
-                                    sb.append("//").append(lc.text()).append("\n");
+                                    sb.append(TsonUtils.formatSingleLineComments(lc.text()));
                                     wasSLC = true;
                                     break;
                                 }
@@ -307,7 +299,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                             listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
                         }
                     }
-                    listToString(config.indentBrackets, list, '[', ']', writer, ListType.PARAMS);
+                    listToString(config.indentBrackets?IndentMode.ALWAYS : IndentMode.NEVER, list, '[', ']', writer, ListType.PARAMS);
                     return;
                 }
                 case MATRIX:
@@ -327,7 +319,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                             listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
                         }
                     }
-                    listToString(config.indentBrackets, (Iterable) list.rows(), '[', ']', writer, ListType.MATRIX);
+                    listToString(config.indentBrackets?IndentMode.ALWAYS : IndentMode.NEVER, (Iterable) list.rows(), '[', ']', writer, ListType.MATRIX);
                     return;
                 }
                 case OBJECT:
@@ -347,7 +339,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
                             listToString(config.indentList, params, '(', ')', writer, ListType.PARAMS);
                         }
                     }
-                    listToString(config.indentBraces, list, '{', '}', writer, ListType.OBJECT);
+                    listToString(config.indentBraces?IndentMode.ALWAYS : IndentMode.NEVER, list, '{', '}', writer, ListType.OBJECT);
                     return;
                 }
                 case BINARY_STREAM: {

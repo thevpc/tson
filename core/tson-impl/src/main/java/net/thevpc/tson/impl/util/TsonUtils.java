@@ -8,11 +8,10 @@ import net.thevpc.tson.impl.elements.TsonElementDecorator;
 import net.thevpc.tson.*;
 import net.thevpc.tson.impl.elements.TsonElementListImpl;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.io.Writer;
+import java.io.*;
 import java.time.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TsonUtils {
 
@@ -91,38 +90,35 @@ public class TsonUtils {
         );
     }
 
-    public static String indent(String v, String indent) {
-        StringBuilder sb = new StringBuilder();
-        for (String s : v.split("\n")) {
-            if (sb.length() > 0) {
-                sb.append("\n");
-            }
-            sb.append(indent);
-            sb.append(s);
-        }
-        return sb.toString();
+    public static String indent(String anyText, String indent) {
+        return lines(anyText).stream().map(x -> (indent == null ? "" : indent) + x).collect(Collectors.joining("\n"));
     }
 
-    public static String formatComments(String str) {
+    public static String formatMultiLineComments(String str, boolean compact) {
         if (str != null) {
-            str = str.trim();
-            if (str.length() > 0) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("/*");
-                int i = 0;
-                for (String s : str.split("\n")) {
-                    if (i > 0) {
-                        sb.append("\n *");
-                    }
-                    sb.append(" ").append(s);
-                    i++;
+            if (compact) {
+                List<String> lines = lines(str);
+                if (lines.isEmpty()) {
+                    return "/* */";
                 }
-                if (i > 1) {
-                    sb.append("\n");
+                if (lines.size() == 1) {
+                    return "/* " + lines.get(0) + " */";
                 }
-                sb.append(" */");
-                return sb.toString();
+                return "/*\n"
+                        + indent(str, "* ")
+                        + "*/\n";
+            } else {
+                return "/*\n"
+                        + indent(str, "* ")
+                        + "*/\n";
             }
+        }
+        return "";
+    }
+
+    public static String formatSingleLineComments(String str) {
+        if (str != null) {
+            return indent(str, "// ")+"\n";
         }
         return "";
     }
@@ -318,12 +314,13 @@ public class TsonUtils {
 //    public static void toQuotedStr(String str, TsonStringLayout layout, StringBuilder sb) {
 //        char[] chars = str.toCharArray();
 //        int len = chars.length;
-////        int bestLen = len * 2 + 2;
-////        if (bestLen < 0) {
-////            bestLen = Integer.MAX_VALUE;
-////        }
-////        sb.ensureNext(sb.length()+bestLen + 2);
-////        sb.ensureCapacity(sb.length()+bestLen + 2);
+
+    /// /        int bestLen = len * 2 + 2;
+    /// /        if (bestLen < 0) {
+    /// /            bestLen = Integer.MAX_VALUE;
+    /// /        }
+    /// /        sb.ensureNext(sb.length()+bestLen + 2);
+    /// /        sb.ensureCapacity(sb.length()+bestLen + 2);
 //        switch (layout) {
 //            case DOUBLE_QUOTE: {
 //                sb.append('\"');
@@ -567,7 +564,6 @@ public class TsonUtils {
 //            }
 //        }
 //    }
-
     public static boolean isValidIdentifier(String id) {
         if (id == null) {
             return false;
@@ -627,13 +623,13 @@ public class TsonUtils {
     }
 
     public static int compareElementsArray(TsonElement[] a1, TsonElement[] a2) {
-        if(a1==null && a2==null) {
+        if (a1 == null && a2 == null) {
             return 0;
         }
-        if(a1==null) {
+        if (a1 == null) {
             return -1;
         }
-        if(a2==null) {
+        if (a2 == null) {
             return 1;
         }
         int i = 0;
@@ -654,13 +650,13 @@ public class TsonUtils {
     }
 
     public static int compareElementsArray(TsonArray[] a1, TsonArray[] a2) {
-        if(a1==null && a2==null) {
+        if (a1 == null && a2 == null) {
             return 0;
         }
-        if(a1==null) {
+        if (a1 == null) {
             return -1;
         }
-        if(a2==null) {
+        if (a2 == null) {
             return 1;
         }
         int i = 0;
@@ -797,6 +793,15 @@ public class TsonUtils {
 
     public static TsonArray toArray(List<TsonElement> elements) {
         return new TsonArrayImpl(null, null, TsonUtils.unmodifiableElements(elements));
+    }
+
+    public static List<String> lines(String any) {
+        try (BufferedReader br = new BufferedReader(new StringReader(any == null ? "" : any))) {
+            return br.lines().collect(Collectors.toList());
+        } catch (IOException e) {
+            //
+        }
+        return new ArrayList<>();
     }
 
     public static TsonArray toArray(TsonElementList elements) {
