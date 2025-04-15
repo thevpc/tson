@@ -20,6 +20,11 @@ public class Tson {
 
     private static String VERSION = "1.0";
     private static TsonElementsFactory factory;
+
+    public static final TsonFormat COMPACT_FORMAT = format().compact(true).build();
+    public static final TsonFormat DEFAULT_FORMAT = format().build();
+
+    //start serializers and readers
     private static TsonSerializer serializer;
 
     static {
@@ -34,20 +39,33 @@ public class Tson {
         serializer = factory.serializer();
     }
 
-    public static final TsonFormat COMPACT_FORMAT = format().compact(true).build();
-    public static final TsonFormat DEFAULT_FORMAT = format().build();
-
-
-    public static String getVersion() {
-        return VERSION;
-    }
-
     public static TsonReader reader() {
         return factory.reader(serializer());
     }
 
     public static TsonReader reader(TsonSerializer serializer) {
         return factory.reader(serializer == null ? serializer() : serializer);
+    }
+
+    public static TsonWriter writer() {
+        return factory.writer(serializer);
+    }
+
+    public static void setSerializer(TsonSerializer newSerializer) {
+        if (newSerializer == null) {
+            newSerializer = factory.serializer();
+        }
+        serializer = newSerializer;
+    }
+
+    public static TsonSerializer serializer() {
+        return serializer;
+    }
+    //end serializers and readers
+
+
+    public static String getVersion() {
+        return VERSION;
     }
 
     public static TsonElement ofTrue() {
@@ -67,33 +85,7 @@ public class Tson {
     }
 
     public static TsonElement ofString(TsonElementType stringType, String value) {
-        switch (stringType == null ? TsonElementType.DOUBLE_QUOTED_STRING : stringType) {
-            case DOUBLE_QUOTED_STRING:
-                return ofDoubleQuotedString(value);
-            case SINGLE_QUOTED_STRING:
-                return ofSingleQuotedString(value);
-            case ANTI_QUOTED_STRING:
-                return ofAntiQuotedString(value);
-            case TRIPLE_DOUBLE_QUOTED_STRING:
-                return ofTripleDoubleQuotedString(value);
-            case TRIPLE_SINGLE_QUOTED_STRING:
-                return ofTripleSingleQuotedString(value);
-            case TRIPLE_ANTI_QUOTED_STRING:
-                return ofTripleAntiQuotedString(value);
-            case LINE_STRING:
-                return ofLineString(value);
-            case CHAR: {
-                if (value == null) {
-                    return ofNull();
-                }
-                if (value.length() == 1) {
-                    return ofChar(value.charAt(0));
-                }
-                throw new IllegalArgumentException("Unsupported String TsonElementType: " + stringType);
-            }
-            default:
-                throw new IllegalArgumentException("Unsupported String TsonElementType: " + stringType);
-        }
+        return factory.ofString(stringType, value);
     }
 
     public static TsonElement ofString(String value) {
@@ -166,6 +158,13 @@ public class Tson {
         return value;
     }
 
+
+    public static TsonElement ofInstant(Instant value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return factory.ofInstant(value);
+    }
 
     public static TsonElement ofLocalDatetime(Instant value) {
         if (value == null) {
@@ -700,12 +699,8 @@ public class Tson {
         return ofLocalDatetime(Instant.ofEpochMilli(value.getTime()));
     }
 
-    public static TsonElement ofInstant(Instant value) {
-        return ofLocalDatetime(value);
-    }
-
     public static TsonElement of(Instant value) {
-        return ofLocalDatetime(value);
+        return ofInstant(value);
     }
 
     public static TsonElement of(LocalDate value) {
@@ -906,27 +901,12 @@ public class Tson {
         return factory.format();
     }
 
-    public static TsonWriter writer() {
-        return factory.writer(serializer);
-    }
-
     public static TsonDocumentBuilder ofDocument() {
         return factory.ofDocument();
     }
 
     public static TsonDocumentHeaderBuilder ofDocumentHeader() {
         return factory.ofDocumentHeader();
-    }
-
-    public static void setSerializer(TsonSerializer newSerializer) {
-        if (newSerializer == null) {
-            newSerializer = factory.serializer();
-        }
-        serializer = newSerializer;
-    }
-
-    public static TsonSerializer serializer() {
-        return serializer;
     }
 
     public static TsonProcessor processor() {

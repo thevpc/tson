@@ -11,8 +11,8 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
     private double real;
     private double imag;
 
-    public TsonDoubleComplexImpl(double real, double imag,String unit) {
-        super(TsonElementType.DOUBLE_COMPLEX,TsonNumberLayout.DECIMAL,unit);
+    public TsonDoubleComplexImpl(double real, double imag, String unit) {
+        super(TsonElementType.DOUBLE_COMPLEX, TsonNumberLayout.DECIMAL, unit);
         this.real = real;
         this.imag = imag;
     }
@@ -29,7 +29,7 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
 
     @Override
     public TsonFloatComplex toFloatComplex() {
-        return new TsonFloatComplexImpl((float) real(),0, numberSuffix());
+        return new TsonFloatComplexImpl((float) real(), 0, numberSuffix());
     }
 
     @Override
@@ -193,7 +193,7 @@ public class TsonDoubleComplexImpl extends AbstractNumberTsonElement implements 
                 case LONG:
                 case BIG_INTEGER:
                 case FLOAT:
-                case DOUBLE:{
+                case DOUBLE: {
                     int i = compare(this, o.toDoubleComplex());
                     return i == 0 ? type().compareTo(o.type()) : i;
                 }

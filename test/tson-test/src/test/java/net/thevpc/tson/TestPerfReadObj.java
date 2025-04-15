@@ -6,7 +6,6 @@
 package net.thevpc.tson;
 
 import com.google.gson.Gson;
-import net.thevpc.tson.impl.util.Chrono;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.introspector.PropertyUtils;

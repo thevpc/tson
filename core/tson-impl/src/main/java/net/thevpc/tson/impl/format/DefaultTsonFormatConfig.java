@@ -1,6 +1,6 @@
 package net.thevpc.tson.impl.format;
 
-class DefaultTsonFormatConfig implements Cloneable {
+public class DefaultTsonFormatConfig implements Cloneable {
     boolean ignoreObjectEmptyArrayFields;
     boolean ignoreObjectNullFields;
     String indent0 = " ";

@@ -66,8 +66,10 @@ public interface TsonParserVisitor {
 
     default void visitAnnotationParamsStart() {
     }
+
     default void visitAnnotationParamsEnd() {
     }
+
     default void visitAnnotationParamStart() {
     }
 
@@ -98,22 +100,23 @@ public interface TsonParserVisitor {
     default void visitSimpleEnd() {
     }
 
-    default void visitArrayEnd(){
+    default void visitArrayEnd() {
 
     }
 
-    default void visitNamedObjectStart(){
-
-    }
-    default void visitNamedArrayStart(){
+    default void visitNamedObjectStart() {
 
     }
 
-    default void listSeparator(){
+    default void visitNamedArrayStart() {
 
     }
 
-    default void matrixRowSeparator(){
+    default void listSeparator() {
+
+    }
+
+    default void matrixRowSeparator() {
 
     }
 

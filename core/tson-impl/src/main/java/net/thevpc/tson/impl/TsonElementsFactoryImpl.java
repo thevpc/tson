@@ -111,6 +111,14 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
     }
 
     @Override
+    public TsonElement ofInstant(Instant value) {
+        if (value == null) {
+            return ofNull();
+        }
+        return new TsonLocalDateTimeImpl(value.atZone(ZoneId.systemDefault()).toLocalDateTime());
+    }
+
+    @Override
     public TsonElement ofLocalDatetime(Instant value) {
         if (value == null) {
             return ofNull();
@@ -786,6 +794,14 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
         return new TsonWriterImpl(serializer);
     }
 
+    public TsonSerializer serializer() {
+        return new TsonSerializerImpl();
+    }
+
+    public TsonReader reader(TsonSerializer serializer) {
+        return new TsonReaderImpl(serializer);
+    }
+
     @Override
     public TsonDocumentBuilder ofDocument() {
         return new TsonDocumentBuilderImpl();
@@ -806,18 +822,39 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
         return b == null ? ofNull() : b.build();
     }
 
-    public TsonSerializer serializer() {
-        return new TsonSerializerImpl();
-    }
-
-    public TsonReader reader(TsonSerializer serializer) {
-        return new TsonReaderImpl(serializer);
-    }
-
     public TsonElement ofNull() {
         return TsonNullImpl.INSTANCE;
     }
 
+    public TsonElement ofString(TsonElementType stringType, String value) {
+        switch (stringType == null ? TsonElementType.DOUBLE_QUOTED_STRING : stringType) {
+            case DOUBLE_QUOTED_STRING:
+                return ofDoubleQuotedString(value);
+            case SINGLE_QUOTED_STRING:
+                return ofSingleQuotedString(value);
+            case ANTI_QUOTED_STRING:
+                return ofAntiQuotedString(value);
+            case TRIPLE_DOUBLE_QUOTED_STRING:
+                return ofTripleDoubleQuotedString(value);
+            case TRIPLE_SINGLE_QUOTED_STRING:
+                return ofTripleSingleQuotedString(value);
+            case TRIPLE_ANTI_QUOTED_STRING:
+                return ofTripleAntiQuotedString(value);
+            case LINE_STRING:
+                return ofLineString(value);
+            case CHAR: {
+                if (value == null) {
+                    return ofNull();
+                }
+                if (value.length() == 1) {
+                    return ofChar(value.charAt(0));
+                }
+                throw new IllegalArgumentException("Unsupported String TsonElementType: " + stringType);
+            }
+            default:
+                throw new IllegalArgumentException("Unsupported String TsonElementType: " + stringType);
+        }
+    }
     public TsonElement ofBoolean(boolean val) {
         return TsonBooleanImpl.valueOf(val);
     }

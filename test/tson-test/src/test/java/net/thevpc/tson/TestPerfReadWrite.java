@@ -6,7 +6,6 @@
 package net.thevpc.tson;
 
 import com.google.gson.Gson;
-import net.thevpc.tson.impl.util.Chrono;
 
 import java.io.StringReader;
 

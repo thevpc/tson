@@ -40,6 +40,8 @@ public interface TsonElementsFactory {
 
     TsonElementBase ofElementBase(TsonElementBase value);
 
+    TsonElement ofInstant(Instant value);
+
     TsonElement ofLocalDatetime(Instant value);
 
     TsonElement ofLocalDatetime(LocalDateTime value);
@@ -173,6 +175,8 @@ public interface TsonElementsFactory {
     TsonElement ofCharStream(String value, String language);
 
     TsonElement ofCharStream(Path value, String language);
+
+    TsonElement ofString(TsonElementType stringType, String value);
 
     TsonElement ofStopStream(String value, String stopWord);
 
