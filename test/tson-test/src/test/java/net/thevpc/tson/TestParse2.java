@@ -43,4 +43,10 @@ public class TestParse2 {
         TsonDocument s = Tson.reader().readDocument(TsonTestUtils.loadTsonTestAsString("test07"));
         System.out.println(s);
     }
+
+    @Test
+    public void test08() {
+        TsonDocument s = Tson.reader().readDocument("{'a':b}");
+        System.out.println(s);
+    }
 }
