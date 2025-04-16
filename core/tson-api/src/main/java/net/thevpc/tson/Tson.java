@@ -20,13 +20,8 @@ public class Tson {
 
     private static String VERSION = "1.0";
     private static TsonElementsFactory factory;
-
-    public static final TsonFormat COMPACT_FORMAT = format().compact(true).build();
-    public static final TsonFormat DEFAULT_FORMAT = format().build();
-
     //start serializers and readers
     private static TsonSerializer serializer;
-
     static {
         ServiceLoader<TsonElementsFactory> loader = ServiceLoader.load(TsonElementsFactory.class);
         for (TsonElementsFactory f : loader) {
@@ -38,6 +33,11 @@ public class Tson {
         }
         serializer = factory.serializer();
     }
+
+    public static final TsonFormat COMPACT_FORMAT = format().compact(true).build();
+    public static final TsonFormat DEFAULT_FORMAT = format().build();
+
+
 
     public static TsonReader reader() {
         return factory.reader(serializer());
