@@ -5,17 +5,21 @@ Type Safe Object Notation
 ``tson`` is ideal as a configuration format but can also be used as for communication (serialization).
 
 Supported features include :
+* string, single line/multiline
 * null values and boolean type
 * byte, short, int, long and bigint types
 * float, double, bigdecimal types
 * arrays, objects (maps)
 * complex types (float, double and bigdecimal based complex values)
 * arrays and matrices (of any other type)
-* expressions (+,-,*...)
-* annotations
-* function calls
-* json object
+* named arrays, parametrized arrays
+* named objects, parametrized objects
+* pairs (key/value)
 * uplets
+* names uplets (aka functions)
+* annotations
+* expressions with standard operators (+,-,*...)
+* comments
 
 
 # Rationale
@@ -26,6 +30,45 @@ is less error prone. Besides, ``tson`` is ways more comprehensive and support wa
 complex values, and so on.
 
 # Some Examples
+The following is tson example
+
+```tson
+// this is comment that prefixes a tson object
+// tson object are very similar to json objects 
+{
+    /* an object entry can be anything, not only pairs*/
+    name:"some name"
+    // annotation can be applied to anything
+    @ThisIsMyAnnotation(something)
+    short-observation:  ¶ this is a string that end by line carriage
+    long-observation: """
+                       this is a multiline string
+                      """
+    weight : 12.3kg  // this is a double number with 'kg' suffix 
+    full   : 3L%     // this is long number with '%' suffix 
+    // tson object can also include non pair value like a number 
+    3.141592
+    // objects can also be named (prefixed by a name)
+    parent: item{
+        (): "empty Uplet"
+        (1): "singleton"
+    }
+    // objects can also be parametrized
+    parent: item(name:"new item"){
+        (): "empty Uplet"
+        (1): "singleton"
+    }
+    // as does arrays
+    someArray: item(name:"new item")[
+        (): "empty Uplet"
+        "second item"
+        "third item"
+    ]
+}
+```
+
+
+
 The simplest ``tson`` file may contain a single literal, such as
 
 ```tson
