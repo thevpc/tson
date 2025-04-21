@@ -40,7 +40,7 @@ The following is tson example
     name:"some name"
     // annotation can be applied to anything
     @ThisIsMyAnnotation(something)
-    short-observation:  ¶ this is a string that end by line carriage
+    short-observation:  ¶ this is a string that ends by line carriage
     long-observation: """
                        this is a multiline string
                       """
