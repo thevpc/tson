@@ -12,7 +12,7 @@ public class TsonBigComplexImpl extends AbstractNumberTsonElement implements Tso
     private BigDecimal imag;
 
     public TsonBigComplexImpl(BigDecimal real, BigDecimal imag,String unit) {
-        super(TsonElementType.BIG_COMPLEX,TsonNumberLayout.DECIMAL,unit);
+        super(TsonElementType.BIG_COMPLEX, TsonNumberLayout.DECIMAL,unit);
         this.real = real;
         this.imag = imag;
     }

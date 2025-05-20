@@ -11,7 +11,7 @@ public class TsonBigDecimalImpl extends AbstractNumberTsonElement implements Tso
     private BigDecimal value;
 
     public TsonBigDecimalImpl(BigDecimal value,String unit) {
-        super(TsonElementType.BIG_DECIMAL,TsonNumberLayout.DECIMAL,unit);
+        super(TsonElementType.BIG_DECIMAL, TsonNumberLayout.DECIMAL,unit);
         this.value = value;
     }
 

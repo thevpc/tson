@@ -18,6 +18,8 @@ public interface TsonElementsFactory {
 
     TsonReader reader(TsonSerializer serializer);
 
+    TsonWriter writer(TsonSerializer serializer);
+
     TsonElement ofNull();
 
     TsonElement ofBoolean(boolean val);
@@ -40,8 +42,6 @@ public interface TsonElementsFactory {
 
     TsonElementBase ofElementBase(TsonElementBase value);
 
-    TsonElement ofInstant(Instant value);
-
     TsonElement ofLocalDatetime(Instant value);
 
     TsonElement ofLocalDatetime(LocalDateTime value);
@@ -61,6 +61,8 @@ public interface TsonElementsFactory {
     TsonElement ofRegex(String value);
 
     TsonElement ofChar(char value);
+
+    TsonElement ofInstant(Instant value);
 
     TsonElement ofInt(int value);
 
@@ -234,8 +236,6 @@ public interface TsonElementsFactory {
 
     TsonFormatBuilder format();
 
-    TsonWriter writer(TsonSerializer serializer);
-
     TsonDocumentBuilder ofDocument();
 
     TsonDocumentHeaderBuilder ofDocumentHeader();
@@ -250,6 +250,7 @@ public interface TsonElementsFactory {
 
 
     TsonElement parseLocalDateTime(String s);
+
     TsonElement parseInstant(String s);
 
     TsonElement parseLocalDate(String s);

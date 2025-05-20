@@ -1,14 +1,12 @@
 package net.thevpc.tson.impl.elements;
 
-import net.thevpc.tson.Tson;
-import net.thevpc.tson.TsonElement;
-import net.thevpc.tson.TsonElementType;
-import net.thevpc.tson.TsonString;
+import net.thevpc.tson.*;
 
 public abstract class AbstractTemporalTsonElement extends AbstractPrimitiveTsonElement{
     public AbstractTemporalTsonElement(TsonElementType type) {
         super(type);
     }
+
     @Override
     public TsonString toStr() {
         return (TsonString) Tson.of(String.valueOf(temporalValue()));
@@ -17,25 +15,34 @@ public abstract class AbstractTemporalTsonElement extends AbstractPrimitiveTsonE
     @Override
     public int compareTo(TsonElement o) {
         if (o.type().isTemporal()) {
-            switch (o.type()) {
-                case LOCAL_DATETIME: {
-                    int i = localDateTimeValue().compareTo(o.localDateTimeValue());
-                    return i == 0 ? type().compareTo(o.type()) : i;
-                }
-                case LOCAL_DATE: {
-                    int i = localDateValue().compareTo(o.localDateValue());
-                    return i == 0 ? type().compareTo(o.type()) : i;
-                }
-                case LOCAL_TIME: {
-                    int i = localTimeValue().compareTo(o.localTimeValue());
-                    return i == 0 ? type().compareTo(o.type()) : i;
-                }
-                case INSTANT: {
-                    int i = instantValue().compareTo(o.instantValue());
-                    return i == 0 ? type().compareTo(o.type()) : i;
-                }
-            }
+            TsonElementType t = TsonElementType.values()[
+                    Math.min(this.type().ordinal(), o.type().ordinal())];
+            return compareToAs(this, o, t);
         }
         return super.compareTo(o);
     }
+
+    protected int compareToAs(TsonElement a, TsonElement b, TsonElementType type) {
+        switch (type) {
+            case INSTANT: {
+                return a.instantValue().compareTo(b.instantValue());
+            }
+            case LOCAL_DATETIME: {
+                return a.localDateTimeValue().compareTo(b.localDateTimeValue());
+            }
+            case LOCAL_DATE: {
+                return a.localDateValue().compareTo(b.localDateValue());
+            }
+            case LOCAL_TIME: {
+                return a.localTimeValue().compareTo(b.localTimeValue());
+            }
+        }
+        throw new IllegalArgumentException("unsupported");
+    }
+
+    @Override
+    public TsonLocalDateTime toLocalDateTime() {
+        return (TsonLocalDateTime) Tson.ofLocalDatetime(localDateTimeValue());
+    }
+
 }

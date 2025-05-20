@@ -10,7 +10,7 @@ import java.util.Objects;
 public class TsonBigIntImpl extends AbstractNumberTsonElement implements TsonBigInt {
     private BigInteger value;
 
-    public TsonBigIntImpl(BigInteger value,TsonNumberLayout layout,String unit) {
+    public TsonBigIntImpl(BigInteger value, TsonNumberLayout layout, String unit) {
         super(TsonElementType.BIG_INTEGER,layout,unit);
         this.value = value;
     }

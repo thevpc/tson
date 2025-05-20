@@ -27,8 +27,8 @@ public class TsonDocumentHeaderBuilderImpl implements TsonDocumentHeaderBuilder 
     public TsonDocumentHeaderBuilderImpl parse(TsonAnnotation a) {
         if (a.name().equals("tson")) {
             List<TsonElement> params = a.params();
-            boolean acceptStr=true;
-            if(params!=null) {
+            boolean acceptStr = true;
+            if (params != null) {
                 for (TsonElement param : params) {
                     switch (param.type()) {
                         case PAIR: {

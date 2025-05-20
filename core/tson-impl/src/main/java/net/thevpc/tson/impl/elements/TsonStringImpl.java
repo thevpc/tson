@@ -10,7 +10,7 @@ public class TsonStringImpl extends AbstractPrimitiveTsonElement implements Tson
     private String rawValue;
     private String value;
 
-    public TsonStringImpl(TsonElementType elementType,String value, String rawValue) {
+    public TsonStringImpl(TsonElementType elementType, String value, String rawValue) {
         super(elementType);
         this.value = value;
         this.rawValue = rawValue;
