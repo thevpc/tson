@@ -925,6 +925,10 @@ public class Tson {
         return factory.parseLocalDateTime(image);
     }
 
+    public static TsonElement parseInstant(String image) {
+        return factory.parseInstant(image);
+    }
+
     public static TsonElement parseNumber(String image) {
         return factory.parseNumber(image);
     }

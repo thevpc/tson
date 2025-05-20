@@ -7,61 +7,51 @@ import java.time.*;
 import java.time.temporal.Temporal;
 import java.util.Objects;
 
-public class TsonLocalDateImpl extends AbstractTemporalTsonElement implements TsonLocalDate {
-    private LocalDate value;
+public class TsonInstantImpl extends AbstractTemporalTsonElement implements TsonInstant {
+    private Instant value;
 
-    public TsonLocalDateImpl(LocalDate value) {
-        super(TsonElementType.LOCAL_DATE);
+    public TsonInstantImpl(Instant value) {
+        super(TsonElementType.INSTANT);
         this.value = value;
-    }
-
-    public TsonLocalDateImpl(String value) {
-        super(TsonElementType.LOCAL_DATE);
-        this.value = LocalDate.parse(value);
-    }
-
-    @Override
-    public Temporal temporalValue() {
-        return value;
     }
 
     @Override
     public TsonString toStr() {
         return (TsonString) Tson.of(String.valueOf(value));
     }
-
     @Override
-    public TsonLocalTime toLocalTime() {
-        return (TsonLocalTime) Tson.ofLocalTime(this.localTimeValue());
+    public Temporal temporalValue() {
+        return value;
     }
 
     @Override
-    public TsonLocalDateTime toLocalDateTime() {
-        return (TsonLocalDateTime) Tson.of(this.localDateTimeValue());
-    }
-
-    @Override
-    public LocalDate localDateValue() {
-        return value();
-    }
-
-    @Override
-    public LocalTime localTimeValue() {
-        return LocalTime.from(value());
-    }
-
-    @Override
-    public LocalDateTime localDateTimeValue() {
-        return value().atStartOfDay();
-    }
-
-    @Override
-    public TsonLocalDate toLocalDate() {
+    public TsonInstant toInstant() {
         return this;
     }
 
     @Override
-    public LocalDate value() {
+    public Instant instantValue() {
+        return value();
+    }
+
+    @Override
+    public TsonLocalTime toLocalTime() {
+        return (TsonLocalTime) Tson.ofLocalTime(localTimeValue());
+    }
+
+    @Override
+    public LocalTime localTimeValue() {
+        return value().atZone(ZoneId.systemDefault()).toLocalTime();
+    }
+
+    @Override
+    public LocalDateTime localDateTimeValue() {
+        return value().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+
+    @Override
+    public Instant value() {
         return value;
     }
 
@@ -70,7 +60,7 @@ public class TsonLocalDateImpl extends AbstractTemporalTsonElement implements Ts
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        TsonLocalDateImpl tsonDate = (TsonLocalDateImpl) o;
+        TsonInstantImpl tsonDate = (TsonInstantImpl) o;
         return Objects.equals(value, tsonDate.value);
     }
 
@@ -86,7 +76,7 @@ public class TsonLocalDateImpl extends AbstractTemporalTsonElement implements Ts
 
     @Override
     protected int compareCore(TsonElement o) {
-        return value.compareTo(o.toLocalDate().value());
+        return value.compareTo(o.toInstant().value());
     }
 
 

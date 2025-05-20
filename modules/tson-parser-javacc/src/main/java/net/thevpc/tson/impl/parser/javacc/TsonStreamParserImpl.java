@@ -25,6 +25,7 @@ public class TsonStreamParserImpl implements TsonStreamParserImplConstants {
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INSTANT:
       case DATETIME:
       case DATE:
       case TIME:
@@ -352,6 +353,10 @@ Token t ;
       jj_consume_token(DATETIME);
                    visitor.visitPrimitiveEnd(Tson.parseLocalDateTime(token.image));
       break;
+    case INSTANT:
+      jj_consume_token(INSTANT);
+                  visitor.visitPrimitiveEnd(Tson.parseInstant(token.image));
+      break;
     case DATE:
       jj_consume_token(DATE);
                visitor.visitPrimitiveEnd(Tson.parseLocalDate(token.image));
@@ -458,6 +463,7 @@ Token t ;
     label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INSTANT:
       case DATETIME:
       case DATE:
       case TIME:
@@ -487,6 +493,7 @@ Token t ;
         break label_3;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INSTANT:
       case DATETIME:
       case DATE:
       case TIME:
@@ -525,6 +532,7 @@ Token t ;
     label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INSTANT:
       case DATETIME:
       case DATE:
       case TIME:
@@ -554,6 +562,7 @@ Token t ;
         break label_4;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INSTANT:
       case DATETIME:
       case DATE:
       case TIME:
@@ -592,6 +601,7 @@ Token t ;
     label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INSTANT:
       case DATETIME:
       case DATE:
       case TIME:
@@ -622,6 +632,7 @@ Token t ;
         break label_5;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INSTANT:
       case DATETIME:
       case DATE:
       case TIME:
@@ -664,6 +675,7 @@ Token t ;
     label_6:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INSTANT:
       case DATETIME:
       case DATE:
       case TIME:
@@ -693,6 +705,7 @@ Token t ;
         break label_6;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INSTANT:
       case DATETIME:
       case DATE:
       case TIME:
@@ -747,6 +760,7 @@ Token t ;
       case RPAREN:
         jj_consume_token(RPAREN);
         break;
+      case INSTANT:
       case DATETIME:
       case DATE:
       case TIME:
@@ -870,6 +884,7 @@ Token t ;
     case RPAREN:
       jj_consume_token(RPAREN);
       break;
+    case INSTANT:
     case DATETIME:
     case DATE:
     case TIME:
@@ -914,6 +929,7 @@ Token t ;
     case RBRACE:
       jj_consume_token(RBRACE);
       break;
+    case INSTANT:
     case DATETIME:
     case DATE:
     case TIME:
@@ -962,6 +978,7 @@ Token t ;
     case RBRACK:
       jj_consume_token(RBRACK);
       break;
+    case INSTANT:
     case DATETIME:
     case DATE:
     case TIME:
@@ -1025,13 +1042,13 @@ Token t ;
       jj_la1_init_2();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x2ffebe,0xff800000,0xff800000,0x0,0x2ffebe,0x2ffebe,0x2ffebe,0x2ffebe,0x2ffebe,0x2ffebe,0x2ffebe,0x2ffebe,0x2ffebe,0x0,0x3ffebe,0x80000,0x200020,0x200020,0x80000,0x200020,0x200020,0x3ffebe,0x2ffefe,0x6ffebe,};
+      jj_la1_0 = new int[] {0x5ffd7e,0xff000000,0xff000000,0x0,0x5ffd7e,0x5ffd7e,0x5ffd7e,0x5ffd7e,0x5ffd7e,0x5ffd7e,0x5ffd7e,0x5ffd7e,0x5ffd7e,0x0,0x7ffd7e,0x100000,0x400040,0x400040,0x100000,0x400040,0x400040,0x7ffd7e,0x5ffdfe,0xdffd7e,};
    }
    private static void jj_la1_init_1() {
       jj_la1_1 = new int[] {0x0,0xffffffff,0xffffffff,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
    }
    private static void jj_la1_init_2() {
-      jj_la1_2 = new int[] {0x540000,0x87fff,0x87fff,0x40000,0x500000,0x560000,0x560000,0x560000,0x560000,0x568000,0x568000,0x560000,0x560000,0x400000,0x560000,0x0,0x0,0x0,0x0,0x0,0x0,0x560000,0x560000,0x568000,};
+      jj_la1_2 = new int[] {0xa80000,0x10ffff,0x10ffff,0x80000,0xa00000,0xac0000,0xac0000,0xac0000,0xac0000,0xad0000,0xad0000,0xac0000,0xac0000,0x800000,0xac0000,0x0,0x0,0x0,0x0,0x0,0x0,0xac0000,0xac0000,0xad0000,};
    }
 
   /** Constructor with InputStream. */
@@ -1148,7 +1165,7 @@ Token t ;
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[94];
+    boolean[] la1tokens = new boolean[95];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -1168,7 +1185,7 @@ Token t ;
         }
       }
     }
-    for (int i = 0; i < 94; i++) {
+    for (int i = 0; i < 95; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

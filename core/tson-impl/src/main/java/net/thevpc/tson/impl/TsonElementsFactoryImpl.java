@@ -115,7 +115,7 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
         if (value == null) {
             return ofNull();
         }
-        return new TsonLocalDateTimeImpl(value.atZone(ZoneId.systemDefault()).toLocalDateTime());
+        return new TsonInstantImpl(value);
     }
 
     @Override
@@ -883,7 +883,12 @@ public class TsonElementsFactoryImpl implements TsonElementsFactory {
 
     @Override
     public TsonElement parseLocalDateTime(String s) {
-        return new TsonLocalDateTimeImpl(Instant.parse(s).atZone(ZoneId.systemDefault()).toLocalDateTime());
+        return new TsonLocalDateTimeImpl(LocalDateTime.parse(s));
+    }
+
+    @Override
+    public TsonElement parseInstant(String s) {
+        return new TsonInstantImpl(Instant.parse(s));
     }
 
     @Override

@@ -89,24 +89,4 @@ public class TsonLocalTimeImpl extends AbstractTemporalTsonElement implements Ts
         return value.compareTo(o.toLocalTime().value());
     }
 
-    @Override
-    public int compareTo(TsonElement o) {
-        if (o.type().isTemporal()) {
-            switch (o.type()) {
-                case LOCAL_DATETIME: {
-                    int i = this.localDateTimeValue().compareTo(o.localDateTimeValue());
-                    return i == 0 ? type().compareTo(o.type()) : i;
-                }
-                case LOCAL_DATE: {
-                    int i = this.localDateValue().compareTo(o.localDateValue());
-                    return i == 0 ? type().compareTo(o.type()) : i;
-                }
-                case LOCAL_TIME: {
-                    int i = value().compareTo(o.localTimeValue());
-                    return i == 0 ? type().compareTo(o.type()) : i;
-                }
-            }
-        }
-        return super.compareTo(o);
-    }
 }
