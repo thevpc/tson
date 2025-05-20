@@ -62,7 +62,7 @@ public class TsonFormatImpl implements TsonFormat, Cloneable {
     }
 
     public void formatAnnotation(TsonAnnotation a, boolean showComments, boolean showAnnotations, Writer sb) {
-        final TsonElementList params = a.params();
+        final List<TsonElement> params = a.params();
         try {
             sb.append('@');
             if (a.name() != null) {
