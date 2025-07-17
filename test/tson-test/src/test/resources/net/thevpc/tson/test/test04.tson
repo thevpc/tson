@@ -1,4 +1,4 @@
-@(halfa,"1.0")
+@(ndoc,"1.0")
 {
     styles:{
         import("*.tcss"),
