@@ -1,66 +1,77 @@
 # tson
 Type Safe Object Notation
 
-``tson`` (read Tyson) is a comprehensive, json-like format, that supports out of the box several simple and complex types.
-``tson`` is ideal as a configuration format but can also be used as for communication (serialization).
+`TSON` (pronounced Tyson) is a comprehensive superset of the JSON format that natively supports a wide range of simple and complex types.
+It is ideal for use as a configuration format but is also suitable for communication and serialization purposes.
 
 Supported features include :
-* string, single line/multiline
-* null values and boolean type
-* byte, short, int, long and bigint types
-* float, double, bigdecimal types
-* arrays, objects (maps)
-* complex types (float, double and bigdecimal based complex values)
-* arrays and matrices (of any other type)
-* named arrays, parametrized arrays
-* named objects, parametrized objects
-* pairs (key/value)
-* uplets
-* names uplets (aka functions)
-* annotations
-* expressions with standard operators (+,-,*...)
-* comments
+- Primitive types: string, null, boolean, byte, short, int, long, bigint
+- Floating-point numbers: float, double, decimal, bigdecimal
+- Collections: arrays, objects (maps), matrices
+- Complex numbers: using float, double, or bigdecimal components
+- Named and parameterized arrays/objects
+- Pairs and tuples (uplets)
+- Named tuples (functions)
+- Annotations on any element
+- Expressions with standard operators (+, -, *, ...)
+- Comments: both single-line and multi-line
+- Multiline strings, regular expressions, char literals
+- Binary and character streams
+- Aliases and references
+- Units on numeric values (e.g., 3GHz, 12kg)
 
 
-# Rationale
-Why not JSON. Well json does not support type safe primitives and is very limited. For instance it does not even support comments.
-Why not YAML. YAML is a superset of json. So is ``tson``, however, unlike yaml, tson does not support space based syntax and hence 
-is less error prone. Besides, ``tson`` is ways more comprehensive and support ways more types and features.
-``tson`` is also more user friendly with support of multiline strings, regular expressions, numeric values with units (think of 3GHz for three Giga Hertz for instance), 
-complex values, and so on.
+# Why TSON?
+## Why not JSON?
+`JSON` lacks support for type-safe primitives, expressions, and even basic features like comments.
 
-# Some Examples
-The following is tson example
+## Why not YAML?
+While YAML is a superset of JSON, it relies on whitespace-sensitive syntax, which is error-prone.
+`TSON` avoids these issues and offers richer type support in a cleaner, unambiguous format.
+
+`TSON` is also more expressive and user-friendly, supporting:
+
+- Multiline and raw strings
+- Numeric values with units
+- Complex types, matrices, and tuples
+- Annotations, functions, expressions, and more
+
+
+# Examples
+A full-featured TSON object:
 
 ```tson
-// this is comment that prefixes a tson object
-// tson object are very similar to json objects 
+// This is a comment before a TSON object
 {
-    /* an object entry can be anything, not only pairs*/
-    name:"some name"
-    // annotation can be applied to anything
+    name: "some name",
+
+    // Annotation can be added to any element
     @ThisIsMyAnnotation(something)
-    short-observation:  ¶ this is a string that ends by line carriage
+    short-observation: ¶ this is a single-line string
+    
     long-observation: """
                        this is a multiline string
                       """
-    weight : 12.3kg  // this is a double number with 'kg' suffix 
-    full   : 3L%     // this is long number with '%' suffix 
-    // tson object can also include non pair value like a number 
-    3.141592
-    // objects can also be named (prefixed by a name)
-    parent: item{
-        (): "empty Uplet"
+    
+    weight: 12.3kg      // double with unit
+    full: 3L%           // long with unit
+
+    3.141592            // unkeyed value
+
+    // Named and parameterized objects
+    parent: item {
+        (): "empty uplet"
         (1): "singleton"
     }
-    // objects can also be parametrized
-    parent: item(name:"new item"){
-        (): "empty Uplet"
+
+    parent: item(name: "new item") {
+        (): "empty uplet"
         (1): "singleton"
     }
-    // as does arrays
-    someArray: item(name:"new item")[
-        (): "empty Uplet"
+
+    // Named parameterized array
+    someArray: item(name: "new item")[
+        (): "empty uplet"
         "second item"
         "third item"
     ]
@@ -68,18 +79,19 @@ The following is tson example
 ```
 
 
-
-The simplest ``tson`` file may contain a single literal, such as
+Minimal values:
 
 ```tson
 12
 ```
-or even a bar null value
+
 ```tson
 null
 ```
 
 ``tson`` file may contain a more complex value such as
+
+Simple Object
 
 ```tson
 {
@@ -112,63 +124,63 @@ null
 ## Strings
 
 ```
-    string          : "Hello\n"
-    char            : 'a'
-    simple string   : 'some string'
-    regexp          : /a*/
-    multiline string: """
-                    some string
-                    """
+    "Hello\n"                       // normal string
+    'c'                             // character
+    'Hello world'                   // simple string
+    /a*/                            // regular expression
+    """Multiline string"""          // multiline (triple quotes)
+    ```Multiline string```          // alternative multiline
+    ¶ This is also a single-line string
 ```
 
 
 ## Array
 
 ```
-    array          :   [12, 13]
+[12, 13]
 
-    named array    :   someName[
-                            12,
-                            a:13
-                            (1,2):[1, 2, 3]
-                        ]
+someName[                      // named array
+    12,
+    a: 13,
+    (1,2): [1, 2, 3]
+]
 
-    named function array    : 
-                        someName(a,b,c)[
-                            12,
-                            a:13
-                            (1,2):[1, 2, 3]
-                        ]
-                        
+someName(a, b, c)[             // parameterized named array
+    12,
+    a: 13,
+    (1,2): [1, 2, 3]
+]                 
 ```
 
 ## Uplet
 ```
-    (12, 13)
+(12, 13)                       // unnamed tuple
+someFunction(12, 13)           // named tuple (like a function)
 ```
 
 ## Objects
 ```
-   object            : {
-                            12,
-                            a:13
-                            (1,2):[1, 2, 3]
-                        }
-   named object      : someName{
-                            12,
-                            a:13
-                            (1,2):[1, 2, 3]
-                        }
-   named function object   : 
-                    someName(a,b,c){
-                            12,
-                            a:13
-                            (1,2):[1, 2, 3]
-                        }
+{                              // basic object
+    12,
+    a: 13,
+    (1,2): [1, 2, 3]
+}
+
+someName {                    // named object
+    12,
+    a: 13,
+    (1,2): [1, 2, 3]
+}
+
+someName(a, b, c) {           // parameterized named object
+    12,
+    a: 13,
+    (1,2): [1, 2, 3]
+}
 ```
 
 
-## Annotation
+## Annotations
 ```
     @someAnnotation(a,b,c)
     someName(a,b,c){
@@ -178,36 +190,33 @@ null
     }
 ```
 
-## Char Stream
+## Char Streams
 
 ```
     ^SomeDelimiter[ Anything you cna think of]SomeDelimiter
 ```
 
-## Binary Stream
+## Binary Streams
 
 ```
     ^SomeDelimiter[Base64]SomeDelimiter
 ```
 
-## Alias
+## Aliases & References
 
 ```
-    {
-        a: @(#ref)1234
-        b:&ref
-    }
+    a: @(#ref)1234     // define alias
+    b: &ref            // use alias
 ```
 
 ## Comments
 
 ```
-    {  /* 
-            this is a comment 
-       */
-        a:1234
-        b:&a
-    }
+    /* Multi-line
+       comment */
+    a: 1234,
+    // Single-line comment
+    b: &a
 ```
 
 ## Expressions
@@ -220,4 +229,6 @@ null
     a==>1
     a**1
     a^1    
+    a:=example    
+    a=example    
 ```
