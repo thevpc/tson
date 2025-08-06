@@ -103,6 +103,7 @@ Simple Object
 
 # Elements
 ## Primitive types
+Atomic data values representing basic categories such as integers, floating-point numbers, booleans, null, and characters. They support various formats and suffixes to specify exact types and units, and do not contain internal structure.
 
 ```
     Byte       : 12b ,  -12B ,  0x12b,  0x12B,  012b,  0b011001b,  0b011001B
@@ -122,6 +123,7 @@ Simple Object
 ```
 
 ## Strings
+A sequence of characters that can be represented in multiple forms, including single-line, multi-line, raw, or regular expression formats. It supports optional delimiters and preserves whitespace and escape sequences as defined by the syntax.
 
 ```
     "Hello\n"                       // normal string
@@ -135,6 +137,7 @@ Simple Object
 
 
 ## Array
+An ordered structure with optional name and optional parameters, allowing any values (including duplicates), and supporting an internal body (a collection of elements). It preserves element order and can contain heterogeneous elements.
 
 ```
 [12, 13]
@@ -153,12 +156,15 @@ someName(a, b, c)[             // parameterized named array
 ```
 
 ## Uplet
+An ordered structure with optional name, allowing any values and duplicate keys, without internal body
 ```
 (12, 13)                       // unnamed tuple
 someFunction(12, 13)           // named tuple (like a function)
 ```
 
 ## Objects
+An ordered structure with optional name and optional parameters, allowing any values (including duplicate keys), supporting an internal body composed of key-value pairs or other elements. It preserves order and can contain heterogeneous entries.
+
 ```
 {                              // basic object
     12,
@@ -181,6 +187,8 @@ someName(a, b, c) {           // parameterized named object
 
 
 ## Annotations
+A metadata construct that can be attached to any TSON element. It consists of a name and optional parameters, providing additional descriptive information without affecting the element’s structure or value.
+
 ```
     @someAnnotation(a,b,c)
     someName(a,b,c){
@@ -191,18 +199,20 @@ someName(a, b, c) {           // parameterized named object
 ```
 
 ## Char Streams
+A sequence of characters enclosed between delimiters, allowing inclusion of arbitrary text content without interpretation. It preserves the exact character sequence, including whitespace and line breaks.
 
 ```
     ^SomeDelimiter[ Anything you cna think of]SomeDelimiter
 ```
 
 ## Binary Streams
-
+A sequence of binary data encoded as Base64, enclosed between user-defined delimiters. It preserves the exact binary content while representing it in a text-friendly format suitable for inclusion in TSON documents.
 ```
     ^SomeDelimiter[Base64]SomeDelimiter
 ```
 
 ## Aliases & References
+Provides a mechanism to define a value once and reuse it multiple times within a TSON document. An alias assigns a label to a value, and a reference uses that label to refer back to the original value, enabling reuse and avoiding duplication.
 
 ```
     a: @(#ref)1234     // define alias
@@ -210,6 +220,7 @@ someName(a, b, c) {           // parameterized named object
 ```
 
 ## Comments
+Textual annotations included within a TSON document to improve readability and documentation. They can be single-line or multi-line and are preserved by the parser without affecting the data structure or semantics.
 
 ```
     /* Multi-line
@@ -220,6 +231,7 @@ someName(a, b, c) {           // parameterized named object
 ```
 
 ## Expressions
+Sequences of operands and operators that represent computations or value derivations within TSON. They support standard arithmetic, logical, and comparison operators, enabling declarative calculation or evaluation embedded in the data structure.
 
 ```
     a+1
