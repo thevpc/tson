@@ -1,246 +1,187 @@
-# tson
-Type Safe Object Notation
+# TSON — Type-Safe Object Notation
 
-`TSON` (pronounced Tyson) is a comprehensive superset of the JSON format that natively supports a wide range of simple and complex types.
-It is ideal for use as a configuration format but is also suitable for communication and serialization purposes.
+TSON (pronounced *Tyson*) is a typed, expressive data language designed for configuration, DSLs, and structured data exchange.
 
-Supported features include :
-- Primitive types: string, null, boolean, byte, short, int, long, bigint
-- Floating-point numbers: float, double, decimal, bigdecimal
-- Collections: arrays, objects (maps), matrices
-- Complex numbers: using float, double, or bigdecimal components
-- Named and parameterized arrays/objects
-- Pairs and tuples (uplets)
-- Named tuples (functions)
-- Annotations on any element
-- Expressions with standard operators (+, -, *, ...)
-- Comments: both single-line and multi-line
-- Multiline strings, regular expressions, char literals
-- Binary and character streams
-- Aliases and references
-- Units on numeric values (e.g., 3GHz, 12kg)
+It extends JSON with a real type system, expressions, annotations, reusable references, and first-class mathematical structures—without relying on whitespace-sensitive syntax or implicit typing rules.
 
+TSON is meant for humans to write and machines to trust.
 
-# Why TSON?
-## Why not JSON?
-`JSON` lacks support for type-safe primitives, expressions, and even basic features like comments.
+---
 
-## Why not YAML?
-While YAML is a superset of JSON, it relies on whitespace-sensitive syntax, which is error-prone.
-`TSON` avoids these issues and offers richer type support in a cleaner, unambiguous format.
+## Why TSON?
 
-`TSON` is also more expressive and user-friendly, supporting:
+JSON is intentionally minimal. That minimalism becomes friction the moment you need:
 
-- Multiline and raw strings
-- Numeric values with units
-- Complex types, matrices, and tuples
-- Annotations, functions, expressions, and more
+- Comments
+- Precise numeric types
+- Units (`250ms`, `3GHz`, `12kg`)
+- Dates and times
+- Reusable values
+- Derived or computed configuration values
 
+YAML attempts to solve this, but does so with indentation rules, implicit typing, and syntactic ambiguity that make tooling and validation fragile.
 
-# Examples
-A full-featured TSON object:
+TSON takes a different approach:  
+**explicit syntax, explicit types, explicit intent.**
+
+---
+
+## A Quick Taste
+
+A valid TSON configuration:
 
 ```tson
-// This is a comment before a TSON object
+server {
+    host: "localhost"
+    port: 8080
+    timeout: 250ms
+    maxLoad: cores * 0.75
+    startedAt: 2024-12-11 09:30:00
+}
+```
+
+This is not JSON with comments bolted on.  
+This is configuration that can *express meaning*.
+
+---
+
+## First-Class Matrices
+
+TSON supports matrices as native structures, not as nested arrays pretending to be math.
+
+```tson
+transform {
+    rotation: [
+        [1,     0,      0],
+        [0,  0.866,  -0.5],
+        [0,   0.5,   0.866]
+    ]
+}
+```
+
+Matrices are ordered, explicit, and structurally meaningful.
+
+---
+
+## Core Ideas
+
+TSON is built around a few simple principles:
+
+- **Strong typing**  
+  Integers, decimals, big numbers, dates, times, complex numbers, and units are first-class.
+
+- **Declarative computation**  
+  Expressions and named tuples allow values to be derived, not duplicated.
+
+- **Structural clarity**  
+  Objects, arrays, tuples, and matrices are explicit and ordered—no encoding tricks, no conventions.
+
+- **Metadata without hacks**  
+  Annotations attach information to any element without altering its value.
+
+- **Human-friendly syntax**  
+  Multiline strings, comments, raw text, and streams are built in.
+
+---
+
+## What TSON Can Represent
+
+TSON natively supports:
+
+- Primitive numeric types (`byte`, `short`, `int`, `long`, `bigint`)
+- Floating-point and decimal types (`float`, `double`, `decimal`, `bigdecimal`)
+- Dates, times, and datetimes
+- Strings, characters, regular expressions, and multiline text
+- Arrays, objects, and matrices (rectangular, ordered)
+- Tuples and named tuples (function-like constructs)
+- Complex numbers
+- Aliases and references
+- Annotations
+- Expressions with standard operators
+- Binary and character streams
+- Units on numeric values
+
+---
+
+## A Rich Example
+
+```tson
+// Full-featured TSON object
 {
-    name: "some name",
+    name: "example"
 
-    // Annotation can be added to any element
-    @ThisIsMyAnnotation(something)
-    short-observation: ¶ this is a single-line string
-    
-    long-observation: """
-                       this is a multiline string
-                      """
-    
-    weight: 12.3kg      // double with unit
-    full: 3L%           // long with unit
+    @Info(source: "sensor-A")
+    weight: 12.3kg
 
-    3.141592            // unkeyed value
+    base: 100
+    threshold: base * 1.2
 
-    // Named and parameterized objects
-    parent: item {
-        (): "empty uplet"
-        (1): "singleton"
-    }
+    stiffness: [
+        [12.0, -3.0],
+        [-3.0, 12.0]
+    ]
+
+    force: (10, 5)
+
+    // Expression semantics depend on the host environment
+    displacement: stiffness^-1 * force
 
     parent: item(name: "new item") {
         (): "empty uplet"
         (1): "singleton"
     }
-
-    // Named parameterized array
-    someArray: item(name: "new item")[
-        (): "empty uplet"
-        "second item"
-        "third item"
-    ]
 }
 ```
 
+---
 
-Minimal values:
+## Typical Use Cases
 
-```tson
-12
-```
+TSON is well suited for:
 
-```tson
-null
-```
+- Application and system configuration
+- Domain-specific languages
+- Scientific and engineering data
+- Tooling formats and automation pipelines
+- Teaching structured data and computation
 
-``tson`` file may contain a more complex value such as
+---
 
-Simple Object
+## Tooling & Ecosystem
 
-```tson
-{
-    name:"some name",
-    value:12.3,
-}
-```
+TSON is designed to be:
 
+- Parsed deterministically
+- Validated strictly
+- Transformed into JSON, XML, YAML, or domain models
+- Embedded in existing systems
 
-# Elements
-## Primitive types
-Atomic data values representing basic categories such as integers, floating-point numbers, booleans, null, and characters. They support various formats and suffixes to specify exact types and units, and do not contain internal structure.
+Reference implementations and tooling are provided in this repository.
 
-```
-    Byte       : 12b ,  -12B ,  0x12b,  0x12B,  012b,  0b011001b,  0b011001B
-    Short      : 12s ,  -12S ,  0x12s,  0x12s,  012s,  0b011001s,  0b011001S
-    Int        : 120 ,  -122 ,  0x123,  0x120,  0123,  0b0110011,  0b0110001
-    Long       : 12L ,  -12L ,  0x12L,  0x12L,  012L,  0b011001L,  0b011001L
-(*) BigInt     : 12G ,  -12G ,  0x12G,  0x12G,  012G,  0b011001G,  0b011001G
-    Float      : 1.0f,  -1.2E-3F
-    Double     : 1.0 ,  -1.2E-3 NaN -Inf +Inf +Bound -Bound
-(*) Decimal    : 1.0d ,  -1.2E-3D
-(*) BigDecimal : 1.0c ,  -1.2E-3c
-    time       : 12:11:00
-    date       : 2022-12-11
-    datetime   : 2022-12-11 12:11:00
-    boolean    : true, false
-    null       : null
-```
+---
 
-## Strings
-A sequence of characters that can be represented in multiple forms, including single-line, multi-line, raw, or regular expression formats. It supports optional delimiters and preserves whitespace and escape sequences as defined by the syntax.
+## Documentation
 
-```
-    "Hello\n"                       // normal string
-    'c'                             // character
-    'Hello world'                   // simple string
-    /a*/                            // regular expression
-    """Multiline string"""          // multiline (triple quotes)
-    ```Multiline string```          // alternative multiline
-    ¶ This is also a single-line string
-```
+- **Language Specification** → `docs/spec.md`  
+  Formal semantics and language rules.
 
+- **Grammar** → `docs/grammar/`  
+  EBNF / JavaCC / ANTLR definitions.
 
-## Array
-An ordered structure with optional name and optional parameters, allowing any values (including duplicates), and supporting an internal body (a collection of elements). It preserves element order and can contain heterogeneous elements.
+- **Reference Manual** → `docs/reference/`  
+  Types, expressions, matrices, units, streams, and annotations.
 
-```
-[12, 13]
+- **Examples** → `examples/`
 
-someName[                      // named array
-    12,
-    a: 13,
-    (1,2): [1, 2, 3]
-]
+---
 
-someName(a, b, c)[             // parameterized named array
-    12,
-    a: 13,
-    (1,2): [1, 2, 3]
-]                 
-```
+## Status
 
-## Uplet
-An ordered structure with optional name, allowing any values and duplicate keys, without internal body
-```
-(12, 13)                       // unnamed tuple
-someFunction(12, 13)           // named tuple (like a function)
-```
+TSON is actively developed and used in production and educational tools.  
+The language evolves carefully, with backward compatibility as a priority.
 
-## Objects
-An ordered structure with optional name and optional parameters, allowing any values (including duplicate keys), supporting an internal body composed of key-value pairs or other elements. It preserves order and can contain heterogeneous entries.
+---
 
-```
-{                              // basic object
-    12,
-    a: 13,
-    (1,2): [1, 2, 3]
-}
+## License
 
-someName {                    // named object
-    12,
-    a: 13,
-    (1,2): [1, 2, 3]
-}
-
-someName(a, b, c) {           // parameterized named object
-    12,
-    a: 13,
-    (1,2): [1, 2, 3]
-}
-```
-
-
-## Annotations
-A metadata construct that can be attached to any TSON element. It consists of a name and optional parameters, providing additional descriptive information without affecting the element’s structure or value.
-
-```
-    @someAnnotation(a,b,c)
-    someName(a,b,c){
-        12,
-        a:13
-        (1,2):[1, 2, 3]
-    }
-```
-
-## Char Streams
-A sequence of characters enclosed between delimiters, allowing inclusion of arbitrary text content without interpretation. It preserves the exact character sequence, including whitespace and line breaks.
-
-```
-    ^SomeDelimiter[ Anything you cna think of]SomeDelimiter
-```
-
-## Binary Streams
-A sequence of binary data encoded as Base64, enclosed between user-defined delimiters. It preserves the exact binary content while representing it in a text-friendly format suitable for inclusion in TSON documents.
-```
-    ^SomeDelimiter[Base64]SomeDelimiter
-```
-
-## Aliases & References
-Provides a mechanism to define a value once and reuse it multiple times within a TSON document. An alias assigns a label to a value, and a reference uses that label to refer back to the original value, enabling reuse and avoiding duplication.
-
-```
-    a: @(#ref)1234     // define alias
-    b: &ref            // use alias
-```
-
-## Comments
-Textual annotations included within a TSON document to improve readability and documentation. They can be single-line or multi-line and are preserved by the parser without affecting the data structure or semantics.
-
-```
-    /* Multi-line
-       comment */
-    a: 1234,
-    // Single-line comment
-    b: &a
-```
-
-## Expressions
-Sequences of operands and operators that represent computations or value derivations within TSON. They support standard arithmetic, logical, and comparison operators, enabling declarative calculation or evaluation embedded in the data structure.
-
-```
-    a+1
-    a=1
-    a:=1
-    a<=1
-    a==>1
-    a**1
-    a^1    
-    a:=example    
-    a=example    
-```
+Apache Licence 2.0
