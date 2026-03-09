@@ -61,59 +61,54 @@ A valid TSON configuration:
 ```tson
 // A simple configuration
 appName: "ExampleApp"
-version: '1.2.0'
+version: 1.2.0
 
 // Port with annotation
 @required
-serverPort: 8080
+serverPort: 8080u16
 
-// named uplet + Hex + typed numeric literals (16-bit RGB)
-accentColor: rgb16(65535u16, 0x8000u16, 0x0000u16)
-
-// FULL_OBJECT form : name(params) { body }
 server(host:"localhost", port:8080u16,disabled) {
 
-    // unit suffix
     timeout: 30ms
-    
-    // expression
     retry: 4/1mn
-    // effective throughput = payload per request × requests per second
-    throughput: (64KB * 120) / 1s
 
     database(type:"postgres") {
         host: "db.local"
         port: 5432u16
     }
 
-    // An array with mixed, typed values
     features: [
         "logging",
-        23
+        "metrics"
     ]
 }
 
-// Single-line raw text
-observations : ¶ this is an observation text on a line
+// Unit suffix on numbers
+timeout: 30ms
 
-// Raw block (¶¶ delimiter)
+// A raw text block without escape sequences
 ¶¶ This text can contain
-¶¶ newlines and backslashes 
-¶¶ like \n without
-¶¶ escaping.
+¶¶ newlines and backslashes
+¶¶ without escaping.
 
-// Raw block (triple quotes)
+// Another raw text block
 """
 This text can contain
 newlines and backslashes
 without escaping.
 """
 
-// Annotation + named uplet (call expression)
+// Annotations on values
 @range(1, 100)
 retryCount: everyMinute(3)
 
-// Unordered list
+// An array with mixed, typed values
+features: [
+    "logging",
+    "metrics",
+    "tracing"
+]
+
 tasks : 
   • task1
   • ¶ task 2
