@@ -472,7 +472,7 @@ matrix(rows: 2, cols: 2)[ 1, 0, 0, 1 ] // Full Array
 ```
 
 ### 5.5 Tuples (`()`)
-Tuples (or uplets) are fixed-size ordered collections. Like objects and arrays, they can be anonymous or named. **Elements** within a tuple can be any valid expression.
+Tuples are fixed-size ordered collections. Like objects and arrays, they can be anonymous or named. **Elements** within a tuple can be any valid expression.
 
 | Type            | Syntax   | Description                                     |
 |:----------------|:---------|:------------------------------------------------|
@@ -660,7 +660,7 @@ TSON employs Strict Lexical Prioritization to differentiate between list markers
 | `[.]`          | Unordered List Item | Reserved structural token (ASCII variant)                        |
 | `[ . ]`        | Array               | Spaces break the token; parses as array with identifier `.`      |
 | `•Apple`       | List Item           | `•` is a non-identifier symbol; triggers list mode immediately.  |
-| `( . )`        | Parenthetical Uplet | Standard grouping (Uplet), not a list marker                     |
+| `( . )`        | Parenthetical Tuple | Standard grouping (Tuple), not a list marker                     |
 
 ---
 
